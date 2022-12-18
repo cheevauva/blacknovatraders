@@ -1,6 +1,7 @@
 <?php
 //$Id$
-error_reporting(0);
+date_default_timezone_set('UTC');
+error_reporting(E_ALL);
 //ini_set('display_errors', 0);
 
 include("db_config.php");

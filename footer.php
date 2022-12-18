@@ -1,18 +1,21 @@
-<?
-global $db,$dbtables;
+<?php
+global $db, $dbtables;
 connectdb();
-$res = $db->Execute("SELECT COUNT(*) as loggedin from $dbtables[ships] WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP($dbtables[ships].last_login)) / 60 <= 5 and email NOT LIKE '%@xenobe'");
-$row = $res->fields;
-$online = $row[loggedin];
+$res = $db->Execute("SELECT COUNT(*) as loggedin from {$dbtables['ships']} WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP({$dbtables['ships']}.last_login)) / 60 <= 5 and email NOT LIKE '%@xenobe'");
+
+if (!empty($res->fields)) {
+    $online = $res->fields['loggedin'];
+} else {
+    $online = '?';
+}
+$res = $db->Execute("SELECT last_run FROM {$dbtables['scheduler']} LIMIT 1");
+if (!empty($res->fields)) {
+    $mySEC = ($sched_ticks * 60) - (TIME() - $res->fields['last_run']);
+} else {
+    $mySEC = 0;
+}
 ?><br>
  <center>
-<?
-// Update counter
-
-$res = $db->Execute("SELECT last_run FROM $dbtables[scheduler] LIMIT 1");
-$result = $res->fields;
-$mySEC = ($sched_ticks * 60) - (TIME()-$result[last_run]);
-?>
   <script language="javascript" type="text/javascript">
    var myi = <?=$mySEC?>;
    setTimeout("rmyx();",1000);

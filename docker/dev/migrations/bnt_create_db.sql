@@ -1,0 +1,1 @@
+CREATE DATABASE `bnt` COLLATE 'utf8_general_ci';

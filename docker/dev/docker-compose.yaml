@@ -1,0 +1,53 @@
+version: "3.3"
+
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - ${NGINX_PORT}:8000
+        volumes:
+            - ./nginx/:/etc/nginx/conf.d
+            - ./../../:/app/
+        links:
+            - php
+    php:
+        build:
+            context: ./php
+        volumes:
+            - ./../../:/app/
+        links:
+            - mysql
+        extra_hosts:
+            - host.docker.internal:host-gateway
+        environment:
+            - BNT_DATABASE_TYPE
+            - BNT_DATABASE_HOST
+            - BNT_DATABASE_USERNAME
+            - BNT_DATABASE_PASSWORD
+            - BNT_DATABASE_PREFIX
+            - BNT_DATABASE_NAME
+            - BNT_DATABASE_PORT
+            - BNT_ADMIN_PASSWORD
+            - BNT_ADMIN_NAME
+            - BNT_ADMIN_EMAIL
+    mysql:
+        image: mysql:5.7
+        ports:
+            - ${MYSQL_PORT:-13306}:3306
+        command: --max_allowed_packet=32505856
+        volumes:
+            - ./migrations/:/docker-entrypoint-initdb.d/
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+    adminer:
+        image: adminer:latest
+        ports:
+            - ${ADMINER_PORT:-8081}:8080
+        environment:
+            ADMINER_DEFAULT_SERVER: mysql
+    composer:
+        build:
+            context: ./composer
+        volumes:
+            - ./../../:/app/
+        command: composer.phar install --prefer-dist --no-dev --no-scripts --no-plugins --no-interaction --no-progress

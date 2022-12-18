@@ -27,17 +27,17 @@ $gamepath = "/~bob/bnt/";
 
 // Hostname and port of the database server:
 // These are defaults, you normally won't have to change them
-$dbhost = "localhost";
+$dbhost = getenv('BNT_DATABASE_HOST');
 
 // Note : if you do not know the port, set this to "" for default. Ex, MySQL default is 3306
-$dbport = "";
+$dbport = getenv('BNT_DATABASE_PORT');
 
 // Username and password to connect to the database:
-$dbuname = "bnt";
-$dbpass = "bnt";
+$dbuname = getenv('BNT_DATABASE_USERNAME');
+$dbpass = getenv('BNT_DATABASE_PASSWORD');
 
 // Name of the SQL database:
-$dbname = "bnt";
+$dbname = getenv('BNT_DATABASE_NAME');
 
 // Type of the SQL database. This can be anything supported by ADOdb. Here are a few:
 // "access" for MS Access databases. You need to create an ODBC DSN.
@@ -52,7 +52,7 @@ $dbname = "bnt";
 // "postgres7" for PostgreSQL ver 7 and up
 // "sybase" for a SyBase database
 // NOTE: only mysql work as of right now, due to SQL compat code
-$db_type = "mysql";
+$db_type = getenv('BNT_DATABASE_TYPE');
 
 // Set this to 1 to use db persistent connections, 0 otherwise - persistent connections can cause load problems!
 $db_persistent = 0;
@@ -61,13 +61,13 @@ $db_persistent = 0;
 one game of BNT on the same database, or if the current table
 names conflict with tables you already have in your db, you will
 need to change this */
-$db_prefix = "bnt_";
+$db_prefix = getenv('BNT_DATABASE_RREFIX');
 
 // Administrator's password and email:
 // Be sure to change these. Don't leave them as is.
-$adminpass = "secret";
-$admin_mail = "admin@example.com";
-$adminname = "Admin Name";
+$adminpass = getenv('BNT_ADMIN_PASSWORD');
+$admin_mail = getenv('BNT_ADMIN_EMAIL');
+$adminname = getenv('BNT_ADMIN_NAME');
 
 // Address the forum link, link's to:
 $link_forums = "http://forums.blacknova.net";

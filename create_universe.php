@@ -61,11 +61,12 @@ if (!function_exists('Table_Row'))
 {
     function Table_Row($data,$failed="Failed",$passed="Passed")
     {
-        $err = TRUEFALSE(0,mysql_errno(),"No errors found",mysql_errno() . ": " . mysql_error());
+        global $db;
+        $err = TRUEFALSE(0,$db->ErrorNo(),"No errors found",$db->ErrorNo() . ": " . $db->ErrorMsg());;
         PrintFlush( "    <tr title=\"$err\">\n");
         PrintFlush( "      <td width=\"600\" bgcolor=\"#CCCCFF\"><font face=\"Verdana\" size=\"1\" color=\"#000000\">$data</font></td>\n");
-        if(mysql_errno()!=0)
-            {PrintFlush( "      <td width=\"100\" align=\"center\" bgcolor=\"#C0C0C0\"><font face=\"Verdana\" size=\"1\" color=\"red\">$failed</font></td>\n");}
+        if($db->ErrorNo()!=0)
+            {PrintFlush( "      <td width=\"100\" align=\"center\" bgcolor=\"#C0C0C0\"><font face=\"Verdana\" size=\"1\" color=\"red\">$failed ({$db->ErrorMsg()})</font></td>\n");}
         else
             {PrintFlush( "      <td width=\"100\" align=\"center\" bgcolor=\"#C0C0C0\"><font face=\"Verdana\" size=\"1\" color=\"Blue\">$passed</font></td>\n");}
         echo "    </tr>\n";
@@ -182,13 +183,23 @@ include("header.php");
 
 ### Connect to the database.
 
-connectdb();
+connectDB();
 
 ### Print Title on Page.
 
 bigtitle();
 
 ### Manually set step var if info isn't correct.
+
+if (!isset($_POST['swordfish'])) {
+    $_POST['swordfish'] = null;
+}
+
+if (!isset($_POST['engage'])) {
+    $engage = null;
+} else {
+    $engage = $_POST['engage'];
+}
 
 if($adminpass!= $_POST['swordfish'])
 {
@@ -210,42 +221,6 @@ if($engage == "1" && $adminpass == $_POST['swordfish'] )
 switch ($step) {
    case "1":
       echo "<form action=create_universe.php method=post>";
-      echo "<table>";
-
-// Domain Check
-if ($bnt_ls)
-    {
-      echo "<tr><td colspan=2 aling=center>";
-      echo "<table border=1 cellspacing=0 cellpadding=2 width=100%>";
-      echo "<tr><td>";
-
-      echo "<FONT COLOR=red><B>Domain Check!</B></FONT><BR>";
-      echo "Make sure you call the <B>create_universe.php</B> from the same URL as:<BR>";
-      echo "- your cronjob calls <B>scheduler.php</B><BR>";
-
-        echo "<BR>This URL will be used on the Public list: ";
-        $gm_url = $SERVER_NAME;
-        if ( ($gm_url == "localhost") || ($gm_url == "127.0.0.1") || ($gm_url == "") )
-        {
-            $gm_url = $gamedomain . $gamepath;
-            $gm_url = (substr($gm_url,0,1)==".")?substr($gm_url,1):$gm_url;
-            echo "<FONT COLOR=red><B>http://$gm_url</B></FONT><BR>";
-            echo "It is better if you run the create_universe.php from the correct URL!<BR>";
-            echo "Or correct the gamedomain and gamepath in your <B>config_local.php</B><BR>";
-            echo "This URL is trasmited if your cronjob calls scheduler.php with localhost!";
-        } else {
-            $gm_url = $gm_url . strrev(strstr(strrev($PHP_SELF),"/"));
-            echo "<FONT COLOR=green><B>http://$gm_url</B></FONT><BR>";
-            echo "YES, if this URL is correct ... continue !<BR>";
-            echo "Remember: if your cronjob calls scheduler.php with localhost than run create_universe with localhost to check the correctnes of the transmitted URL!";
-        }
-
-
-      echo "</td></tr>";
-      echo "</table></td></tr>";
-    }
-echo"</table>";
-// Domain Check End
 
     Table_Header("Create Universe [Base/Planet Setup]");
     Table_2Col("Percent Special","<input type=text name=special size=10 maxlength=10 value=1>");
@@ -846,7 +821,7 @@ Table_Footer("Completed successfully.");
     Table_Row("Xenobes will play every $sched_turns minutes.","Failed","Inserted");
 
       $db->Execute("INSERT INTO $dbtables[scheduler] VALUES(NULL, 'Y', 0, $sched_igb, 0, 'sched_igb.php', NULL,unix_timestamp(now()))");
-    Table_Row("Interests on IGB accounts will be accumulated every $sched_IGB minutes.","Failed","Inserted");
+    Table_Row("Interests on IGB accounts will be accumulated every $sched_igb minutes.","Failed","Inserted");
 
       $db->Execute("INSERT INTO $dbtables[scheduler] VALUES(NULL, 'Y', 0, $sched_news, 0, 'sched_news.php', NULL,unix_timestamp(now()))");
     Table_Row("News will be generated every $sched_news minutes.","Failed","Inserted");
@@ -872,14 +847,7 @@ Table_Footer("Completed successfully.");
       $db->Execute("INSERT INTO $dbtables[scheduler] VALUES(NULL, 'Y', '60', '60', '0', 'bnt_ls_client.php', NULL, unix_timestamp(now()))");
         Table_Row("The Master server list update will occur every 60 minutes.","Failed","Inserted");
 
-      if ($bnt_ls===true)
-      {
-            $db->Execute("INSERT INTO $dbtables[scheduler] VALUES(NULL, 'Y', 0, 60, 0, 'bnt_ls_client.php', NULL,unix_timestamp(now()))");
-        Table_Row("The public list updater will occur every 60 minutes","Failed","Inserted");
 
-            $creating=1;
-            include("bnt_ls_client.php");
-      }
     Table_Footer("Completed successfully");
 
     Table_Header("Inserting Admins Acount Information");
