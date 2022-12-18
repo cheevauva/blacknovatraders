@@ -16,12 +16,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Public
 License for more details.
 
 Requirements: 
-    PHP4.2+ (tested with 4.22, 5.0)
-    MySQL (tested with 3.23.x, 4.1, 5.0)
-    Apache >= 1.3.10
-    a web-browser (doh!)
-
-    IIS is not supported, and BNT will not work correctly on it in future versions.
+    PHP >= 8.2
+    MySQL >= 5.7
+    nginx
 
 Download:
     You can get the newest version at http://blacknova.net
@@ -36,7 +33,8 @@ Credits:
     the current list of developers.
 
 Installation:
-    Please see the docs/INSTALL file.
+    For linux users with docker-compose: sudo make up
+    For other users: Please see the docs/INSTALL file.
 
 Upgrades:
     As is typical with releases, we highly recommend a fresh install. Upgrades are not supported at this time.
