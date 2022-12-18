@@ -8,10 +8,9 @@ if (preg_match("/global_funcs.php/i", $PHP_SELF)) {
 }
 
 
-//----- Start register_globals fix ----
-// reg_global_fix,0.1.1,22-09-2004,BNT DevTeam
-
-if(!defined('reg_global_fix'))define('reg_global_fix', True, TRUE);
+if(!defined('reg_global_fix')) {
+    define('reg_global_fix', true);
+}
 
 if (1==1)
 {
@@ -19,14 +18,14 @@ if (1==1)
   {
       if (!isset($GLOBALS[$k]))
       {
-          ${$k}=$v;
+          $$k=$v;
       }
   }
   foreach ($_GET as $k=>$v)
   {
       if (!isset($GLOBALS[$k]))
       {
-          ${$k}=$v;
+          $$k=$v;
       }
   }
 
@@ -34,11 +33,10 @@ if (1==1)
   {
       if (!isset($GLOBALS[$k]))
       {
-          ${$k}=$v;
+          $$k=$v;
       }
   }
 }
-//------ End register_globals fix
 
 if (!empty($userpass) && $userpass != '+') {
   $username = substr($userpass, 0, strpos($userpass, "+"));
@@ -129,24 +127,24 @@ define('LOG_BOUNTY_FEDBOUNTY', 52); // Sent when the federation places a bounty 
 define('LOG_PLANET_BOMBED', 53); //Sent after bombing a planet
 define('LOG_ADMIN_ILLEGVALUE', 54); //sent to admin on planet destruction instead of capture
 // Database tables variables
-$dbtables['ibank_accounts'] = "${db_prefix}ibank_accounts";
-$dbtables['links'] = "${db_prefix}links";
-$dbtables['planets'] = "${db_prefix}planets";
-$dbtables['traderoutes'] = "${db_prefix}traderoutes";
-$dbtables['news'] = "${db_prefix}news";
-$dbtables['ships'] = "${db_prefix}ships";
-$dbtables['teams'] = "${db_prefix}teams";
-$dbtables['universe'] = "${db_prefix}universe";
-$dbtables['zones'] = "${db_prefix}zones";
-$dbtables['messages'] = "${db_prefix}messages";
-$dbtables['xenobe'] = "${db_prefix}xenobe";
-$dbtables['sector_defence'] = "${db_prefix}sector_defence";
-$dbtables['scheduler'] = "${db_prefix}scheduler";
-$dbtables['ip_bans'] = "${db_prefix}ip_bans";
-$dbtables['IGB_transfers'] = "${db_prefix}IGB_transfers";
-$dbtables['logs'] = "${db_prefix}logs";
-$dbtables['bounty'] = "${db_prefix}bounty";
-$dbtables['movement_log'] = "${db_prefix}movement_log";
+$dbtables['ibank_accounts'] = "{$db_prefix}ibank_accounts";
+$dbtables['links'] = "{$db_prefix}links";
+$dbtables['planets'] = "{$db_prefix}planets";
+$dbtables['traderoutes'] = "{$db_prefix}traderoutes";
+$dbtables['news'] = "{$db_prefix}news";
+$dbtables['ships'] = "{$db_prefix}ships";
+$dbtables['teams'] = "{$db_prefix}teams";
+$dbtables['universe'] = "{$db_prefix}universe";
+$dbtables['zones'] = "{$db_prefix}zones";
+$dbtables['messages'] = "{$db_prefix}messages";
+$dbtables['xenobe'] = "{$db_prefix}xenobe";
+$dbtables['sector_defence'] = "{$db_prefix}sector_defence";
+$dbtables['scheduler'] = "{$db_prefix}scheduler";
+$dbtables['ip_bans'] = "{$db_prefix}ip_bans";
+$dbtables['IGB_transfers'] = "{$db_prefix}IGB_transfers";
+$dbtables['logs'] = "{$db_prefix}logs";
+$dbtables['bounty'] = "{$db_prefix}bounty";
+$dbtables['movement_log'] = "{$db_prefix}movement_log";
 
 function mypw($one,$two)
 {
@@ -234,40 +232,27 @@ function checklogin()
   return $flag;
 }
 
-function connectdb($do_die=true)
+function connectdb($do_die = true)
 {
-  /* connect to database - and if we can't stop right there */
-  global $dbhost;
-  global $dbport;
-  global $dbuname;
-  global $dbpass;
-  global $dbname;
-  global $default_lang;
-  global $lang;
-  global $gameroot;
-  global $db_type;
-  global $db_persistent;
-  global $db;
-  global $ADODB_FETCH_MODE;
+    global $dbhost;
+    global $dbport;
+    global $dbuname;
+    global $dbpass;
+    global $dbname;
+    global $default_lang;
+    global $lang;
+    global $gameroot;
+    global $db_type;
+    global $db;
+    
+    $db = new \BNT\ADODB\ADODBConnection($db_type);
+    $result = $db->Connect($dbhost, $dbuname, $dbpass, $dbname, $dbport);
 
-  $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
-
-  if(!empty($dbport))
-    $dbhost.= ":$dbport";
-
-  $db = ADONewConnection("$db_type");
-  if($db_persistent == 1)
-    $result = $db->PConnect("$dbhost", "$dbuname", "$dbpass", "$dbname");
-  else
-    $result = $db->Connect("$dbhost", "$dbuname", "$dbpass", "$dbname");
-
-  if(!$result)
-  {
-    if($do_die)
-    {
-      die ("Unable to connect to the database");
+    if (!$result) {
+        if ($do_die) {
+            die("Unable to connect to the database");
+        }
     }
-  }
 }
 
 function updatecookie()
@@ -289,8 +274,8 @@ function updatecookie()
     $username = substr($userpass, 0, strpos($userpass, "+"));
     $password = substr($userpass, strpos($userpass, "+")+1);
   }
-  setcookie("id", $id);
-  setcookie("res", $res);
+  setcookie("id", $id ?? '');
+  setcookie("res", $res ?? '');
 }
 
 

@@ -1,6 +1,6 @@
-FROM php:8.1-cli
+FROM php:8.2-cli
 
-WORKDIR /app/backend
+WORKDIR /app
 
 
 RUN apt-get update
@@ -10,9 +10,6 @@ RUN apt-get install -y zlib1g-dev
 RUN apt-get install -y nano
 
 RUN docker-php-ext-install zip
-
-RUN pecl install redis \
-    && docker-php-ext-enable redis
 
 RUN php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');" && \
     php /composer-setup.php  --version=2.2.6 --install-dir=/usr/local/bin && \

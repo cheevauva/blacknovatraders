@@ -1,17 +1,17 @@
 <?php
 global $db, $dbtables;
 connectdb();
-$res = $db->Execute("SELECT COUNT(*) as loggedin from {$dbtables['ships']} WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP({$dbtables['ships']}.last_login)) / 60 <= 5 and email NOT LIKE '%@xenobe'");
-
-if (!empty($res->fields)) {
-    $online = $res->fields['loggedin'];
-} else {
+try {
+    $res = $db->Execute("SELECT COUNT(*) as loggedin from {$dbtables['ships']} WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP({$dbtables['ships']}.last_login)) / 60 <= 5 and email NOT LIKE '%@xenobe'");
+    $online = $res->fields['loggedin'] ?? '?';
+} catch (\Exception $ex) {
     $online = '?';
 }
-$res = $db->Execute("SELECT last_run FROM {$dbtables['scheduler']} LIMIT 1");
-if (!empty($res->fields)) {
-    $mySEC = ($sched_ticks * 60) - (TIME() - $res->fields['last_run']);
-} else {
+
+try {
+    $res = $db->Execute("SELECT last_run FROM {$dbtables['scheduler']} LIMIT 1");
+    $mySEC = ($sched_ticks * 60) - (TIME() - ($res->fields['last_run'] ?? 0));
+} catch (\Exception $ex) {
     $mySEC = 0;
 }
 ?><br>

@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 //ini_set('display_errors', 0);
 
 include("db_config.php");
-include("$ADOdbpath" . "/adodb.inc.php");
+require_once 'vendor/autoload.php';
 
 /* Main scheduler variables (game flow control)
 -----------------------------------------------*/

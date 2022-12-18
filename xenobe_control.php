@@ -389,7 +389,6 @@ else
         $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
         $resultnm = $db->Execute ("select character_name from $dbtables[ships] where character_name='$character'");
         $namecheck = $resultnm->fields;
-        $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
         $nametry = 1;
         // If Name Exists Try Again - Up To Nine Times
         while (($namecheck[0]) and ($nametry <= 9)) {
@@ -400,7 +399,6 @@ else
           $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
           $resultnm = $db->Execute ("select character_name from $dbtables[ships] where character_name='$character'");
           $namecheck = $resultnm->fields;
-          $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
           $nametry++;
         }
         // Create Ship Name
@@ -455,7 +453,6 @@ else
             $result->MoveNext();
           }
         }
-        $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
         if ($errflag==0)
         {
           $makepass="";

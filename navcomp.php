@@ -120,7 +120,6 @@
 			{
 				echo " >> " . $links[$i];
 			}
-			$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 			echo "<BR><BR>";
 			echo "$l_nav_answ1 $search_depth $l_nav_answ2<BR><BR>";
 		}

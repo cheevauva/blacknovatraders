@@ -1,0 +1,20 @@
+{
+    "name": "cheevauva/blacknovatraders",
+    "description": "",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "ext-json": "*",
+        "doctrine/dbal": "3.5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "BNT\\": "BNT/"
+        },
+        "classmap": [
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

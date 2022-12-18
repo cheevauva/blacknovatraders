@@ -169,7 +169,7 @@ $BenchmarkTimer->start();
 ### Set timelimit and randomize timer.
 
 set_time_limit(0);
-srand((double)microtime()*1000000);
+srand(intval(microtime(true) * 1000000));
 
 ### Include config files and db scheme.
 
@@ -334,9 +334,10 @@ switch ($step) {
       echo "</form>";
       break;
    case "4":
-
+       
     Table_Header("Setting up Sectors --- STAGE 4");
-
+       $db->Execute("DELETE FROM $dbtables[universe]");
+    Table_Row("Delete all sector","Failed","Deleted");
       $initsore = $ore_limit * $initscommod / 100.0;
       $initsorganics = $organics_limit * $initscommod / 100.0;
       $initsgoods = $goods_limit * $initscommod / 100.0;
@@ -346,13 +347,9 @@ switch ($step) {
       $initbgoods = $goods_limit * $initbcommod / 100.0;
       $initbenergy = $energy_limit * $initbcommod / 100.0;
 
-      $insert = $db->Execute("INSERT INTO $dbtables[universe] (sector_id, sector_name, zone_id, port_type, port_organics, port_ore, port_goods, port_energy, beacon, angle1, angle2, distance) VALUES ('0', 'Sol', '1', 'special', '0', '0', '0', '0', 'Sol: Hub of the Universe', '0', '0', '0')");
+      $insert = $db->Execute("INSERT INTO $dbtables[universe] (sector_id, sector_name, zone_id, port_type, port_organics, port_ore, port_goods, port_energy, beacon, angle1, angle2, distance) VALUES (null, 'Sol', '1', 'special', '0', '0', '0', '0', 'Sol: Hub of the Universe', '0', '0', '0')");
     Table_Row("Creating Sol sector","Failed","Created");
-
-      $update = $db->Execute("UPDATE $dbtables[universe] SET sector_id=0 WHERE sector_id=1");
-    Table_Row("Converting Sol Sector Id to 0","False","True");
-
-      $insert = $db->Execute("INSERT INTO $dbtables[universe] (sector_id, sector_name, zone_id, port_type, port_organics, port_ore, port_goods, port_energy, beacon, angle1, angle2, distance) VALUES ('1', 'Alpha Centauri', '1', 'energy',  '0', '0', '0', '0', 'Alpha Centauri: Gateway to the Galaxy', '0', '0', '1')");
+      $insert = $db->Execute("INSERT INTO $dbtables[universe] (sector_id, sector_name, zone_id, port_type, port_organics, port_ore, port_goods, port_energy, beacon, angle1, angle2, distance) VALUES (null, 'Alpha Centauri', '1', 'energy',  '0', '0', '0', '0', 'Alpha Centauri: Gateway to the Galaxy', '0', '0', '1')");
     Table_Row("Creating Alpha Centauri in sector 1","Failed","Created");
 
     Table_Spacer();
