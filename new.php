@@ -1,6 +1,6 @@
 <?
 include("config.php");
-include("languages/$lang");
+loadlanguage($lang);
 
 $title=$l_new_title;
 include("header.php");

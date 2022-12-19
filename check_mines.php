@@ -3,7 +3,7 @@ if (preg_match("/check_mines.php/i", $PHP_SELF)) {
    die("You can not access this file directly!");
 }
 
-include("languages/$lang");
+loadlanguage($lang);
 
 //Put the sector information into the array "sectorinfo"
 

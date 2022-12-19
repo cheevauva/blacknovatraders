@@ -3,7 +3,7 @@
 include("config.php");
 updatecookie();
 
-include("languages/$lang");
+loadlanguage($lang);
 
 $title="$l_mt_title";
 include("header.php");

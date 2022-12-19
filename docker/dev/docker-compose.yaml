@@ -32,8 +32,6 @@ services:
             - BNT_ADMIN_EMAIL
     mysql:
         image: mysql:5.7
-        ports:
-            - ${MYSQL_PORT:-13306}:3306
         command: --max_allowed_packet=32505856
         volumes:
             - ./migrations/:/docker-entrypoint-initdb.d/

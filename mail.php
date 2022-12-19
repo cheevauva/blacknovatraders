@@ -1,6 +1,6 @@
 <?
 	include("config.php");
-  include("languages/$lang");
+  loadlanguage($lang);
 
 	$title=$l_mail_title;
 	include("header.php");

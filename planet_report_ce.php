@@ -2,7 +2,7 @@
 
 include("config.php");
 updatecookie();
-include("languages/$lang");
+loadlanguage($lang);
 
 $title=$l_pr_title;
 

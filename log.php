@@ -4,7 +4,7 @@
 include("config.php");
 updatecookie();
 
-include("languages/$lang");
+loadlanguage($lang);
 
 $title="$l_log_titlet";
 $no_body=1;

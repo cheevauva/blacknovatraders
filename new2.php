@@ -12,7 +12,7 @@ $start_beacon = 0; //start space_beacons
 $start_genesis = 0; //starting genesis torps
 $escape = 'N';  //start game equip[[ped with escape pod?]]
 $scoop = 'N';  //start game equipped with fuel scoop?
-include("languages/$lang");
+loadlanguage($lang);
 
 $title=$l_new_title2;
 

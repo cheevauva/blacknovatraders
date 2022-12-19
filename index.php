@@ -3,7 +3,7 @@
 
   if(empty($lang))
     $lang = $default_lang;
-  include("languages/$lang");
+  loadlanguage($lang);
 	$title="Login"; 
   $interface="index.php";
   $no_body=1;

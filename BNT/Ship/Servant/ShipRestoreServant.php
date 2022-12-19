@@ -23,7 +23,7 @@ class ShipRestoreServant implements ServantInterface
         if ($ship->hasEscapePod) {
             $ship->resetWithEscapePod();
         } else {
-            
+            $ship->resetWithoutEscapePod();
         }
 
         $save = new ShipSaveDAO;

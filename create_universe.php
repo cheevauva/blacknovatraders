@@ -4,7 +4,7 @@
 // create_universe_port_fix,0.2.0,25-02-2004,TheMightyDude
 
 include("config.php");
-include("languages/$lang");
+loadlanguage($lang);
 
 
 /*

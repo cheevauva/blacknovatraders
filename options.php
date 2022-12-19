@@ -1,7 +1,7 @@
 <?
 
 include("config.php");
-include("languages/$lang");
+loadlanguage($lang);
 updatecookie();
 
 $title="$l_opt_title"; 

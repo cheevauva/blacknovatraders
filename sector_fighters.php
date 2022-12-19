@@ -3,7 +3,7 @@
                         echo "You can not access this file directly!";
                         die();
                     }
-                    include("languages/$lang");
+                    loadlanguage($lang);
 
                     echo $l_sf_attacking;
                     $targetfighters = $total_sector_fighters;

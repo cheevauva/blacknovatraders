@@ -146,7 +146,7 @@ $dbtables['bounty'] = "{$db_prefix}bounty";
 $dbtables['movement_log'] = "{$db_prefix}movement_log";
 
 if ($server_closed) {
-    include("languages/$lang");
+    loadlanguage($lang);
     $title = $l_login_sclosed;
     include 'header.php';
     echo $l_login_closed_message;
@@ -238,6 +238,19 @@ function checklogin()
 
 
   return $flag;
+}
+
+function loadlanguage(string $language): array
+{
+    $language = str_replace('.inc', '', $language);
+    
+    include sprintf('%s/languages/%s.inc', __DIR__, $language);
+    
+    foreach (get_defined_vars() as $key => $label) {
+        $GLOBALS[$key] = $label;
+    }
+    
+    return get_defined_vars();
 }
 
 function connectdb($do_die = true): \BNT\ADODB\ADODBConnection

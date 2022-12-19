@@ -12,10 +12,11 @@
 <html>
 <head>
 <meta http-equiv="Pragma" content="no-cache">
-<title><?php echo $title; ?></title>
+<title><?php echo ($title ?? ''); ?></title>
  <style type="text/css">
  <!--
 <?php
+$interface = $interface ?? '';
 if($interface == "")
 {
   $interface = "main.php";

@@ -6,7 +6,7 @@
         die();
     }
 
-    include("languages/$lang");
+    loadlanguage($lang);
 
     $result2 = $db->Execute ("SELECT * FROM $dbtables[universe] WHERE sector_id='$sector'");
     //Put the sector information into the array "sectorinfo"

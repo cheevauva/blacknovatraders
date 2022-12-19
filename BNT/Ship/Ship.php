@@ -49,7 +49,7 @@ class Ship
         $this->dateLastLogin = new \DateTime;
     }
 
-    public function resetWithEscapePod(): void
+    protected function reset(): void
     {
         $this->hull = 0;
         $this->engines = 0;
@@ -83,10 +83,15 @@ class Ship
         $this->dev_lssd = false;
     }
 
+    public function resetWithEscapePod(): void
+    {
+        $this->reset();
+    }
+
     public function resetWithoutEscapePod(): void
     {
+        $this->reset();
         $this->credits = 1000;
-        $this->resetWithEscapePod();
     }
 
 }

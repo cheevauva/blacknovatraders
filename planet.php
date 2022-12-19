@@ -4,7 +4,7 @@ include("combat.php");
 
 updatecookie();
 
-include("languages/$lang");
+loadlanguage($lang);
 $title=$l_planet_title;
 include("header.php");
 

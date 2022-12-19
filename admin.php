@@ -2,7 +2,7 @@
 //$Id$
 
 include("config.php");
-include("languages/$lang");
+loadlanguage($lang);
 updatecookie();
 
 $title="Administration";

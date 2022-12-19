@@ -1,7 +1,7 @@
 <?
 include("config.php");
 updatecookie();
-include("languages/$lang");
+loadlanguage($lang);
 
 
 connectdb();
