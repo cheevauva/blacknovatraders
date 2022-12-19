@@ -227,4 +227,4 @@ $xen_planets = 5;                     //Percent of created xenobe that will own 
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
 
 include("global_funcs.php");
-?>
+

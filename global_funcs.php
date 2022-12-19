@@ -140,21 +140,29 @@ $dbtables['messages'] = "{$db_prefix}messages";
 $dbtables['xenobe'] = "{$db_prefix}xenobe";
 $dbtables['sector_defence'] = "{$db_prefix}sector_defence";
 $dbtables['scheduler'] = "{$db_prefix}scheduler";
-$dbtables['ip_bans'] = "{$db_prefix}ip_bans";
 $dbtables['IGB_transfers'] = "{$db_prefix}IGB_transfers";
 $dbtables['logs'] = "{$db_prefix}logs";
 $dbtables['bounty'] = "{$db_prefix}bounty";
 $dbtables['movement_log'] = "{$db_prefix}movement_log";
+
+if ($server_closed) {
+    include("languages/$lang");
+    $title = $l_login_sclosed;
+    include 'header.php';
+    echo $l_login_closed_message;
+    die;
+}
 
 function mypw($one,$two)
 {
    return pow($one*1,$two*1);
 }
 
-function bigtitle()
+function bigtitle(?string $title2 = null)
 {
   global $title;
-  echo "<H1>$title</H1>\n";
+  
+  echo "<H1>" . ($title2 ?? $title) . "</H1>\n";
 }
 
 function TEXT_GOTOMAIN()
@@ -232,7 +240,7 @@ function checklogin()
   return $flag;
 }
 
-function connectdb($do_die = true)
+function connectdb($do_die = true): \BNT\ADODB\ADODBConnection
 {
     global $dbhost;
     global $dbport;
@@ -253,6 +261,8 @@ function connectdb($do_die = true)
             die("Unable to connect to the database");
         }
     }
+    
+    return $db;
 }
 
 function updatecookie()
@@ -278,6 +288,13 @@ function updatecookie()
   setcookie("res", $res ?? '');
 }
 
+
+function shipSave(\BNT\Ship\Ship $ship): void
+{
+    $save = new \BNT\Ship\DAO\ShipSaveDAO;
+    $save->ship = $ship;
+    $save->serve();
+}
 
 function playerlog($sid, $log_type, $data = "")
 {

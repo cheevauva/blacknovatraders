@@ -40,14 +40,14 @@ class ADODBConnection
         }
     }
 
-    public function Execute($sql): ADODBResult
+    public function Execute($sql): ?ADODBResult
     {
         try {
             return new ADODBResult($this->connection->executeQuery($sql));
         } catch (AbstractException $ex) {
             $this->errorCode = $ex->getCode();
             $this->errorMessage = $ex->getMessage();
-            throw $ex;
+            return null;
         }
     }
 
@@ -59,6 +59,12 @@ class ADODBConnection
     public function ErrorMsg(): ?string
     {
         return $this->errorMessage;
+    }
+    
+    
+    public function getConnection(): Connection
+    {
+        return $this->connection;
     }
 
 }

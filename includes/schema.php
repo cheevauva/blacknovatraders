@@ -407,15 +407,6 @@ echo $db->ErrorMsg();
 
 Table_Row("Creating scheduler Table","Failed","Passed");
 
-$db->Execute("CREATE TABLE $dbtables[ip_bans](" .
-             "ban_id int unsigned NOT NULL auto_increment," .
-             "ban_mask varchar(16) NOT NULL," .
-             "PRIMARY KEY (ban_id)" .
-             ") ENGINE='InnoDB' COLLATE 'utf8_general_ci'");
-$err = DBTRUEFALSE(0,$db->ErrorNo(),"No errors found",$db->ErrorNo() . ": " . $db->ErrorMsg());
-
-Table_Row("Creating ip_bans Table","Failed","Passed");
-
 $db->Execute("CREATE TABLE $dbtables[logs](" .
              "log_id int unsigned NOT NULL auto_increment," .
              "ship_id int DEFAULT '0' NOT NULL," .

@@ -50,11 +50,11 @@ bigtitle();
 <TABLE CELLPADDING="4">
 <TR>
 	<TD align="right"><? echo $l_login_email; ?></TD>
-	<TD align="left"><INPUT TYPE="TEXT" NAME="email" SIZE="20" MAXLENGTH="40" VALUE="<?php echo "$username" ?>"></TD>
+    <TD align="left"><INPUT TYPE="TEXT" NAME="email" SIZE="20" MAXLENGTH="40" VALUE="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>"></TD>
 </TR>
 <TR>
 	<TD align="right"><? echo $l_login_pw;?></TD>
-	<TD align="left"><INPUT TYPE="PASSWORD" NAME="pass" SIZE="20" MAXLENGTH="20" VALUE="<?php echo "$password" ?>"></TD>
+	<TD align="left"><INPUT TYPE="PASSWORD" NAME="pass" SIZE="20" MAXLENGTH="20" VALUE="<?php echo htmlspecialchars($_POST['password'] ?? '') ?>"></TD>
 </TR>
 <TR><TD colspan=2><center>Forgot your password?  Enter it blank and press login.</center></TD></TR></TABLE>
 <BR>

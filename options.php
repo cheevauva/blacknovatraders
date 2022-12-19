@@ -54,7 +54,7 @@ echo "<TD>$l_opt_select</TD><TD><select NAME=newlang>";
 
 foreach($avail_lang as $curlang)
 {
-  if($curlang['file'] == $playerinfo[lang])
+  if($curlang['file'] == $playerinfo['lang'])
     $selected = "selected";
   else
     $selected = "";
