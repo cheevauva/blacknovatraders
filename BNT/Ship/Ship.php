@@ -4,49 +4,71 @@ declare(strict_types=1);
 
 namespace BNT\Ship;
 
+use DateTime;
+
 class Ship
 {
 
-    public int $id;
-    public string $language;
-    public string $ip;
+    public int $ship_id;
+    public string $ship_name;
+    public bool $ship_destroyed = false;
+    public string $character_name;
     public string $password;
-    public bool $isDestroyed = false;
-    public \DateTime $dateLastLogin;
-    public bool $hasEscapePod;
+    public string $email;
     public int $hull = 0;
     public int $engines = 0;
     public int $power = 0;
     public int $computer = 0;
     public int $sensors = 0;
     public int $beams = 0;
-    public int $torpLaunchers = 0;
+    public int $torp_launchers = 0;
     public int $torps = 0;
-    public int $armor = 0;
-    public int $armorPts = 0;
-    public int $cloak = 0;
     public int $shields = 0;
+    public int $armor = 0;
+    public int $armor_pts = 0;
+    public int $cloak = 0;
+    public int $credits = 0;
     public int $sector = 0;
-    public int $shipOre = 0;
-    public int $shipOrganics = 0;
-    public int $shipEnergy = 0;
-    public int $shipColonists = 0;
-    public int $shipGoods = 0;
-    public int $shipFighters = 0;
-    public int $shipDamage = 0;
-    public bool $onPlanet = false;
+    public int $ship_ore = 0;
+    public int $ship_organics = 0;
+    public int $ship_goods = 0;
+    public int $ship_energy = 0;
+    public int $ship_colonists = 0;
+    public int $ship_fighters = 0;
+    public int $ship_damage = 0;
+    public int $turns = 0;
+    public bool $on_planet = false;
     public int $dev_warpedit = 0;
     public int $dev_genesis = 0;
     public int $dev_beacon = 0;
     public int $dev_emerwarp = 0;
+    public bool $dev_escapepod = false;
     public bool $dev_fuelscoop = false;
     public int $dev_minedeflector = 0;
-    public bool $dev_lssd = false;
-    public int $credits = 0;
+    public int $turns_used = 0;
+    public DateTime $last_login;
+    public int $rating = 0;
+    public int $score = 0;
+    public int $team = 0;
+    public int $team_invite = 0;
+    public string $interface = 'N';
+    public string $ip_address = '1.1.1.1';
+    public int $planet_id = 0;
+    public int $preset1 = 0;
+    public int $preset2 = 0;
+    public int $preset3 = 0;
+    public bool $trade_colonists = true;
+    public bool $trade_fighters = false;
+    public bool $trade_torps = false;
+    public bool $trade_energy = true;
+    public ?string $cleared_defences = null;
+    public string $lang;
+    public bool $dhtml = true;
+    public bool $dev_lssd = true;
 
     public function __construct()
     {
-        $this->dateLastLogin = new \DateTime;
+        $this->last_login = new \DateTime;
     }
 
     protected function reset(): void
@@ -57,23 +79,23 @@ class Ship
         $this->computer = 0;
         $this->sensors = 0;
         $this->beams = 0;
-        $this->torpLaunchers = 0;
+        $this->torp_launchers = 0;
         $this->torps = 0;
         $this->armor = 0;
-        $this->armorPts = 100;
+        $this->armor_pts = 100;
         $this->cloak = 0;
         $this->shields = 0;
         $this->sector = 0;
-        $this->shipOre = 0;
-        $this->shipOrganics = 0;
-        $this->shipEnergy = 1000;
-        $this->shipColonists = 0;
-        $this->shipGoods = 0;
-        $this->shipFighters = 100;
-        $this->shipDamage = 0;
-        $this->onPlanet = false;
-        $this->isDestroyed = false;
-        $this->hasEscapePod = false;
+        $this->ship_ore = 0;
+        $this->ship_organics = 0;
+        $this->ship_energy = 1000;
+        $this->ship_colonists = 0;
+        $this->ship_goods = 0;
+        $this->ship_fighters = 100;
+        $this->ship_damage = 0;
+        $this->ship_destroyed = false;
+        $this->on_planet = false;
+        $this->dev_escapepod = false;
         $this->dev_warpedit = 0;
         $this->dev_genesis = 0;
         $this->dev_beacon = 0;
@@ -92,6 +114,32 @@ class Ship
     {
         $this->reset();
         $this->credits = 1000;
+    }
+
+    public function getPlanetLevel(): int
+    {
+        $planetavg = array_sum([
+            $this->hull,
+            $this->engines,
+            $this->computer,
+            $this->beams,
+            $this->torp_launchers,
+            $this->shields,
+            $this->armor
+        ]);
+        $planetavg /= 7;
+
+        if ($planetavg < 8) {
+            return 0;
+        } else if ($planetavg < 12) {
+            return  1;
+        } else if ($planetavg < 16) {
+            return 2;
+        } else if ($planetavg < 20) {
+            return 3;
+        } else {
+            return 4;
+        }
     }
 
 }

@@ -31,22 +31,22 @@ class ShipLoginServant implements ServantInterface
         $ship = $this->ship = $retrieveByEmail->ship;
 
         if ($ship->password !== $this->password) {
-            playerlog($ship->id, LOG_BADLOGIN, $this->ip);
+            playerlog($ship->ship_id, LOG_BADLOGIN, $this->ip);
             throw ShipException::incorrectPassword($ship);
         }
 
-        if ($ship->isDestroyed) {
+        if ($ship->ship_destroyed) {
             throw ShipException::hasBeenDestroyed($ship);
         }
 
-        $ship->dateLastLogin = new \DateTime;
-        $ship->ip = $this->ip;
+        $ship->last_login = new \DateTime;
+        $ship->ip_address = $this->ip;
 
         $save = new ShipSaveDAO;
         $save->ship = $ship;
         $save->serve();
 
-        playerlog($ship->id, LOG_LOGIN, $this->ip);
+        playerlog($ship->ship_id, LOG_LOGIN, $this->ip);
     }
 
 }

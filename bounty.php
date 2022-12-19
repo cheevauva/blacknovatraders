@@ -8,7 +8,7 @@ include("header.php");
 
 connectdb();
 
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }

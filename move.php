@@ -12,7 +12,7 @@ include("header.php");
 connectdb();
 
 //Check to see if the user is logged in
-if (checklogin())
+if (isNotAuthorized())
 {
     die();
 }

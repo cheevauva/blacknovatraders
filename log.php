@@ -11,7 +11,7 @@ $no_body=1;
 include("header.php");
 
 connectdb();
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }

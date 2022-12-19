@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BNT\Ship\DAO;
+
+use BNT\Ship\Ship;
+
+class ShipCreateDAO extends ShipDAO
+{
+
+    public Ship $ship;
+
+    public function serve(): void
+    {
+        $mapper = $this->mapper();
+        $mapper->ship = $this->ship;
+        $mapper->serve();
+
+        $this->db()->insert($this->table(), $mapper->row);
+        
+        $this->ship->id = $this->db()->lastInsertId();
+    }
+
+}

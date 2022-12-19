@@ -8,7 +8,7 @@ $title=$l_planet2_title;
 include("header.php");
 
 connectdb();
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }

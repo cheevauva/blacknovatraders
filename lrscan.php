@@ -7,7 +7,7 @@ $title=$l_lrs_title;
 include("header.php");
 
 connectdb();
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }

@@ -23,6 +23,9 @@ class ADODBResult
         if ($name === 'fields') {
             return $this->iterator->current();
         }
+        if ($name === 'EOF') {
+            return !$this->iterator->valid();
+        }
     }
     
     public function RecordCount(): int

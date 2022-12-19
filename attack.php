@@ -13,7 +13,7 @@ connectdb();
 $title=$l_att_title;
 include("header.php");
 
-if(checklogin())
+if(isNotAuthorized())
 {
   die();//shouldnt we redirect to login page or show the login notice here?
 }

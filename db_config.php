@@ -23,7 +23,7 @@ $gamedomain = ".127.0.0.1";
 // If you enter www.blah.com/blacknova to access the game, you would leave the line as it is.
 // If you do not need to specify blacknova, just enter a single slash eg:
 // $gamepath = "/";
-$gamepath = "/~bob/bnt/";
+$gamepath = "/";
 
 // Hostname and port of the database server:
 // These are defaults, you normally won't have to change them

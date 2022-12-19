@@ -13,8 +13,6 @@ abstract class ShipDAO implements ServantInterface
 
     use DatabaseTrait;
 
-    abstract public function serve(): void;
-
     protected function table(): string
     {
         global $dbtables;

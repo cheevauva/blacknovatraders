@@ -189,55 +189,47 @@ function TEXT_JAVASCRIPT_END()
   echo "</SCRIPT>\n";
 }
 
-function checklogin()
+function isNotAuthorized(): bool
 {
-  $flag = 0;
+    global $l_global_needlogin;
+    global $l_global_died;
+    global $l_login_died;
+    global $l_die_please;
+    global $ship;
 
-  global $username, $l_global_needlogin, $l_global_died;
-  global $password, $l_login_died, $l_die_please;
-  global $db, $dbtables;
-
-  $result1 = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username' LIMIT 1");
-  $playerinfo = $result1->fields;
-
-  /* Check the cookie to see if username/password are empty - check password against database */
-  if($username == "" or $password == "" or $password != $playerinfo['password'])
-  {
-    echo $l_global_needlogin;
-    $flag = 1;
-  }
-
-  /* Check for destroyed ship */
-  if($playerinfo['ship_destroyed'] == "Y")
-  {
-    /* if the player has an escapepod, set the player up with a new ship */
-    if($playerinfo['dev_escapepod'] == "Y")
-    {
-      $result2 = $db->Execute("UPDATE $dbtables[ships] SET hull=0, engines=0, power=0, computer=0,sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N',dev_lssd='N' where email='$username'");
-      echo $l_login_died;
-      $flag = 1;
+    if (empty($_SESSION['ship_id'])) {
+        echo $l_global_needlogin;
+        return true;
     }
-    else
-    {
-      /* if the player doesn't have an escapepod - they're dead, delete them. */
-      /* uhhh  don't delete them to prevent self-distruct inherit*/
-      echo $l_global_died;
+    
+    $retrieveById = new \BNT\Ship\DAO\ShipRetrieveByIdDAO;
+    $retrieveById->id = $_SESSION['ship_id'];
+    $retrieveById->serve();
+    
+    $ship = $retrieveById->ship;
 
-      echo $l_die_please;
-      $flag = 1;
+    if ($ship->ship_destroyed) {
+        if ($ship->dev_escapepod) {
+            $new = new \BNT\Ship\DAO\ShipNewWishEscapePodDAO;
+            $new->shipId = $ship->id;
+            $new->serve();
+            echo $l_login_died;
+            return true;
+        } else {
+            echo $l_global_died;
+            echo $l_die_please;
+            return true;
+        }
     }
-  }
-  global $server_closed;
-  global $l_login_closed_message;
-  if($server_closed && $flag==0)
-  {
-    echo $l_login_closed_message;
-    $flag=1;
-  }
 
+    return false;
+}
 
-
-  return $flag;
+function ship(): \BNT\Ship\Ship
+{
+    global $ship;
+    
+    return $ship;
 }
 
 function loadlanguage(string $language): array
@@ -280,25 +272,7 @@ function connectdb($do_die = true): \BNT\ADODB\ADODBConnection
 
 function updatecookie()
 {
-  // refresh the cookie with username/password/id/res - times out after 60 mins, and player must login again.
-  global $gamepath;
-  global $gamedomain;
-  global $userpass;
-  global $username;
-  global $password;
-  global $id;
-  global $res;
-  // The new combined cookie login.
-  $userpass = $username."+".$password;
-  SetCookie("userpass",$userpass,time()+(3600*24)*365,$gamepath,$gamedomain);
-  if ($userpass != '' and $userpass != '+') {
-      setcookie("username","",0); // Legacy support, delete the old login cookies.
-      setcookie("password","",0); // Legacy support, delete the old login cookies.
-    $username = substr($userpass, 0, strpos($userpass, "+"));
-    $password = substr($userpass, strpos($userpass, "+")+1);
-  }
-  setcookie("id", $id ?? '');
-  setcookie("res", $res ?? '');
+
 }
 
 
@@ -926,31 +900,46 @@ function calc_ownership($sector)
   }
 }
 
-function player_insignia_name($a_username) {
-
-// Somewhat inefficient, but I think this is the best way to do this.
-
-global $db, $dbtables, $username, $player_insignia;
-global $l_insignia;
-
-$res = $db->Execute("SELECT score FROM $dbtables[ships] WHERE email='$a_username'");
-$playerinfo = $res->fields;
-$score_array = array('1000', '3000', '6000', '9000', '12000', '15000', '20000', '40000', '60000', '80000', '100000', '120000', '160000', '200000', '250000', '300000', '350000', '400000', '450000', '500000');
-
-for ( $i=0; $i<count($score_array); $i++)
+function player_insignia_name(\BNT\Ship\Ship $playerinfo)
 {
-    if ( $playerinfo[score] < $score_array[$i])
-     {
-       $player_insignia = $l_insignia[$i];
-       break;
-     }
-}
+    global $player_insignia;
+    global $l_insignia;
 
-if(!isset($player_insignia))
-  $player_insignia = end($l_insignia);
+    $score_array = [
+        '1000',
+        '3000',
+        '6000',
+        '9000',
+        '12000',
+        '15000',
+        '20000',
+        '40000',
+        '60000',
+        '80000',
+        '100000',
+        '120000',
+        '160000',
+        '200000',
+        '250000',
+        '300000',
+        '350000',
+        '400000',
+        '450000',
+        '500000'
+    ];
 
-return $player_insignia;
+    for ($i = 0; $i < count($score_array); $i++) {
+        if ($playerinfo->score < $score_array[$i]) {
+            $player_insignia = $l_insignia[$i];
+            break;
+        }
+    }
 
+    if (!isset($player_insignia)) {
+        $player_insignia = end($l_insignia);
+    }
+    
+    return $player_insignia;
 }
 
 function t_port($ptype) {

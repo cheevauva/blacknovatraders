@@ -13,7 +13,7 @@ include("header.php");
 
 
 
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }

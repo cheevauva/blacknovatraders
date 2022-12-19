@@ -8,7 +8,7 @@
 
 	connectdb();
 
-	if (checklogin()) {die();}
+	if (isNotAuthorized()) {die();}
 
 	$result = $db->Execute ("SELECT * FROM $dbtables[ships] WHERE email='$username'");
 	$playerinfo=$result->fields;

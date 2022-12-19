@@ -2,6 +2,7 @@
 //$Id$
 date_default_timezone_set('UTC');
 error_reporting(E_ALL);
+session_start();
 //ini_set('display_errors', 0);
 
 include("db_config.php");
@@ -180,6 +181,12 @@ $start_armor = 10;
 $start_credits = 1000;
 $start_energy = 100;
 $start_turns = 1200;
+$start_lssd = false;  //do ships start with an lssd ?
+$start_editors = 0;//starting warp editors
+$start_minedeflectors = 0;//start mine deflectors
+$start_emerwarp = 0; //start emergency warp units
+$start_beacon = 0; //start space_beacons
+$start_genesis = 0; //starting genesis torps
 
 $max_turns = 2500;
 $max_emerwarp = 10;

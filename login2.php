@@ -21,6 +21,10 @@ try {
 
     $ship = $login->ship;
     $correctLogin = true;
+    session_start();
+    $_SESSION['ship_id'] = $ship->ship_id;
+    $_SESSION['ship_lang'] = $ship->lang;
+    $_SESSION['interface'] = $mainfilename ?? '';
 } catch (ShipNotFoundException $ex) {
     $playerfound = false;
 } catch (ShipPasswordIncorrectException $ex) {
@@ -33,14 +37,7 @@ try {
 
 $lang = $ship->language ?? $default_lang;
 
-SetCookie("lang", $lang, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-include("languages/$lang" . ".inc");
-
-setcookie("interface", $mainfilename ?? '');
-
-/* first placement of cookie - don't use updatecookie. */
-$userpass = $email . "+" . $pass;
-SetCookie("userpass", $userpass, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
+loadlanguage($lang);
 
 include 'header.php';
 
@@ -58,12 +55,12 @@ if (!empty($incorrectPassword)) {
 
 if (!empty($correctLogin)) {
     TEXT_GOTOMAIN();
-    echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=$interface?id=" . $ship->id . "\">";
+    echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=$interface?id=" . $ship->ship_id . "\">";
     goto footer;
 }
 
-if ($ship->isDestroyed) {
-    if ($ship->hasEscapePod) {
+if ($ship->ship_destroyed) {
+    if ($ship->dev_escapepod) {
         echo $l_login_died;
     } else {
         echo "You have died in a horrible incident, <a href=log.php>here</a> is the blackbox information that was retrieved from your ships wreckage.<BR><BR>";

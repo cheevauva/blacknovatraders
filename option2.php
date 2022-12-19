@@ -2,7 +2,7 @@
 
 include("config.php");
 connectdb();
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }

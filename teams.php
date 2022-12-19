@@ -8,7 +8,7 @@ $title=$l_team_title;
 include("header.php");
 connectdb();
 
-if (checklogin()) {die();}
+if (isNotAuthorized()) {die();}
 bigtitle();
 $testing = false; // set to false to get rid of password when creating new alliance
 

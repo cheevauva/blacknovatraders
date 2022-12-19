@@ -11,7 +11,7 @@ connectdb();
 $title=$l_teamplanet_title;
 include("header.php");
 
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }

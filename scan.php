@@ -9,7 +9,7 @@ $title=$l_scan_title;
 include("header.php");
 
 connectdb();
-if(checklogin())
+if(isNotAuthorized())
 {
   die();
 }
