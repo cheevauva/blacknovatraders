@@ -27,4 +27,13 @@ class LinkRetrieveManyBySectorDAO extends LinkDAO
         }
     }
 
+    public static function call(int $sector): array
+    {
+        $self = new static;
+        $self->sector = $sector;
+        $self->serve();
+
+        return $self->links;
+    }
+
 }

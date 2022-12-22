@@ -6,6 +6,8 @@ namespace BNT\Planet\DAO;
 
 use BNT\ServantInterface;
 use BNT\DatabaseTrait;
+use BNT\TableEnum;
+use BNT\Planet\Mapper\PlanetMapper;
 
 abstract class PlanetDAO implements ServantInterface
 {
@@ -14,9 +16,12 @@ abstract class PlanetDAO implements ServantInterface
 
     protected function table(): string
     {
-        global $dbtables;
+        return TableEnum::Planets->toDb();
+    }
 
-        return $dbtables['planets'];
+    protected function mapper(): PlanetMapper
+    {
+        return new PlanetMapper;
     }
 
 }

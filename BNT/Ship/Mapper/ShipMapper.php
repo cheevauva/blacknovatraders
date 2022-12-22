@@ -83,6 +83,7 @@ class ShipMapper implements ServantInterface
             $ship->lang = $this->row['lang'];
             $ship->dhtml = $this->toBool($this->row['dhtml']);
             $ship->dev_lssd = $this->toBool($this->row['dev_lssd']);
+            $ship->sector = intval($this->row['sector']);
 
             $ship->lang = $this->row['lang'] ?? null;
         }

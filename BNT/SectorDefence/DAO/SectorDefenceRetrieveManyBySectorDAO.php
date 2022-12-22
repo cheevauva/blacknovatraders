@@ -2,33 +2,32 @@
 
 declare(strict_types=1);
 
-namespace BNT\Planet\DAO;
+namespace BNT\SectorDefence\DAO;
 
-class PlanetRetrieveManyBySectorDAO extends PlanetDAO
+class SectorDefenceRetrieveManyBySectorDAO extends SectorDefenceDAO
 {
 
     public int $sector;
-    public array $planets;
+    public array $defences = [];
 
     public function serve(): void
     {
-       
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
-        $qb->from($this->table(), 'p');
-        $qb->andWhere('p.sector_id = :sector_id');
+        $qb->from($this->table(), 'sd');
+        $qb->andWhere('sd.sector_id = :sector_id');
         $qb->setParameters([
             'sector_id' => $this->sector,
         ]);
         
-        $this->planets = [];
+        $this->defences = [];
 
-        foreach ($qb->fetchAllAssociative() as $planet) {
+        foreach ($qb->fetchAllAssociative() as $sectorDefence) {
             $mapper = $this->mapper();
-            $mapper->row = $planet;
+            $mapper->row = $sectorDefence;
             $mapper->serve();
 
-            $this->planets[] = $mapper->planet;
+            $this->defences[] = $mapper->defence;
         }
     }
 
@@ -38,7 +37,7 @@ class PlanetRetrieveManyBySectorDAO extends PlanetDAO
         $self->sector = $sector;
         $self->serve();
 
-        return $self->planets;
+        return $self->defences;
     }
 
 }

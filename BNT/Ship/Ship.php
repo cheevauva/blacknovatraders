@@ -132,10 +132,28 @@ class Ship
         if ($planetavg < 8) {
             return 0;
         } else if ($planetavg < 12) {
-            return  1;
+            return 1;
         } else if ($planetavg < 16) {
             return 2;
         } else if ($planetavg < 20) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    public function getLevel(): int
+    {
+        $shipavg = $this->hull + $this->engines + $this->power + $this->computer + $this->sensors + $this->armor + $this->shields + $this->beams + $this->torp_launchers + $this->cloak;
+        $shipavg /= 10;
+
+        if ($shipavg < 8) {
+            return 0;
+        } else if ($shipavg < 12) {
+            return 1;
+        } else if ($shipavg < 16) {
+            return 2;
+        } else if ($shipavg < 20) {
             return 3;
         } else {
             return 4;

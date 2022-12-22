@@ -232,6 +232,74 @@ function ship(): \BNT\Ship\Ship
     return $ship;
 }
 
+function asSectorDefence($sectorDefence): BNT\SectorDefence\SectorDefence
+{
+    return $sectorDefence;
+}
+
+function getPlanetName(?\BNT\Planet\Planet $planet = null): string
+{
+    global $l_unnamed;
+    
+    return $planet ? ($planet->name ?: $l_unnamed) : $l_unknown;
+}
+
+function asShip($ship): \BNT\Ship\Ship
+{
+    return $ship;
+}
+
+
+function asPlanet($planet): \BNT\Planet\Planet
+{
+    return $planet;
+}
+
+function getPlanetLevel(?\BNT\Ship\Ship $planetOwner = nul)
+{
+    if ($planetOwner) {
+        return $planetOwner->getPlanetLevel();
+    }
+
+    return 0;
+}
+
+function asTraderoute($traderoute): \BNT\Traderoute\Traderoute
+{
+    return $traderoute;
+}
+
+function getTraderouteDirectionLabel(\BNT\Traderoute\Traderoute $traderoute): string
+{
+    return match ($traderoute->circuit) {
+        BNT\Traderoute\TraderouteCircuitEnum::One => '=>',
+        BNT\Traderoute\TraderouteCircuitEnum::Two => '<=>',
+    };
+}
+
+function getTraderouteSrcLabel(\BNT\Traderoute\Traderoute $traderoute): string
+{
+    global $l_port;
+    global $l_defense;
+    
+    return match ($traderoute->source_type) {
+        BNT\Traderoute\TraderouteTypeEnum::Port => $l_port,
+        BNT\Traderoute\TraderouteTypeEnum::Defense => $l_defense,
+        BNT\Traderoute\TraderouteTypeEnum::Personal, BNT\Traderoute\TraderouteTypeEnum::Corperate => getPlanetName(\BNT\Planet\DAO\PlanetRetrieveByIdDAO::call($traderoute->source_id)),
+    };
+}
+
+function getTraderouteDstLabel(\BNT\Traderoute\Traderoute $traderoute): string
+{
+    global $l_defense;
+    
+    return match ($traderoute->dest_type) {
+        BNT\Traderoute\TraderouteTypeEnum::Port => strval($traderoute->dest_id),
+        BNT\Traderoute\TraderouteTypeEnum::Defense => sprintf('%s [%s]', $l_defense, $traderoute->dest_id),
+        BNT\Traderoute\TraderouteTypeEnum::Personal, BNT\Traderoute\TraderouteTypeEnum::Corperate => getPlanetName(\BNT\Planet\DAO\PlanetRetrieveByIdDAO::call($traderoute->dest_id)),
+    };
+}
+
 function loadlanguage(string $language): array
 {
     $language = str_replace('.inc', '', $language);
@@ -445,9 +513,10 @@ $news = $db->Execute("INSERT INTO $dbtables[news] (headline, newstext, user_id, 
 
 function NUMBER($number, $decimals = 0)
 {
-  global $local_number_dec_point;
-  global $local_number_thousands_sep;
-  return number_format($number, $decimals, $local_number_dec_point, $local_number_thousands_sep);
+    global $local_number_dec_point;
+    global $local_number_thousands_sep;
+    
+    return number_format($number, $decimals, $local_number_dec_point, $local_number_thousands_sep);
 }
 
 function NUM_HOLDS($level_hull)
@@ -942,34 +1011,23 @@ function player_insignia_name(\BNT\Ship\Ship $playerinfo)
     return $player_insignia;
 }
 
-function t_port($ptype) {
+function t_port(BNT\Sector\SectorPortTypeEnum $ptype): string
+{
+    global $l_ore;
+    global $l_none;
+    global $l_energy;
+    global $l_organics;
+    global $l_goods;
+    global $l_special;
 
-global $l_ore, $l_none, $l_energy, $l_organics, $l_goods, $l_special;
-
-switch ($ptype) {
-    case "ore":
-        $ret=$l_ore;
-        break;
-    case "none":
-        $ret=$l_none;
-        break;
-    case "energy":
-        $ret=$l_energy;
-        break;
-    case "organics":
-        $ret=$l_organics;
-        break;
-    case "goods":
-        $ret=$l_goods;
-        break;
-    case "special":
-        $ret=$l_special;
-        break;
-
-
-}
-
-return $ret;
+    return match ($ptype) {
+        BNT\Sector\SectorPortTypeEnum::Ore => $l_ore,
+        BNT\Sector\SectorPortTypeEnum::None => $l_none,
+        BNT\Sector\SectorPortTypeEnum::Energy => $l_energy,
+        BNT\Sector\SectorPortTypeEnum::Organics => $l_organics,
+        BNT\Sector\SectorPortTypeEnum::Goods => $l_goods,
+        BNT\Sector\SectorPortTypeEnum::Special => $l_special,
+    };
 }
 
 function stripnum($str)

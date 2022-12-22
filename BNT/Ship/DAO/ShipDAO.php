@@ -7,6 +7,7 @@ namespace BNT\Ship\DAO;
 use BNT\ServantInterface;
 use BNT\DatabaseTrait;
 use BNT\Ship\Mapper\ShipMapper;
+use BNT\TableEnum;
 
 abstract class ShipDAO implements ServantInterface
 {
@@ -15,9 +16,7 @@ abstract class ShipDAO implements ServantInterface
 
     protected function table(): string
     {
-        global $dbtables;
-
-        return $dbtables['ships'];
+        return TableEnum::Ships->toDb();
     }
 
     protected function mapper(): ShipMapper

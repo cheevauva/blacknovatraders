@@ -7,6 +7,7 @@ namespace BNT\Link\DAO;
 use BNT\ServantInterface;
 use BNT\DatabaseTrait;
 use BNT\Link\Mapper\LinkMapper;
+use BNT\TableEnum;
 
 abstract class LinkDAO implements ServantInterface
 {
@@ -15,9 +16,7 @@ abstract class LinkDAO implements ServantInterface
 
     protected function table(): string
     {
-        global $dbtables;
-
-        return $dbtables['links'];
+        return TableEnum::Links->toDb();
     }
 
     protected function mapper(): LinkMapper

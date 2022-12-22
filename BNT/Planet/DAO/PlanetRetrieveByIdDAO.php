@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship\DAO;
+namespace BNT\Planet\DAO;
 
-use BNT\Ship\Ship;
+use BNT\Planet\Planet;
 
-class ShipRetrieveByIdDAO extends ShipDAO
+class PlanetRetrieveByIdDAO extends PlanetDAO
 {
 
     public int $id;
-    public ?Ship $ship;
+    public ?Planet $planet;
 
     public function serve(): void
     {
@@ -27,16 +27,16 @@ class ShipRetrieveByIdDAO extends ShipDAO
         $mapper->row = $qb->fetchAssociative() ?: [];
         $mapper->serve();
 
-        $this->ship = $mapper->ship;
+        $this->planet = $mapper->planet;
     }
-
-    public static function call(int $id): ?Ship
+    
+    public static function call(int $id): ?Planet
     {
         $self = new static;
         $self->id = $id;
         $self->serve();
-
-        return $self->ship;
+        
+        return $self->planet;
     }
 
 }
