@@ -160,4 +160,14 @@ class Ship
         }
     }
 
+    public function getFreeHolds(): float
+    {
+        return NUM_HOLDS($this->hull) - $this->ship_ore - $this->ship_organics - $this->ship_goods - $this->ship_colonists;
+    }
+
+    public function getFreePower(): float
+    {
+        return NUM_ENERGY($this->power) - $this->ship_energy;
+    }
+
 }
