@@ -390,7 +390,7 @@ function Real_Space_Move($destination)
   {
     $energyscooped = 100;
   }
-  $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+  $free_power = asShip($playerinfo)->getFreePower();
 
   // amount of energy that can be stored is less than amount scooped amount scooped is set to what can be stored
   if($free_power < $energyscooped)

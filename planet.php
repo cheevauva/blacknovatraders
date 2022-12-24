@@ -277,8 +277,8 @@ if(!empty($planetinfo))
     elseif($command == "transfer")
     {
       /* transfer menu */
-      $free_holds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
-      $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+      $free_holds = asShip($playerinfo)->getFreeHolds();
+      $free_power = asShip($playerinfo)->getFreePower();
       $l_planet_cinfo=str_replace("[cargo]",NUMBER($free_holds),$l_planet_cinfo);
       $l_planet_cinfo=str_replace("[energy]",NUMBER($free_power),$l_planet_cinfo);
       echo "$l_planet_cinfo<BR><BR>";

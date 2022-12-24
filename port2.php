@@ -103,9 +103,8 @@ if ($sectorinfo->port_type !== SectorPortTypeEnum::Special && $sectorinfo->port_
 
     $cargo_exchanged = $trade_ore + $trade_organics + $trade_goods;
 
-    $free_holds = NUM_HOLDS($playerinfo->hull) - $playerinfo[ship_ore] - $playerinfo[ship_organics] -
-    $playerinfo[ship_goods] - $playerinfo[ship_colonists];
-    $free_power = NUM_ENERGY($playerinfo->power) - $playerinfo[ship_energy];
+    $free_holds = asShip($playerinfo)->getFreeHolds();
+    $free_power = asShip($playerinfo)->getFreePower();
     $total_cost = $trade_ore * $ore_price + $trade_organics * $organics_price + $trade_goods * $goods_price +
     $trade_energy * $energy_price;
 

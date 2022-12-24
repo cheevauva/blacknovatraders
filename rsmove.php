@@ -78,7 +78,7 @@ elseif (($destination <= $sector_max && empty($engage)) || ($destination <= $sec
   {
     $energyscooped = 100;
   }
-  $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+  $free_power = asShip($playerinfo)->getFreePower();
   if($free_power < $energyscooped)
   {
     $energyscooped = $free_power;
@@ -117,7 +117,7 @@ elseif($destination <= $sector_max && $engage > 0)
   {
     $energyscooped = 100;
   }
-  $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+  $free_power = asShip($playerinfo)->getFreePower();
   if($free_power < $energyscooped)
   {
     $energyscooped = $free_power;

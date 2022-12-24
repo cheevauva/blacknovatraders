@@ -28,7 +28,6 @@ class SectorPortSpecialServant implements ServantInterface
         global $fighter_max;
         global $torpedo_max;
         global $armor_max;
-        global $colonist_max;
 
         $playerinfo = $this->ship;
 
@@ -40,7 +39,7 @@ class SectorPortSpecialServant implements ServantInterface
         $this->armor_max = NUM_ARMOUR($playerinfo->armor);
         $this->armor_free = $armor_max - $playerinfo->armor_pts;
         $this->colonist_max = NUM_HOLDS($playerinfo->hull) - $playerinfo->ship_ore - $playerinfo->ship_organics - $playerinfo->ship_goods;
-        $this->colonist_free = $colonist_max - $playerinfo->ship_colonists;
+        $this->colonist_free = $playerinfo->getFreeHolds();
     }
 
     public static function call(Ship $ship): self

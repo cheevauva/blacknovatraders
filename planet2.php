@@ -15,8 +15,7 @@ if(isNotAuthorized())
 
 //-------------------------------------------------------------------------------------------------
 
-$result = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
-$playerinfo = $result->fields;
+$playerinfo = ship();
 
 $result2 = $db->Execute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
 if($result2)
@@ -37,10 +36,10 @@ if($playerinfo[turns] < 1)
 }
 else
 {
-  $free_holds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
-  $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
-  $fighter_max = NUM_FIGHTERS($playerinfo[computer]) - $playerinfo[ship_fighters];
-  $torpedo_max = NUM_TORPEDOES($playerinfo[torp_launchers]) - $playerinfo[torps];
+  $free_holds = asShip($playerinfo)->getFreeHolds();
+  $free_power = asShip($playerinfo)->getFreePower();
+  $fighter_max = asShip($playerinfo)->getFighterMax();
+  $torpedo_max = asShip($playerinfo)->getTorpedoesMax();
 
   // first setup the tp flags
   if($tpore != -1)

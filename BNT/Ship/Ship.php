@@ -181,7 +181,7 @@ class Ship
         return $fighterMax;
     }
 
-    public function getArmorMax()
+    public function getTorpedoesMax()
     {
         $torpedoMax = NUM_TORPEDOES($this->torp_launchers) - $this->torps;
 
@@ -192,7 +192,7 @@ class Ship
         return $torpedoMax;
     }
 
-    public function getTorpedoesMax()
+    public function getArmorMax()
     {
         $armorMax = NUM_ARMOUR($this->armor) - $this->armor_pts;
 
@@ -205,7 +205,7 @@ class Ship
 
     public function getColonistMax()
     {
-        $colonistMax = NUM_HOLDS($this->hull) - $this->ship_ore - $this->ship_organics - $this->ship_goods - $this->ship_colonists;
+        $colonistMax = $this->getFreeHolds();
 
         if ($colonistMax < 0) {
             $colonistMax = 0;

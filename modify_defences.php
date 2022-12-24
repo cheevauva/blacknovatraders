@@ -22,8 +22,7 @@ If(!isset($defence_id))
    die();
 }
 
-$res = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
-$playerinfo = $res->fields;
+$playerinfo = ship();
 $res = $db->Execute("SELECT * from $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
 $sectorinfo = $res->fields;
 
@@ -135,8 +134,8 @@ switch($response) {
       {
          $quantity = $defenceinfo['quantity'];
       }
-      $torpedo_max = NUM_TORPEDOES($playerinfo[torp_launchers]) - $playerinfo[torps];
-      $fighter_max = NUM_FIGHTERS($playerinfo[computer]) - $playerinfo[ship_fighters];
+      $torpedo_max = asShip($playerinfo)->getTorpedoesMax();
+      $fighter_max = asShip($playerinfo)->getFighterMax();
       if($defenceinfo['defence_type'] == 'F')
       {
          if($quantity > $fighter_max)

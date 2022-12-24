@@ -33,7 +33,7 @@ while(!$result->EOF)
   $result->MoveNext();
 }
 
-$freeholds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
+$freeholds = asShip($playerinfo)->getFreeHolds();
 $maxholds = NUM_HOLDS($playerinfo[hull]);
 $maxenergy = NUM_ENERGY($playerinfo[power]);
 if ($playerinfo[ship_colonists] < 0 || $playerinfo[ship_ore] < 0 || $playerinfo[ship_organics] < 0 || $playerinfo[ship_goods] < 0 || $playerinfo[ship_energy] < 0 || $freeholds < 0)
@@ -412,7 +412,7 @@ function traderoute_distance($type1, $type2, $start, $dest, $circuit, $sells = '
   if($playerinfo[dev_fuelscoop] == "Y" && !$energyscooped && $triptime == 1)
     $energyscooped = 100;
 
-  $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+  $free_power = asShip($playerinfo)->getFreePower();
 
   if($free_power < $energyscooped)
     $energyscooped = $free_power;
@@ -1362,7 +1362,7 @@ traderoute_results_table_top();
 
       if($playerinfo[trade_colonists] == 'Y')
       {
-      $free_holds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
+      $free_holds = asShip($playerinfo)->getFreeHolds();
         $colonists_buy = $free_holds;
 
         if($playerinfo[credits] < $colonist_price * $colonists_buy)
@@ -1379,7 +1379,7 @@ traderoute_results_table_top();
 
       if($playerinfo[trade_fighters] == 'Y')
       {
-        $free_fighters = NUM_FIGHTERS($playerinfo[computer]) - $playerinfo[ship_fighters];
+        $free_fighters = asShip($playerinfo)->getFighterMax();
         $fighters_buy = $free_fighters;
 
         if($total_credits < $fighters_buy * $fighter_price)
@@ -1396,7 +1396,7 @@ traderoute_results_table_top();
 
       if($playerinfo[trade_torps] == 'Y')
       {
-        $free_torps = NUM_FIGHTERS($playerinfo[torp_launchers]) - $playerinfo[torps];
+        $free_torps = asShip($playerinfo)->getTorpedoesMax();
         $torps_buy = $free_torps;
 
         if($total_credits < $torps_buy * $torpedo_price)
@@ -1530,7 +1530,7 @@ traderoute_results_table_top();
         $playerinfo[ship_energy] -= $energy_buy;
       }
 
-      $free_holds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
+      $free_holds = asShip($playerinfo)->getFreeHolds();
 
       //time to buy
       if($source[port_type] == 'ore')
@@ -1629,7 +1629,7 @@ traderoute_results_table_top();
 //------------- Source is planet (begin) -----
   elseif(($traderoute[source_type] == 'L') || ($traderoute[source_type] == 'C'))
   {
-    $free_holds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
+    $free_holds = asShip($playerinfo)->getFreeHolds();
 
     if($traderoute[dest_type] == 'P')
     {
@@ -1704,7 +1704,7 @@ traderoute_results_table_top();
       else
         $colonists_buy = 0;
 
-      $free_torps = NUM_TORPEDOES($playerinfo[torp_launchers]) - $playerinfo[torps];
+      $free_torps = asShip($playerinfo)->getTorpedoesMax();
       if($source[torps] > 0 && $free_torps > 0 && $playerinfo[trade_torps] == 'Y')
       {
         if($source[torps] > $free_torps)
@@ -1718,7 +1718,7 @@ traderoute_results_table_top();
       else
         $torps_buy = 0;
 
-      $free_fighters = NUM_FIGHTERS($playerinfo[computer]) - $playerinfo[ship_fighters];
+      $free_fighters = asShip($playerinfo)->getFighterMax();
       if($source[fighters] > 0 && $free_fighters > 0 && $playerinfo[trade_fighters] == 'Y')
       {
         if($source[fighters] > $free_fighters)
@@ -1850,7 +1850,7 @@ traderoute_results_table_top();
       else
         $energy_buy = 0;
 
-      $free_holds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
+      $free_holds = asShip($playerinfo)->getFreeHolds();
 
       //time to buy
       if($dest[port_type] == 'ore')
