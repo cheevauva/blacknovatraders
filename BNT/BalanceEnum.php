@@ -26,6 +26,16 @@ enum BalanceEnum
     case dev_emerwarp_price;
     case dev_warpedit_price;
     case dev_minedeflector_price;
+    case goods_price;
+    case goods_delta;
+    case goods_limit;
+    case energy_price;
+    case energy_delta;
+    case energy_limit;
+    case organics_price;
+    case organics_delta;
+    case organics_limit;
+    case inventory_factor;
 
     public function val(): mixed
     {
@@ -34,6 +44,15 @@ enum BalanceEnum
         global $ore_rate;
         global $ore_prate;
         global $ore_limit;
+        global $goods_price;
+        global $goods_delta;
+        global $goods_limit;
+        global $energy_price;
+        global $energy_delta;
+        global $energy_limit;
+        global $organics_price;
+        global $organics_delta;
+        global $organics_limit;
         global $upgrade_cost;
         global $fighter_price;
         global $torpedo_price;
@@ -48,6 +67,7 @@ enum BalanceEnum
         global $dev_emerwarp_price;
         global $dev_warpedit_price;
         global $dev_minedeflector_price;
+        global $inventory_factor;
 
         return match ($this) {
             BalanceEnum::ore_price => $ore_price,
@@ -69,6 +89,16 @@ enum BalanceEnum
             BalanceEnum::dev_emerwarp_price => $dev_emerwarp_price,
             BalanceEnum::dev_warpedit_price => $dev_warpedit_price,
             BalanceEnum::dev_minedeflector_price => $dev_minedeflector_price,
+            BalanceEnum::goods_price => $goods_price,
+            BalanceEnum::goods_delta => $goods_delta,
+            BalanceEnum::goods_limit => $goods_limit,
+            BalanceEnum::energy_price => $energy_price,
+            BalanceEnum::energy_delta => $energy_delta,
+            BalanceEnum::energy_limit => $energy_limit,
+            BalanceEnum::organics_price => $organics_price,
+            BalanceEnum::organics_delta => $organics_delta,
+            BalanceEnum::organics_limit => $organics_limit,
+            BalanceEnum::inventory_factor => $inventory_factor,
         };
     }
 

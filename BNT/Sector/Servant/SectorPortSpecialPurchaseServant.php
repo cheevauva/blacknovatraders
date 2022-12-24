@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BNT\Sector\Servant;
 
 use BNT\ServantInterface;
-use BNT\Sector\Exception\SectorException;
 use BNT\Ship\DAO\ShipSaveDAO;
 
 class SectorPortSpecialPurchaseServant implements ServantInterface
@@ -19,10 +18,7 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
         $offer->serve();
 
         $ship = $offer->ship;
-
-        if ($offer->total_cost > $ship->credits) {
-            throw SectorException::notEnoughCreditsForPurchase($ship->credits, $offer->total_cost);
-        }
+        $ship->pay($offer->total_cost);
         
         $ship->hull = max($offer->hull_upgrade, $ship->hull);
         $ship->engines = max($offer->engine_upgrade, $ship->engines);
@@ -48,11 +44,7 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
         $ship->dev_escapepod = $ship->dev_escapepod ?: !empty($offer->escapepod_purchase);
         $ship->dev_fuelscoop = $ship->dev_fuelscoop ?: !empty($offer->fuelscoop_purchase);
         $ship->dev_lssd = $ship->dev_lssd ?: !empty($offer->lssd_purchase);
-        //
-        $ship->credits = $ship->credits - $offer->total_cost;
-        $ship->turns--;
-        $ship->turns_used++;
-
+        
         ShipSaveDAO::call($ship);
     }
 

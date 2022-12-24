@@ -1,3 +1,4 @@
+<?php $calculator = BNT\Sector\Servant\SectorPortTradeWithShipServant::as($calculator); ?>
 <?php bigtitle($l_title_trade); ?>
 <FORM ACTION=port2.php METHOD=POST>
     <table>

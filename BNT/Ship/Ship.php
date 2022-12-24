@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BNT\Ship;
 
 use DateTime;
+use BNT\Ship\Exception\ShipException;
+use BNT\Ship\ShipResourceEnum;
 
 class Ship
 {
@@ -27,7 +29,7 @@ class Ship
     public int $armor = 0;
     public int $armor_pts = 0;
     public int $cloak = 0;
-    public int $credits = 0;
+    public $credits = 0; // @todo int in db
     public int $sector = 0;
     public int $ship_ore = 0;
     public int $ship_organics = 0;
@@ -212,6 +214,99 @@ class Ship
         }
 
         return $colonistMax;
+    }
+
+    public function turn(): void
+    {
+        if ($this->turns < 1) {
+            throw ShipException::notAllowTurn();
+        }
+
+        $this->turns--;
+        $this->turns_used++;
+    }
+
+    private function setAmount(ShipResourceEnum $resource, $amount)
+    {
+        match ($resource) {
+            ShipResourceEnum::Energy => $this->ship_energy = $amount,
+            ShipResourceEnum::Ore => $this->ship_ore = $amount,
+            ShipResourceEnum::Organics => $this->ship_organics = $amount,
+            ShipResourceEnum::Goods => $this->ship_goods = $amount,
+        };
+    }
+
+    public function trade(ShipResourceEnum $resource, $amount): void
+    {
+        if (empty($amount)) {
+            return;
+        }
+
+        if ($amount < 0) {
+            $this->buy($resource, abs($amount));
+        } else {
+            $this->sell($resource, abs($amount));
+        }
+    }
+
+    public function sell(ShipResourceEnum $resource, $amount): void
+    {
+        $current = $this->amount($resource);
+
+        if ($current < $amount) {
+            throw ShipException::notEnoughResourceForSelling($resource, $current, $amount);
+        }
+
+        switch ($resource) {
+            case ShipResourceEnum::Energy:
+            case ShipResourceEnum::Ore:
+            case ShipResourceEnum::Organics:
+            case ShipResourceEnum::Goods:
+                $this->setAmount($resource, $current - $amount);
+                break;
+        }
+    }
+
+    public function buy(ShipResourceEnum $resource, $amount): void
+    {
+        $current = $this->amount($resource);
+
+        switch ($resource) {
+            case ShipResourceEnum::Energy:
+                if ($amount > $this->getFreePower()) {
+                    throw ShipException::notEnoughPowerForPurchase($this->getFreePower(), $amount);
+                }
+                break;
+        }
+
+        switch ($resource) {
+            case ShipResourceEnum::Energy:
+            case ShipResourceEnum::Ore:
+            case ShipResourceEnum::Organics:
+            case ShipResourceEnum::Goods:
+                $this->setAmount($resource, $current + $amount);
+                break;
+        }
+    }
+
+    public function amount(ShipResourceEnum $resource)
+    {
+        return match ($resource) {
+            ShipResourceEnum::Energy => $this->ship_energy,
+            ShipResourceEnum::Ore => $this->ship_ore,
+            ShipResourceEnum::Organics => $this->ship_organics,
+            ShipResourceEnum::Goods => $this->ship_goods,
+        };
+    }
+
+    public function pay($cost): void
+    {
+        if ($this->credits < $cost) {
+            throw ShipException::notEnoughCredits($this->credits, $cost);
+        }
+
+        $this->turn();
+        $this->credits -= $cost;
     }
 
 }

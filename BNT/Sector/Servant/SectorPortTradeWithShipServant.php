@@ -25,39 +25,18 @@ class SectorPortTradeWithShipServant implements ServantInterface
 
     public function serve(): void
     {
-        global $organics_delta;
-        global $organics_limit;
         global $organics_price;
-        global $ore_delta;
-        global $ore_limit;
         global $ore_price;
-        global $inventory_factor;
-        global $goods_delta;
-        global $goods_limit;
         global $goods_price;
-        global $energy_limit;
-        global $energy_delta;
         global $energy_price;
 
         $sector = $this->sector;
         $ship = $this->ship;
 
-        $ore_price_diff = ((($ore_delta * $sector->port_ore) / $ore_limit) * $inventory_factor);
-        $organics_price_diff = ((($organics_delta * $sector->port_organics) / $organics_limit) * $inventory_factor);
-        $goods_price_diff = ((( $goods_delta * $sector->port_goods) / $goods_limit) * $inventory_factor);
-        $energy_price_diff = ((($energy_delta * $sector->port_energy) / $energy_limit) * $inventory_factor);
-        //
-        $this->ore_price = $ore_price + $ore_price_diff;
-        $this->organics_price = $organics_price + $organics_price_diff;
-        $this->goods_price = $goods_price + $goods_price_diff;
-        $this->energy_price = $energy_price + $energy_price_diff;
-
-        match ($sector->port_type) {
-            SectorPortTypeEnum::Ore => $this->ore_price = $ore_price - $ore_price_diff,
-            SectorPortTypeEnum::Organics => $this->organics_price = $organics_price - $organics_price_diff,
-            SectorPortTypeEnum::Goods => $this->goods_price = $goods_price - $goods_price_diff,
-            SectorPortTypeEnum::Energy => $this->energy_price = $energy_price - $energy_price_diff,
-        };
+        $this->ore_price = $sector->priceByPortType(SectorPortTypeEnum::Ore);
+        $this->organics_price = $sector->priceByPortType(SectorPortTypeEnum::Organics);;
+        $this->goods_price = $sector->priceByPortType(SectorPortTypeEnum::Goods);
+        $this->energy_price = $sector->priceByPortType(SectorPortTypeEnum::Energy);
 
         // establish default amounts for each commodity
         $this->ore_amount = $ship->ship_ore;
@@ -69,7 +48,7 @@ class SectorPortTradeWithShipServant implements ServantInterface
             SectorPortTypeEnum::Ore => $this->ore_amount = NUM_HOLDS($ship->hull) - $ship->ship_ore - $ship->ship_colonists,
             SectorPortTypeEnum::Organics => $this->organics_amount = NUM_HOLDS($ship->hull) - $ship->ship_organics - $ship->ship_colonists,
             SectorPortTypeEnum::Goods => $this->goods_amount = NUM_HOLDS($ship->hull) - $ship->ship_goods - $ship->ship_colonists,
-            SectorPortTypeEnum::Energy => $this->energy_amount = NUM_ENERGY($ship->power) - $ship->ship_energy,
+            SectorPortTypeEnum::Energy => $this->energy_amount = $ship->getFreePower(),
         };
 
         // limit amounts to port quantities
@@ -94,6 +73,11 @@ class SectorPortTradeWithShipServant implements ServantInterface
         $self->ship = $ship;
         $self->serve();
 
+        return $self;
+    }
+
+    public static function as($self): self
+    {
         return $self;
     }
 
