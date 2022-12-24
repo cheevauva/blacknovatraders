@@ -516,7 +516,7 @@ function NUMBER($number, $decimals = 0)
     global $local_number_dec_point;
     global $local_number_thousands_sep;
     
-    return number_format($number, $decimals, $local_number_dec_point, $local_number_thousands_sep);
+    return number_format($number ?? 0, $decimals, $local_number_dec_point, $local_number_thousands_sep);
 }
 
 function NUM_HOLDS($level_hull)
@@ -1119,11 +1119,11 @@ function isLoanPending($ship_id)
   {
     $account=$res->fields;
 
-    if($account[loan] == 0)
+    if($account['loan'] == 0)
       return false;
 
     $curtime=time();
-    $difftime = ($curtime - $account[time]) / 60;
+    $difftime = ($curtime - $account['time']) / 60;
     if($difftime > $IGB_lrate)
       return true;
     else

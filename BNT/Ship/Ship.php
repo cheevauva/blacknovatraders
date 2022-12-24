@@ -170,4 +170,48 @@ class Ship
         return NUM_ENERGY($this->power) - $this->ship_energy;
     }
 
+    public function getFighterMax()
+    {
+        $fighterMax = NUM_FIGHTERS($this->computer) - $this->ship_fighters;
+
+        if ($fighterMax < 0) {
+            $fighterMax = 0;
+        }
+
+        return $fighterMax;
+    }
+
+    public function getArmorMax()
+    {
+        $torpedoMax = NUM_TORPEDOES($this->torp_launchers) - $this->torps;
+
+        if ($torpedoMax < 0) {
+            $torpedoMax = 0;
+        }
+
+        return $torpedoMax;
+    }
+
+    public function getTorpedoesMax()
+    {
+        $armorMax = NUM_ARMOUR($this->armor) - $this->armor_pts;
+
+        if ($armorMax < 0) {
+            $armorMax = 0;
+        }
+
+        return $armorMax;
+    }
+
+    public function getColonistMax()
+    {
+        $colonistMax = NUM_HOLDS($this->hull) - $this->ship_ore - $this->ship_organics - $this->ship_goods - $this->ship_colonists;
+
+        if ($colonistMax < 0) {
+            $colonistMax = 0;
+        }
+
+        return $colonistMax;
+    }
+
 }

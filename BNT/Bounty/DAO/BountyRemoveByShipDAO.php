@@ -2,23 +2,20 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship\DAO;
+namespace BNT\Bounty\DAO;
 
 use BNT\Ship\Ship;
 
-class ShipSaveDAO extends ShipDAO
+class BountyRemoveByShipDAO extends BountyDAO
 {
 
     public Ship $ship;
 
     public function serve(): void
     {
-        $mapper = $this->mapper();
-        $mapper->ship = $this->ship;
-        $mapper->serve();
-
-        $this->db()->update($this->table(), $mapper->row, [
-            'ship_id' => $this->ship->ship_id,
+        $this->db()->delete($this->table(), [
+            'bounty_on' => $this->ship->ship_id,
+            'placed_by' => 0,
         ]);
     }
 

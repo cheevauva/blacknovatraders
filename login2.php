@@ -21,10 +21,11 @@ try {
 
     $ship = $login->ship;
     $correctLogin = true;
-    session_start();
     $_SESSION['ship_id'] = $ship->ship_id;
     $_SESSION['ship_lang'] = $ship->lang;
     $_SESSION['interface'] = $mainfilename ?? '';
+    header('Location: main.php?id=' . $ship->ship_id);
+    die;
 } catch (ShipNotFoundException $ex) {
     $playerfound = false;
 } catch (ShipPasswordIncorrectException $ex) {
@@ -50,12 +51,6 @@ if (empty($playerfound)) {
 
 if (!empty($incorrectPassword)) {
     echo "$l_login_4gotpw1 <A HREF=mail.php?mail=$email>$l_clickme</A> $l_login_4gotpw2 <a href=login.php>$l_clickme</a> $l_login_4gotpw3 $ip...";
-    goto footer;
-}
-
-if (!empty($correctLogin)) {
-    TEXT_GOTOMAIN();
-    echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=$interface?id=" . $ship->ship_id . "\">";
     goto footer;
 }
 

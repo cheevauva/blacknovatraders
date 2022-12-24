@@ -42,9 +42,7 @@ class ShipLoginServant implements ServantInterface
         $ship->last_login = new \DateTime;
         $ship->ip_address = $this->ip;
 
-        $save = new ShipSaveDAO;
-        $save->ship = $ship;
-        $save->serve();
+        ShipSaveDAO::call($ship);
 
         playerlog($ship->ship_id, LOG_LOGIN, $this->ip);
     }
