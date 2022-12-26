@@ -18,7 +18,7 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
         $offer->serve();
 
         $ship = $offer->ship;
-        $ship->pay($offer->total_cost);
+        $ship->payment($offer->total_cost);
         
         $ship->hull = max($offer->hull_upgrade, $ship->hull);
         $ship->engines = max($offer->engine_upgrade, $ship->engines);

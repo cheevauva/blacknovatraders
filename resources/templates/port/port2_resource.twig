@@ -1,0 +1,33 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_title_trade }}{% endblock %}
+{% block content %}
+    <TABLE >
+        <TR>
+            <TD colspan=2>{{  tr.l_trade_result }}</TD>
+        </TR>
+        <TR>
+            <TD colspan=2>
+                {{  offerResource.total_cost < 0 ? tr.l_profit : tr.l_cost }}
+                {{  NUMBER(abs(offerResource.total_cost)) }} {{  tr.l_credits }}
+            </TD>
+        </TR>
+        <TR>
+            <TD>{{  tr.l_traded_ore }}</TD>
+            <TD >{{  NUMBER(offerResource.trade_ore) }}</TD>
+        </TR>
+        <TR>
+            <TD>{{  tr.l_traded_organics }}</TD>
+            <TD> {{  NUMBER(offerResource.trade_organics) }}</TD>
+        </TR>
+        <TR>
+            <TD>{{  tr.l_traded_goods }}</TD>
+            <TD >{{  NUMBER(offerResource.trade_goods) }}</TD>
+        </TR>
+        <TR>
+            <TD>{{  tr.l_traded_energy }}</TD>
+            <TD >{{  NUMBER(offerResource.trade_energy) }}</TD>
+        </TR>
+    </TABLE>
+
+    {{  tr.l_trade_complete }}<br/>
+{% endblock %}

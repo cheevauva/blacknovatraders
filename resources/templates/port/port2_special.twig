@@ -1,0 +1,108 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_title_trade }}{% endblock %}
+{% block content %}
+    <TABLE>
+        <TR>
+            <TD>{{ tr.l_trade_result }}</TD>
+        </TR>
+        <TR> 
+            <TD>{{ tr.l_cost }} : {{  trade_credits }}  {{ tr.l_credits }}</TD>
+        </TR>
+        {% if (offer.hull_upgrade > playerinfo.hull)  %}
+            <tr>
+                <td colspan="2">{{ tr.l_hull }} {{ tr.l_trade_upgraded }} {{ offer.hull_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.engine_upgrade > playerinfo.engines) %}
+            <tr>
+                <td colspan="2">{{ tr.l_engines }} {{ tr.l_trade_upgraded }} {{ offer.engine_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.power_upgrade > playerinfo.power) %}
+            <tr>
+                <td colspan="2">{{ tr.l_power }} {{ tr.l_trade_upgraded }} {{ offer.power_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.computer_upgrade > playerinfo.computer) %}
+            <tr>
+                <td colspan="2">{{ tr.l_computer }} {{ tr.l_trade_upgraded }} {{ offer.computer_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.sensors_upgrade > playerinfo.sensors) %}
+            <tr>
+                <td colspan="2">{{ tr.l_sensors }} {{ tr.l_trade_upgraded }} {{ offer.sensors_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.beams_upgrade > playerinfo.beams) %}
+            <tr>
+                <td colspan="2">{{ tr.l_beams }} {{ tr.l_trade_upgraded }} {{ offer.beams_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.armor_upgrade > playerinfo.armor) %}
+            <tr>
+                <td colspan="2">{{ tr.l_armor }} {{ tr.l_trade_upgraded }} {{ offer.armor_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.cloak_upgrade > playerinfo.cloak) %}
+            <tr>
+                <td colspan="2">{{ tr.l_cloak }} {{ tr.l_trade_upgraded }} {{ offer.cloak_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.torp_launchers_upgrade > playerinfo.torp_launchers) %}
+            <tr>
+                <td colspan="2">{{ tr.l_torp_launch }} {{ tr.l_trade_upgraded }} {{ offer.torp_launchers_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.shields_upgrade > playerinfo.shields) %}
+            <tr>
+                <td colspan="2">{{ tr.l_shields }} {{ tr.l_trade_upgraded }} {{ offer.shields_upgrade }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.fighter_number) %}
+            <tr>
+                <td>{{ tr.l_fighters }} {{ tr.l_trade_added }}</td><td>{{  offer.fighter_number }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.torpedo_number) %}
+            <tr>
+                <td>{{ tr.l_torps }} {{ tr.l_trade_added }}</td><td>{{  offer.torpedo_number }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.armor_number) %}
+            <tr>
+                <td>{{ tr.l_armorpts }} {{ tr.l_trade_added }}</td><td>{{  offer.armor_number }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.colonist_number) %}
+            <tr>
+                <td>{{ tr.l_colonists }} {{ tr.l_trade_added }}</td><td>{{  offer.colonist_number }}</td>
+            </tr>
+        {% endif %}
+        {% if (offer.dev_genesis_number) %}
+            <tr><td>{{ tr.l_genesis }} {{ tr.l_trade_added }}</td><td>{{  offer.dev_genesis_number }}</td></tr>
+        {% endif %}
+        {% if (offer.dev_beacon_number) %}
+            <tr><td>{{ tr.l_beacons }} {{ tr.l_trade_added }}</td><td>{{  offer.dev_beacon_number }}</td></tr>
+        {% endif %}
+        {% if (offer.dev_emerwarp_number) %}
+            <tr><td>{{ tr.l_ewd }} {{ tr.l_trade_added }}</td><td>{{  offer.dev_emerwarp_number }}</td></tr>
+        {% endif %}
+        {% if (offer.dev_warpedit_number) %}
+            <tr><td>{{ tr.l_warpedit }} {{ tr.l_trade_added }}</td><td>{{  offer.dev_warpedit_number }}</td></tr>
+        {% endif %}
+        {% if (offer.dev_minedeflector_number) %}
+            <tr><td>{{ tr.l_deflect }} {{ tr.l_trade_added }}</td><td>{{  offer.dev_minedeflector_number }}</td></tr>
+        {% endif %}
+
+        {% if (offer.escapepod_purchase and not playerinfo.dev_escapepod) %}
+            <tr><td>{{ tr.l_escape_pod }} {{ tr.l_trade_installed }}</td></tr>
+        {% endif %}
+        {% if (offer.fuelscoop_purchase and not playerinfo.dev_fuelscoop) %}
+            <tr><td>{{ tr.l_fuel_scoop }} {{ tr.l_trade_installed }}</td></tr>
+        {% endif %}
+        {% if (offer.lssd_purchase and not playerinfo.dev_lssd) %}
+            <tr><td>{{ tr.l_lssd }} {{ tr.l_trade_installed }}</td></tr>
+        {% endif %}
+    </table>
+    <BR><BR>Click <A HREF=port.php>here</A> to return to the supply depot.
+{% endblock %}

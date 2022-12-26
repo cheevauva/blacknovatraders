@@ -18,6 +18,11 @@ class SectorPortResourceOfferServant implements ServantInterface
     public $trade_goods = 0;
     public $trade_energy = 0;
     //
+    public $needle_trade_ore = 0;
+    public $needle_trade_organics = 0;
+    public $needle_trade_goods = 0;
+    public $needle_trade_energy = 0;
+    //
     public $ore_price = 0;
     public $organics_price = 0;
     public $goods_price = 0;
@@ -29,15 +34,10 @@ class SectorPortResourceOfferServant implements ServantInterface
     {
         $sector = $this->sector;
 
-        $this->trade_ore = $this->normalize($this->trade_ore);
-        $this->trade_organics = $this->normalize($this->trade_organics);
-        $this->trade_goods = $this->normalize($this->trade_goods);
-        $this->trade_energy = $this->normalize($this->trade_energy);
-
-        $this->trade_ore = $this->trade(SectorPortTypeEnum::Ore, $this->trade_ore);
-        $this->trade_organics = $this->trade(SectorPortTypeEnum::Organics, $this->trade_organics);
-        $this->trade_goods = $this->trade(SectorPortTypeEnum::Goods, $this->trade_goods);
-        $this->trade_energy = $this->trade(SectorPortTypeEnum::Energy, $this->trade_energy);
+        $this->trade_ore = $this->trade(SectorPortTypeEnum::Ore, $this->needle_trade_ore);
+        $this->trade_organics = $this->trade(SectorPortTypeEnum::Organics, $this->needle_trade_organics);
+        $this->trade_goods = $this->trade(SectorPortTypeEnum::Goods, $this->needle_trade_goods);
+        $this->trade_energy = $this->trade(SectorPortTypeEnum::Energy, $this->needle_trade_energy);
 
         $this->ore_price = $sector->priceByPortType(SectorPortTypeEnum::Ore);
         $this->organics_price = $sector->priceByPortType(SectorPortTypeEnum::Organics);
@@ -47,10 +47,6 @@ class SectorPortResourceOfferServant implements ServantInterface
         $this->total_cost = $this->calculateTotal();
     }
 
-    private function normalize($value)
-    {
-        return intval(round(abs(floatval($value ?? 0))));
-    }
 
     private function calculateTotal()
     {
@@ -69,15 +65,6 @@ class SectorPortResourceOfferServant implements ServantInterface
 
     public static function as($self): self
     {
-        return $self;
-    }
-
-    public static function call(Sector $sector): self
-    {
-        $self = new static;
-        $self->sector = $sector;
-        $self->serve();
-
         return $self;
     }
 

@@ -1,0 +1,278 @@
+{% extends "layout.twig" %}
+
+{% macro dropdown(name, value) %}
+    <select size='1' name="{{ name }}">
+        {% for i in 0..60 %}
+            <option value="{{ i }}" {% if i == value %}selected{% endif %}>{{ i }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+{% block title %}{{ tr.l_title_trade }}{% endblock %}
+
+{% block content %}
+    {{ tr.l_would_dump }} <A HREF=dump.php>{{ tr.l_here }}</A>.
+    <A HREF="bounty.php">{{ tr.l_by_placebounty }}</A><BR>
+    <FORM ACTION=port2.php METHOD=POST>
+        <table>
+            <tr>
+                <td><B>{{ tr.l_ship_levels }}</B></td>
+                <td><B>{{ tr.l_cost }}</B></td>
+                <td><B>{{ tr.l_current }}</B></td>
+                <td><B>{{ tr.l_upgrade }}</B></td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_hull }}</td>
+                <td><input type=text readonly name=hull_costper VALUE='0' ></td>
+                <td>{{ NUMBER(ship.hull) }}</td>
+                <td>
+                    {{ _self.dropdown("hull_upgrade", ship.hull) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_engines }}</td>
+                <td><input type=text readonly  size=10 name=engine_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.engines) }}</td>
+                <td>
+                    {{ _self.dropdown("engine_upgrade", ship.engines) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_power }}</td>
+                <td><input type=text readonly name=power_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.power) }}</td>
+                <td>
+                    {{ _self.dropdown("power_upgrade", ship.power) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_sensors }}</td>
+                <td><input type=text readonly name=sensors_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.sensors) }}</td>
+                <td>
+                    {{ _self.dropdown("sensors_upgrade", ship.sensors) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_computer }}</td>
+                <td><input type=text readonly  name=computer_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.computer) }}</td>
+                <td>
+                    {{ _self.dropdown("computer_upgrade", ship.computer) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_armor }}</td>
+                <td><input type=text readonly name=armor_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.armor) }}</td>
+                <td>
+                    {{ _self.dropdown("armor_upgrade", ship.armor) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_torp_launch }}</td>
+                <td><input type=text readonly name=torp_launchers_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.torp_launchers) }}</td>
+                <td>
+                    {{ _self.dropdown("torp_launchers_upgrade", ship.torp_launchers) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_shields }}</td>
+                <td><input type=text readonly  name=shields_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.shields) }}</td>
+                <td>
+                    {{ _self.dropdown("shields_upgrade", ship.shields) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_beams }}</td>
+                <td><input type=text readonly  name=beams_costper VALUE='0'  ></td>
+                <td>{{ NUMBER(ship.beams) }}</td>
+                <td>
+                    {{ _self.dropdown("beams_upgrade", ship.beams) }}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_cloak }}</td>
+                <td><input type=text readonly  name=cloak_costper VALUE='0'   onfocus></td>
+                <td>{{ NUMBER(ship.cloak) }}</td>
+                <td>
+                    {{ _self.dropdown("cloak_upgrade", ship.cloak) }}
+                </td>
+            </tr>
+        </table>
+        <TABLE>
+            <TR>
+                <td><B>{{ tr.l_device }}</B></td>
+                <td><B>{{ tr.l_cost }}</B></td>
+                <td><B>{{ tr.l_current }}</B></td>
+                <td><B>{{ tr.l_max }}</B></td>
+                <td><B>{{ tr.l_qty }}</B></td>
+            </TR>
+            <TR>
+                <td>{{ tr.l_genesis }}</td>
+                <td>{{ NUMBER(dev_genesis_price) }}</td>
+                <td>{{ NUMBER(ship.dev_genesis) }}</td>
+                <td>{{ tr.l_unlimited }}</td>
+                <td><INPUT TYPE=TEXT NAME=dev_genesis_number SIZE=4 MAXLENGTH=4 VALUE=0 ></td>
+            </TR>
+            <TR>
+                <td>{{ tr.l_beacons }}</td>
+                <td>{{ NUMBER(dev_beacon_price) }}</td>
+                <td>{{ NUMBER(ship.dev_beacon) }}</td>
+                <td>{{ tr.l_unlimited }}</td>
+                <td><INPUT TYPE=TEXT NAME=dev_beacon_number SIZE=4 MAXLENGTH=4 VALUE=0 ></td>
+            </TR>
+            <TR >
+                <td>{{ tr.l_ewd }}</td>
+                <td>{{ NUMBER(dev_emerwarp_price) }}</td>
+                <td>{{ NUMBER(ship.dev_emerwarp) }}</td>
+
+                {% if (ship.dev_emerwarp != calculator.max_emerwarp) %}
+                    <td>
+                        {{ NUMBER(sector.emerwarp_free) }}
+                    </td>
+                    <td><INPUT TYPE=TEXT NAME=dev_emerwarp_number SIZE=4 MAXLENGTH=4 VALUE=0 >
+                    {% else %}
+                    <td>0</td>
+                    <td><input type=text readonly NAME=dev_emerwarp_number MAXLENGTH=10 value="{{ tr.l_full }}"  >
+                    {% endif %}
+                </td>
+            </TR>
+            <TR>
+                <td>{{ tr.l_warpedit }}</td>
+                <td>{{ NUMBER(dev_warpedit_price) }}</td>
+                <td>{{ NUMBER(ship.dev_warpedit) }}</td><td>{{ tr.l_unlimited }}</td><td><INPUT TYPE=TEXT NAME=dev_warpedit_number SIZE=4 MAXLENGTH=4 VALUE=0 ></td>
+            </TR>
+            <TR>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </TR>
+            <TR >
+                <td>{{ tr.l_deflect }}</td>
+                <td>{{ NUMBER(dev_minedeflector_price) }}</td>
+                <td>{{ NUMBER(ship.dev_minedeflector) }}</td>
+                <td>{{ tr.l_unlimited }}</td>
+                <td><INPUT TYPE=TEXT NAME=dev_minedeflector_number SIZE=4 MAXLENGTH=10 VALUE=0 ></td>
+            </TR>
+            <TR>
+                <td>{{ tr.l_escape_pod }}</td>
+                <td>{{ NUMBER(dev_escapepod_price) }}</td>
+                {% if (ship.dev_escapepod == "N") %}
+                    <td>{{ tr.l_none }}</td>
+                    <td></td>
+                    <td><INPUT TYPE=CHECKBOX NAME=escapepod_purchase VALUE=1 onclick></td>
+                    {% else %}
+                    <td>{{ tr.l_equipped }}</td>
+                    <td></td>
+                    <td>{{ tr.l_n_a }}</td>
+                {% endif %}
+
+            </TR>
+            <TR>
+                <td>{{ tr.l_fuel_scoop }}</td>
+                <td>{{ NUMBER(dev_fuelscoop_price) }}</td>
+                {% if (ship.dev_fuelscoop == "N") %}
+                    <td>{{ tr.l_none }}</td>
+                    <td></td>
+                    <td><INPUT TYPE=CHECKBOX NAME=fuelscoop_purchase VALUE=1 onclick></td>
+                    {% else %}
+                    <td>{{ tr.l_equipped }}</td>
+                    <td></td>
+                    <td>{{ tr.l_n_a }}</td>
+                {% endif %}
+
+            </TR>
+            <TR>
+                <td>{{ tr.l_lssd }}</td>
+                <td>{{ NUMBER(dev_lssd_price) }}</td>
+                {% if (ship.dev_lssd == "N") %}
+                    <td>{{ tr.l_none }}</td>
+                    <td></td>
+                    <td><INPUT TYPE=CHECKBOX NAME=lssd_purchase VALUE=1 onclick></td>
+                    {% else %}
+                    <td>{{ tr.l_equipped }}</td>
+                    <td></td>
+                    <td>{{ tr.l_n_a }}</td>
+                {% endif %}
+            </TR>
+            <TR >
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+            </TR>
+        </TABLE>
+        <BR>
+        <TABLE>
+            <TR>
+                <td>{{ tr.l_item }}</td>
+                <td>{{ tr.l_cost }}</td>
+                <td>{{ tr.l_current }}</td>
+                <td>{{ tr.l_max }}</td>
+                <td>{{ tr.l_qty }}</td>
+            </TR>
+            <TR >
+                <td>{{ tr.l_fighters }}</td>
+                <td>{{ NUMBER(fighter_price) }}</td>
+                <td>{{ NUMBER(ship.ship_fighters) }} / {{ NUMBER(sector.fighter_max) }}</td>
+                {% if (ship.ship_fighters != sector.fighter_max) %}
+                    <td>{{ NUMBER(sector.fighter_free) }}</td>
+                    <td><INPUT TYPE=TEXT NAME=fighter_number SIZE=6 MAXLENGTH=10 VALUE=0 ></td>
+                    {% else %}
+                    <td>0</td>
+                    <td><input type=text readonly NAME=fighter_number MAXLENGTH=10 value="{{ tr.l_full }}" abindex='-1'>                </td>
+                    {% endif %}
+            </tr>
+            <tr>
+                <td>{{ tr.l_torps }}</td>
+                <td>{{ NUMBER(torpedo_price) }}</td>
+                <td>{{ NUMBER(ship.torps) }} / {{ NUMBER(sector.torpedo_max) }}</td>
+                {% if (ship.torps != sector.torpedo_max) %}
+                    <td>{{ NUMBER(sector.torpedo_free) }}</td>
+                    <td><INPUT TYPE=TEXT NAME=torpedo_number SIZE=6 MAXLENGTH=10 VALUE=0 ></td>
+                    {% else %}
+                    <td>0</td>
+                    <td><input type=text readonly NAME=torpedo_number MAXLENGTH=10 value="{{ tr.l_full }}"  ></td>
+                    {% endif %}
+            </TR>
+            <TR >
+                <td>{{ tr.l_armorpts }}</td>
+                <td>{{ NUMBER(armor_price) }}</td>
+                <td>{{ NUMBER(ship.armor_pts) }} / {{ NUMBER(sector.armor_max) }}</td>
+                {% if (ship.armor_pts != sector.armor_max) %}
+                    <td> {{ NUMBER(sector.armor_free) }}</td>
+                    <td> <INPUT TYPE=TEXT NAME=armor_number SIZE=6 MAXLENGTH=10 VALUE=0></td>
+                    {% else %}
+                    <td>0</td>
+                    <td><input type=text readonly  NAME=armor_number MAXLENGTH=10 value="{{ tr.l_full }}" ></td>
+                    {% endif %}
+            </tr>
+            <tr>
+                <td>{{ tr.l_colonists }}</td>
+                <td>{{ NUMBER(colonist_price) }}</td>
+                <td>{{ NUMBER(ship.ship_colonists) }} / {{ NUMBER(sector.colonist_max) }}</td>
+                {% if (ship.ship_colonists != sector.colonist_max) %}
+                    <td>{{ NUMBER(sector.colonist_free) }}</td>
+                    <td><INPUT TYPE=TEXT NAME=colonist_number SIZE=6 MAXLENGTH=10 VALUE=0 ></td>
+                    {% else %}
+                    <td>0</td>
+                    <td><input type=text readonly  NAME=colonist_number MAXLENGTH=10 value="{{ tr.l_full }}" ></td>
+                    {% endif %}
+            </TR>
+        </TABLE>
+        <TABLE>
+            <TR>
+                <td><INPUT TYPE=SUBMIT VALUE="{{ tr.l_buy }}"></td>
+                <TD ALIGN=RIGHT>{{ tr.l_totalcost }}: <INPUT TYPE=TEXT  NAME=total_cost SIZE=22 VALUE=0></td>
+            </TR>
+        </TABLE>
+    </FORM>
+{% endblock %}

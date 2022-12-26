@@ -5,7 +5,8 @@
     "require": {
         "php": "^8.2",
         "ext-json": "*",
-        "doctrine/dbal": "3.5.1"
+        "doctrine/dbal": "3.5.1",
+        "twig/twig": "v3.4.3"
     },
     "autoload": {
         "psr-4": {

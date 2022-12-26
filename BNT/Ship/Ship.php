@@ -162,6 +162,26 @@ class Ship
         }
     }
 
+    public function getFreeResourceForBuying(ShipResourceEnum $resource)
+    {
+        return match ($resource) {
+            ShipResourceEnum::Energy => $this->getFreePower(),
+            ShipResourceEnum::Ore => NUM_HOLDS($this->hull) - $this->ship_ore - $this->ship_colonists,
+            ShipResourceEnum::Organics => NUM_HOLDS($this->hull) - $this->ship_organics - $this->ship_colonists,
+            ShipResourceEnum::Goods => NUM_HOLDS($this->hull) - $this->ship_goods - $this->ship_colonists,
+        };
+    }
+
+    public function getFreeResourceForSelling(ShipResourceEnum $resource)
+    {
+        return match ($resource) {
+            ShipResourceEnum::Energy => $this->ship_energy,
+            ShipResourceEnum::Ore => $this->ship_ore,
+            ShipResourceEnum::Organics => $this->ship_organics,
+            ShipResourceEnum::Goods => $this->ship_goods,
+        };
+    }
+
     public function getFreeHolds(): float
     {
         return NUM_HOLDS($this->hull) - $this->ship_ore - $this->ship_organics - $this->ship_goods - $this->ship_colonists;
@@ -236,19 +256,6 @@ class Ship
         };
     }
 
-    public function trade(ShipResourceEnum $resource, $amount): void
-    {
-        if (empty($amount)) {
-            return;
-        }
-
-        if ($amount < 0) {
-            $this->buy($resource, abs($amount));
-        } else {
-            $this->sell($resource, abs($amount));
-        }
-    }
-
     public function sell(ShipResourceEnum $resource, $amount): void
     {
         $current = $this->amount($resource);
@@ -299,7 +306,12 @@ class Ship
         };
     }
 
-    public function pay($cost): void
+    public function acceptPayment($cost): void
+    {
+        $this->credits += $cost;
+    }
+
+    public function payment($cost): void
     {
         if ($this->credits < $cost) {
             throw ShipException::notEnoughCredits($this->credits, $cost);

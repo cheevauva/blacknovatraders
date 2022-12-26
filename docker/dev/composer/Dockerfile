@@ -12,5 +12,5 @@ RUN apt-get install -y nano
 RUN docker-php-ext-install zip
 
 RUN php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');" && \
-    php /composer-setup.php  --version=2.2.6 --install-dir=/usr/local/bin && \
+    php /composer-setup.php  --version=2.5.1 --install-dir=/usr/local/bin && \
     php -r "unlink('/composer-setup.php');" 

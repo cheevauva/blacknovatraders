@@ -1,0 +1,7 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_title_trade }}{% endblock %}
+{% block content %}
+    {{ tr.l_port_bounty|raw }}
+    {{ tr.l_port_bounty2|replace({"[amount]": NUMBER(totalBounty) })|raw }}
+    <A HREF="bounty.php">{{ tr.l_by_placebounty }}</A><BR><BR>
+{% endblock %}

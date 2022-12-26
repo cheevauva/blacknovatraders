@@ -1,0 +1,52 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_title_trade }}{% endblock %}
+{% block content %}
+    <FORM ACTION=port2.php METHOD=POST>
+        <table>
+            <tr>
+                <td>{{ tr.l_commodity }}</td>
+                <td>{{ tr.l_buying }}/{{ tr.l_selling }}</td>
+                <td>{{ tr.l_amount }}</td>
+                <td>{{ tr.l_price }}</td>
+                <td>{{ tr.l_buy }}/{{ tr.l_sell }}</td>
+                <td>{{ tr.l_cargo }}</td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_ore }}</td>
+                <td>{{ sector.port_type.value == 'ore' ? tr.l_selling : tr.l_buying }}</td>
+                <td>{{ NUMBER(sector.port_ore) }}</td>
+                <td>{{ calculator.ore_price }}</td>
+                <td>
+                    <INPUT TYPE=TEXT NAME=trade_ore SIZE=10 MAXLENGTH=20 VALUE="{{ calculator.ore_amount }}">
+                </td>
+                <td>{{ NUMBER(playerinfo.ship_ore) }}</td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_organics }}</td>
+                <td>{{ sector.port_type.value == 'organics' ? tr.l_selling : tr.l_buying }}</td>
+                <td>{{ NUMBER(sector.port_organics) }}</td>
+                <td>{{ calculator.organics_price }}</td>
+                <td><INPUT TYPE=TEXT NAME=trade_organics SIZE=10 MAXLENGTH=20 VALUE="{{ calculator.organics_amount }}"></td>
+                <td>{{ NUMBER(playerinfo.ship_organics) }}</td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_goods }}</td>
+                <td>{{ sector.port_type.value == 'goods' ? tr.l_selling : tr.l_buying }}</td>
+                <td>{{ NUMBER(sector.port_goods) }}</td>
+                <td>{{ calculator.goods_price }}</td>
+                <td><INPUT TYPE=TEXT NAME=trade_goods SIZE=10 MAXLENGTH=20 VALUE="{{ calculator.goods_amount }}"></td>
+                <td>{{ NUMBER(playerinfo.ship_goods) }}</td>
+            </tr>
+            <tr>
+                <td>{{ tr.l_energy }}</td>
+                <td>{{ sector.port_type.value == 'energy' ? tr.l_selling : tr.l_buying }}</td>
+                <td>{{ NUMBER(sector.port_energy) }}</td>
+                <td>{{ calculator.energy_price }}</td>
+                <td><INPUT TYPE=TEXT NAME=trade_energy SIZE=10 MAXLENGTH=20 VALUE="{{ calculator.energy_amount }}"></td>
+                <td>{{ NUMBER(playerinfo.ship_energy) }}</td>
+            </tr>
+        </table>
+        <INPUT TYPE=SUBMIT VALUE="{{ tr.l_trade }}">
+    </FORM>
+    {{ tr.l_trade_st_info|replace({"[free_holds]": NUMBER(freeHolds), "[free_power]": NUMBER(freePower), "[credits]": NUMBER(credits)}) }}
+{% endblock %}

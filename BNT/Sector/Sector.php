@@ -24,7 +24,7 @@ class Sector
     public int $port_ore = 0;
     public int $port_goods = 0;
     public int $port_energy = 0;
-    public $credits = 100000000; 
+    public $credits = 100000000;
 
     private function setAmount(SectorPortTypeEnum $resource, $amount)
     {
@@ -61,19 +61,6 @@ class Sector
         return $portType->price() + $margin;
     }
 
-    public function trade(SectorPortTypeEnum $resource, $amount): void
-    {
-        if (empty($amount)) {
-            return;
-        }
-
-        if ($amount < 0) {
-            $this->buy($resource, $amount);
-        } else {
-            $this->sell($resource, -$amount);
-        }
-    }
-
     public function sell(SectorPortTypeEnum $resource, $amount): void
     {
         $current = $this->amount($resource);
@@ -106,7 +93,12 @@ class Sector
         }
     }
 
-    public function pay($cost): void
+    public function acceptPayment($cost): void
+    {
+        $this->credits += $cost;
+    }
+
+    public function payment($cost): void
     {
         if ($this->credits < $cost) {
             throw SectorException::notEnoughCreditsForPurchase($this->credits, $cost);

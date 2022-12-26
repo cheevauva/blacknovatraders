@@ -153,6 +153,22 @@ if ($server_closed) {
     die;
 }
 
+function twig(): \Twig\Environment
+{
+    $loader = new \Twig\Loader\FilesystemLoader('resources/templates');
+    $twig = new \Twig\Environment($loader, [
+        //'cache' => __DIR__ . '/cache/twig_c/',
+    ]);
+    $twig->addGlobal('tr', loadlanguage($GLOBALS['lang']));
+    $twig->addFunction(new \Twig\TwigFunction('NUMBER', function ($number) {
+        return NUMBER($number);
+    }), [
+        'is_safe' => true
+    ]);
+    
+    return $twig;
+}
+
 function mypw($one,$two)
 {
    return pow($one*1,$two*1);
