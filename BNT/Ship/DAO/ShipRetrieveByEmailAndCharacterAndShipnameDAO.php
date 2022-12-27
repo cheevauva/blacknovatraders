@@ -6,10 +6,12 @@ namespace BNT\Ship\DAO;
 
 use BNT\Ship\Ship;
 
-class ShipRetrieveByEmailDAO extends ShipDAO
+class ShipRetrieveByEmailAndCharacterAndShipnameDAO extends ShipDAO
 {
 
     public string $email;
+    public string $character_name;
+    public string $ship_name;
     public ?Ship $ship;
 
     public function serve(): void
@@ -17,9 +19,13 @@ class ShipRetrieveByEmailDAO extends ShipDAO
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
         $qb->from($this->table());
-        $qb->andWhere('email = :email');
+        $qb->orWhere('email = :email');
+        $qb->orWhere('character_name = :character_name');
+        $qb->orWhere('ship_name = :ship_name');
         $qb->setParameters([
             'email' => $this->email,
+            'character_name' => $this->character_name,
+            'ship_name' => $this->ship_name,
         ]);
         $qb->setMaxResults(1);
 
@@ -30,10 +36,12 @@ class ShipRetrieveByEmailDAO extends ShipDAO
         $this->ship = $mapper->ship;
     }
 
-    public static function call(string $email): ?Ship
+    public static function call(string $email, string $character, string $shipname): ?Ship
     {
         $self = new static;
         $self->email = $email;
+        $self->character_name = $character;
+        $self->ship_name = $shipname;
         $self->serve();
 
         return $self->ship;

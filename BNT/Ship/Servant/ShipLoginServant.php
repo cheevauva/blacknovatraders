@@ -16,21 +16,19 @@ class ShipLoginServant implements ServantInterface
     public string $ip;
     public string $email;
     public string $password;
-    public Ship $ship;
+    public ?Ship $ship = null;
 
     public function serve(): void
     {
-        $retrieveByEmail = new ShipRetrieveByEmailDAO;
-        $retrieveByEmail->email = $this->email;
-        $retrieveByEmail->serve();
+        $this->ship = ShipRetrieveByEmailDAO::call($this->email);
 
-        if (empty($retrieveByEmail->ship)) {
+        if (empty($this->ship)) {
             throw ShipException::notFound();
         }
 
-        $ship = $this->ship = $retrieveByEmail->ship;
+        $ship = $this->ship;
 
-        if ($ship->password !== $this->password) {
+        if (!password_verify($this->password, $ship->password)) {
             playerlog($ship->ship_id, LOG_BADLOGIN, $this->ip);
             throw ShipException::incorrectPassword($ship);
         }

@@ -18,8 +18,17 @@ class ShipCreateDAO extends ShipDAO
         $mapper->serve();
 
         $this->db()->insert($this->table(), $mapper->row);
-        
-        $this->ship->id = $this->db()->lastInsertId();
+
+        $this->ship->ship_id = intval($this->db()->lastInsertId());
+    }
+
+    public static function call(Ship $ship): self
+    {
+        $self = new static;
+        $self->ship = $ship;
+        $self->serve();
+
+        return $self;
     }
 
 }

@@ -13,7 +13,7 @@ class ShipException extends \Exception
     public static function notEnoughPowerForPurchase($current, $needle): ShipNotEnoughPowerForPurchaseException
     {
         global $l_notenough_power;
-        
+
         $ex = new ShipNotEnoughPowerForPurchaseException($l_notenough_power);
         $ex->current = $current;
         $ex->needle = $needle;
@@ -56,12 +56,16 @@ class ShipException extends \Exception
 
     public static function notFound(): ShipNotFoundException
     {
-        return new ShipNotFoundException;
+        global $l_login_noone;
+
+        return new ShipNotFoundException($l_login_noone);
     }
 
     public static function incorrectPassword(Ship $ship): ShipPasswordIncorrectException
     {
-        $ex = new ShipPasswordIncorrectException;
+        global $l_login_4gotpw1;
+        
+        $ex = new ShipPasswordIncorrectException($l_login_4gotpw1);
         $ex->ship = $ship;
 
         return $ex;
@@ -69,7 +73,9 @@ class ShipException extends \Exception
 
     public static function hasBeenDestroyed(Ship $ship): ShipHasBeenDestroyedException
     {
-        $ex = new ShipHasBeenDestroyedException;
+        global $l_login_died;
+        
+        $ex = new ShipHasBeenDestroyedException($l_login_died);
         $ex->ship = $ship;
 
         return $ex;

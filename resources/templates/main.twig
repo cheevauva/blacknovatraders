@@ -1,0 +1,353 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_main_title }}{% endblock %}
+{% block content %}
+    <table style="width: 900px;margin: 0 auto 0 auto;">
+        <tr>
+            <td>
+                <a href="report.php">{{ playerinfo.name() }}</a> ({{ playerinfo.character() }}) [{{ playerinfo.rank() }}] [{{ playerinfo.team() }}]
+            </td>
+            <td>
+                {{ tr.l_turns_have }}
+                {{ playerinfo.turns() }}
+            </td>
+            <td align=center>
+                {{ tr.l_turns_used }} {{ playerinfo.turnsUsed() }}
+            </td>
+            <td align=right>
+                {{ tr.l_score }} {{ playerinfo.score() }}
+            </td>
+        </tr>
+        <tr class="page_break">
+            <td></td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            {{ tr.l_sector }}: {{ playerinfo.sector() }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap>
+                            {{ sectorinfo.beacon }}
+                            {{ zoneinfo.zone_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="{{ "zoneinfo.php?zone=zoneinfo.zone_id" }}">{{ zoneinfo.zone_name }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            ----
+                        </td>
+                    </tr>
+                    <tr>
+                        <td >
+                            {{ tr.l_traderoutes }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div>
+                                {% if not traderoutes %}
+                                    <a >{{ tr.l_none }} </a>
+                                {% else %}
+                                    {% for traderoute in traderoutes %}
+                                        <a href="traderoute.php?engage={{ traderoute.traderoute_id }}">
+                                            {{ getTraderouteSrcLabel(traderoute) }} {{ getTraderouteDirectionLabel(traderoute) }} {{ getTraderouteDstLabel(traderoute) }}
+                                        </a>
+                                        <br>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap>
+                            <div >
+                                <a  href=traderoute.php>{{ tr.l_trade_control }}</a><br>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 60%;">
+                {% if sectorinfo.isPort() %}
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="port.php">
+                                    <table>
+                                        <tr>
+                                            <td rowspan="2">
+                                                <div class="space_station_port"></div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <table>
+                                                    <tr>
+                                                        <td>{{ tr.l_tradingport }}: {{ sectorinfo.portTypeName()|capitalize }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><img  src="images/ore.gif"> {{ tr.l_ore }}</td>
+                                                        <td>{{ sectorinfo.ore() }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><img  src="images/organics.gif"> {{ tr.l_organics }}</td>
+                                                        <td>{{ sectorinfo.organics() }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><img  src="images/goods.gif"> {{ tr.l_goods }}</td>
+                                                        <td>{{ sectorinfo.goods() }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><img   src="images/energy.gif"> {{ tr.l_energy }}</td> 
+                                                        <td>{{ sectorinfo.energy() }}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                {% else %}
+                    <table>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td rowspan="2">
+                                            <div class="space_station"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                {% endif %}
+                <table>
+                    <tr>
+                        <td>{{ '%s [%s]'|format(tr.l_planet_in_sec, sectorinfo.id()) }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table border=0 width="100%">
+                                {%  if not planetsInSector %}
+                                    <tr>
+                                        <td>
+                                            {{ tr.l_none }}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    {% for planet in planetsInSector %}
+                                        <tr>
+                                            <td>
+                                                <a href="planet.php?planet_id={{ planet.id() }}">
+                                                    <table>
+                                                        <tr>
+                                                            <td rowspan="2"><div class="planettypes-{{ planet.level() }}"></div></td>
+                                                            <td>{{ planet.name() }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ planet.ownerName() }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ '%s [%s]'|format(tr.l_ships_in_sec, sectorinfo.id()) }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table border=0 width="100%">
+                                {% if not shipsInSector %}
+                                    <tr>
+                                        <td>
+                                            {{ tr.l_sector_0 }}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    {% for shipInSector in shipsInSector %}
+                                        <tr>
+                                            <td>
+                                                {% if shipInSector.isDisplayed() %}
+                                                    <a href="ship.php?ship_id={{ shipInSector.id() }}">
+                                                        <table>
+                                                            <tr>
+                                                                <td rowspan="3"><div class="shiptypes-{{ shipInSector.level() }}"></div></td>
+                                                                <td>{{ shipInSector.name() }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{{ shipInSector.character() }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{{ shipInSector.team() }}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </a>
+                                                {% else %}
+                                                    <table>
+                                                        <tr>
+                                                            <td rowspan="2"><div class="shiptypes-{{ shipInSector.level() }}"></div></td>
+                                                            <td>{{ tr.l_unknown }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{ tr.l_unknown }}</td>
+                                                        </tr>
+                                                    </table>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table border=0 width="100%">
+                    <tr>
+                        <td>{{ tr.l_sector_def }}</td>
+                    </tr>
+                </table>
+                <table border=0 width="100%">
+                    {%  if not defencesInSector %}
+                        <tr>
+                            <td>{{ tr.l_none }}</td>
+                        </tr>
+                    {% else %}
+                        {% for  defenceInSector in defencesInSector %}
+                            <tr>
+                                <td>
+                                    <a href="modify_defences.php?defence_id={{ defenceInSector.defence_id }}">
+                                        <table>
+                                            <tr>
+                                                <td >
+                                                    {%  if (defenceInSector.defence_type.value == 'M') %}
+                                                        <img src="images/mines.gif">
+                                                    {% endif %}
+                                                    {% if (defenceInSector.defence_type.value == 'F') %}
+                                                        <img src="images/fighters.gif">
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ defenceInSector.defenceSectorLabel() }}</td>
+                                            </tr>
+                                            <tr colspan="2">
+                                                <td>
+                                                    {{ shipDefenceinSector.character_name }}
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+                <table> 
+                    <tr>
+                        <td>
+                            <table> 
+                                <tr>
+                                    <td colspan="2">
+                                        {{ tr.l_cargo }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><img  src="images/ore.gif"> {{ tr.l_ore }}</td>
+                                    <td>{{ playerinfo.ore() }}</td>
+                                </tr>
+                                <tr>
+                                    <td><img  src="images/organics.gif"> {{ tr.l_organics }}</td>
+                                    <td>{{ playerinfo.organics() }}</td>
+                                </tr>
+                                <tr>
+                                    <td><img  src="images/goods.gif"> {{ tr.l_goods }}</td>
+                                    <td>{{ playerinfo.goods() }}</td>
+                                </tr>
+                                <tr>
+                                    <td><img   src="images/energy.gif"> {{ tr.l_energy }}</td> 
+                                    <td>{{ playerinfo.energy() }}</td>
+                                </tr>
+                                <tr>
+                                    <td><img  src="images/colonists.gif"> {{ tr.l_colonists }}</td> 
+                                    <td>{{ playerinfo.colonists() }}</td>
+                                </tr>
+                                <tr>
+                                    <td><img src="images/credits.gif"> {{ tr.l_credits }}</td>
+                                    <td>{{ playerinfo.credits() }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            {{ tr.l_realspace }}
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div >
+                                <a  href="rsmove.php?engage=1&amp;destination={{ playerinfo.preset1 }}">=&gt;{{ playerinfo.preset1 }}</a><a  href=preset.php>[{{ tr.l_set }}]</a><br>
+                                <a  href="rsmove.php?engage=1&amp;destination={{ playerinfo.preset2 }}">=&gt;{{ playerinfo.preset2 }}</a><a  href=preset.php>[{{ tr.l_set }}]</a><br>
+                                <a  href="rsmove.php?engage=1&amp;destination={{ playerinfo.preset3 }}">=&gt;{{ playerinfo.preset3 }}</a><a  href=preset.php>[{{ tr.l_set }}]</a><br>
+                                <a  href="rsmove.php">=&gt;{{ tr.l_main_other }}</a><br>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            {{ tr.l_main_warpto }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <TD NOWRAP>
+                            <div >
+                                {% if links %}
+                                    <a >{{ tr.l_no_warplink }}</a><br>
+                                {% else %}
+                                    {% for  link in links  %}
+                                        <a  href="move.php?sector={{ link.link_dest }}">
+                                            =&gt;{{ tr.link.link_dest }}
+                                        </a>
+                                        <a  href="lrscan.php?sector={{ tr.link.link_dest }}">
+                                            [{{ tr.l_scan }}]
+                                        </a><br>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap align=center>
+                            <div >
+                                <a  href="lrscan.php?sector=*">[{{ tr.l_fullscan }}]</a><br>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+{% endblock %}

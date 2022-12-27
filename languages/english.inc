@@ -1191,7 +1191,7 @@ $l_new_shipname			= "Ship Name";
 $l_new_pname			= "Player Character Name";
 $l_new_info			= "We promise not to give out (or sell) your e-mail address to anyone.  It is required though, to send you your server generated password..";
 $l_new_closed_message		="Game closed for tournament play";
-$l_new_blank			="E-mail, ship name, and character name may not be blank.";
+$l_new_blank			="E-mail, ship name, character name and password may not be blank.";
 $l_new_inuse			="E-mail address is already in use.";
 $l_new_4gotpw1			="If you have forgotten your password,";
 $l_new_4gotpw2			="to have it e-mailed to you.";
@@ -1202,6 +1202,7 @@ $l_new_login			="to go to the login screen.";
 $l_new_err			="Please go back or <a href=new.php>click here</a> and try again.";
 $l_new_topic			="Traders Password";
 $l_new_message			="Greetings,\n\nSomeone from the IP address {ip} requested that your password for Traders be sent to you.\n\nYour password is: [pass]\n\nThank you\n\nThe Traders web team.";
+$l_new_password = "Password";
 
 // logout.php
 

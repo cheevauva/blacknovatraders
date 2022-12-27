@@ -1,0 +1,8 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_new_title2 }}{% endblock %}
+{% block content %}
+    {{ message | raw }}
+    {% if user_created %}
+        <A HREF="login.php">{{ tr.l_clickme }}</A> {{ tr.l_new_login }}
+        {% endif %}
+    {% endblock %}

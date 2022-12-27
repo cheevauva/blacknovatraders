@@ -157,15 +157,40 @@ function twig(): \Twig\Environment
 {
     $loader = new \Twig\Loader\FilesystemLoader('resources/templates');
     $twig = new \Twig\Environment($loader, [
-        //'cache' => __DIR__ . '/cache/twig_c/',
+    //'cache' => __DIR__ . '/cache/twig_c/',
     ]);
+    $twig->addGlobal('isLogged', !empty($_SESSION['ship_id']));
+    $opts = [
+        'is_safe' => true
+    ];
     $twig->addGlobal('tr', loadlanguage($GLOBALS['lang']));
+    $twig->addFunction(new \Twig\TwigFunction('player_insignia_name', function ($playerinfo) {
+        return player_insignia_name($playerinfo);
+    }), $opts);
     $twig->addFunction(new \Twig\TwigFunction('NUMBER', function ($number) {
         return NUMBER($number);
-    }), [
-        'is_safe' => true
-    ]);
-    
+    }), $opts);
+    $twig->addFunction(new \Twig\TwigFunction('getTraderouteSrcLabel', function ($traderoute) {
+        return getTraderouteSrcLabel($traderoute);
+    }), $opts);
+    $twig->addFunction(new \Twig\TwigFunction('getTraderouteDirectionLabel', function ($traderoute) {
+        return getTraderouteDirectionLabel($traderoute);
+    }), $opts);
+    $twig->addFunction(new \Twig\TwigFunction('getTraderouteDstLabel', function ($traderoute) {
+        return getTraderouteDstLabel($traderoute);
+    }), $opts);
+    $twig->addFunction(new \Twig\TwigFunction('t_port', function ($portType) {
+        return t_port($portType);
+    }), $opts);
+    $twig->addFunction(new \Twig\TwigFunction('getPlanetLevel', function ($planet) {
+        return getPlanetLevel($planet);
+    }), $opts);
+    $twig->addFunction(new \Twig\TwigFunction('SCAN_SUCCESS', function ($level_scan, $level_cloak, $options = []) {
+        return SCAN_SUCCESS($level_scan, $level_cloak, $options);
+    }), $opts);
+    $twig->addFunction(new \Twig\TwigFunction('rand', function () {
+        return rand();
+    }), $opts);
     return $twig;
 }
 

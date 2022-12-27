@@ -858,7 +858,7 @@ Table_Footer("Completed successfully.");
     $ship->ship_name = 'WebMaster';
     $ship->character_name = 'WebMaster';
     $ship->email = $admin_mail;
-    $ship->password = $password;
+    $ship->password($password);
 
     $createShip = new \BNT\Ship\Servant\ShipCreateServant;
     $createShip->ship = $ship;

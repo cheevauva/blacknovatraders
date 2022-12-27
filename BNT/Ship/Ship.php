@@ -320,5 +320,10 @@ class Ship
         $this->turn();
         $this->credits -= $cost;
     }
+    
+    public function password(string $password): void
+    {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
 
 }

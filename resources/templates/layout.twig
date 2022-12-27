@@ -5,28 +5,169 @@
         <title>{% block title %}Title{% endblock %}</title>
     </head>
     <body>
+        <div id="header">
+            {% if isLogged %}
+                <a href="main.php">H</a> |
+                {{ tr.l_commands }}: 
+                <a href="device.php">{{ tr.l_devices }}</a> |
+                <a href="planet_report.php">{{ tr.l_planets }}</a> |
+                <a href="log.php">{{ tr.l_log }}</a> |
+                <a href="defence_report.php">{{ tr.l_sector_def }}</a> |
+                <a href="readmail.php">{{ tr.l_read_msg }}</A> |
+                <a href="mailto2.php">{{ tr.l_send_msg }}</a> |
+                <a href="ranking.php">{{ tr.l_rankings }}</a> |
+                <a href="settings.php">Settings</a> |
+                <a href="teams.php">{{ tr.l_teams }}</a> |
+                <a href="self_destruct.php">{{ tr.l_ohno }}</a> |
+                <a href="options.php">{{ tr.l_options }}</a> |
+                <a href="navcomp.php">{{ tr.l_navcomp }}</a> |
+                <a  href="logout.php">{{ tr.l_logout }}</a> |
+                {%   if ksm_allowed %}
+                    <a href="galaxy.php">{{ tr.l_map }}</a> |
+                {% endif %}
+                {{ tr.l_information ?? '@todo' }} |
+                <a href="help.php">{{ tr.l_help }}</a> |
+                <a href="faq.html">{{ tr.l_faq }}</a> |
+                <a href="feedback.php">{{ tr.l_feedback }}</a> |
+                <a href="news.php">{{ tr.l_news ?? 'News' }}</a> 
+                {% if tr.link_forums %}
+                    <a href="{{ tr.link_forums }}" TARGET="_blank">{{ tr.l_forums }}</a> |
+                {% endif %}
+            {% else %}
+                <img src="images/BNT-header.jpg" alt="BlackNova Traders" width="517" height="189" border="0">
+            {% endif %}
+        </div>
         <div id="content">
             {% block content %}{% endblock %}
-            <br/><br/>
-            {{ tr.l_global_mmenu|raw }}
         </div>
         <div id="footer">
             <table width="100%">
                 <tr>
-                    <td><a href="news.php">Local BlackNova News</a></td>
-                    <td>Copyright 2000-2005 Ron Harwood and L. Patrick Smallwood. Copyright 2005-<?php echo date('Y'); ?> <a href="http://www.sourceforge.net/projects/blacknova">BlackNova Team</a></td>
+                    <td>Copyright 2000-2005 Ron Harwood and L. Patrick Smallwood. Copyright 2005-... <a href="http://www.sourceforge.net/projects/blacknova">BlackNova Team</a></td>
                 </tr>
             </table>
         </div>
     <style>
+        table {
+            width:  100%;
+        }
+
+        .page_break {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+
+        td {
+            vertical-align: top;
+            text-align: left;
+        }
+
+        body {
+            background-image: url("images/bgoutspace1.gif");
+            background-color: #000000;
+            color: #c0c0c0;
+            /*vlink="#00ff00" alink="#ff0000"*/
+        }
+
+        #header {
+            width: 900px;
+            margin: 0 auto 0 auto;
+            margin-bottom: 20px;
+        }
+
         #footer {
-            position: absolute;
-            opacity: 0.35;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 30px;
-            background-color: black;
+            width: 900px;
+            margin: 0 auto 0 auto;
+            margin-bottom: 20px;
+        }
+
+        #content {
+            width: 900px;
+            margin: 0 auto 0 auto;
+            margin-bottom: 20px;
+            margin-top: 50px;
+        }
+
+        a {
+            color: #00ff00
+        }
+
+        #footer {
+            width: 900px;
+            margin-top: 100px;
+        }
+
+        .planettypes-0 {
+            width: 80px;
+            height: 90px;
+            background-image: url("images/tinyplanet.gif");
+        }
+
+        .planettypes-1 {
+            width: 80px;
+            height: 90px;
+            background-image: url("images/smallplanet.gif");
+        }
+
+        .planettypes-2 {
+            width: 80px;
+            height: 90px;
+            background-image: url("images/mediumplanet.gif");
+        }
+
+        .planettypes-3 {
+            width: 80px;
+            height: 90px;
+            background-image: url("images/largeplanet.gif");
+        }
+        .planettypes-4 {
+            width: 80px;
+            height: 90px;
+            background-image: url("hugeplanet.gif");
+        }
+
+        .shiptypes-0 {
+            width: 80px;
+            height: 60px;
+            background-image: url("images/tinyship.gif");
+        }
+
+        .shiptypes-1 {
+            width: 80px;
+            height: 60px;
+            background-image: url("images/smallship.gif");
+        }
+
+        .shiptypes-2 {
+            width: 80px;
+            height: 60px;
+            background-image: url("images/mediumship.gif");
+        }
+
+        .shiptypes-3 {
+            width: 80px;
+            height: 60px;
+            background-image: url("images/largeship.gif");
+        }
+
+        .shiptypes-4 {
+            width: 80px;
+            height: 60px;
+            background-image: url("images/hugeship.gif");
+        }
+
+        .space_station_port {
+            width: 100px;
+            height: 70px;
+            background-image: url("images/space_station_port.png");
+        }
+
+        .space_station {
+            width: 233px;
+            height: 300px;
+            background-image: url("images/space_station.png");
         }
     </style>
 </body>

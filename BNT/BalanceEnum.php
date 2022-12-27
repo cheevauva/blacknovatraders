@@ -36,6 +36,11 @@ enum BalanceEnum
     case organics_delta;
     case organics_limit;
     case inventory_factor;
+    case start_armor;
+    case start_credits;
+    case start_energy;
+    case start_fighters;
+    case max_turns;
 
     public function val(): mixed
     {
@@ -68,6 +73,11 @@ enum BalanceEnum
         global $dev_warpedit_price;
         global $dev_minedeflector_price;
         global $inventory_factor;
+        global $start_armor;
+        global $start_credits;
+        global $start_energy;
+        global $start_fighters;
+        global $max_turns;
 
         return match ($this) {
             BalanceEnum::ore_price => $ore_price,
@@ -99,6 +109,11 @@ enum BalanceEnum
             BalanceEnum::organics_delta => $organics_delta,
             BalanceEnum::organics_limit => $organics_limit,
             BalanceEnum::inventory_factor => $inventory_factor,
+            BalanceEnum::start_armor => $start_armor,
+            BalanceEnum::start_credits => $start_credits,
+            BalanceEnum::start_energy => $start_energy,
+            BalanceEnum::start_fighters => $start_fighters,
+            BalanceEnum::max_turns => $max_turns,
         };
     }
 
