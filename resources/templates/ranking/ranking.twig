@@ -1,0 +1,11 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_ranks_title }}{% endblock %}
+{% block content %}
+    <FORM ACTION=preset.php METHOD=POST>
+        Preset 1: <INPUT TYPE=TEXT NAME=preset1 SIZE=6 MAXLENGTH=6 VALUE="{{ playerinfo.preset1 }}"><BR>
+        Preset 2: <INPUT TYPE=TEXT NAME=preset2 SIZE=6 MAXLENGTH=6 VALUE="{{ playerinfo.preset2 }}"><BR>
+        Preset 3: <INPUT TYPE=TEXT NAME=preset3 SIZE=6 MAXLENGTH=6 VALUE="{{ playerinfo.preset3 }}"><BR>
+        <INPUT TYPE=HIDDEN NAME="change" VALUE=1>
+        <BR><INPUT TYPE=SUBMIT VALUE="{{ tr.l_pre_save }}"><BR><BR>
+    </FORM>
+{% endblock %}

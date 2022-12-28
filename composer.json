@@ -6,7 +6,8 @@
         "php": "^8.2",
         "ext-json": "*",
         "doctrine/dbal": "3.5.1",
-        "twig/twig": "v3.4.3"
+        "twig/twig": "v3.4.3",
+        "symfony/cache": "v6.2.3"
     },
     "autoload": {
         "psr-4": {
