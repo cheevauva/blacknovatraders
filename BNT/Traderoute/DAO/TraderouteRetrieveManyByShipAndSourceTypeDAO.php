@@ -57,7 +57,7 @@ class TraderouteRetrieveManyByShipAndSourceTypeDAO extends TraderouteDAO
             $mapper->row = $link;
             $mapper->serve();
 
-            $this->traderoutes[] = $mapper->link;
+            $this->traderoutes[] = $mapper->traderoute;
         }
     }
 

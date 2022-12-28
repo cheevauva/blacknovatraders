@@ -41,6 +41,7 @@ enum BalanceEnum
     case start_energy;
     case start_fighters;
     case max_turns;
+    case sector_max;
 
     public function val(): mixed
     {
@@ -78,6 +79,7 @@ enum BalanceEnum
         global $start_energy;
         global $start_fighters;
         global $max_turns;
+        global $sector_max;
 
         return match ($this) {
             BalanceEnum::ore_price => $ore_price,
@@ -114,6 +116,7 @@ enum BalanceEnum
             BalanceEnum::start_energy => $start_energy,
             BalanceEnum::start_fighters => $start_fighters,
             BalanceEnum::max_turns => $max_turns,
+            BalanceEnum::sector_max => $sector_max,
         };
     }
 

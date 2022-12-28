@@ -6,7 +6,6 @@ namespace BNT\Ship;
 
 use DateTime;
 use BNT\Ship\Exception\ShipException;
-use BNT\Ship\ShipResourceEnum;
 
 class Ship
 {
@@ -320,7 +319,7 @@ class Ship
         $this->turn();
         $this->credits -= $cost;
     }
-    
+
     public function password(string $password): void
     {
         $this->password = password_hash($password, PASSWORD_DEFAULT);

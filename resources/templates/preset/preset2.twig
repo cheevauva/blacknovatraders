@@ -1,0 +1,11 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_pre_title }}{% endblock %}
+{% block content %}
+    {% if message %}
+        {{ message | raw }}
+    {% else %}
+        Preset 1: <a href=rsmove.php?engage=1&destination={{ playerinfo.preset1 }}>{{ playerinfo.preset1 }}</a><br/>
+        Preset 2: <a href=rsmove.php?engage=1&destination={{ playerinfo.preset2 }}>{{ playerinfo.preset2 }}</a><br/>
+        Preset 3: <a href=rsmove.php?engage=1&destination={{ playerinfo.preset3 }}>{{ playerinfo.preset3 }}</a><br/>
+    {% endif %}
+{% endblock %}

@@ -98,6 +98,15 @@ class ShipView
         return $this->ship->getLevel();
     }
 
+    public function preset(int $preset): int
+    {
+        return match ($preset) {
+            1 => $this->ship->preset1,
+            2 => $this->ship->preset2,
+            3 => $this->ship->preset3,
+        };
+    }
+
     public function isDisplayed(): bool
     {
         $success = SCAN_SUCCESS($this->ship->sensors, $this->ship->cloak);
@@ -109,8 +118,8 @@ class ShipView
 
     public static function map(array $ships): array
     {
-        return array_map(function ($planet) {
-            return new static($planet);
+        return array_map(function ($ship) {
+            return new static($ship);
         }, $ships);
     }
 

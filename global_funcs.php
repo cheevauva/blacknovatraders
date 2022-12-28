@@ -110,27 +110,6 @@ function twig(): \Twig\Environment
     $twig->addFunction(new \Twig\TwigFunction('NUMBER', function ($number) {
         return NUMBER($number);
     }), $opts);
-    $twig->addFunction(new \Twig\TwigFunction('getTraderouteSrcLabel', function ($traderoute) {
-        return getTraderouteSrcLabel($traderoute);
-    }), $opts);
-    $twig->addFunction(new \Twig\TwigFunction('getTraderouteDirectionLabel', function ($traderoute) {
-        return getTraderouteDirectionLabel($traderoute);
-    }), $opts);
-    $twig->addFunction(new \Twig\TwigFunction('getTraderouteDstLabel', function ($traderoute) {
-        return getTraderouteDstLabel($traderoute);
-    }), $opts);
-    $twig->addFunction(new \Twig\TwigFunction('t_port', function ($portType) {
-        return t_port($portType);
-    }), $opts);
-    $twig->addFunction(new \Twig\TwigFunction('getPlanetLevel', function ($planet) {
-        return getPlanetLevel($planet);
-    }), $opts);
-    $twig->addFunction(new \Twig\TwigFunction('SCAN_SUCCESS', function ($level_scan, $level_cloak, $options = []) {
-        return SCAN_SUCCESS($level_scan, $level_cloak, $options);
-    }), $opts);
-    $twig->addFunction(new \Twig\TwigFunction('rand', function () {
-        return rand();
-    }), $opts);
     return $twig;
 }
 
@@ -218,13 +197,6 @@ function asSectorDefence($sectorDefence): BNT\SectorDefence\SectorDefence
     return $sectorDefence;
 }
 
-function getPlanetName(?\BNT\Planet\Planet $planet = null): string
-{
-    global $l_unnamed;
-    
-    return $planet ? ($planet->name ?: $l_unnamed) : $l_unknown;
-}
-
 function asShip($ship): \BNT\Ship\Ship
 {
     return $ship;
@@ -236,50 +208,11 @@ function asPlanet($planet): \BNT\Planet\Planet
     return $planet;
 }
 
-function getPlanetLevel(?\BNT\Ship\Ship $planetOwner = nul)
-{
-    if ($planetOwner) {
-        return $planetOwner->getPlanetLevel();
-    }
-
-    return 0;
-}
-
 function asTraderoute($traderoute): \BNT\Traderoute\Traderoute
 {
     return $traderoute;
 }
 
-function getTraderouteDirectionLabel(\BNT\Traderoute\Traderoute $traderoute): string
-{
-    return match ($traderoute->circuit) {
-        BNT\Traderoute\TraderouteCircuitEnum::One => '=>',
-        BNT\Traderoute\TraderouteCircuitEnum::Two => '<=>',
-    };
-}
-
-function getTraderouteSrcLabel(\BNT\Traderoute\Traderoute $traderoute): string
-{
-    global $l_port;
-    global $l_defense;
-    
-    return match ($traderoute->source_type) {
-        BNT\Traderoute\TraderouteTypeEnum::Port => $l_port,
-        BNT\Traderoute\TraderouteTypeEnum::Defense => $l_defense,
-        BNT\Traderoute\TraderouteTypeEnum::Personal, BNT\Traderoute\TraderouteTypeEnum::Corperate => getPlanetName(\BNT\Planet\DAO\PlanetRetrieveByIdDAO::call($traderoute->source_id)),
-    };
-}
-
-function getTraderouteDstLabel(\BNT\Traderoute\Traderoute $traderoute): string
-{
-    global $l_defense;
-    
-    return match ($traderoute->dest_type) {
-        BNT\Traderoute\TraderouteTypeEnum::Port => strval($traderoute->dest_id),
-        BNT\Traderoute\TraderouteTypeEnum::Defense => sprintf('%s [%s]', $l_defense, $traderoute->dest_id),
-        BNT\Traderoute\TraderouteTypeEnum::Personal, BNT\Traderoute\TraderouteTypeEnum::Corperate => getPlanetName(\BNT\Planet\DAO\PlanetRetrieveByIdDAO::call($traderoute->dest_id)),
-    };
-}
 
 function loadlanguage(string $language): array
 {
