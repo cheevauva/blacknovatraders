@@ -8,67 +8,7 @@ if (preg_match("/global_funcs.php/i", $PHP_SELF)) {
 }
 
 
-if(!defined('reg_global_fix')) {
-    define('reg_global_fix', true);
-}
-
-if (1==1)
-{
-  foreach ($_POST as $k=>$v)
-  {
-      if (!isset($GLOBALS[$k]))
-      {
-          $$k=$v;
-      }
-  }
-  foreach ($_GET as $k=>$v)
-  {
-      if (!isset($GLOBALS[$k]))
-      {
-          $$k=$v;
-      }
-  }
-
-  foreach ($_COOKIE as $k=>$v)
-  {
-      if (!isset($GLOBALS[$k]))
-      {
-          $$k=$v;
-      }
-  }
-}
-
-if (!empty($userpass) && $userpass != '+') {
-  $username = substr($userpass, 0, strpos($userpass, "+"));
-  $password = substr($userpass, strpos($userpass, "+")+1);
-
-}
-
-// Ensure lang is set
-$found = 0;
-if(!empty($lang))
-{
-  if(!preg_match("/^[\w]+$/", $lang))
-  {
-     $lang = $default_lang;
-
-  }
-  foreach($avail_lang as $key => $value)
-  {
-    if($lang == $value[file])
-    {
-      SetCookie("lang",$lang,time()+(3600*24)*365,$gamepath,$gamedomain);
-      $found = 1;
-      break;
-    }
-  }
-
-  if($found == 0)
-    $lang = $default_lang;
-}
-
-if (!isset($lang) || empty($lang))
-  $lang = $default_lang;
+$lang = $default_lang;
 $lang = $lang . ".inc";
 //Log constants
 

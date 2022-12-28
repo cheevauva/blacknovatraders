@@ -12,6 +12,7 @@ use BNT\Zone\DAO\ZoneRetrieveByIdDAO;
 require_once './config.php';
 
 connectdb();
+loadlanguage($lang);
 
 if (isNotAuthorized()) {
     die();

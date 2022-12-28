@@ -39,7 +39,7 @@ if ($playerinfo->on_planet) {
     }
 }
 
-$sectorinfo = SectorRetrieveByIdDAO::call($playerinfo->sector) ?? new Sector;
+$sectorinfo = SectorRetrieveByIdDAO::call($playerinfo->sector);
 
 echo twig()->render('main.twig', [
     'playerinfo' => new ShipView($playerinfo),

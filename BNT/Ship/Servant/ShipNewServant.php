@@ -71,6 +71,7 @@ class ShipNewServant implements ServantInterface
         $ship = new Ship;
         $ship->ship_name = $this->shipname;
         $ship->password($this->password);
+        $ship->sector = 1;
         $ship->character_name = $this->character;
         $ship->email = $this->username;
         $ship->armor_pts = BalanceEnum::start_armor->val();
@@ -91,11 +92,11 @@ class ShipNewServant implements ServantInterface
         $ship->dev_lssd = $this->start_lssd;
 
         ShipCreateDAO::call($ship);
-        
+
         $zone = new Zone;
         $zone->zone_name = sprintf("%s 's Territory", $this->character);
         $zone->owner = $ship->ship_id;
-        
+
         $ibankAccount = new IBankAccount;
         $ibankAccount->ship_id = $ship->ship_id;
 
@@ -114,7 +115,6 @@ class ShipNewServant implements ServantInterface
 
         if ($mturns > $max_turns)
             $mturns = $max_turns;
-
     }
 
 }
