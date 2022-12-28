@@ -234,22 +234,17 @@
                         {% for  defenceInSector in defencesInSector %}
                             <tr>
                                 <td>
-                                    <a href="modify_defences.php?defence_id={{ defenceInSector.defence_id }}">
+                                    <a href="modify_defences.php?defence_id={{ defenceInSector.id() }}">
                                         <table>
                                             <tr>
-                                                <td >
-                                                    {%  if (defenceInSector.defence_type.value == 'M') %}
-                                                        <img src="images/mines.gif">
-                                                    {% endif %}
-                                                    {% if (defenceInSector.defence_type.value == 'F') %}
-                                                        <img src="images/fighters.gif">
-                                                    {% endif %}
+                                                <td>
+                                                    <div class="sectordefencetypes-{{ defenceInSector.type() }}"></div>
                                                 </td>
-                                                <td>{{ defenceInSector.defenceSectorLabel() }}</td>
+                                                <td>{{ defenceInSector.name() }}</td>
                                             </tr>
                                             <tr colspan="2">
                                                 <td>
-                                                    {{ shipDefenceinSector.character_name }}
+                                                    {{ defenceInSector.shipname() }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -323,14 +318,14 @@
                     <tr>
                         <TD NOWRAP>
                             <div >
-                                {% if links %}
+                                {% if not links %}
                                     <a >{{ tr.l_no_warplink }}</a><br>
                                 {% else %}
                                     {% for  link in links  %}
                                         <a  href="move.php?sector={{ link.link_dest }}">
-                                            =&gt;{{ tr.link.link_dest }}
+                                            =&gt;{{ link.link_dest }}
                                         </a>
-                                        <a  href="lrscan.php?sector={{ tr.link.link_dest }}">
+                                        <a  href="lrscan.php?sector={{ link.link_dest }}">
                                             [{{ tr.l_scan }}]
                                         </a><br>
                                     {% endfor %}

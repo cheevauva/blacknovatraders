@@ -11,7 +11,7 @@ use BNT\Planet\View\PlanetView;
 use BNT\Ship\View\ShipView;
 use BNT\Sector\View\SectorView;
 use BNT\Traderoute\View\TraderouteView;
-use BNT\Sector\Sector;
+use BNT\SectorDefence\View\SectorDefenceView;
 
 require_once './config.php';
 
@@ -48,7 +48,7 @@ echo twig()->render('main.twig', [
     'links' => LinkRetrieveManyBySectorDAO::call($playerinfo->sector),
     'planetsInSector' => PlanetView::map(PlanetRetrieveManyBySectorDAO::call($playerinfo->sector)),
     'traderoutes' => TraderouteView::map(TraderouteRetrieveManyByShipDAO::call($playerinfo)),
-    'defencesInSector' => SectorDefenceRetrieveManyBySectorDAO::call($playerinfo->sector),
+    'defencesInSector' => SectorDefenceView::map(SectorDefenceRetrieveManyBySectorDAO::call($playerinfo->sector)),
     'zoneinfo' => ZoneRetrieveByIdDAO::call($sectorinfo->zone_id),
     'shipsInSector' => ShipView::map(ShipRetrieveManyBySectorDAO::call($playerinfo->sector)),
 ]);
