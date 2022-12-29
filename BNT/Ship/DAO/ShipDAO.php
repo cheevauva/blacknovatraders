@@ -8,6 +8,7 @@ use BNT\ServantInterface;
 use BNT\DatabaseTrait;
 use BNT\Ship\Mapper\ShipMapper;
 use BNT\TableEnum;
+use BNT\Ship\Ship;
 
 abstract class ShipDAO implements ServantInterface
 {
@@ -27,16 +28,21 @@ abstract class ShipDAO implements ServantInterface
     protected function asShips(array $rows): array
     {
         $ships = [];
-        
-        foreach ($rows as $row) {
-            $mapper = $this->mapper();
-            $mapper->row = $row;
-            $mapper->serve();
 
-            $ships[] = $mapper->ship;
+        foreach ($rows as $row) {
+            $ships[] = $this->asShip($row);
         }
-        
+
         return $ships;
+    }
+
+    protected function asShip(array $row): ?Ship
+    {
+        $mapper = $this->mapper();
+        $mapper->row = $row;
+        $mapper->serve();
+
+        return $mapper->ship;
     }
 
 }

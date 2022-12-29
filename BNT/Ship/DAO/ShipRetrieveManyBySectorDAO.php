@@ -28,15 +28,7 @@ class ShipRetrieveManyBySectorDAO extends ShipDAO
             $qb->setParameter('on_planet', $this->onPlanet ? 'Y' : 'N');
         }
 
-        $this->ships = [];
-
-        foreach ($qb->fetchAllAssociative() as $sectorDefence) {
-            $mapper = $this->mapper();
-            $mapper->row = $sectorDefence;
-            $mapper->serve();
-
-            $this->ships[] = $mapper->ship;
-        }
+        $this->ships = $this->asShips($qb->fetchAllAssociative() ?: []);
     }
 
     public static function call(int $sector, ?bool $onPlanet = null): array

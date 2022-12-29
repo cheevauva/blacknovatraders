@@ -23,11 +23,7 @@ class ShipRetrieveByEmailDAO extends ShipDAO
         ]);
         $qb->setMaxResults(1);
 
-        $mapper = $this->mapper();
-        $mapper->row = $qb->fetchAssociative() ?: [];
-        $mapper->serve();
-
-        $this->ship = $mapper->ship;
+        $this->ship = $this->asShip($qb->fetchAssociative() ?: []);
     }
 
     public static function call(string $email): ?Ship
