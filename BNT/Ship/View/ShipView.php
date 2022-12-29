@@ -58,6 +58,11 @@ class ShipView
         return strval($this->ship->sector);
     }
 
+    public function rating(): string
+    {
+        return strval($this->ship->rating);
+    }
+
     public function team(): string
     {
         return '!!';

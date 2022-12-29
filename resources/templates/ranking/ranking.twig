@@ -1,11 +1,43 @@
 {% extends "layout.twig" %}
 {% block title %}{{ tr.l_ranks_title }}{% endblock %}
 {% block content %}
-    <FORM ACTION=preset.php METHOD=POST>
-        Preset 1: <INPUT TYPE=TEXT NAME=preset1 SIZE=6 MAXLENGTH=6 VALUE="{{ playerinfo.preset1 }}"><BR>
-        Preset 2: <INPUT TYPE=TEXT NAME=preset2 SIZE=6 MAXLENGTH=6 VALUE="{{ playerinfo.preset2 }}"><BR>
-        Preset 3: <INPUT TYPE=TEXT NAME=preset3 SIZE=6 MAXLENGTH=6 VALUE="{{ playerinfo.preset3 }}"><BR>
-        <INPUT TYPE=HIDDEN NAME="change" VALUE=1>
-        <BR><INPUT TYPE=SUBMIT VALUE="{{ tr.l_pre_save }}"><BR><BR>
-    </FORM>
+    <h1>{{ tr.l_score }}</h1>
+    <TABLE>
+        <TR >
+            <TD>{{ tr.l_player }}</TD>
+            <TD>{{ tr.l_score }}</TD>
+        </tr>
+        {% for ship in shipsAsTopScore %}
+            <TR >
+                <TD>{{ ship.name() }}</TD>
+                <TD>{{ ship.score() }}</TD>
+            </tr>
+        {% endfor %}
+    </table>
+    <h1>{{ tr.l_turns_used }}</h1>
+    <TABLE>
+        <TR >
+            <TD>{{ tr.l_player }}</TD>
+            <TD>{{ tr.l_turns_used }}</TD>
+        </tr>
+        {% for ship in shipsAsTopScore %}
+            <TR >
+                <TD>{{ ship.name() }}</TD>
+                <TD>{{ ship.turnsUsed() }}</TD>
+            </tr>
+        {% endfor %}
+    </table>
+    <h1>{{ tr.l_ranks_good }}</h1>
+    <TABLE>
+        <TR >
+            <TD>{{ tr.l_player }}</TD>
+            <TD>{{ tr.l_rating }}</TD>
+        </tr>
+        {% for ship in shipsAsTopRating %}
+            <TR >
+                <TD>{{ ship.name() }}</TD>
+                <TD>{{ ship.rating() }}</TD>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

@@ -1,22 +1,21 @@
 <?php
-use BNT\Cache;
-include("config.php");
-updatecookie();
+use BNT\Ship\DAO\ShipRanking\ShipRankingTopScoreDAO;
+use BNT\Ship\DAO\ShipRanking\ShipRankingTopTurnsUsedDAO;
+use BNT\Ship\DAO\ShipRanking\ShipRankingTopRatingDAO;
+use BNT\Ship\View\ShipView;
+
+require_once './config.php';
 
 loadlanguage($lang);
-$title=$l_ranks_title;
-include("header.php");
 
 connectdb();
-bigtitle();
-$item = Cache::instance()->getItem('test');
-if ($item->isHit()) {
-    var_dump($item->get());
-} else {
-    $item->set(12);
-    Cache::instance()->save($item);
-    die;
-}
+
+echo twig()->render('ranking/ranking.twig', [
+    'shipsAsTopScore' => ShipView::map(ShipRankingTopScoreDAO::call()),
+    'shipsAsTopTurnsUsed' => ShipView::map(ShipRankingTopTurnsUsedDAO::call()),
+    'shipsAsTopRating' => ShipView::map(ShipRankingTopRatingDAO::call())
+]);
+die;
 //-------------------------------------------------------------------------------------------------
 
 $res = $db->Execute("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe'");

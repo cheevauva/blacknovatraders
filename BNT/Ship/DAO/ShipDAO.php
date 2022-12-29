@@ -24,4 +24,19 @@ abstract class ShipDAO implements ServantInterface
         return new ShipMapper;
     }
 
+    protected function asShips(array $rows): array
+    {
+        $ships = [];
+        
+        foreach ($rows as $row) {
+            $mapper = $this->mapper();
+            $mapper->row = $row;
+            $mapper->serve();
+
+            $ships[] = $mapper->ship;
+        }
+        
+        return $ships;
+    }
+
 }
