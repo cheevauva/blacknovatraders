@@ -68,6 +68,15 @@ class ShipView
         return '!!';
     }
 
+    public function efficiency(): string
+    {
+        if ($this->ship->turns_used < 150) {
+            return NUMBER(0);
+        }
+
+        return NUMBER($this->ship->score / $this->ship->turns_used);
+    }
+
     public function ore(): string
     {
         return NUMBER($this->ship->ship_ore);

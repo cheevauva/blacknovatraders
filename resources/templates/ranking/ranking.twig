@@ -6,11 +6,15 @@
         <TR >
             <TD>{{ tr.l_player }}</TD>
             <TD>{{ tr.l_score }}</TD>
+            <td>Eff. Rating.</td>
+            <td>{{ tr.l_team_alliance }}</td>
         </tr>
         {% for ship in shipsAsTopScore %}
             <TR >
                 <TD>{{ ship.name() }}</TD>
                 <TD>{{ ship.score() }}</TD>
+                <TD>{{ ship.efficiency() }}</TD>
+                <TD>{{ ship.team() }}</TD>
             </tr>
         {% endfor %}
     </table>
@@ -19,11 +23,15 @@
         <TR >
             <TD>{{ tr.l_player }}</TD>
             <TD>{{ tr.l_turns_used }}</TD>
+            <td>Eff. Rating.</td>
+            <td>{{ tr.l_team_alliance }}</td>
         </tr>
         {% for ship in shipsAsTopScore %}
             <TR >
                 <TD>{{ ship.name() }}</TD>
                 <TD>{{ ship.turnsUsed() }}</TD>
+                <TD>{{ ship.efficiency() }}</TD>
+                <TD>{{ ship.team() }}</TD>
             </tr>
         {% endfor %}
     </table>
@@ -32,12 +40,17 @@
         <TR >
             <TD>{{ tr.l_player }}</TD>
             <TD>{{ tr.l_rating }}</TD>
+            <td>Eff. Rating.</td>
+            <td>{{ tr.l_team_alliance }}</td>
         </tr>
         {% for ship in shipsAsTopRating %}
             <TR >
                 <TD>{{ ship.name() }}</TD>
                 <TD>{{ ship.rating() }}</TD>
+                <TD>{{ ship.efficiency() }}</TD>
+                <TD>{{ ship.team() }}</TD>
             </tr>
         {% endfor %}
     </table>
+
 {% endblock %}

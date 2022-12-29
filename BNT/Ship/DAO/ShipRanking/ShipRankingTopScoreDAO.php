@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Ship\DAO\ShipRanking;
 
+use BNT\BalanceEnum;
+
 class ShipRankingTopScoreDAO extends ShipRankingTopDAO
 {
 
@@ -18,7 +20,13 @@ class ShipRankingTopScoreDAO extends ShipRankingTopDAO
         $qb->select('*');
         $qb->from($this->table());
         $qb->orderBy('score', 'DESC');
-        $qb->setMaxResults(100);
+        $qb->andWhere('ship_destroyed=:ship_destroyed');
+        $qb->andWhere('email NOT LIKE :email');
+        $qb->setParameters([
+            'ship_destroyed' => 'N',
+            'email' => '%@xenobe',
+        ]);
+        $qb->setMaxResults(BalanceEnum::max_rank->val());
 
         return $qb->fetchAllAssociative();
     }
