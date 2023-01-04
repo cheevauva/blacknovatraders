@@ -4,15 +4,14 @@ use BNT\Ship\View\ShipView;
 use BNT\Log\View\LogView;
 use BNT\Log\DAO\LogRetrieveManyByShipDAO;
 
-include("config.php");
-updatecookie();
-
-loadlanguage($lang);
+require_once './config.php';
 
 connectdb();
+
 if (isNotAuthorized()) {
     die();
 }
+
 $playerinfo = ship();
 
 echo twig()->render('log/log.twig', [

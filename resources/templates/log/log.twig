@@ -5,12 +5,12 @@
     {% for log in logs %}
         <table>
             <tr> 
-                <td>{{ log.title() }}</td> 
+                <td>{{ log.title()|raw }}</td> 
                 <td>{{ log.time() }}</td> 
             </tr>
             <tr>
                 <td colspan=2> 
-                    {{ log.text() }}
+                    {{ log.text()|raw }}
                 </td>
             </tr> 
         </table> 

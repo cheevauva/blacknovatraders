@@ -1,0 +1,8 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_die_title }}{% endblock %}
+{% block content %}
+    <FONT COLOR=RED><B>{{ tr.l_die_rusure }}</B></FONT><BR><BR>
+    <A HREF=>{{ tr.l_die_nonono }}</A>{{ tr.l_die_what }}<BR><BR>
+    <A HREF=self_destruct.php?sure=1>{{ tr.l_yes }}!</A>{{ tr.l_die_goodbye }}<BR><BR>
+{% endblock %}
+
