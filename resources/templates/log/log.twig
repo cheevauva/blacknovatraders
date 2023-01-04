@@ -1,0 +1,21 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_log_titlet }}{% endblock %}
+{% block content %}
+
+    {% for log in logs %}
+        <table>
+            <tr> 
+                <td>{{ log.title() }}</td> 
+                <td>{{ log.time() }}</td> 
+            </tr>
+            <tr>
+                <td colspan=2> 
+                    {{ log.text() }}
+                </td>
+            </tr> 
+        </table> 
+        <hr>
+    {% endfor %}
+
+{% endblock %}
+

@@ -9,6 +9,8 @@ use BNT\Ship\DAO\ShipRetrieveByEmailDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Ship;
 use BNT\Ship\Exception\ShipException;
+use BNT\Log\LogLogin;
+use BNT\Log\LogBadLogin;
 
 class ShipLoginServant implements ServantInterface
 {
@@ -29,7 +31,11 @@ class ShipLoginServant implements ServantInterface
         $ship = $this->ship;
 
         if (!password_verify($this->password, $ship->password)) {
-            playerlog($ship->ship_id, LOG_BADLOGIN, $this->ip);
+            $badLogin = new LogBadLogin;
+            $badLogin->ship_id = $ship->ship_id;
+            $badLogin->ip = $this->ip;
+            $badLogin->dispatch();
+
             throw ShipException::incorrectPassword($ship);
         }
 
@@ -42,7 +48,10 @@ class ShipLoginServant implements ServantInterface
 
         ShipSaveDAO::call($ship);
 
-        playerlog($ship->ship_id, LOG_LOGIN, $this->ip);
+        $login = new LogLogin;
+        $login->ship_id = $ship->ship_id;
+        $login->ip = $this->ip;
+        $login->dispatch();
     }
 
 }

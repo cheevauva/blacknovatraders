@@ -15,6 +15,7 @@ enum TableEnum
     case Zones;
     case SectorDefences;
     case Bounty;
+    case Logs;
 
     public function toDb(): string
     {
@@ -29,6 +30,7 @@ enum TableEnum
             TableEnum::Zones => $dbtables['zones'],
             TableEnum::SectorDefences => $dbtables['sector_defence'],
             TableEnum::Bounty => $dbtables['bounty'],
+            TableEnum::Logs => $dbtables['logs'],
         };
     }
 

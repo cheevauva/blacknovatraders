@@ -216,6 +216,8 @@ if($engage == "1" && $adminpass == $_POST['swordfish'] )
     $step="2";
 }
 
+extract($_POST);
+
 ### Main switch statement.
 
 switch ($step) {

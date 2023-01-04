@@ -412,7 +412,7 @@ $db->Execute("CREATE TABLE $dbtables[logs](" .
              "ship_id int DEFAULT '0' NOT NULL," .
              "type mediumint(5) DEFAULT '0' NOT NULL," .
              "time datetime," .
-             "data varchar(255)," .
+             "data text," .
              "PRIMARY KEY (log_id)," .
              "KEY idate (ship_id,time)" .
              ") ENGINE='InnoDB' COLLATE 'utf8_general_ci'");
