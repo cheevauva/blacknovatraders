@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship\DAO\ShipRanking;
+namespace BNT\Ship\ShipRanking\DAO;
 
 use BNT\BalanceEnum;
 
-class ShipRankingTopRatingDAO extends ShipRankingTopDAO
+class ShipRankingTopScoreDAO extends ShipRankingTopDAO
 {
 
     protected function cacheKey(): string
     {
-        return 'ranking_top_rating';
+        return 'ranking_top_score';
     }
 
     protected function getShips(): array
@@ -19,7 +19,7 @@ class ShipRankingTopRatingDAO extends ShipRankingTopDAO
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
         $qb->from($this->table());
-        $qb->orderBy('rating', 'DESC');
+        $qb->orderBy('score', 'DESC');
         $qb->andWhere('ship_destroyed=:ship_destroyed');
         $qb->andWhere('email NOT LIKE :email');
         $qb->setParameters([

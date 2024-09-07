@@ -370,59 +370,14 @@ function gen_score($sid)
 
 function db_kill_player($ship_id)
 {
-  global $default_prod_ore;
-  global $default_prod_organics;
-  global $default_prod_goods;
-  global $default_prod_energy;
-  global $default_prod_fighters;
-  global $default_prod_torp;
-  global $gameroot;
-  global $db,$dbtables;
-
-  include("languages/english.inc");
-
-  $db->Execute("UPDATE $dbtables[ships] SET ship_destroyed='Y',on_planet='N',sector=0,cleared_defences=' ' WHERE ship_id=$ship_id");
-  $db->Execute("DELETE from $dbtables[bounty] WHERE placed_by = $ship_id");
-
-  $res = $db->Execute("SELECT DISTINCT sector_id FROM $dbtables[planets] WHERE owner='$ship_id' AND base='Y'");
-  $i=0;
-
-  while(!$res->EOF && $res)
-  {
-    $sectors[$i] = $res->fields[sector_id];
-    $i++;
-    $res->MoveNext();
-  }
-
-  $db->Execute("UPDATE $dbtables[planets] SET owner=0,fighters=0, base='N' WHERE owner=$ship_id");
-
-  if(!empty($sectors))
-  {
-    foreach($sectors as $sector)
-    {
-      calc_ownership($sector);
-    }
-  }
-  $db->Execute("DELETE FROM $dbtables[sector_defence] where ship_id=$ship_id");
-
-  $res = $db->Execute("SELECT zone_id FROM $dbtables[zones] WHERE corp_zone='N' AND owner=$ship_id");
-  $zone = $res->fields;
-
-$db->Execute("UPDATE $dbtables[universe] SET zone_id=1 WHERE zone_id=$zone[zone_id]");
-
-
-
-$query = $db->Execute("select character_name from $dbtables[ships] where ship_id='$ship_id'");
-$name = $query->fields;
-
-
-$headline = $name[character_name] . $l_killheadline;
-
-
-$newstext=str_replace("[name]",$name[character_name],$l_news_killed);
-
-$news = $db->Execute("INSERT INTO $dbtables[news] (headline, newstext, user_id, date, news_type) VALUES ('$headline','$newstext','$ship_id',NOW(), 'killed')");
-
+    global $default_prod_ore;
+    global $default_prod_organics;
+    global $default_prod_goods;
+    global $default_prod_energy;
+    global $default_prod_fighters;
+    global $default_prod_torp;
+    $ship = \BNT\Ship\DAO\ShipRetrieveByIdDAO::call($ship_id);
+    BNT\Ship\Servant\ShipKillServant::call($ship);
 }
 
 function NUMBER($number, $decimals = 0)

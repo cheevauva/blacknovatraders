@@ -8,7 +8,7 @@ use BNT\ServantInterface;
 use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\DAO\BountySumByShipDAO;
-use BNT\Bounty\DAO\BountyRemoveByShipDAO;
+use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;
 use BNT\Bounty\Exception\BountyException;
 
 class BountryPayByShipServant implements ServantInterface
@@ -32,7 +32,11 @@ class BountryPayByShipServant implements ServantInterface
         $ship->credits = intval($ship->credits - $amount);
 
         ShipSaveDAO::call($ship);
-        BountyRemoveByShipDAO::call($ship);
+        
+        $removeBounty = new BountyRemoveByCriteriaDAO;
+        $removeBounty->bountyOn = $this->ship->ship_id;
+        $removeBounty->placedBy = 0;
+        $removeBounty->serve();
     }
 
     public static function call(Ship $ship): self

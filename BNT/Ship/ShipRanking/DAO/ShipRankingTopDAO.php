@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship\DAO\ShipRanking;
+namespace BNT\Ship\ShipRanking\DAO;
 
 use BNT\Ship\DAO\ShipDAO;
 use BNT\CacheTrait;

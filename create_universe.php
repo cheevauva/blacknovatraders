@@ -854,12 +854,11 @@ Table_Footer("Completed successfully.");
       $update = $db->Execute("INSERT INTO $dbtables[ibank_accounts] (ship_id,balance,loan) VALUES (1,0,0)");
     Table_Row("Inserting Admins ibank Information","Failed","Inserted");
 
-    $password = substr($admin_mail, 0, $maxlen_password);
-
     $ship = new \BNT\Ship\Ship;
     $ship->ship_name = 'WebMaster';
     $ship->character_name = 'WebMaster';
     $ship->email = $admin_mail;
+    
     $ship->password($password);
 
     $createShip = new \BNT\Ship\Servant\ShipCreateServant;

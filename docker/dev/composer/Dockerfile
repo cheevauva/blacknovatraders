@@ -8,6 +8,7 @@ RUN apt-get install -y libxml2-dev
 RUN apt-get install -y libzip-dev
 RUN apt-get install -y zlib1g-dev
 RUN apt-get install -y libmemcached-dev
+RUN apt-get install -y libssl-dev
 RUN apt-get install -y nano
 
 RUN pecl install memcached-3.2.0

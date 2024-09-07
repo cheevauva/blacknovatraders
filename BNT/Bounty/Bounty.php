@@ -6,5 +6,10 @@ namespace BNT\Bounty;
 
 class Bounty
 {
-    //put your code here
+
+    public int $bounty_id;
+    public int $placed_by;
+    public int $bounty_on;
+    public int $amount;
+
 }

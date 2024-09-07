@@ -1,8 +1,8 @@
 <?php
 
-use BNT\Ship\DAO\ShipRanking\ShipRankingTopScoreDAO;
-use BNT\Ship\DAO\ShipRanking\ShipRankingTopTurnsUsedDAO;
-use BNT\Ship\DAO\ShipRanking\ShipRankingTopRatingDAO;
+use BNT\Ship\ShipRanking\DAO\ShipRankingTopScoreDAO;
+use BNT\Ship\ShipRanking\DAO\ShipRankingTopTurnsUsedDAO;
+use BNT\Ship\ShipRanking\DAO\ShipRankingTopRatingDAO;
 use BNT\Ship\View\ShipView;
 
 require_once './config.php';

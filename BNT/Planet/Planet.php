@@ -30,4 +30,9 @@ class Planet
     public int $prod_torp = 0;
     public bool $defeated = false;
 
+    public static function as(self $planet): static
+    {
+        return $planet;
+    }
+
 }
