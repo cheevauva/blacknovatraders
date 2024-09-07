@@ -44,11 +44,11 @@ $sectorinfo = SectorRetrieveByIdDAO::call($playerinfo->sector);
 
 echo twig()->render('main.twig', [
     'playerinfo' => new ShipView($playerinfo),
-    'sectorinfo' => new SectorView($sectorinfo),
+    'sectorinfo' => $sectorinfo ? new SectorView($sectorinfo) : null,
     'links' => LinkRetrieveManyBySectorDAO::call($playerinfo->sector),
     'planetsInSector' => PlanetView::map(PlanetRetrieveManyBySectorDAO::call($playerinfo->sector)),
     'traderoutes' => TraderouteView::map(TraderouteRetrieveManyByShipDAO::call($playerinfo)),
-    'defencesInSector' => SectorDefenceView::map(SectorDefenceRetrieveManyBySectorDAO::call($playerinfo->sector)),
-    'zoneinfo' => ZoneRetrieveByIdDAO::call($sectorinfo->zone_id),
+    'defencesInSector' => $sectorinfo ? SectorDefenceView::map(SectorDefenceRetrieveManyBySectorDAO::call($playerinfo->sector)) : null,
+    'zoneinfo' => $sectorinfo ? ZoneRetrieveByIdDAO::call($sectorinfo->zone_id) : null,
     'shipsInSector' => ShipView::map(ShipRetrieveManyBySectorDAO::call($playerinfo->sector)),
 ]);
