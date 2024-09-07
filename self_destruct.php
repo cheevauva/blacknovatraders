@@ -1,6 +1,7 @@
 <?php
 
 use BNT\Ship\Servant\ShipSelfDestructServant;
+use BNT\Servant\TransactionServant;
 
 require_once './config.php';
 
@@ -21,7 +22,11 @@ switch ($_GET['sure'] ?? null) {
         echo twig()->render('harakiri/step1.twig');
         break;
     case 2:
-        ShipSelfDestructServant::call($playerinfo, $ip);
+        $selfDestruct = new ShipSelfDestructServant;
+        $selfDestruct->ship = $playerinfo;
+        $selfDestruct->ip = $ip;
+        
+        TransactionServant::call($selfDestruct);
         header('Location: logout.php');
         die;
         break;

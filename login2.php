@@ -3,6 +3,7 @@
 use BNT\Ship\Servant\ShipLoginServant;
 use BNT\Ship\Exception\ShipHasBeenDestroyedException;
 use BNT\Ship\Servant\ShipRestoreServant;
+use BNT\Servant\TransactionServant;
 
 require_once 'config.php';
 
@@ -26,8 +27,9 @@ try {
     } catch (ShipHasBeenDestroyedException $ex) {
         $restore = new ShipRestoreServant;
         $restore->ship = $ex->ship;
-        $restore->serve();
 
+        TransactionServant::call($restore);
+        
         throw $ex;
     }
 } catch (Exception $ex) {

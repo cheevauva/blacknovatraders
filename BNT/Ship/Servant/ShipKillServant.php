@@ -37,7 +37,7 @@ class ShipKillServant implements ServantInterface
         ShipSaveDAO::call($this->ship);
 
         $removeBounty = new BountyRemoveByCriteriaDAO;
-        $removeBounty->placedBy = $this->ship->id;
+        $removeBounty->placedBy = $this->ship->ship_id;
         $removeBounty->serve();
 
         $retrievePlanets = new PlanetRetrieveManyByCriteria;
@@ -48,7 +48,7 @@ class ShipKillServant implements ServantInterface
 
         foreach ($retrievePlanets->planets as $planet) {
             $planet = Planet::as($planet);
-            
+
             if ($planet->base) {
                 $sectorsWithBase[] = $planet->sector_id;
             }
@@ -79,11 +79,13 @@ class ShipKillServant implements ServantInterface
         $retrieveSector->zone_id = $zone->zone_id;
         $retrieveSector->serve();
 
-        $sector = $retrieveSector->sector;
-        $sector->zone_id = 1;
+        if (!empty($retrieveSector->sector)) {
+            $sector = $retrieveSector->sector;
+            $sector->zone_id = 1;
 
-        SectorSaveDAO::call($sector);
-
+            SectorSaveDAO::call($sector);
+        }
+        
         $news = new News;
         $news->headline = $this->ship->character_name . $l_killheadline;
         $news->newstext = str_replace("[name]", $this->ship->character_name, $l_news_killed);

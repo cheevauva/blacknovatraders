@@ -7,6 +7,7 @@ namespace BNT\News\DAO;
 use BNT\TableEnum;
 use BNT\News\Mapper\NewsMapper;
 use BNT\ServantInterface;
+use BNT\DatabaseTrait;
 
 abstract class NewsDAO implements ServantInterface
 {
@@ -15,7 +16,7 @@ abstract class NewsDAO implements ServantInterface
 
     protected function table(): string
     {
-        return TableEnum::Sectors->toDb();
+        return TableEnum::News->toDb();
     }
 
     protected function mapper(): NewsMapper

@@ -23,7 +23,7 @@ enum TableEnum
         global $dbtables;
 
         return match ($this) {
-            TableEnum::Ships => $dbtables['news'],
+            TableEnum::News => $dbtables['news'],
             TableEnum::Ships => $dbtables['ships'],
             TableEnum::Traderoutes => $dbtables['traderoutes'],
             TableEnum::Links => $dbtables['links'],

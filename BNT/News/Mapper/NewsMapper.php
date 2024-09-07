@@ -27,7 +27,7 @@ class NewsMapper implements \BNT\ServantInterface
         if (!empty($this->news) && empty($this->row)) {
             $news = $this->news;
             $row = [];
-            $row['news_id'] = $news->news_id;
+            $row['news_id'] = $news->news_id ?? null;
             $row['headline'] = $news->headline;
             $row['newstext'] = $news->newstext;
             $row['user_id'] = $news->user_id;

@@ -377,7 +377,9 @@ function db_kill_player($ship_id)
     global $default_prod_fighters;
     global $default_prod_torp;
     $ship = \BNT\Ship\DAO\ShipRetrieveByIdDAO::call($ship_id);
-    BNT\Ship\Servant\ShipKillServant::call($ship);
+
+    \BNT\Ship\Servant\ShipKillServant::call($ship);
+   
 }
 
 function NUMBER($number, $decimals = 0)

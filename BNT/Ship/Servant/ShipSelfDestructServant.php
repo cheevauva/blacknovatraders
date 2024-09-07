@@ -16,7 +16,7 @@ class ShipSelfDestructServant implements ServantInterface
 
     public function serve(): void
     {
-        db_kill_player($playerinfo['ship_id']);
+        ShipKillServant::call($this->ship);
 //        cancel_bounty($playerinfo['ship_id']);
 //        
         $harakiri = new LogHarakiri;

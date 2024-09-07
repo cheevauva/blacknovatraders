@@ -6,6 +6,7 @@ namespace BNT\Ship\Servant;
 
 use BNT\ServantInterface;
 use BNT\Ship\Ship;
+use BNT\Ship\DAO\ShipSaveDAO;
 
 class ShipRestoreServant implements ServantInterface
 {
@@ -16,19 +17,17 @@ class ShipRestoreServant implements ServantInterface
     {
         $ship = $this->ship;
 
-        if (!$ship->isDestroyed) {
+        if (!$ship->ship_destroyed) {
             throw new \Exception('Ship has not been destroyed');
         }
 
-        if ($ship->hasEscapePod) {
+        if ($ship->dev_escapepod) {
             $ship->resetWithEscapePod();
         } else {
             $ship->resetWithoutEscapePod();
         }
 
-        $save = new ShipSaveDAO;
-        $save->ship = $save;
-        $save->serve();
+        ShipSaveDAO::call($ship);
     }
 
 }

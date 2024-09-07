@@ -17,9 +17,14 @@ class NewsSaveDAO extends NewsDAO
         $mapper->news = $this->news;
         $mapper->serve();
 
-        $this->db()->update($this->table(), $mapper->row, [
-            'news_id' => $this->news->news_id,
-        ]);
+        if (!isset($this->news->news_id)) {
+            $this->db()->insert($this->table(), $mapper->row);
+            $this->news->news_id = (int) $this->db()->lastInsertId();
+        } else {
+            $this->db()->update($this->table(), $mapper->row, [
+                'news_id' => $this->news->news_id,
+            ]);
+        }
     }
 
     public static function call(News $news): void
