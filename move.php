@@ -1,4 +1,7 @@
-<?
+<?php
+
+use BNT\Ship\Servant\ShipMoveServant;
+use BNT\Servant\TransactionServant;
 
 include("config.php");
 updatecookie();
@@ -12,6 +15,20 @@ include("header.php");
 connectdb();
 
 //Check to see if the user is logged in
+if (isNotAuthorized())
+{
+    die();
+}
+
+try {
+    $move = new ShipMoveServant;
+    $move->sector = intval($_GET['sector'] ?? 0);
+    $move->ship = $ship;
+
+    TransactionServant::call($move);
+} catch (Exception $ex) {
+
+}
 if (isNotAuthorized())
 {
     die();

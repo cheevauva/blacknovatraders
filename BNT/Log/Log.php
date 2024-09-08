@@ -15,6 +15,7 @@ abstract class Log
     public int $ship_id = 0;
     public LogTypeEnum $type = LogTypeEnum::UNDEFINED;
     public ?\DateTime $time = null;
+    public $message;
     
     public function __construct()
     {

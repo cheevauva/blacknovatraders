@@ -1,10 +1,10 @@
 <?php
 
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
-use BNT\Link\DAO\LinkRetrieveManyBySectorDAO;
+use BNT\Link\DAO\LinkRetrieveManyByCriteriaDAO;
 use BNT\Planet\DAO\PlanetRetrieveManyBySectorDAO;
 use BNT\Traderoute\DAO\TraderouteRetrieveManyByShipDAO;
-use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyBySectorDAO;
+use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Zone\DAO\ZoneRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipRetrieveManyBySectorDAO;
 use BNT\Planet\View\PlanetView;
@@ -42,13 +42,21 @@ if ($playerinfo->on_planet) {
 
 $sectorinfo = SectorRetrieveByIdDAO::call($playerinfo->sector);
 
+$retriveLinks = new LinkRetrieveManyByCriteriaDAO;
+$retriveLinks->link_start = $playerinfo->sector;
+$retriveLinks->serve();
+
+$retrieveSectorDefences = new SectorDefenceRetrieveManyByCriteriaDAO;
+$retrieveSectorDefences->sector_id = $playerinfo->sector;
+$retrieveSectorDefences->serve();
+
 echo twig()->render('main.twig', [
     'playerinfo' => new ShipView($playerinfo),
     'sectorinfo' => $sectorinfo ? new SectorView($sectorinfo) : null,
-    'links' => LinkRetrieveManyBySectorDAO::call($playerinfo->sector),
+    'links' => $retriveLinks->links,
     'planetsInSector' => PlanetView::map(PlanetRetrieveManyBySectorDAO::call($playerinfo->sector)),
     'traderoutes' => TraderouteView::map(TraderouteRetrieveManyByShipDAO::call($playerinfo)),
-    'defencesInSector' => $sectorinfo ? SectorDefenceView::map(SectorDefenceRetrieveManyBySectorDAO::call($playerinfo->sector)) : null,
+    'defencesInSector' => SectorDefenceView::map($retrieveSectorDefences->defences),
     'zoneinfo' => $sectorinfo ? ZoneRetrieveByIdDAO::call($sectorinfo->zone_id) : null,
     'shipsInSector' => ShipView::map(ShipRetrieveManyBySectorDAO::call($playerinfo->sector)),
 ]);

@@ -14,6 +14,9 @@ class SectorDefence
     public int $quantity;
     public SectorDefenceFmSettingEnum $fm_setting = SectorDefenceFmSettingEnum::Toll;
 
-
+    public static function as(self $self): static
+    {
+        return $self;
+    }
 
 }

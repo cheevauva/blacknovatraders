@@ -7,6 +7,7 @@ namespace BNT\Ship\Servant;
 use BNT\ServantInterface;
 use BNT\Ship\Ship;
 use BNT\Log\LogHarakiri;
+use BNT\Bounty\Servant\BountyCancelServant;
 
 class ShipSelfDestructServant implements ServantInterface
 {
@@ -16,9 +17,9 @@ class ShipSelfDestructServant implements ServantInterface
 
     public function serve(): void
     {
+        BountyCancelServant::call($this->ship);
         ShipKillServant::call($this->ship);
-//        cancel_bounty($playerinfo['ship_id']);
-//        
+        
         $harakiri = new LogHarakiri;
         $harakiri->ship_id = $this->ship->ship_id;
         $harakiri->ip = $this->ip;

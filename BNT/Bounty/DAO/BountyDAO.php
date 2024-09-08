@@ -7,6 +7,7 @@ namespace BNT\Bounty\DAO;
 use BNT\ServantInterface;
 use BNT\DatabaseTrait;
 use BNT\TableEnum;
+use BNT\Bounty\Mapper\BountyMapper;
 
 abstract class BountyDAO implements ServantInterface
 {
@@ -16,6 +17,11 @@ abstract class BountyDAO implements ServantInterface
     protected function table(): string
     {
         return TableEnum::Bounty->toDb();
+    }
+
+    protected function mapper(): BountyMapper
+    {
+        return new BountyMapper;
     }
 
 }

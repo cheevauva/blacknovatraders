@@ -9,5 +9,5 @@ enum SectorDefenceTypeEnum: string
 
     case Mines = 'M';
     case Fighters = 'F';
-
+    
 }

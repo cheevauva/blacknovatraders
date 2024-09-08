@@ -12,4 +12,8 @@ class Bounty
     public int $bounty_on;
     public int $amount;
 
+    public static function as(self $self): static
+    {
+        return $self;
+    }
 }

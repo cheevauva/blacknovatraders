@@ -74,6 +74,8 @@ class Ship
 
     protected function reset(): void
     {
+        global $start_energy;
+        
         $this->hull = 0;
         $this->engines = 0;
         $this->power = 0;
@@ -89,7 +91,7 @@ class Ship
         $this->sector = 0;
         $this->ship_ore = 0;
         $this->ship_organics = 0;
-        $this->ship_energy = 1000;
+        $this->ship_energy = $start_energy;
         $this->ship_colonists = 0;
         $this->ship_goods = 0;
         $this->ship_fighters = 100;

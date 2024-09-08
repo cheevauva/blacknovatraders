@@ -9,13 +9,18 @@ class BountyRemoveByCriteriaDAO extends BountyDAO
 
     public ?int $placedBy;
     public ?int $bountyOn;
+    public ?int $bounty_id;
 
     public function serve(): void
     {
         $criteria = [];
-        
+
         if (isset($this->bountyOn)) {
             $criteria['bounty_on'] = $this->bountyOn;
+        }
+        
+        if (isset($this->bounty_id)) {
+            $criteria['bounty_id'] = $this->bounty_id;
         }
         
         if (isset($this->placedBy)) {
