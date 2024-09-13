@@ -23,7 +23,7 @@ class SectorDefenceFightSevant implements ServantInterface
     public bool $doIt = true;
     public Ship $ship;
     public int $sector_id;
-    public int $ok = 1;
+    //
     private int $playerArmor;
     private int $playerBeams;
     private int $playerShields;

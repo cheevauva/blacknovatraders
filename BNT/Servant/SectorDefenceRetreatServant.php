@@ -10,6 +10,7 @@ use BNT\Ship\DAO\ShipSaveDAO;
 class SectorDefenceRetreatServant implements \BNT\ServantInterface
 {
 
+    public bool $doIt = true;
     public Ship $ship;
 
     public function serve(): void
@@ -19,7 +20,9 @@ class SectorDefenceRetreatServant implements \BNT\ServantInterface
         $this->ship->cleared_defences = null;
         $this->ship->last_login = new \DateTime;
 
-        ShipSaveDAO::call($this->ship);
+        if ($this->doIt) {
+            ShipSaveDAO::call($this->ship);
+        }
     }
 
     public static function call(Ship $ship): self

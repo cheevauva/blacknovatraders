@@ -6,36 +6,52 @@ namespace BNT\Servant;
 
 use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
+use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\BalanceEnum;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\SectorDefenceTypeEnum;
 use BNT\SectorDefence\SectorDefence;
-use BNT\DTO\SectorDefenceDistributeTollDTO;
+use BNT\Log\LogTollPaid;
+use BNT\Log\LogTollRecieve;
+use BNT\Log\DAO\LogCreateDAO;
 
 class SectorDefencePayTollServant implements \BNT\ServantInterface
 {
 
+    public bool $doIt = true;
     public Ship $ship;
     public int $sector;
     //
 
-    /**
-     * @var SectorDefenceDistributeTollDTO[]
-     */
-    public array $distributeTolls = [];
-    public int $fightersToll;
-    public int $totalSectorFighters;
+    public int $fightersToll = 0;
+    public int $totalSectorFighters = 0;
+    public array $shipsForChange = [];
+    public array $logs = [];
 
     public function serve(): void
     {
+        global $l_chf_notenoughcreditstoll;
+
         $this->totalSectorFighters = SectorDefenceRetrieveTotalFightersBySectorIdDAO::call($this->sector);
         $this->fightersToll = intval($this->totalSectorFighters * BalanceEnum::fighter_price->val() * 0.6);
-        //
+
+        if ($this->ship->credits < $this->fightersToll) {
+            throw new \Exception($l_chf_notenoughcreditstoll);
+        }
+
+        $log = new LogTollPaid;
+        $log->sector = $this->sector;
+        $log->fightersToll = $this->fightersToll;
+
+        $this->logs[] = $log;
+
         $this->ship->cleared_defences = null;
         $this->ship->credits -= $this->fightersToll;
         //
         $this->distributeToll();
+
+        $this->doIt();
     }
 
     private function distributeToll()
@@ -53,13 +69,31 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
             $ship = ShipRetrieveByIdDAO::call($defence->ship_id);
             $ship->credits += $tollAmount;
 
-            $distributeToll = new SectorDefenceDistributeTollDTO;
-            $distributeToll->defence = $defence;
-            $distributeToll->ship = $ship;
-            $distributeToll->tollAmount = $tollAmount;
-            $distributeToll->sector = $this->sector;
+            $this->shipsForChange[] = $ship;
 
-            $this->distributeTolls[] = $distributeToll;
+            $log = new LogTollRecieve;
+            $log->tollAmount = $tollAmount;
+            $log->sector = $this->sector;
+
+            $this->logs[] = $log;
+        }
+    }
+
+    private function doIt(): void
+    {
+        foreach ($this->distributeTolls as $distributeToll) {
+            $distributeToll = SectorDefenceDistributeTollDTO::as($distributeToll);
+            ShipSaveDAO::call($distributeToll->ship);
+        }
+
+        ShipSaveDAO::call($this->ship);
+
+        foreach ($this->shipsForChange as $ship) {
+            ShipSaveDAO::call($ship);
+        }
+
+        foreach ($this->logs as $log) {
+            LogCreateDAO::call($log);
         }
     }
 
