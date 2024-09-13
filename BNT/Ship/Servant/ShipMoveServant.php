@@ -12,7 +12,7 @@ use BNT\Ship\Exception\ShipMoveTurnException;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\Link\DAO\LinkRetrieveManyByCriteriaDAO;
 use BNT\Link\Link;
-use BNT\Servant\CheckFightersServant;
+use BNT\Servant\SectorDefenceCheckFightersServant;
 
 class ShipMoveServant implements ServantInterface
 {
@@ -24,10 +24,15 @@ class ShipMoveServant implements ServantInterface
     {
         global $admin_mail;
         global $l_move_failed;
+        global $l_move_turn;
 
-        $this->ship->last_login = new \DateTime;
-        $this->ship->turn();
-        $this->ship->sector = $this->sector;
+        try {
+            $this->ship->last_login = new \DateTime;
+            $this->ship->turn();
+            $this->ship->sector = $this->sector;
+        } catch (\Exception $ex) {
+            throw new ShipMoveTurnException($l_move_turn);
+        }
 
         $sectorinfo = SectorRetrieveByIdDAO::call($this->ship->sector);
 
@@ -37,16 +42,11 @@ class ShipMoveServant implements ServantInterface
         $retrieveLinks->serve();
 
         if (empty($retrieveLinks->links)) {
-            $this->ship->cleared_defences = ' ';
-
-            ShipSaveDAO::call($this->ship);
-
             throw new ShipMoveTurnException($l_move_failed);
         }
 
         try {
-            $checkFighters = new CheckFightersServant;
-            $checkFighters->calledFrom = CalledFromEnum::Move;
+            $checkFighters = new SectorDefenceCheckFightersServant;
             $checkFighters->ship = $this->ship;
             $checkFighters->sector = $this->sector;
             $checkFighters->serve();
@@ -56,7 +56,7 @@ class ShipMoveServant implements ServantInterface
                 log_move($this->ship->ship_id, $this->sector);
             }
         } catch (\Throwable $ex) {
-            mail($admin_mail, "Move Error", sprintf("Start Sector: %s\nEnd Sector: %s\nPlayer: %s - %s\n\nError: $error", ...[
+            mail($admin_mail, "Move Error", sprintf("Start Sector: %s\nEnd Sector: %s\nPlayer: %s - %s\n\nError: %s", ...[
                 $sectorinfo->sector_id,
                 $this->sector,
                 $this->ship->character_name,

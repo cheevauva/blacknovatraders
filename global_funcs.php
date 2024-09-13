@@ -483,49 +483,17 @@ function explode_mines($sector, $num_mines)
 
 }
 
-function destroy_fighters($sector, $num_fighters)
+function destroy_fighters(int $sector, int $num_fighters): void
 {
-    global $db, $dbtables;
-
-    $result3 = $db->Execute ("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$sector' and defence_type ='F' order by quantity ASC");
-    echo $db->ErrorMsg();
-    //Put the defence information into the array "defenceinfo"
-    if($result3 > 0)
-    {
-       while(!$result3->EOF && $num_fighters > 0)
-       {
-          $row=$result3->fields;
-          if($row[quantity] > $num_fighters)
-          {
-             $update = $db->Execute("UPDATE $dbtables[sector_defence] set quantity=quantity - $num_fighters where defence_id = $row[defence_id]");
-             $num_fighters = 0;
-          }
-          else
-          {
-             $update = $db->Execute("DELETE FROM $dbtables[sector_defence] WHERE defence_id = $row[defence_id]");
-             $num_fighters -= $row[quantity];
-          }
-          $result3->MoveNext();
-       }
-    }
-
+    \BNT\SectorDefence\Servant\SectorDefenceDestroyFightersServant::call($sector, $num_fighters);
 }
 
-function message_defence_owner($sector, $message)
+function message_defence_owner(int $sector, string $message): void
 {
-    global $db, $dbtables;
-    $result3 = $db->Execute ("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$sector' ");
-    echo $db->ErrorMsg();
-    //Put the defence information into the array "defenceinfo"
-    if($result3 > 0)
-    {
-       while(!$result3->EOF)
-       {
-
-          playerlog($result3->fields[ship_id],LOG_RAW, $message);
-          $result3->MoveNext();
-       }
-    }
+    $messageDefenceOwner = new \BNT\Message\Servant\MessageDefenceOwnerServant();
+    $messageDefenceOwner->sector = $sector;
+    $messageDefenceOwner->message = $message;
+    $messageDefenceOwner->serve();
 }
 
 function distribute_toll($sector, $toll, $total_fighters)

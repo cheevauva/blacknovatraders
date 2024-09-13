@@ -8,6 +8,8 @@ use BNT\ServantInterface;
 use BNT\Log\Log;
 use BNT\Log\LogWithIP;
 use BNT\Log\LogWithPlayer;
+use BNT\Log\LogRaw;
+use BNT\Log\LogDefenceDestroyedFighters;
 
 class LogMapper implements ServantInterface
 {
@@ -42,6 +44,15 @@ class LogMapper implements ServantInterface
             $log->player = $data['player'];
         }
 
+        if ($log instanceof LogRaw) {
+            $log->message = $data['message'];
+        }
+
+        if ($log instanceof LogDefenceDestroyedFighters) {
+            $log->fighterslost = $data['fighterslost'];
+            $log->sector = $data['sector'];
+        }
+
         return $log;
     }
 
@@ -60,6 +71,15 @@ class LogMapper implements ServantInterface
 
         if ($log instanceof LogWithPlayer) {
             $data['player'] = $log->player;
+        }
+
+        if ($log instanceof LogRaw) {
+            $data['message'] = $log->message;
+        }
+
+        if ($log instanceof LogDefenceDestroyedFighters) {
+            $data['sector'] = $log->sector;
+            $data['fighterslost'] = $log->fighterslost;
         }
 
         $data['entity_type'] = get_class($log);

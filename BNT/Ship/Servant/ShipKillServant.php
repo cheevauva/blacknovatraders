@@ -7,11 +7,15 @@ namespace BNT\Ship\Servant;
 use BNT\ServantInterface;
 use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
+use BNT\Bounty\Bounty;
+use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
 use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;
 use BNT\Planet\Planet;
 use BNT\Planet\DAO\PlanetRetrieveManyByCriteria;
 use BNT\Planet\DAO\PlanetSaveDAO;
+use BNT\SectorDefence\SectorDefence;
 use BNT\SectorDefence\DAO\SectorDefenceRemoveByCriteriaDAO;
+use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Zone\DAO\ZoneRetrieveByCriteriaDAO;
 use BNT\Sector\DAO\SectorRetrieveByCriteriaDAO;
 use BNT\Sector\DAO\SectorSaveDAO;
@@ -22,23 +26,29 @@ class ShipKillServant implements ServantInterface
 {
 
     public Ship $ship;
+    public bool $doIt = true;
+    public array $news = [];
+    public array $sectorsForChange = [];
+    public array $planetsForChange = [];
+    public array $bountiesForRemove = [];
+    public array $sectorDefencesForRemove = [];
 
     public function serve(): void
     {
         global $gameroot;
-
-        include("languages/english.inc");
+        global $l_killheadline;
+        global $l_news_killed;
 
         $this->ship->ship_destroyed = true;
         $this->ship->on_planet = false;
         $this->ship->sector = 0;
         $this->ship->cleared_defences = null;
 
-        ShipSaveDAO::call($this->ship);
+        $retrieveBounties = new BountyRetrieveManyByCriteriaDAO;
+        $retrieveBounties->placedBy = $this->ship->ship_id;
+        $retrieveBounties->serve();
 
-        $removeBounty = new BountyRemoveByCriteriaDAO;
-        $removeBounty->placedBy = $this->ship->ship_id;
-        $removeBounty->serve();
+        $this->bountiesForRemove = $retrieveBounties->bounties;
 
         $retrievePlanets = new PlanetRetrieveManyByCriteria;
         $retrievePlanets->owner = $this->ship->ship_id;
@@ -57,16 +67,18 @@ class ShipKillServant implements ServantInterface
             $planet->fighters = 0;
             $planet->base = false;
 
-            PlanetSaveDAO::call($planet);
+            $this->planetsForChange[] = $planet;
         }
 
         foreach (array_unique($sectorsWithBase) as $sector) {
             calc_ownership($sector);
         }
 
-        $removeSectorDefence = new SectorDefenceRemoveByCriteriaDAO;
-        $removeSectorDefence->ship_id = $this->ship->ship_id;
-        $removeSectorDefence->serve();
+        $retrieveSectorDefences = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $retrieveSectorDefences->ship_id = $this->ship->ship_id;
+        $retrieveSectorDefences->serve();
+
+        $this->sectorDefencesForRemove = $retrieveSectorDefences->defences;
 
         $retrieveZone = new ZoneRetrieveByCriteriaDAO;
         $retrieveZone->corp = false;
@@ -83,16 +95,51 @@ class ShipKillServant implements ServantInterface
             $sector = $retrieveSector->sector;
             $sector->zone_id = 1;
 
-            SectorSaveDAO::call($sector);
+            $this->sectorsForChange[] = $sector;
         }
-        
+
         $news = new News;
         $news->headline = $this->ship->character_name . $l_killheadline;
         $news->newstext = str_replace("[name]", $this->ship->character_name, $l_news_killed);
         $news->user_id = $this->ship->ship_id;
         $news->news_type = 'killed';
 
-        NewsSaveDAO::call($news);
+        $this->news[] = $news;
+
+        $this->doIt();
+    }
+
+    private function doIt(): void
+    {
+        if (!$this->doIt) {
+            return;
+        }
+
+        foreach ($this->bountiesForRemove as $bounty) {
+            $removeBounty = new BountyRemoveByCriteriaDAO;
+            $removeBounty->bounty_id = Bounty::as($bounty)->bounty_id;
+            $removeBounty->serve();
+        }
+
+        foreach ($this->sectorDefencesForRemove as $defence) {
+            $removeDefence = new SectorDefenceRemoveByCriteriaDAO;
+            $removeDefence->defence_id = SectorDefence::as($defence)->defence_id;
+            $removeDefence->serve();
+        }
+
+        foreach ($this->planetsForChange as $planet) {
+            PlanetSaveDAO::call($planet);
+        }
+
+        foreach ($this->sectorsForChange as $sector) {
+            SectorSaveDAO::call($sector);
+        }
+
+        ShipSaveDAO::call($this->ship);
+
+        foreach ($this->news as $news) {
+            NewsSaveDAO::call($news);
+        }
     }
 
     public static function call(Ship $ship): void

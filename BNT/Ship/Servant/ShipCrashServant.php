@@ -9,32 +9,63 @@ use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\Servant\BountyCancelServant;
 use BNT\Ship\Servant\ShipKillServant;
+use BNT\Log\DAO\LogCreateDAO;
 
 class ShipDestroyServant implements ServantInterface
 {
 
     public Ship $ship;
+    public bool $doIt = true;
+    public bool $shipDestroyed = false;
+    public bool $shipHasEscapePod = false;
+    public BountyCancelServant $cancelBounty;
+    public ?ShipKillServant $shipKill = null;
+    public array $logs = [];
 
     public function serve(): void
     {
+        $this->shipHasEscapePod = $this->ship->dev_escapepod;
+
         if ($this->ship->dev_escapepod) {
-            $rating = round($this->ship->rating / 2);
-
-            $this->result->shipDestroyed = false;
-            $this->result->hasEscapePod = true;
-            $this->result->ok = 0;
-
+            $this->shipDestroyed = false;
             $this->ship->resetWithEscapePod();
-            $this->ship->rating = $rating;
-
-            ShipSaveDAO::call($this->ship);
-            BountyCancelServant::call($this->ship);
+            $this->ship->rating = round($this->ship->rating / 2);
+            $this->cancelBounty();
         } else {
-            $this->result->shipDestroyed = true;
-            $this->result->ok = 0;
+            $this->shipDestroyed = true;
+            $this->cancelBounty();
+            $this->shipKill();
+        }
 
-            BountyCancelServant::call($this->ship);
-            ShipKillServant::call($this->ship);
+        $this->doIt();
+    }
+
+    private function shipKill(): ShipKillServant
+    {
+        $this->shipKill = new ShipKillServant;
+        $this->shipKill->ship = $this->ship;
+        $this->shipKill->doIt = $this->doIt;
+        $this->shipKill->serve();
+    }
+
+    private function cancelBounty(): BountyCancelServant
+    {
+        $this->cancelBounty = new BountyCancelServant;
+        $this->cancelBounty->bounty_on = $this->ship->ship_id;
+        $this->cancelBounty->doIt = $this->doIt;
+        $this->cancelBounty->serve();
+    }
+
+    private function doIt(): void
+    {
+        if (!$this->doIt) {
+            return;
+        }
+
+        ShipSaveDAO::call($this->ship);
+
+        foreach ($this->logs as $log) {
+            LogCreateDAO::call($log);
         }
     }
 

@@ -43,9 +43,11 @@ enum BalanceEnum
     case max_turns;
     case sector_max;
     case max_rank;
+    case level_factor;
 
     public function val(): mixed
     {
+        global $level_factor;
         global $ore_price;
         global $ore_delta;
         global $ore_rate;
@@ -120,6 +122,7 @@ enum BalanceEnum
             BalanceEnum::max_turns => $max_turns,
             BalanceEnum::sector_max => $sector_max,
             BalanceEnum::max_rank => $max_rank,
+            BalanceEnum::level_factor => $level_factor,
         };
     }
 

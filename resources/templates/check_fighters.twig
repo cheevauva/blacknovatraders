@@ -1,0 +1,13 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_main_title }}{% endblock %}
+{% block content %}
+    <br/>
+    <FORM ACTION="{{ calledfrom }} METHOD="POST">
+        <INPUT TYPE=RADIO NAME=response CHECKED VALUE=fight>{{ tr.l_chf_inputfight }}</INPUT>
+        <INPUT TYPE=RADIO NAME=response CHECKED VALUE=sneak>{{ tr.l_chf_inputcloak }}</INPUT><BR>
+        <INPUT TYPE=SUBMIT VALUE={{ tr.l_chf_go> }}<BR><BR>
+        <input type=hidden name=sector value="{{ sector }}">
+        <input type=hidden name=engage value="1">
+        <input type=hidden name=destination value=" {{ destination }}">
+    </FORM>
+{% endblock %}

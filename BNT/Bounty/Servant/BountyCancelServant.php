@@ -18,6 +18,10 @@ class BountyCancelServant implements ServantInterface
 {
 
     public int $bounty_on;
+    public bool $doIt = true;
+    public array $logs = [];
+    public array $shipsForChange = [];
+    public array $bountiesForRemove = [];
 
     public function serve(): void
     {
@@ -27,28 +31,47 @@ class BountyCancelServant implements ServantInterface
 
         foreach ($retieveBounties->bounties as $bountydetails) {
             $bountydetails = Bounty::as($bountydetails);
-
+            
             $bountyOn = ShipRetrieveByIdDAO::call($bountydetails->bounty_on);
 
             if ($bountydetails->placed_by) {
                 $placedBy = ShipRetrieveByIdDAO::call($bountydetails->placed_by);
                 $placedBy->credits += $bountydetails->amount;
 
-                ShipSaveDAO::call($placedBy);
+                $this->shipsForChange[] = $placedBy;
 
                 $log = new LogBountyCancelled;
                 $log->ship_id = $bountydetails->placed_by;
-                $log->message = implode('|', [
-                    $bountydetails->amount,
-                    $bountyOn->character_name
-                ]);
+                $log->amount = $bountydetails->amount;
+                $log->characterName = $bountyOn->character_name;
 
-                LogCreateDAO::call($log);
+                $this->logs[] = $log;
             }
 
+            $this->bountiesForRemove[] = $bountydetails;
+        }
+        
+        $this->doIt();
+    }
+
+    private function doIt(): void
+    {
+        if (!$this->doIt) {
+            return;
+        }
+
+        foreach ($this->bountiesForRemove as $bountyForRemove) {
             $removeBounty = new BountyRemoveByCriteriaDAO;
-            $removeBounty->bounty_id = $bountydetails->bounty_id;
+            $removeBounty->bounty_id = Bounty::as($bountyForRemove)->bounty_id;
             $removeBounty->serve();
+        }
+
+        foreach ($this->shipsForChange as $ship) {
+            ShipSaveDAO::call($ship);
+        }
+
+        foreach ($this->logs as $log) {
+            LogCreateDAO::call($log);
         }
     }
 
