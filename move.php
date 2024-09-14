@@ -19,6 +19,17 @@ if (isNotAuthorized())
 {
     die();
 }
+//echo '<pre>';
+//$ship = ship();
+//
+//$fight = new BNT\Servant\SectorDefenceFightSevant;
+//$fight->sector_id = intval($_GET['sector']);
+//$fight->ship = $ship;
+//$fight->doIt = false;
+//$fight->serve();
+//
+//print_r($fight);
+//die;
 
 try {
     $move = new ShipMoveServant;

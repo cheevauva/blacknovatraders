@@ -93,6 +93,16 @@ if ($server_closed) {
     die;
 }
 
+function toBool(string $value): bool
+{
+    return strtoupper($value) === 'Y';
+}
+
+function fromBool(bool $value): string
+{
+    return $value ? 'Y' : 'N';
+}
+
 function twig(): \Twig\Environment
 {
     $loader = new \Twig\Loader\FilesystemLoader('resources/templates');
@@ -370,16 +380,59 @@ function gen_score($sid)
 
 function db_kill_player($ship_id)
 {
-    global $default_prod_ore;
-    global $default_prod_organics;
-    global $default_prod_goods;
-    global $default_prod_energy;
-    global $default_prod_fighters;
-    global $default_prod_torp;
-    $ship = \BNT\Ship\DAO\ShipRetrieveByIdDAO::call($ship_id);
+  global $default_prod_ore;
+  global $default_prod_organics;
+  global $default_prod_goods;
+  global $default_prod_energy;
+  global $default_prod_fighters;
+  global $default_prod_torp;
+  global $gameroot;
+  global $db,$dbtables;
 
-    \BNT\Ship\Servant\ShipKillServant::call($ship);
-   
+  include("languages/english.inc");
+
+  $db->Execute("UPDATE $dbtables[ships] SET ship_destroyed='Y',on_planet='N',sector=0,cleared_defences=' ' WHERE ship_id=$ship_id");
+  $db->Execute("DELETE from $dbtables[bounty] WHERE placed_by = $ship_id");
+
+  $res = $db->Execute("SELECT DISTINCT sector_id FROM $dbtables[planets] WHERE owner='$ship_id' AND base='Y'");
+  $i=0;
+
+  while(!$res->EOF && $res)
+  {
+    $sectors[$i] = $res->fields[sector_id];
+    $i++;
+    $res->MoveNext();
+  }
+
+  $db->Execute("UPDATE $dbtables[planets] SET owner=0,fighters=0, base='N' WHERE owner=$ship_id");
+
+  if(!empty($sectors))
+  {
+    foreach($sectors as $sector)
+    {
+      calc_ownership($sector);
+    }
+  }
+  $db->Execute("DELETE FROM $dbtables[sector_defence] where ship_id=$ship_id");
+
+  $res = $db->Execute("SELECT zone_id FROM $dbtables[zones] WHERE corp_zone='N' AND owner=$ship_id");
+  $zone = $res->fields;
+
+$db->Execute("UPDATE $dbtables[universe] SET zone_id=1 WHERE zone_id=$zone[zone_id]");
+
+
+
+$query = $db->Execute("select character_name from $dbtables[ships] where ship_id='$ship_id'");
+$name = $query->fields;
+
+
+$headline = $name[character_name] . $l_killheadline;
+
+
+$newstext=str_replace("[name]",$name[character_name],$l_news_killed);
+
+$news = $db->Execute("INSERT INTO $dbtables[news] (headline, newstext, user_id, date, news_type) VALUES ('$headline','$newstext','$ship_id',NOW(), 'killed')");
+
 }
 
 function NUMBER($number, $decimals = 0)
@@ -483,17 +536,49 @@ function explode_mines($sector, $num_mines)
 
 }
 
-function destroy_fighters(int $sector, int $num_fighters): void
+function destroy_fighters($sector, $num_fighters)
 {
-    \BNT\SectorDefence\Servant\SectorDefenceDestroyFightersServant::call($sector, $num_fighters);
+    global $db, $dbtables;
+
+    $result3 = $db->Execute ("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$sector' and defence_type ='F' order by quantity ASC");
+    echo $db->ErrorMsg();
+    //Put the defence information into the array "defenceinfo"
+    if($result3 > 0)
+    {
+       while(!$result3->EOF && $num_fighters > 0)
+       {
+          $row=$result3->fields;
+          if($row[quantity] > $num_fighters)
+          {
+             $update = $db->Execute("UPDATE $dbtables[sector_defence] set quantity=quantity - $num_fighters where defence_id = $row[defence_id]");
+             $num_fighters = 0;
+          }
+          else
+          {
+             $update = $db->Execute("DELETE FROM $dbtables[sector_defence] WHERE defence_id = $row[defence_id]");
+             $num_fighters -= $row[quantity];
+          }
+          $result3->MoveNext();
+       }
+    }
+
 }
 
-function message_defence_owner(int $sector, string $message): void
+function message_defence_owner($sector, $message)
 {
-    $messageDefenceOwner = new \BNT\Message\Servant\MessageDefenceOwnerServant();
-    $messageDefenceOwner->sector = $sector;
-    $messageDefenceOwner->message = $message;
-    $messageDefenceOwner->serve();
+    global $db, $dbtables;
+    $result3 = $db->Execute ("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$sector' ");
+    echo $db->ErrorMsg();
+    //Put the defence information into the array "defenceinfo"
+    if($result3 > 0)
+    {
+       while(!$result3->EOF)
+       {
+
+          playerlog($result3->fields[ship_id],LOG_RAW, $message);
+          $result3->MoveNext();
+       }
+    }
 }
 
 function distribute_toll($sector, $toll, $total_fighters)

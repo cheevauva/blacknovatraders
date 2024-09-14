@@ -45,7 +45,7 @@ class ShipKillServant implements ServantInterface
         $this->ship->cleared_defences = null;
 
         $retrieveBounties = new BountyRetrieveManyByCriteriaDAO;
-        $retrieveBounties->placedBy = $this->ship->ship_id;
+        $retrieveBounties->placed_by = $this->ship->ship_id;
         $retrieveBounties->serve();
 
         $this->bountiesForRemove = $retrieveBounties->bounties;

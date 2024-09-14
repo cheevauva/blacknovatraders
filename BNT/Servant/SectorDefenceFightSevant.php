@@ -16,6 +16,7 @@ use BNT\BalanceEnum;
 use BNT\SectorDefence\Servant\SectorDefenceDestroyFightersServant;
 use BNT\Message\Servant\MessageDefenceOwnerServant;
 use BNT\Ship\Servant\ShipDestroyServant;
+use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 
 class SectorDefenceFightSevant implements ServantInterface
 {
@@ -51,6 +52,17 @@ class SectorDefenceFightSevant implements ServantInterface
         global $energyscooped;
         global $l_sf_sendlog;
         global $torp_dmg_rate;
+        
+        
+        $hasMyDefence = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $hasMyDefence->sector_id = $this->sector_id;
+        $hasMyDefence->ship_id = $this->ship->ship_id;
+        $hasMyDefence->limit = 1;
+        $hasMyDefence->serve();
+
+        if ($hasMyDefence->defences) {
+            return;
+        }
 
         $this->totalSectorFighters = SectorDefenceRetrieveTotalFightersBySectorIdDAO::call($this->sector_id);
 
@@ -75,7 +87,7 @@ class SectorDefenceFightSevant implements ServantInterface
 
         $fighterslost = $this->totalSectorFighters - $this->targetFighters;
 
-        $this->destroyFighters();
+        $this->destroyFighters($fighterslost);
         $this->messageDefenceOwner($this->sector_id, strtr($l_sf_sendlog, [
             '[player]' => $this->ship->character_name,
             '[lost]' => $fighterslost,
@@ -117,7 +129,12 @@ class SectorDefenceFightSevant implements ServantInterface
 
     private function logDefenceDestroyedFighters(int $fighterslost): void
     {
+        if ($fighterslost < 1) {
+            return;
+        }
+        
         $log = new LogDefenceDestroyedFighters;
+        $log->ship_id = $this->ship->ship_id;
         $log->fighterslost = $fighterslost;
         $log->sector = $this->sector_id;
 
@@ -133,20 +150,21 @@ class SectorDefenceFightSevant implements ServantInterface
         $this->logs[] = $log;
     }
 
-    protected function destroyFighters(): void
+    protected function destroyFighters(int $fighterslost): void
     {
         $this->destroyFighters = new SectorDefenceDestroyFightersServant;
         $this->destroyFighters->sector = $this->sector_id;
+        $this->destroyFighters->fighters = $fighterslost;
         $this->destroyFighters->doIt = $this->doIt;
         $this->destroyFighters->serve();
     }
 
     private function calculatePlayerTorps(): int
     {
-        $torp = round(mypw(BalanceEnum::level_factor, $this->ship->torp_launchers)) * 2;
+        $torp = round(mypw(BalanceEnum::level_factor->val(), $this->ship->torp_launchers)) * 2;
 
-        if ($torp > $this->ship->torp) {
-            $torp = $this->ship->torp;
+        if ($torp > $this->ship->torps) {
+            $torp = $this->ship->torps;
         }
 
         return $torp;
@@ -165,7 +183,7 @@ class SectorDefenceFightSevant implements ServantInterface
 
     private function calculatePlayerBeams(): int
     {
-        $beams = NUM_BEAMS($this->ship->beams);
+        $beams = intval(NUM_BEAMS($this->ship->beams));
 
         if ($beams > $this->ship->ship_energy) {
             $beams = $this->ship->ship_energy;
@@ -180,8 +198,8 @@ class SectorDefenceFightSevant implements ServantInterface
             return;
         }
 
-        if ($this->playerBeams > round($this->targetFighters / 2)) {
-            $temp = round($this->targetFighters / 2);
+        if ($this->playerBeams > intval(round($this->targetFighters / 2))) {
+            $temp = intval(round($this->targetFighters / 2));
             $lost = $this->targetFighters - $temp;
             $this->targetFighters = $temp;
             $this->playerBeams -= $lost;

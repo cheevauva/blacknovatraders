@@ -19,9 +19,9 @@ class Planet
     public int $fighters = 0;
     public int $torps = 0;
     public int $owner = 0;
-    public bool $corp = false;
+    public int $corp = 0;
     public bool $base = false;
-    public int $sells = 0;
+    public bool $sells = false;
     public int $prod_organics = 0;
     public int $prod_ore = 0;
     public int $prod_goods = 0;

@@ -11,8 +11,10 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
 
     public ?int $sector_id;
     public ?int $ship_id;
+    public ?int $excludeShipId;
     public ?SectorDefenceTypeEnum $defence_type;
     public ?bool $orderByQuantityDESC;
+    public ?int $limit = null;
     //
     public array $defences = [];
 
@@ -21,6 +23,7 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
         $qb->from($this->table());
+        $qb->setMaxResults($this->limit);
 
         if (isset($this->sector_id)) {
             $qb->andWhere('sector_id = :sector_id');
@@ -29,12 +32,17 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
 
         if (isset($this->defence_type)) {
             $qb->andWhere('defence_type = :defence_type');
-            $qb->setParameter('defence_type', $this->defence_type->value());
+            $qb->setParameter('defence_type', $this->defence_type->val());
         }
 
         if (isset($this->ship_id)) {
             $qb->andWhere('ship_id = :ship_id');
             $qb->setParameter('ship_id', $this->ship_id);
+        }
+
+        if (isset($this->excludeShipId)) {
+            $qb->andWhere('ship_id != :excludeShipId');
+            $qb->setParameter('excludeShipId', $this->excludeShipId);
         }
 
         if (!empty($this->orderByQuantityDESC)) {

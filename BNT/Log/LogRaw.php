@@ -10,6 +10,5 @@ class LogRaw extends Log
 {
 
     public LogTypeEnum $type = LogTypeEnum::RAW;
-    public string $message;
 
 }

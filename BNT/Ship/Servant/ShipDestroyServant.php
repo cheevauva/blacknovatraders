@@ -29,7 +29,7 @@ class ShipDestroyServant implements ServantInterface
         if ($this->ship->dev_escapepod) {
             $this->shipDestroyed = false;
             $this->ship->resetWithEscapePod();
-            $this->ship->rating = round($this->ship->rating / 2);
+            $this->ship->rating = intval(round($this->ship->rating / 2));
             $this->cancelBounty();
         } else {
             $this->shipDestroyed = true;
@@ -40,7 +40,7 @@ class ShipDestroyServant implements ServantInterface
         $this->doIt();
     }
 
-    private function shipKill(): ShipKillServant
+    private function shipKill(): void
     {
         $this->shipKill = new ShipKillServant;
         $this->shipKill->ship = $this->ship;
@@ -48,7 +48,7 @@ class ShipDestroyServant implements ServantInterface
         $this->shipKill->serve();
     }
 
-    private function cancelBounty(): BountyCancelServant
+    private function cancelBounty(): void
     {
         $this->cancelBounty = new BountyCancelServant;
         $this->cancelBounty->bounty_on = $this->ship->ship_id;

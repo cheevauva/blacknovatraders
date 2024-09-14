@@ -48,7 +48,7 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
                 $fighters = 0;
             } else {
 
-                $this->defencesAsRemoved[] = $defence;
+                $this->defencesForRemove[] = $defence;
                 $fighters -= $defence->quantity;
             }
         }

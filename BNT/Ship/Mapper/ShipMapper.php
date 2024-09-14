@@ -13,23 +13,13 @@ class ShipMapper implements ServantInterface
     public ?array $row = null;
     public ?Ship $ship = null;
 
-    protected function toBool(string $value): bool
-    {
-        return strtoupper($value) === 'Y';
-    }
-
-    protected function fromBool(bool $value): string
-    {
-        return $value ? 'Y' : 'N';
-    }
-
     public function serve(): void
     {
         if (empty($this->ship) && !empty($this->row)) {
             $ship = $this->ship = new Ship;
             $ship->ship_id = intval($this->row['ship_id']);
             $ship->ship_name = $this->row['ship_name'];
-            $ship->ship_destroyed = $this->toBool($this->row['ship_destroyed']);
+            $ship->ship_destroyed = toBool($this->row['ship_destroyed']);
             $ship->character_name = $this->row['character_name'];
             $ship->password = $this->row['password'];
             $ship->email = $this->row['email'];
@@ -55,13 +45,13 @@ class ShipMapper implements ServantInterface
             $ship->ship_fighters = intval($this->row['ship_fighters']);
             $ship->ship_damage = intval($this->row['ship_damage']);
             $ship->turns = intval($this->row['turns']);
-            $ship->on_planet = $this->toBool($this->row['on_planet']);
+            $ship->on_planet = toBool($this->row['on_planet']);
             $ship->dev_warpedit = intval($this->row['dev_warpedit']);
             $ship->dev_genesis = intval($this->row['dev_genesis']);
             $ship->dev_beacon = intval($this->row['dev_beacon']);
             $ship->dev_emerwarp = intval($this->row['dev_emerwarp']);
-            $ship->dev_escapepod = $this->toBool($this->row['dev_escapepod']);
-            $ship->dev_fuelscoop = $this->toBool($this->row['dev_fuelscoop']);
+            $ship->dev_escapepod = toBool($this->row['dev_escapepod']);
+            $ship->dev_fuelscoop = toBool($this->row['dev_fuelscoop']);
             $ship->dev_minedeflector = intval($this->row['dev_minedeflector']);
             $ship->turns_used = intval($this->row['turns_used']);
             $ship->last_login = $this->row['last_login'] ? new \DateTime($this->row['last_login']) : $ship->last_login;
@@ -75,14 +65,14 @@ class ShipMapper implements ServantInterface
             $ship->preset1 = intval($this->row['preset1']);
             $ship->preset2 = intval($this->row['preset2']);
             $ship->preset3 = intval($this->row['preset3']);
-            $ship->trade_colonists = $this->toBool($this->row['trade_colonists']);
-            $ship->trade_fighters = $this->toBool($this->row['trade_fighters']);
-            $ship->trade_torps = $this->toBool($this->row['trade_torps']);
-            $ship->trade_energy = $this->toBool($this->row['trade_energy']);
+            $ship->trade_colonists = toBool($this->row['trade_colonists']);
+            $ship->trade_fighters = toBool($this->row['trade_fighters']);
+            $ship->trade_torps = toBool($this->row['trade_torps']);
+            $ship->trade_energy = toBool($this->row['trade_energy']);
             $ship->cleared_defences = $this->row['cleared_defences'];
             $ship->lang = $this->row['lang'];
-            $ship->dhtml = $this->toBool($this->row['dhtml']);
-            $ship->dev_lssd = $this->toBool($this->row['dev_lssd']);
+            $ship->dhtml = toBool($this->row['dhtml']);
+            $ship->dev_lssd = toBool($this->row['dev_lssd']);
             $ship->sector = intval($this->row['sector']);
 
             $ship->lang = $this->row['lang'] ?? null;
@@ -92,7 +82,7 @@ class ShipMapper implements ServantInterface
             $ship = $this->ship;
             $row = [];
             $row['ship_name'] = $ship->ship_name;
-            $row['ship_destroyed'] = $this->fromBool($ship->ship_destroyed);
+            $row['ship_destroyed'] = fromBool($ship->ship_destroyed);
             $row['character_name'] = $ship->character_name;
             $row['password'] = $ship->password;
             $row['email'] = $ship->email;
@@ -118,13 +108,13 @@ class ShipMapper implements ServantInterface
             $row['ship_fighters'] = $ship->ship_fighters;
             $row['ship_damage'] = $ship->ship_damage;
             $row['turns'] = $ship->turns;
-            $row['on_planet'] = $this->fromBool($ship->on_planet);
+            $row['on_planet'] = fromBool($ship->on_planet);
             $row['dev_warpedit'] = $ship->dev_warpedit;
             $row['dev_genesis'] = $ship->dev_genesis;
             $row['dev_beacon'] = $ship->dev_beacon;
             $row['dev_emerwarp'] = $ship->dev_beacon;
-            $row['dev_escapepod'] = $this->fromBool($ship->dev_escapepod);
-            $row['dev_fuelscoop'] = $this->fromBool($ship->dev_fuelscoop);
+            $row['dev_escapepod'] = fromBool($ship->dev_escapepod);
+            $row['dev_fuelscoop'] = fromBool($ship->dev_fuelscoop);
             $row['dev_minedeflector'] = $ship->dev_minedeflector;
             $row['turns_used'] = $ship->turns_used;
             $row['last_login'] = $ship->last_login->format('Y-m-d H:i:s');
@@ -138,14 +128,14 @@ class ShipMapper implements ServantInterface
             $row['preset1'] = $ship->preset1;
             $row['preset2'] = $ship->preset2;
             $row['preset3'] = $ship->preset3;
-            $row['trade_colonists'] = $this->fromBool($ship->trade_colonists);
-            $row['trade_fighters'] = $this->fromBool($ship->trade_fighters);
-            $row['trade_torps'] = $this->fromBool($ship->trade_torps);
-            $row['trade_energy'] = $this->fromBool($ship->trade_energy);
+            $row['trade_colonists'] = fromBool($ship->trade_colonists);
+            $row['trade_fighters'] = fromBool($ship->trade_fighters);
+            $row['trade_torps'] = fromBool($ship->trade_torps);
+            $row['trade_energy'] = fromBool($ship->trade_energy);
             $row['cleared_defences'] = $ship->cleared_defences;
             $row['lang'] = $ship->lang;
-            $row['dhtml'] = $this->fromBool($ship->dhtml);
-            $row['dev_lssd'] = $this->fromBool($ship->dev_lssd);
+            $row['dhtml'] = fromBool($ship->dhtml);
+            $row['dev_lssd'] = fromBool($ship->dev_lssd);
 
             $this->row = $row;
         }
