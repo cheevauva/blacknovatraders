@@ -1,0 +1,15 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_mines_title }}{% endblock %}
+{% block content %}
+    <FORM ACTION=mines2.php METHOD=POST>
+        {{ tr.l_mines_info1|replace({"[sector]": ship.sector, "[mines]": sector.mines, "[fighters]": sector.fighters}) }}<BR><BR>
+        You have {{ ship.torps }} mines and {{ ship.ship_fighters }} fighters available to deploy.<BR>
+        {{ tr.l_mines_deploy }} <INPUT TYPE=TEXT NAME=nummines SIZE=10 MAXLENGTH=10 VALUE="0">{{ tr.l_mines }}<BR>
+        {{ tr.l_mines_deploy }} <INPUT TYPE=TEXT NAME=numfighters SIZE=10 MAXLENGTH=10 VALUE="0"> {{ tr.l_fighters }}<BR>
+        Fighter mode <INPUT TYPE=RADIO NAME=mode {% if defenceFighter.fm_setting.val() == 'attack' %}CHECKED{% endif %} VALUE="attack"> {{ tr.l_mines_att }}</INPUT>
+        <INPUT TYPE=RADIO NAME=mode {% if defenceFighter.fm_setting.val() == 'toll' %}CHECKED{% endif %} VALUE="toll">{{ tr.l_mines_toll }}</INPUT><BR>
+        <INPUT TYPE=SUBMIT VALUE="{{ tr.l_submit }}">
+        <INPUT TYPE=RESET VALUE="{{  tr.l_reset }}"><BR><BR>
+        <input type=hidden name=op value=$op>
+    </FORM>
+{% endblock %}

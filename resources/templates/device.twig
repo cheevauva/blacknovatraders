@@ -1,0 +1,56 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_device_title }}{% endblock %}
+{% block content %}
+    {{ tr.l_device_expl }}<BR><BR>
+
+    <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=2>
+        <TR BGCOLOR="$color_header">
+            <TD><B>{{ tr.l_device }}</B></TD>
+            <TD><B>{{ tr.l_qty }}</B></TD>
+            <TD><B>{{ tr.l_usage }}</B></TD>
+        </TR>
+        <TR>
+            <TD><A HREF=beacon.php>{{ tr.l_beacons }}</A></TD>
+            <TD>{{ ship.dev_beacon }}</TD><TD>{{ tr.l_manual }}</TD>
+        </TR>
+        <TR>
+            <TD><A HREF=warpedit.php>{{ tr.l_warpedit }}</A></TD>
+            <TD>{{ ship.dev_warpedit }}</TD><TD>{{ tr.l_manual }}</TD>
+        </TR>
+        <TR>
+            <TD><A HREF=genesis.php>{{ tr.l_genesis }}</A></TD>
+            <TD>{{ ship.dev_genesis }}</TD><TD>{{ tr.l_manual }}</TD>
+        </TR>
+        <TR>
+            <TD>{{ tr.l_deflect }}</TD><TD>{{ ship.dev_minedeflector }}</TD><TD>{{ tr.l_automatic }}</TD>
+        </TR>
+        <TR>
+            <TD><A HREF=mines2.php?op=1>{{ tr.l_mines }}</A></TD>
+            <TD>{{ ship.torps }}</TD><TD>{{ tr.l_manual }}</TD>
+        </TR>
+        <TR>
+            <TD><A HREF=mines2.php?op=2>{{ tr.l_fighters }}</A></TD>
+            <TD>{{ ship.ship_fighters }}</TD><TD>{{ tr.l_manual }}</TD>
+        </TR>
+        <TR>
+            <TD><A HREF=emerwarp.php>{{ tr.l_ewd }}</A></TD>
+            <TD>{{ ship.dev_emerwarp }}</TD><TD>{{ tr.l_manual }}/{{ tr.l_automatic }}</TD>
+        </TR>
+        <TR>
+            <TD>{{ tr.l_escape_pod }}</TD>
+            <TD>{% if ship.dev_escapepod %}{{ tr.l_yes }}{% else %}{{ tr.l_no }}{% endif %}</TD>
+            <TD>{{ tr.l_automatic }}</TD>
+        </TR>
+        <TR>
+            <TD>{{ tr.l_fuel_scoop }}</TD>
+            <TD>{% if ship.dev_fuelscoop %}{{ tr.l_yes }}{% else %}{{ tr.l_no }}{% endif %}</TD>
+            <TD>{{ tr.l_automatic }}</TD>
+        </TR>
+        <TR>
+            <TD>{{ tr.l_lssd }}</TD>
+            <TD>{% if ship.dev_lssd %}{{ tr.l_yes }}{% else %}{{ tr.l_no }}{% endif %}</TD>
+            <TD>{{ tr.l_automatic }}</TD>
+        </TR>
+    </TABLE>
+    <BR>
+{% endblock %}

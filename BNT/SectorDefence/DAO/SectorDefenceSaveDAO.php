@@ -17,9 +17,14 @@ class SectorDefenceSaveDAO extends SectorDefenceDAO
         $mapper->defence = $this->defence;
         $mapper->serve();
 
-        $this->db()->update($this->table(), $mapper->row, [
-            'ship_id' => $this->defence->defence_id,
-        ]);
+        if ($this->defence->defence_id) {
+            $this->db()->update($this->table(), $mapper->row, [
+                'defence_id' => $this->defence->defence_id,
+            ]);
+        } else {
+            $this->db()->insert($this->table(), $mapper->row);
+            $this->defence->defence_id = (int) $this->db()->lastInsertId();
+        }
     }
 
     public static function call(SectorDefence $defence): self

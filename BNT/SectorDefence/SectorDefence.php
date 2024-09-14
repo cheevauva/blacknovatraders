@@ -7,11 +7,11 @@ namespace BNT\SectorDefence;
 class SectorDefence
 {
 
-    public int $defence_id;
+    public ?int $defence_id = null;
     public int $ship_id;
     public int $sector_id;
     public SectorDefenceTypeEnum $defence_type = SectorDefenceTypeEnum::Mines;
-    public int $quantity;
+    public int $quantity = 0;
     public SectorDefenceFmSettingEnum $fm_setting = SectorDefenceFmSettingEnum::Toll;
 
     public static function as(self $self): static
