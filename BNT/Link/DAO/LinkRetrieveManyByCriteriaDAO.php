@@ -10,6 +10,7 @@ class LinkRetrieveManyByCriteriaDAO extends LinkDAO
     public ?int $link_start;
     public ?int $link_dest;
     public array $links;
+    public ?int $limit;
 
     public function serve(): void
     {
@@ -21,13 +22,17 @@ class LinkRetrieveManyByCriteriaDAO extends LinkDAO
             $qb->andWhere('link_start = :link_start');
             $qb->setParameter('link_start', $this->link_start);
         }
-        
+
         if (isset($this->link_dest)) {
             $qb->andWhere('link_dest = :link_dest');
             $qb->setParameter('link_dest', $this->link_dest);
         }
-        
+
         $qb->orderBy('link_dest', 'ASC');
+        
+        if (isset($this->limit)) {
+            $qb->setMaxResults($this->limit);
+        }
 
         $this->links = [];
 

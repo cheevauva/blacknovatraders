@@ -1,7 +1,4 @@
-<?php
-
-use BNT\Ship\Servant\ShipMoveServant;
-use BNT\Servant\TransactionServant;
+<?
 
 include("config.php");
 updatecookie();
@@ -15,31 +12,6 @@ include("header.php");
 connectdb();
 
 //Check to see if the user is logged in
-if (isNotAuthorized())
-{
-    die();
-}
-//echo '<pre>';
-//$ship = ship();
-//
-//$fight = new BNT\Servant\SectorDefenceFightSevant;
-//$fight->sector_id = intval($_GET['sector']);
-//$fight->ship = $ship;
-//$fight->doIt = false;
-//$fight->serve();
-//
-//print_r($fight);
-//die;
-
-try {
-    $move = new ShipMoveServant;
-    $move->sector = intval($_GET['sector'] ?? 0);
-    $move->ship = $ship;
-
-    TransactionServant::call($move);
-} catch (Exception $ex) {
-
-}
 if (isNotAuthorized())
 {
     die();

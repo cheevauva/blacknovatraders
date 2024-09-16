@@ -1112,10 +1112,11 @@ $l_chf_youpaidsometoll  = "You paid [chf_tollstring] credits for the toll.";
 $l_chf_thefightersdetectyou     = "The fighters detect you!";
 $l_chf_therearetotalfightersindest      = "There are [chf_total_sector_fighters] fighters in your destination sector.";
 $l_chf_creditsdemanded  = "They demand [chf_number_fighterstoll] credits to enter this sector.";
-$l_chf_youcanretreat    = "You can <BR><INPUT TYPE=RADIO NAME=response VALUE=retreat><B>Retreat</B> - Will cost an extra turn.<BR></INPUT>";
-$l_chf_inputpay = "<INPUT TYPE=RADIO NAME=response CHECKED VALUE=pay><B>Pay</B> the toll and enter without harm from the fighters.<BR></INPUT>";
-$l_chf_inputfight       = "<B>Fight</B> - you must defeat all the fighters to enter the sector.<BR>";
-$l_chf_inputcloak       = "<B>Cloak</B> - Use your cloaking device and try to avoid the fighters.<BR>";
+$l_chf_youcan = "You can";
+$l_chf_inputretreat    = "Retreat - Will cost an extra turn";
+$l_chf_inputpay = "Pay the toll and enter without harm from the fighters.";
+$l_chf_inputfight       = "Fight - you must defeat all the fighters to enter the sector.";
+$l_chf_inputcloak       = "Cloak - Use your cloaking device and try to avoid the fighters.";
 $l_chf_go       = "Go";
 
 // mines.php
