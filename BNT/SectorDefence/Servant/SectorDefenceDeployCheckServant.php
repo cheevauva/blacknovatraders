@@ -13,6 +13,7 @@ use BNT\Sector\Sector;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\Zone\Zone;
 use BNT\Zone\DAO\ZoneRetrieveByIdDAO;
+use Exception;
 
 class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
 {
@@ -30,6 +31,7 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
     public int $numDefences = 0;
     public bool $allowDefenses = true;
     public bool $hasEmenyShipInSector = false;
+    public bool $quite = false;
 
     public function serve(): void
     {
@@ -70,6 +72,26 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
 
         if (is_null($this->zone->allow_defenses) && $this->zone->owner != $this->ship->ship_id) {
             $this->allowDefenses = empty($this->ship->team) && !empty($this->zoneOwner) && $this->ship->team !== $this->zoneOwner->team;
+        }
+        
+        $this->validate();
+    }
+
+    protected function validate(): void
+    {
+        global $l_mines_nodeploy;
+        global $l_mines_nopermit;
+        
+        if ($this->quite) {
+            return;
+        }
+        
+        if (!$this->allowDefenses) {
+            throw new Exception($l_mines_nodeploy);
+        }
+        
+        if ($this->hasEmenyShipInSector) {
+            throw new Exception($l_mines_nopermit);
         }
     }
 
