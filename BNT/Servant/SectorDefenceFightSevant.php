@@ -167,7 +167,7 @@ class SectorDefenceFightSevant implements ServantInterface
             $torp = $this->ship->torps;
         }
 
-        return $torp;
+        return intval($torp);
     }
 
     private function calculatePlayerShields(): int
@@ -178,7 +178,7 @@ class SectorDefenceFightSevant implements ServantInterface
             $shields = $this->ship->shields;
         }
 
-        return $shields;
+        return intval($shields);
     }
 
     private function calculatePlayerBeams(): int

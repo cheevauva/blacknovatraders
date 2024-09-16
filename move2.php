@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 use BNT\Servant\SectorDefenceCheckFightersServant;
 use BNT\Ship\Servant\ShipMoveServant;
+use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
+use BNT\Servant\SectorDefencePayTollServant;
+use BNT\Servant\SectorDefenceFightSevant;
+use BNT\Servant\SectorDefenceSneakServant;
+use BNT\Servant\SectorDefenceRetreatServant;
 
 require_once './config.php';
 loadlanguage($lang);
@@ -23,32 +28,34 @@ try {
             $checkFighters->sector = intval($_GET['sector']);
             $checkFighters->ship = $ship;
             $checkFighters->serve();
-            
-            if (!$checkFighters->hasEnemy) {
-                $move=  new ShipMoveServant;
+
+            try {
+                $move = new ShipMoveServant;
+                $move->checkFighters = $checkFighters;
                 $move->ship = $ship;
-                $move->doIt = true;
                 $move->sector = intval($_GET['sector']);
                 $move->serve();
                 header('Location: main.php');
                 die;
+            } catch (SectorDefenceHasEmenyException $ex) {
+                echo twig()->render('check_fighters.twig', [
+                    'fightersToll' => $checkFighters->fightersToll,
+                    'totalSectorFighters' => $checkFighters->totalSectorFightes,
+                    'sector' => $_GET['sector'],
+                    'destination' => $_GET['destination'] ?? 0,
+                ]);
             }
-
-            echo twig()->render('check_fighters.twig', [
-                'fightersToll' => $checkFighters->fightersToll,
-                'totalSectorFighters' => $checkFighters->totalSectorFightes,
-                'sector' => $_GET['sector'],
-                'destination' => $_GET['destination'] ?? 0,
-            ]);
             break;
-        case 'POST':
-            switch ($_GET['response']) {
+        case 'POST':           
+            switch ($_POST['response']) {
                 case 'fight':
                     $fight = new SectorDefenceFightSevant;
-                    $fight->ship = $this->ship;
-                    $fight->sector_id = $sectorObj->sector_id;
+                    $fight->ship = $ship;
+                    $fight->sector_id = intval($_GET['sector']);
+                    $fight->doIt = false;
                     $fight->serve();
-
+                    echo '<pre>';
+                    print_r($fight);die;
                     break;
                 case 'retreat':
                     SectorDefenceRetreatServant::call($this->ship);
@@ -56,19 +63,19 @@ try {
                 case 'pay':
                     $pay = new SectorDefencePayTollServant;
                     $pay->ship = $this->ship;
-                    $pay->sector = $this->sector;
+                    $pay->sector = intval($_GET['sector']);
                     $pay->serve();
                     break;
                 case 'sneak':
                     try {
                         $sneak = new SectorDefenceSneakServant;
                         $sneak->fightersOwner = $fightersOwner;
-                        $sneak->ship = $this->ship;
+                        $sneak->ship = $ship;
                         $sneak->serve();
                     } catch (SectorDefenceDetectYourShipException $ex) {
                         $fight = new SectorDefenceFightSevant;
-                        $fight->ship = $this->ship;
-                        $fight->sector_id = $sectorObj->sector_id;
+                        $fight->ship = $ship;
+                        $fight->sector_id = intval($_GET['sector']);;
                         $fight->serve();
                         // todo
                     }
