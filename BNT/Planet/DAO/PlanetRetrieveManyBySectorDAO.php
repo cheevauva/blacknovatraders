@@ -9,9 +9,9 @@ class PlanetRetrieveManyBySectorDAO extends PlanetDAO
     public int $sector;
     public array $planets;
 
+    #[\Override]
     public function serve(): void
     {
-
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
         $qb->from($this->table(), 'p');
@@ -20,15 +20,7 @@ class PlanetRetrieveManyBySectorDAO extends PlanetDAO
             'sector_id' => $this->sector,
         ]);
 
-        $this->planets = [];
-
-        foreach ($qb->fetchAllAssociative() as $planet) {
-            $mapper = $this->mapper();
-            $mapper->row = $planet;
-            $mapper->serve();
-
-            $this->planets[] = $mapper->planet;
-        }
+        $this->planets = $this->asPlanets($qb->fetchAllAssociative());
     }
 
     public static function call(int $sector): array

@@ -48,14 +48,6 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
             $qb->orderBy('quantity', 'DESC');
         }
 
-        $this->defences = [];
-
-        foreach ($qb->fetchAllAssociative() as $sectorDefence) {
-            $mapper = $this->mapper();
-            $mapper->row = $sectorDefence;
-            $mapper->serve();
-
-            $this->defences[] = $mapper->defence;
-        }
+        $this->defences = $this->asSectorDefences($qb->fetchAllAssociative());
     }
 }

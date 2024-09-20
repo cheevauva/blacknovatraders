@@ -1057,4 +1057,3 @@ function isLoanPending($ship_id)
     return false;
 
 }
-?>

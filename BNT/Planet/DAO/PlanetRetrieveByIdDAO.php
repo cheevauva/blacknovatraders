@@ -11,6 +11,7 @@ class PlanetRetrieveByIdDAO extends PlanetDAO
     public int $id;
     public ?Planet $planet;
 
+    #[\Override]
     public function serve(): void
     {
         $qb = $this->db()->createQueryBuilder();
@@ -22,11 +23,7 @@ class PlanetRetrieveByIdDAO extends PlanetDAO
         ]);
         $qb->setMaxResults(1);
 
-        $mapper = $this->mapper();
-        $mapper->row = $qb->fetchAssociative() ?: [];
-        $mapper->serve();
-
-        $this->planet = $mapper->planet;
+        $this->planet = $this->asPlanet($qb->fetchAssociative() ?: []);
     }
 
     public static function call(int $id): ?Planet

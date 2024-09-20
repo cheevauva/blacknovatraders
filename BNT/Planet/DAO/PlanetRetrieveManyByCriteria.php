@@ -10,6 +10,7 @@ class PlanetRetrieveManyByCriteria extends PlanetDAO
     public ?bool $base;
     public array $planets;
 
+    #[\Override]
     public function serve(): void
     {
         $qb = $this->db()->createQueryBuilder();
@@ -26,14 +27,6 @@ class PlanetRetrieveManyByCriteria extends PlanetDAO
             $qb->setParameter('base', $this->base ? 'Y' : 'N');
         }
 
-        $this->planets = [];
-
-        foreach ($qb->fetchAllAssociative() as $planet) {
-            $mapper = $this->mapper();
-            $mapper->row = $planet;
-            $mapper->serve();
-
-            $this->planets[] = $mapper->planet;
-        }
+        $this->planets = $this->asPlanets($qb->fetchAllAssociative());
     }
 }

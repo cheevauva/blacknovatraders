@@ -6,6 +6,7 @@ namespace BNT\News\DAO;
 
 use BNT\Enum\TableEnum;
 use BNT\News\Mapper\NewsMapper;
+use BNT\News\Entity\News;
 use BNT\ServantInterface;
 use BNT\Traits\DatabaseTrait;
 
@@ -21,5 +22,34 @@ abstract class NewsDAO implements ServantInterface
     protected function mapper(): NewsMapper
     {
         return new NewsMapper;
+    }
+
+    protected function asNews(array $row): News
+    {
+        $mapper = $this->mapper();
+        $mapper->row = $row;
+        $mapper->serve();
+
+        return $mapper->news;
+    }
+
+    protected function asManyNews(array $rows): array
+    {
+        $news = [];
+        
+        foreach ($rows as $row) {
+            $news[] = $this->asNews($row);
+        }
+        
+        return $news;
+    }
+
+    protected function asRow(News $news): array
+    {
+        $mapper = $this->mapper();
+        $mapper->news = $news;
+        $mapper->serve();
+
+        return $mapper->row;
     }
 }

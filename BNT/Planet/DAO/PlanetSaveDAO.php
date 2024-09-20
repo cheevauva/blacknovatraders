@@ -10,15 +10,18 @@ class PlanetSaveDAO extends PlanetDAO
 {
     public Planet $planet;
 
+    #[\Override]
     public function serve(): void
     {
-        $mapper = $this->mapper();
-        $mapper->planet = $this->planet;
-        $mapper->serve();
+        if (!isset($this->planet->planet_id)) {
+            $this->db()->insert($this->table(), $this->asRow($this->planet));
 
-        $this->db()->update($this->table(), $mapper->row, [
-            'planet_id' => $this->planet->planet_id,
-        ]);
+            $this->planet->planet_id = (int) $this->db()->lastInsertId();
+        } else {
+            $this->db()->update($this->table(), $this->asRow($this->planet), [
+                'planet_id' => $this->planet->planet_id,
+            ]);
+        }
     }
 
     public static function call(Planet $planet): void
