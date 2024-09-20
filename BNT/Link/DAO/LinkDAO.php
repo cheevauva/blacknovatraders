@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Link\DAO;
 
 use BNT\ServantInterface;
-use BNT\DatabaseTrait;
+use BNT\Traits\DatabaseTrait;
 use BNT\Link\Mapper\LinkMapper;
-use BNT\TableEnum;
+use BNT\Enum\TableEnum;
 
 abstract class LinkDAO implements ServantInterface
 {

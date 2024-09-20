@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Ship\DAO;
 
 use BNT\ServantInterface;
-use BNT\DatabaseTrait;
+use BNT\Traits\DatabaseTrait;
 use BNT\Ship\Mapper\ShipMapper;
-use BNT\TableEnum;
+use BNT\Enum\TableEnum;
 use BNT\Ship\Ship;
 
 abstract class ShipDAO implements ServantInterface

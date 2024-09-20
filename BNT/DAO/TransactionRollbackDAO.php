@@ -7,7 +7,7 @@ namespace BNT\DAO;
 class TransactionRollbackDAO implements \BNT\ServantInterface
 {
 
-    use \BNT\DatabaseTrait;
+    use \BNT\Traits\DatabaseTrait;
 
     public function serve(): void
     {

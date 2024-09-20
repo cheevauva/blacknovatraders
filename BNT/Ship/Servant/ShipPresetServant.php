@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BNT\Ship\Servant;
 
 use BNT\ServantInterface;
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 

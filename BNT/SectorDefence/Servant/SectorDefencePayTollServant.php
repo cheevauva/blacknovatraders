@@ -7,14 +7,14 @@ namespace BNT\SectorDefence\Servant;
 use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\SectorDefenceTypeEnum;
 use BNT\SectorDefence\SectorDefence;
 use BNT\Log\LogTollPaid;
 use BNT\Log\LogTollRecieve;
-use BNT\Log\DAO\LogCreateDAO;
+use BNT\Log\Log;
 
 class SectorDefencePayTollServant implements \BNT\ServantInterface
 {
@@ -93,7 +93,7 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
         }
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($log);
+            Log::as($log)->dispatch();
         }
     }
 

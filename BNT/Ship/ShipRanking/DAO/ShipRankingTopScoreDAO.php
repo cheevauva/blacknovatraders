@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\ShipRanking\DAO;
 
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 
 class ShipRankingTopScoreDAO extends ShipRankingTopDAO
 {

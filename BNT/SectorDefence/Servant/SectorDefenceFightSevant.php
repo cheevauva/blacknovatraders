@@ -6,13 +6,13 @@ namespace BNT\SectorDefence\Servant;
 
 use BNT\ServantInterface;
 use BNT\SectorDefence\SectorDefence;
+use BNT\Log\Log;
 use BNT\Log\LogDefenceKaboom;
 use BNT\Log\LogDefenceDestroyedFighters;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
 use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
-use BNT\Log\DAO\LogCreateDAO;
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 use BNT\SectorDefence\Servant\SectorDefenceDestroyFightersServant;
 use BNT\Message\Servant\MessageDefenceOwnerServant;
 use BNT\Ship\Servant\ShipDestroyServant;
@@ -123,7 +123,7 @@ class SectorDefenceFightSevant implements ServantInterface
         ShipSaveDAO::call($this->ship);
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($log);
+            Log::as($log)->dispatch();
         }
     }
 

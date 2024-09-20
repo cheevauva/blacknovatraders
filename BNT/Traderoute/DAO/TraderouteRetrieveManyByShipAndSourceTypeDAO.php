@@ -6,7 +6,7 @@ namespace BNT\Traderoute\DAO;
 
 use BNT\Traderoute\TraderouteTypeEnum;
 use BNT\Ship\Ship;
-use BNT\TableEnum;
+use BNT\Enum\TableEnum;
 
 class TraderouteRetrieveManyByShipAndSourceTypeDAO extends TraderouteDAO
 {

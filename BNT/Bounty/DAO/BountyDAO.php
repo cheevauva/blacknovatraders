@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BNT\Bounty\DAO;
 
 use BNT\ServantInterface;
-use BNT\DatabaseTrait;
-use BNT\TableEnum;
+use BNT\Traits\DatabaseTrait;
+use BNT\Enum\TableEnum;
 use BNT\Bounty\Mapper\BountyMapper;
 
 abstract class BountyDAO implements ServantInterface

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\SectorDefence\DAO;
 
 use BNT\ServantInterface;
-use BNT\DatabaseTrait;
+use BNT\Traits\DatabaseTrait;
 use BNT\SectorDefence\Mapper\SectorDefenceMapper;
-use BNT\TableEnum;
+use BNT\Enum\TableEnum;
 
 abstract class SectorDefenceDAO implements ServantInterface
 {

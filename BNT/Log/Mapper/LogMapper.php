@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace BNT\Log\Mapper;
 
 use BNT\ServantInterface;
-use BNT\Log\Log;
-use BNT\Log\LogWithIP;
-use BNT\Log\LogWithPlayer;
-use BNT\Log\LogRaw;
-use BNT\Log\LogDefenceDestroyedFighters;
+use BNT\Log\Entity\Log;
+use BNT\Log\Entity\LogWithIP;
+use BNT\Log\Entity\LogWithPlayer;
+use BNT\Log\Entity\LogRaw;
+use BNT\Log\Entity\LogDefenceDestroyedFighters;
 
 class LogMapper implements ServantInterface
 {
@@ -88,5 +88,4 @@ class LogMapper implements ServantInterface
 
         return $row;
     }
-
 }

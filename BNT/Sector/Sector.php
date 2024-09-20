@@ -6,7 +6,7 @@ namespace BNT\Sector;
 
 use BNT\Sector\Exception\SectorException;
 use BNT\Sector\SectorPortTypeEnum;
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 
 class Sector
 {

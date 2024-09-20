@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BNT\Planet\DAO;
 
 use BNT\ServantInterface;
-use BNT\DatabaseTrait;
-use BNT\TableEnum;
+use BNT\Traits\DatabaseTrait;
+use BNT\Enum\TableEnum;
 use BNT\Planet\Mapper\PlanetMapper;
 
 abstract class PlanetDAO implements ServantInterface

@@ -7,7 +7,7 @@ namespace BNT\Ship\Servant;
 use BNT\ServantInterface;
 use BNT\Ship\DAO\ShipRetrieveByEmailAndCharacterAndShipnameDAO;
 use BNT\Ship\DAO\ShipCreateDAO;
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 use BNT\Email\Email;
 use BNT\Ship\Ship;
 use BNT\Zone\Zone;

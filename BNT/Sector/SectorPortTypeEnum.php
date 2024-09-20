@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Sector;
 
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 use BNT\Ship\ShipResourceEnum;
 
 enum SectorPortTypeEnum: string

@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace BNT\Log;
+namespace BNT\Log\Enum;
 
 enum LogTypeEnum: int
 {
+
     case UNDEFINED = 0;
     case LOGIN = 1;
     case LOGOUT = 2;
@@ -61,5 +62,4 @@ enum LogTypeEnum: int
     case BOUNTY_FEDBOUNTY = 52; // Sent when the federation places a bounty on a player
     case PLANET_BOMBED = 53; //Sent after bombing a planet
     case ADMIN_ILLEGVALUE = 54; //sent to admin on planet destruction instead of capture
-
 }

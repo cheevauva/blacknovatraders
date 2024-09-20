@@ -9,7 +9,7 @@ use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\Servant\BountyCancelServant;
 use BNT\Ship\Servant\ShipKillServant;
-use BNT\Log\DAO\LogCreateDAO;
+use BNT\Log\Log;
 
 class ShipDestroyServant implements ServantInterface
 {
@@ -65,7 +65,7 @@ class ShipDestroyServant implements ServantInterface
         ShipSaveDAO::call($this->ship);
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($log);
+            Log::as($log)->dispatch();
         }
     }
 

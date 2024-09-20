@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace BNT\Log\DAO;
 
 use BNT\ServantInterface;
-use BNT\TableEnum;
+use BNT\Enum\TableEnum;
 use BNT\Log\Log;
 use BNT\Log\Mapper\LogMapper;
-use BNT\DatabaseTrait;
+use BNT\Traits\DatabaseTrait;
 
 abstract class LogDAO implements ServantInterface
 {

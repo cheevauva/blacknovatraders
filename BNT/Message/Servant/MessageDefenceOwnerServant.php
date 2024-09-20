@@ -7,6 +7,7 @@ namespace BNT\Message\Servant;
 use BNT\ServantInterface;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\SectorDefence;
+use BNT\Log\Log;
 use BNT\Log\LogRaw;
 use BNT\Log\DAO\LogCreateDAO;
 
@@ -48,7 +49,7 @@ class MessageDefenceOwnerServant implements ServantInterface
         }
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($log);
+            Log::as($log)->dispatch();
         }
     }
 

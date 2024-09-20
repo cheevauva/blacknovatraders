@@ -2,21 +2,23 @@
 
 declare(strict_types=1);
 
-namespace BNT\Log;
+namespace BNT\Log\Entity;
 
-use BNT\EventTrait;
+use BNT\Traits\EventTrait;
+use BNT\Traits\AsTrait;
 
 abstract class Log
 {
 
     use EventTrait;
+    use AsTrait;
 
     public int $log_id;
     public int $ship_id = 0;
     public LogTypeEnum $type = LogTypeEnum::UNDEFINED;
     public ?\DateTime $time = null;
     public $message;
-    
+
     public function __construct()
     {
         $this->time = new \DateTime;

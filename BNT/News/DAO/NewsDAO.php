@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BNT\News\DAO;
 
-use BNT\TableEnum;
+use BNT\Enum\TableEnum;
 use BNT\News\Mapper\NewsMapper;
 use BNT\ServantInterface;
-use BNT\DatabaseTrait;
+use BNT\Traits\DatabaseTrait;
 
 abstract class NewsDAO implements ServantInterface
 {

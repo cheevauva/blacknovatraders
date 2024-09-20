@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT;
+namespace BNT\Traits;
 
 use BNT\Log\Log;
 use BNT\Log\DAO\LogCreateDAO;

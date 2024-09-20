@@ -11,7 +11,7 @@ use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\SectorDefence;
 use BNT\SectorDefence\SectorDefenceTypeEnum;
-use BNT\BalanceEnum;
+use BNT\Enum\BalanceEnum;
 
 class SectorDefenceCheckFightersServant implements ServantInterface
 {

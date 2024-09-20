@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT;
+namespace BNT\Traits;
 
 use Doctrine\DBAL\Connection;
 
