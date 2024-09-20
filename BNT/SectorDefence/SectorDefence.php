@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence;
 
+use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
+use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
+
 class SectorDefence
 {
 

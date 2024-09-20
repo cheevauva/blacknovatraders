@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use BNT\SectorDefence\Servant\SectorDefenceDeployCheckServant;
 use BNT\SectorDefence\Servant\SectorDefenceDeployServant;
-use BNT\SectorDefence\SectorDefenceFmSettingEnum;
+use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 use BNT\Servant\TransactionServant;
 
 require_once './config.php';

@@ -9,7 +9,7 @@ use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Exception\ShipMoveTurnException;
 use BNT\Link\DAO\LinkRetrieveManyByCriteriaDAO;
-use BNT\Servant\SectorDefenceCheckFightersServant;
+use BNT\SectorDefence\Servant\SectorDefenceCheckFightersServant;
 use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
 
 class ShipMoveServant implements ServantInterface

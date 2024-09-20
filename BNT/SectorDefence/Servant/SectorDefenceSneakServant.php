@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BNT\Servant;
+namespace BNT\SectorDefence\Servant;
 
 use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
-use BNT\Servant\SectorDefenceFightSevant;
+use BNT\SectorDefence\Servant\SectorDefenceFightSevant;
 
 class SectorDefenceSneakServant implements \BNT\ServantInterface
 {

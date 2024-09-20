@@ -8,8 +8,8 @@ use BNT\Ship\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\SectorDefence\SectorDefence;
 use BNT\SectorDefence\DAO\SectorDefenceSaveDAO;
-use BNT\SectorDefence\SectorDefenceFmSettingEnum;
-use BNT\SectorDefence\SectorDefenceTypeEnum;
+use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
+use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 use BNT\SectorDefence\Servant\SectorDefenceDeployCheckServant;
 
 class SectorDefenceDeployServant implements \BNT\ServantInterface

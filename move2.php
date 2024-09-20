@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use BNT\Servant\SectorDefenceCheckFightersServant;
 use BNT\Ship\Servant\ShipMoveServant;
+use BNT\SectorDefence\Servant\SectorDefenceCheckFightersServant;
+use BNT\SectorDefence\Servant\SectorDefencePayTollServant;
+use BNT\SectorDefence\Servant\SectorDefenceFightSevant;
+use BNT\SectorDefence\Servant\SectorDefenceSneakServant;
+use BNT\SectorDefence\Servant\SectorDefenceRetreatServant;
 use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
-use BNT\Servant\SectorDefencePayTollServant;
-use BNT\Servant\SectorDefenceFightSevant;
-use BNT\Servant\SectorDefenceSneakServant;
-use BNT\Servant\SectorDefenceRetreatServant;
 
 require_once './config.php';
 loadlanguage($lang);
@@ -46,7 +46,7 @@ try {
                 ]);
             }
             break;
-        case 'POST':           
+        case 'POST':
             switch ($_POST['response']) {
                 case 'fight':
                     $fight = new SectorDefenceFightSevant;
@@ -55,7 +55,8 @@ try {
                     $fight->doIt = false;
                     $fight->serve();
                     echo '<pre>';
-                    print_r($fight);die;
+                    print_r($fight);
+                    die;
                     break;
                 case 'retreat':
                     SectorDefenceRetreatServant::call($this->ship);
@@ -75,7 +76,8 @@ try {
                     } catch (SectorDefenceDetectYourShipException $ex) {
                         $fight = new SectorDefenceFightSevant;
                         $fight->ship = $ship;
-                        $fight->sector_id = intval($_GET['sector']);;
+                        $fight->sector_id = intval($_GET['sector']);
+                        ;
                         $fight->serve();
                         // todo
                     }

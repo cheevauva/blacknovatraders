@@ -5,24 +5,25 @@ declare(strict_types=1);
 namespace BNT\Servant;
 
 use BNT\ServantInterface;
-use BNT\DatabaseTrait;
+use BNT\DAO\TransactionBeginTransactionDAO;
+use BNT\DAO\TransactionCommitDAO;
+use BNT\DAO\TransactionRollbackDAO;
 
 class TransactionServant implements ServantInterface
 {
-
-    use DatabaseTrait;
 
     public ServantInterface $servant;
 
     public function serve(): void
     {
-        $this->db()->beginTransaction();
+        (new TransactionBeginTransactionDAO)->serve();
 
         try {
             $this->servant->serve();
-            $this->db()->commit();
+
+            (new TransactionCommitDAO)->serve();
         } catch (\Throwable $ex) {
-            $this->db()->rollBack();
+            (new TransactionRollbackDAO)->serve();
 
             throw $ex;
         }

@@ -32,7 +32,7 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
 
         if (isset($this->defence_type)) {
             $qb->andWhere('defence_type = :defence_type');
-            $qb->setParameter('defence_type', $this->defence_type->val());
+            $qb->setParameter('defence_type', $this->defence_type->value);
         }
 
         if (isset($this->ship_id)) {

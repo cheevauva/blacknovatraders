@@ -6,8 +6,8 @@ namespace BNT\SectorDefence\Mapper;
 
 use BNT\ServantInterface;
 use BNT\SectorDefence\SectorDefence;
-use BNT\SectorDefence\SectorDefenceFmSettingEnum;
-use BNT\SectorDefence\SectorDefenceTypeEnum;
+use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
+use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 
 class SectorDefenceMapper implements ServantInterface
 {
@@ -30,8 +30,8 @@ class SectorDefenceMapper implements ServantInterface
         if (!empty($this->defence) && empty($this->row)) {
             $this->row = [];
             $this->row['defence_id'] = $this->defence->defence_id;
-            $this->row['defence_type'] = $this->defence->defence_type->val();
-            $this->row['fm_setting'] = $this->defence->fm_setting->val();
+            $this->row['defence_type'] = $this->defence->defence_type->value;
+            $this->row['fm_setting'] = $this->defence->fm_setting->value;
             $this->row['ship_id'] = $this->defence->ship_id;
             $this->row['sector_id'] = $this->defence->sector_id;
             $this->row['quantity'] = $this->defence->quantity;

@@ -7,8 +7,8 @@ namespace BNT\SectorDefence\View;
 use BNT\SectorDefence\SectorDefence;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\View\ShipView;
-use BNT\SectorDefence\SectorDefenceTypeEnum;
-use BNT\SectorDefence\SectorDefenceFmSettingEnum;
+use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
+use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 
 class SectorDefenceView
 {
