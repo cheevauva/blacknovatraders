@@ -6,7 +6,6 @@ namespace BNT\Zone\DAO;
 
 class ZoneRetrieveManyByCriteriaDAO extends ZoneDAO
 {
-
     public ?int $zone_id;
     public ?bool $corp;
     public ?int $owner;
@@ -37,5 +36,4 @@ class ZoneRetrieveManyByCriteriaDAO extends ZoneDAO
 
         $this->zones = $mapper->zone;
     }
-
 }

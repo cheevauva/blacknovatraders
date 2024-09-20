@@ -30,5 +30,4 @@ class ShipRankingTopRatingDAO extends ShipRankingTopDAO
 
         return $qb->fetchAllAssociative();
     }
-
 }

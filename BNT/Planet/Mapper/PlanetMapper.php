@@ -9,7 +9,6 @@ use BNT\ServantInterface;
 
 class PlanetMapper implements ServantInterface
 {
-
     public array $row;
     public Planet $planet;
 
@@ -68,5 +67,4 @@ class PlanetMapper implements ServantInterface
             $this->row['defeated'] = $planet->defeated;
         }
     }
-
 }

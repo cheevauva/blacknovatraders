@@ -54,5 +54,4 @@ class SectorException extends \Exception
 
         return $ex;
     }
-
 }

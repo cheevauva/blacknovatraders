@@ -10,7 +10,6 @@ use BNT\Ship\DAO\ShipCreateDAO;
 
 class ShipCreateServant implements ServantInterface
 {
-
     public Ship $ship;
 
     public function serve(): void
@@ -52,5 +51,4 @@ class ShipCreateServant implements ServantInterface
         $create->ship = $ship;
         $create->serve();
     }
-
 }

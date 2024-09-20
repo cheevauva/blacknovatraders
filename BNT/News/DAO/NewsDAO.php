@@ -11,7 +11,6 @@ use BNT\Traits\DatabaseTrait;
 
 abstract class NewsDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class NewsDAO implements ServantInterface
     {
         return new NewsMapper;
     }
-
 }

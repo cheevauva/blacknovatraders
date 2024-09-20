@@ -10,7 +10,6 @@ use Doctrine\DBAL\Driver\AbstractException;
 
 class ADODBConnection
 {
-
     private Connection $connection;
     private string $type;
     private int $errorCode = 0;
@@ -55,16 +54,14 @@ class ADODBConnection
     {
         return $this->errorCode;
     }
-    
+
     public function ErrorMsg(): ?string
     {
         return $this->errorMessage;
     }
-    
-    
+
     public function getConnection(): Connection
     {
         return $this->connection;
     }
-
 }

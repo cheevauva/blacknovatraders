@@ -24,7 +24,6 @@ use BNT\News\DAO\NewsSaveDAO;
 
 class ShipKillServant implements ServantInterface
 {
-
     public Ship $ship;
     public bool $doIt = true;
     public array $news = [];
@@ -148,5 +147,4 @@ class ShipKillServant implements ServantInterface
         $self->ship = $ship;
         $self->serve();
     }
-
 }

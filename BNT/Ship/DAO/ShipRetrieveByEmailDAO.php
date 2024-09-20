@@ -8,7 +8,6 @@ use BNT\Ship\Ship;
 
 class ShipRetrieveByEmailDAO extends ShipDAO
 {
-
     public string $email;
     public ?Ship $ship;
 
@@ -34,5 +33,4 @@ class ShipRetrieveByEmailDAO extends ShipDAO
 
         return $self->ship;
     }
-
 }

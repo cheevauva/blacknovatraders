@@ -6,7 +6,6 @@ namespace BNT\Log\Enum;
 
 enum LogTypeEnum: int
 {
-
     case UNDEFINED = 0;
     case LOGIN = 1;
     case LOGOUT = 2;

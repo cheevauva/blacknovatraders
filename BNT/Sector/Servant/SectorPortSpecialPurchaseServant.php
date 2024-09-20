@@ -9,7 +9,6 @@ use BNT\Ship\DAO\ShipSaveDAO;
 
 class SectorPortSpecialPurchaseServant implements ServantInterface
 {
-
     public SectorPortSpecialOfferServant $offer;
 
     public function serve(): void
@@ -19,7 +18,7 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
 
         $ship = $offer->ship;
         $ship->payment($offer->total_cost);
-        
+
         $ship->hull = max($offer->hull_upgrade, $ship->hull);
         $ship->engines = max($offer->engine_upgrade, $ship->engines);
         $ship->power = max($offer->power_upgrade, $ship->power);
@@ -44,7 +43,7 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
         $ship->dev_escapepod = $ship->dev_escapepod ?: !empty($offer->escapepod_purchase);
         $ship->dev_fuelscoop = $ship->dev_fuelscoop ?: !empty($offer->fuelscoop_purchase);
         $ship->dev_lssd = $ship->dev_lssd ?: !empty($offer->lssd_purchase);
-        
+
         ShipSaveDAO::call($ship);
     }
 
@@ -56,5 +55,4 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
 
         return $self;
     }
-
 }

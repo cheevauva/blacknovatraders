@@ -9,7 +9,6 @@ namespace BNT\Ship\DAO;
  */
 class ShipNewWishEscapePodDAO extends ShipDAO
 {
-
     public int $shipId;
 
     public function serve(): void
@@ -18,5 +17,4 @@ class ShipNewWishEscapePodDAO extends ShipDAO
             'ship_id' => $this->shipId,
         ]);
     }
-
 }

@@ -9,7 +9,6 @@ use BNT\Ship\Exception\ShipException;
 
 class Ship
 {
-
     public int $ship_id;
     public string $ship_name;
     public bool $ship_destroyed = false;
@@ -75,7 +74,7 @@ class Ship
     protected function reset(): void
     {
         global $start_energy;
-        
+
         $this->hull = 0;
         $this->engines = 0;
         $this->power = 0;
@@ -326,5 +325,4 @@ class Ship
     {
         $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
-
 }

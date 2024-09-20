@@ -6,7 +6,6 @@ namespace BNT\Planet\DAO;
 
 class PlanetRetrieveManyByCriteria extends PlanetDAO
 {
-
     public ?int $owner;
     public ?bool $base;
     public array $planets;
@@ -37,5 +36,4 @@ class PlanetRetrieveManyByCriteria extends PlanetDAO
             $this->planets[] = $mapper->planet;
         }
     }
-
 }

@@ -15,7 +15,6 @@ use BNT\IBankAccount\IBankAccount;
 
 class ShipNewServant implements ServantInterface
 {
-
     public string $username;
     public string $character;
     public string $shipname;
@@ -116,5 +115,4 @@ class ShipNewServant implements ServantInterface
         if ($mturns > $max_turns)
             $mturns = $max_turns;
     }
-
 }

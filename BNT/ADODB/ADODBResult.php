@@ -8,7 +8,6 @@ use Doctrine\DBAL\Result;
 
 class ADODBResult
 {
-
     private Result $result;
     private \Iterator $iterator;
 
@@ -27,7 +26,7 @@ class ADODBResult
             return !$this->iterator->valid();
         }
     }
-    
+
     public function RecordCount(): int
     {
         return $this->result->rowCount();
@@ -37,5 +36,4 @@ class ADODBResult
     {
         $this->iterator->next();
     }
-
 }

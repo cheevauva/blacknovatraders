@@ -8,7 +8,6 @@ use BNT\Zone\Zone;
 
 class ZoneRetrieveByIdDAO extends ZoneDAO
 {
-
     public int $id;
     public Zone $zone;
 
@@ -38,5 +37,4 @@ class ZoneRetrieveByIdDAO extends ZoneDAO
 
         return $self->zone;
     }
-
 }

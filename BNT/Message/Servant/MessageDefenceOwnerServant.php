@@ -13,7 +13,6 @@ use BNT\Log\DAO\LogCreateDAO;
 
 class MessageDefenceOwnerServant implements ServantInterface
 {
-
     public int $sector;
     public string $message;
     public bool $doIt = true;
@@ -52,5 +51,4 @@ class MessageDefenceOwnerServant implements ServantInterface
             Log::as($log)->dispatch();
         }
     }
-
 }

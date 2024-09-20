@@ -14,5 +14,4 @@ trait CacheTrait
     {
         return Cache::instance();
     }
-
 }

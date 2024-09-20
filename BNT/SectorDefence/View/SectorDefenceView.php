@@ -12,7 +12,6 @@ use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 
 class SectorDefenceView
 {
-
     protected SectorDefence $sectorDefence;
 
     public function __construct(SectorDefence $sectorDefence)
@@ -57,5 +56,4 @@ class SectorDefenceView
             return new static($sectorDefence);
         }, $sectorDefences);
     }
-
 }

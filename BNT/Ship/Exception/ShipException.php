@@ -64,7 +64,7 @@ class ShipException extends \Exception
     public static function incorrectPassword(Ship $ship): ShipPasswordIncorrectException
     {
         global $l_login_4gotpw1;
-        
+
         $ex = new ShipPasswordIncorrectException($l_login_4gotpw1);
         $ex->ship = $ship;
 
@@ -74,11 +74,10 @@ class ShipException extends \Exception
     public static function hasBeenDestroyed(Ship $ship): ShipHasBeenDestroyedException
     {
         global $l_login_died;
-        
+
         $ex = new ShipHasBeenDestroyedException($l_login_died);
         $ex->ship = $ship;
 
         return $ex;
     }
-
 }

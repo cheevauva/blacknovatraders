@@ -11,7 +11,6 @@ use BNT\Enum\TableEnum;
 
 abstract class LinkDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class LinkDAO implements ServantInterface
     {
         return new LinkMapper;
     }
-
 }

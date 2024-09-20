@@ -9,7 +9,6 @@ use BNT\ServantInterface;
 
 class LinkMapper implements ServantInterface
 {
-
     public ?array $row = null;
     public ?Link $link = null;
 
@@ -32,5 +31,4 @@ class LinkMapper implements ServantInterface
             $this->row = $row;
         }
     }
-
 }

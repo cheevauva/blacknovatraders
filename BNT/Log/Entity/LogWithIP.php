@@ -8,7 +8,5 @@ use BNT\Log\Enum\LogTypeEnum;
 
 abstract class LogWithIP extends Log
 {
-
     public string $ip;
-
 }

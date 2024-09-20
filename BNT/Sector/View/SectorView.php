@@ -9,7 +9,6 @@ use BNT\Sector\SectorPortTypeEnum;
 
 class SectorView
 {
-
     protected Sector $sector;
 
     public function __construct(Sector $sector)
@@ -73,5 +72,4 @@ class SectorView
             SectorPortTypeEnum::Special => $l_special,
         };
     }
-
 }

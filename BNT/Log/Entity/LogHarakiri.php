@@ -8,6 +8,5 @@ use BNT\Log\Enum\LogTypeEnum;
 
 class LogHarakiri extends LogWithIP
 {
-
     public LogTypeEnum $type = LogTypeEnum::HARAKIRI;
 }

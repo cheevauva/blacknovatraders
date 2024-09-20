@@ -9,7 +9,6 @@ use BNT\Ship\DAO\ShipSaveDAO;
 
 class SectorDefenceRetreatServant implements \BNT\ServantInterface
 {
-
     public bool $doIt = true;
     public Ship $ship;
 
@@ -33,5 +32,4 @@ class SectorDefenceRetreatServant implements \BNT\ServantInterface
 
         return $self;
     }
-
 }

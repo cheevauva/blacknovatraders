@@ -11,7 +11,6 @@ use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 
 class SectorDefenceMapper implements ServantInterface
 {
-
     public ?array $row = null;
     public ?SectorDefence $defence = null;
 
@@ -37,5 +36,4 @@ class SectorDefenceMapper implements ServantInterface
             $this->row['quantity'] = $this->defence->quantity;
         }
     }
-
 }

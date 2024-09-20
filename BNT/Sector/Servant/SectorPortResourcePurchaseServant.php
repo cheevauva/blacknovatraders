@@ -15,7 +15,6 @@ use BNT\Ship\DAO\ShipSaveDAO;
 
 class SectorPortResourcePurchaseServant implements ServantInterface
 {
-
     public Ship $ship;
     public SectorPortResourceOfferServant $offer;
 
@@ -78,5 +77,4 @@ class SectorPortResourcePurchaseServant implements ServantInterface
 
         return $self;
     }
-
 }

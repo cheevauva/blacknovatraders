@@ -9,7 +9,6 @@ use BNT\Language\Language;
 
 class LanguageRetrieveAllDAO implements ServantInterface
 {
-
     /**
      * @var array<Language>
      */
@@ -29,5 +28,4 @@ class LanguageRetrieveAllDAO implements ServantInterface
             $this->languages[] = $lang;
         }
     }
-
 }

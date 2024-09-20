@@ -9,6 +9,7 @@ use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 
 class SectorDefence
 {
+    use \BNT\Traits\AsTrait;
 
     public ?int $defence_id = null;
     public int $ship_id;
@@ -16,10 +17,4 @@ class SectorDefence
     public SectorDefenceTypeEnum $defence_type = SectorDefenceTypeEnum::Mines;
     public int $quantity = 0;
     public SectorDefenceFmSettingEnum $fm_setting = SectorDefenceFmSettingEnum::Toll;
-
-    public static function as(self $self): static
-    {
-        return $self;
-    }
-
 }

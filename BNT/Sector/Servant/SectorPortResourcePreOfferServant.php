@@ -11,6 +11,7 @@ use BNT\Ship\Ship;
 
 class SectorPortResourcePreOfferServant implements ServantInterface
 {
+    use \BNT\Traits\AsTrait;
 
     public Sector $sector;
     public Ship $ship;
@@ -106,10 +107,4 @@ class SectorPortResourcePreOfferServant implements ServantInterface
 
         return $self;
     }
-
-    public static function as($self): self
-    {
-        return $self;
-    }
-
 }

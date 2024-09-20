@@ -10,6 +10,7 @@ use BNT\Sector\SectorPortTypeEnum;
 
 class SectorPortResourceOfferServant implements ServantInterface
 {
+    use \BNT\Traits\AsTrait;
 
     public Sector $sector;
     //
@@ -47,7 +48,6 @@ class SectorPortResourceOfferServant implements ServantInterface
         $this->total_cost = $this->calculateTotal();
     }
 
-
     private function calculateTotal()
     {
         return array_sum([
@@ -62,10 +62,4 @@ class SectorPortResourceOfferServant implements ServantInterface
     {
         return $this->sector->port_type->is($portType) ? $origin : -$origin;
     }
-
-    public static function as($self): self
-    {
-        return $self;
-    }
-
 }

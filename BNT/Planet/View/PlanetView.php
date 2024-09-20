@@ -10,7 +10,6 @@ use BNT\Ship\Ship;
 
 class PlanetView
 {
-
     protected Planet $planet;
 
     public function __construct(Planet $planet = null)
@@ -67,5 +66,4 @@ class PlanetView
             return new static($planet);
         }, $planets);
     }
-
 }

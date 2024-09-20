@@ -15,7 +15,6 @@ use BNT\Enum\BalanceEnum;
 
 class SectorDefenceCheckFightersServant implements ServantInterface
 {
-
     public int $sector;
     public Ship $ship;
     public int $totalSectorFightes = 0;
@@ -74,5 +73,4 @@ class SectorDefenceCheckFightersServant implements ServantInterface
             break;
         }
     }
-
 }

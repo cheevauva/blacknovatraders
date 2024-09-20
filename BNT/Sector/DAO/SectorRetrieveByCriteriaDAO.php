@@ -8,7 +8,6 @@ use BNT\Sector\Sector;
 
 class SectorRetrieveByCriteriaDAO extends SectorDAO
 {
-
     public ?int $zone_id;
     public ?Sector $sector;
 
@@ -22,7 +21,7 @@ class SectorRetrieveByCriteriaDAO extends SectorDAO
             $qb->andWhere('zone_id = :zone_id');
             $qb->setParameter('zone_id', $this->zone_id);
         }
-        
+
         $qb->setMaxResults(1);
 
         $mapper = $this->mapper();
@@ -31,6 +30,4 @@ class SectorRetrieveByCriteriaDAO extends SectorDAO
 
         $this->sector = $mapper->sector;
     }
-
-
 }

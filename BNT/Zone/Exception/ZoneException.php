@@ -32,5 +32,4 @@ class ZoneException extends \Exception
 
         return new self($l_no_trade_out);
     }
-
 }

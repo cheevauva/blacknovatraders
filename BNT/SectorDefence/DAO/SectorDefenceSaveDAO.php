@@ -8,7 +8,6 @@ use BNT\SectorDefence\SectorDefence;
 
 class SectorDefenceSaveDAO extends SectorDefenceDAO
 {
-
     public SectorDefence $defence;
 
     public function serve(): void
@@ -35,5 +34,4 @@ class SectorDefenceSaveDAO extends SectorDefenceDAO
 
         return $self;
     }
-
 }

@@ -8,6 +8,5 @@ use BNT\Log\Enum\LogTypeEnum;
 
 class LogRaw extends Log
 {
-
     public LogTypeEnum $type = LogTypeEnum::RAW;
 }

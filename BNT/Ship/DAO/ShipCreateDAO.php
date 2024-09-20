@@ -8,7 +8,6 @@ use BNT\Ship\Ship;
 
 class ShipCreateDAO extends ShipDAO
 {
-
     public Ship $ship;
 
     public function serve(): void
@@ -30,5 +29,4 @@ class ShipCreateDAO extends ShipDAO
 
         return $self;
     }
-
 }

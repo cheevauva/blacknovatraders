@@ -18,7 +18,6 @@ use BNT\Log\Log;
 
 class SectorDefencePayTollServant implements \BNT\ServantInterface
 {
-
     public bool $doIt = true;
     public Ship $ship;
     public int $sector;
@@ -96,5 +95,4 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
             Log::as($log)->dispatch();
         }
     }
-
 }

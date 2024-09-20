@@ -9,7 +9,6 @@ use BNT\Ship\Ship;
 
 class SectorPortSpecialServant implements ServantInterface
 {
-
     public Ship $ship;
     public float $totalBounty;
     public $emerwarp_free;
@@ -50,5 +49,4 @@ class SectorPortSpecialServant implements ServantInterface
 
         return $self;
     }
-
 }

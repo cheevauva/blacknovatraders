@@ -12,7 +12,6 @@ use BNT\Traits\DatabaseTrait;
 
 abstract class LogDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -25,7 +24,7 @@ abstract class LogDAO implements ServantInterface
         return new LogMapper;
     }
 
-    public function asLog(array $row): Log
+    protected function asLog(array $row): Log
     {
         $self = new LogMapper;
         $self->row = $row;
@@ -34,7 +33,7 @@ abstract class LogDAO implements ServantInterface
         return $self->log;
     }
 
-    public function asLogs(array $rows): array
+    protected function asLogs(array $rows): array
     {
         $logs = [];
 
@@ -44,5 +43,4 @@ abstract class LogDAO implements ServantInterface
 
         return $logs;
     }
-
 }

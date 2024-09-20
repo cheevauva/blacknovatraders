@@ -13,7 +13,6 @@ use BNT\Log\Entity\LogDefenceDestroyedFighters;
 
 class LogMapper implements ServantInterface
 {
-
     public Log $log;
     public array $row;
 

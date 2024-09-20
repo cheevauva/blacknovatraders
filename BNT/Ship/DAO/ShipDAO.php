@@ -12,7 +12,6 @@ use BNT\Ship\Ship;
 
 abstract class ShipDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -44,5 +43,4 @@ abstract class ShipDAO implements ServantInterface
 
         return $mapper->ship;
     }
-
 }

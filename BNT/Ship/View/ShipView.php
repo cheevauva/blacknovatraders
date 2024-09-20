@@ -8,7 +8,6 @@ use BNT\Ship\Ship;
 
 class ShipView
 {
-
     protected Ship $ship;
 
     public function __construct(Ship $ship)
@@ -136,5 +135,4 @@ class ShipView
             return new static($ship);
         }, $ships);
     }
-
 }

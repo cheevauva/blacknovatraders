@@ -12,7 +12,6 @@ use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 
 class ZonePortTradeServant implements ServantInterface
 {
-
     public Zone $zone;
     public Ship $ship;
 
@@ -36,7 +35,7 @@ class ZonePortTradeServant implements ServantInterface
         if (!$this->isAllowForOutsiders($zone, $ship)) {
             throw ZoneException::notAllowTradingForOutsiders();
         }
-        
+
         if ($ship->turns < 1) {
             global $l_trade_turnneed;
             throw new \Exception($l_trade_turnneed);
@@ -47,7 +46,7 @@ class ZonePortTradeServant implements ServantInterface
     {
         if (empty($zone->corp_zone)) {
             $owner = ShipRetrieveByIdDAO::call($zone->owner);
-            
+
             if (empty($owner)) {
                 return true;
             }
@@ -77,5 +76,4 @@ class ZonePortTradeServant implements ServantInterface
 
         return $self;
     }
-
 }

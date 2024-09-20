@@ -16,5 +16,4 @@ trait EventTrait
             LogCreateDAO::call($this); // @todo replace on event dispatcher
         }
     }
-
 }

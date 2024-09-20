@@ -11,7 +11,6 @@ use BNT\Bounty\Servant\BountyCancelServant;
 
 class ShipSelfDestructServant implements ServantInterface
 {
-
     public Ship $ship;
     public string $ip;
 
@@ -19,7 +18,7 @@ class ShipSelfDestructServant implements ServantInterface
     {
         BountyCancelServant::call($this->ship);
         ShipKillServant::call($this->ship);
-        
+
         $harakiri = new LogHarakiri;
         $harakiri->ship_id = $this->ship->ship_id;
         $harakiri->ip = $this->ip;
@@ -35,5 +34,4 @@ class ShipSelfDestructServant implements ServantInterface
 
         return $self;
     }
-
 }

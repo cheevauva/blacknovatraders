@@ -11,7 +11,6 @@ use BNT\Traderoute\Mapper\TraderouteMapper;
 
 abstract class TraderouteDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class TraderouteDAO implements ServantInterface
     {
         return new TraderouteMapper;
     }
-
 }

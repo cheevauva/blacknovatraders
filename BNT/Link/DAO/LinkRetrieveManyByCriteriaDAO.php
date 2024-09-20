@@ -6,7 +6,6 @@ namespace BNT\Link\DAO;
 
 class LinkRetrieveManyByCriteriaDAO extends LinkDAO
 {
-
     public ?int $link_start;
     public ?int $link_dest;
     public array $links;
@@ -29,7 +28,7 @@ class LinkRetrieveManyByCriteriaDAO extends LinkDAO
         }
 
         $qb->orderBy('link_dest', 'ASC');
-        
+
         if (isset($this->limit)) {
             $qb->setMaxResults($this->limit);
         }
@@ -44,5 +43,4 @@ class LinkRetrieveManyByCriteriaDAO extends LinkDAO
             $this->links[] = $mapper->link;
         }
     }
-
 }

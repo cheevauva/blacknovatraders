@@ -8,7 +8,6 @@ use BNT\Planet\Planet;
 
 class PlanetRetrieveByIdDAO extends PlanetDAO
 {
-
     public int $id;
     public ?Planet $planet;
 
@@ -29,14 +28,13 @@ class PlanetRetrieveByIdDAO extends PlanetDAO
 
         $this->planet = $mapper->planet;
     }
-    
+
     public static function call(int $id): ?Planet
     {
         $self = new static;
         $self->id = $id;
         $self->serve();
-        
+
         return $self->planet;
     }
-
 }

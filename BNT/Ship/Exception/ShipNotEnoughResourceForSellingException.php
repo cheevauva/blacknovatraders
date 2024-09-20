@@ -6,8 +6,6 @@ namespace BNT\Ship\Exception;
 
 class ShipNotEnoughResourceForSellingException extends ShipException
 {
-
     public $current;
     public $needle;
-
 }

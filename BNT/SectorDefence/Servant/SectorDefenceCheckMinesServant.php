@@ -8,7 +8,6 @@ use BNT\Ship\Ship;
 
 class SectorDefenceCheckMinesServant implements \BNT\ServantInterface
 {
-
     public int $sector;
     public Ship $ship;
 
@@ -16,5 +15,4 @@ class SectorDefenceCheckMinesServant implements \BNT\ServantInterface
     {
         
     }
-
 }

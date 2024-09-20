@@ -6,7 +6,6 @@ namespace BNT\Ship\Exception;
 
 class ShipNotEnoughPowerForPurchaseException extends ShipException
 {
-
     public $current;
     public $needle;
 }

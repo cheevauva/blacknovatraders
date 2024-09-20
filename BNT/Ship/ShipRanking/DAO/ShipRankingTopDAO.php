@@ -9,7 +9,6 @@ use BNT\Traits\CacheTrait;
 
 abstract class ShipRankingTopDAO extends ShipDAO
 {
-
     use CacheTrait;
 
     public array $ships = [];
@@ -46,5 +45,4 @@ abstract class ShipRankingTopDAO extends ShipDAO
 
         return $self->ships;
     }
-
 }

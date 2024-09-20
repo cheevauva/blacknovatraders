@@ -6,8 +6,6 @@ namespace BNT\SectorDefence\Enum;
 
 enum SectorDefenceTypeEnum: string
 {
-
     case Mines = 'M';
     case Fighters = 'F';
-
 }

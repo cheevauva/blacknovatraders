@@ -8,7 +8,6 @@ use BNT\Sector\Sector;
 
 class SectorSaveDAO extends SectorDAO
 {
-
     public Sector $sector;
 
     public function serve(): void
@@ -30,5 +29,4 @@ class SectorSaveDAO extends SectorDAO
 
         return $self;
     }
-
 }

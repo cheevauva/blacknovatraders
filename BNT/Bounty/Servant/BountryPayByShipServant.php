@@ -13,7 +13,6 @@ use BNT\Bounty\Exception\BountyException;
 
 class BountryPayByShipServant implements ServantInterface
 {
-
     public Ship $ship;
 
     public function serve(): void
@@ -32,7 +31,7 @@ class BountryPayByShipServant implements ServantInterface
         $ship->credits = intval($ship->credits - $amount);
 
         ShipSaveDAO::call($ship);
-        
+
         $removeBounty = new BountyRemoveByCriteriaDAO;
         $removeBounty->bountyOn = $this->ship->ship_id;
         $removeBounty->placedBy = 0;
@@ -47,5 +46,4 @@ class BountryPayByShipServant implements ServantInterface
 
         return $self;
     }
-
 }

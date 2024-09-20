@@ -12,7 +12,6 @@ use BNT\Traderoute\TraderouteMoveTypeEnum;
 
 class TraderouteMapper implements ServantInterface
 {
-
     public ?array $row = null;
     public ?Traderoute $traderoute = null;
 
@@ -40,5 +39,4 @@ class TraderouteMapper implements ServantInterface
             $this->row = $row;
         }
     }
-
 }

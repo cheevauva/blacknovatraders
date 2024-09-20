@@ -10,7 +10,6 @@ use BNT\Ship\DAO\ShipSaveDAO;
 
 class ShipRestoreServant implements ServantInterface
 {
-
     public Ship $ship;
 
     public function serve(): void
@@ -29,5 +28,4 @@ class ShipRestoreServant implements ServantInterface
 
         ShipSaveDAO::call($ship);
     }
-
 }

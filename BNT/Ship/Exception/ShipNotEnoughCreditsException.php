@@ -6,8 +6,6 @@ namespace BNT\Ship\Exception;
 
 class ShipNotEnoughCreditsException extends ShipException
 {
-
     public $credits;
     public $cost;
-
 }

@@ -8,7 +8,5 @@ use BNT\Log\Enum\LogTypeEnum;
 
 class LogLogout extends LogWithIP
 {
-
     public LogTypeEnum $type = LogTypeEnum::LOGOUT;
-
 }

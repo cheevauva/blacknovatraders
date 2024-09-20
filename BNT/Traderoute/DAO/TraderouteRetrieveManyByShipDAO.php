@@ -9,7 +9,6 @@ use BNT\Ship\Ship;
 
 class TraderouteRetrieveManyByShipDAO extends TraderouteDAO
 {
-
     public ?array $traderoutes = [];
     public Ship $ship;
 
@@ -30,5 +29,4 @@ class TraderouteRetrieveManyByShipDAO extends TraderouteDAO
 
         return $self->traderoutes;
     }
-
 }

@@ -6,7 +6,6 @@ namespace BNT\SectorDefence\DAO;
 
 class SectorDefenceRetrieveTotalFightersBySectorIdDAO extends SectorDefenceDAO
 {
-
     public int $sectorId;
     public int $totalFighters;
 
@@ -29,5 +28,4 @@ class SectorDefenceRetrieveTotalFightersBySectorIdDAO extends SectorDefenceDAO
 
         return $self->totalFighters;
     }
-
 }

@@ -11,7 +11,6 @@ use BNT\Log\LogAttackLose;
 
 class LogView
 {
-
     protected Log $log;
 
     public function __construct(Log $log)
@@ -323,5 +322,4 @@ class LogView
         }
         return $retvalue;
     }
-
 }

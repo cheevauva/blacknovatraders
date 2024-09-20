@@ -8,7 +8,6 @@ use BNT\Sector\Sector;
 
 class SectorRetrieveByIdDAO extends SectorDAO
 {
-
     public int $id;
     public ?Sector $sector;
 
@@ -38,5 +37,4 @@ class SectorRetrieveByIdDAO extends SectorDAO
 
         return $self->sector;
     }
-
 }

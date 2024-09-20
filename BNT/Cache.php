@@ -9,7 +9,6 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class Cache
 {
-
     private static CacheItemPoolInterface $cache;
 
     public static function instance(): CacheItemPoolInterface
@@ -20,5 +19,4 @@ class Cache
 
         return self::$cache;
     }
-
 }

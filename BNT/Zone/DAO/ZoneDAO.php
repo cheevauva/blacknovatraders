@@ -11,7 +11,6 @@ use BNT\Zone\Mapper\ZoneMapper;
 
 abstract class ZoneDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class ZoneDAO implements ServantInterface
     {
         return new ZoneMapper;
     }
-
 }

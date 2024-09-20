@@ -13,7 +13,6 @@ use BNT\SectorDefence\SectorDefenceTypeEnum;
 
 class SectorDefenceDestroyFightersServant implements ServantInterface
 {
-
     public int $sector;
     public int $fighters;
     public array $defencesForChange = [];
@@ -52,7 +51,7 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
                 $fighters -= $defence->quantity;
             }
         }
-        
+
         $this->doIt();
     }
 
@@ -86,5 +85,4 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
 
         return $self;
     }
-
 }

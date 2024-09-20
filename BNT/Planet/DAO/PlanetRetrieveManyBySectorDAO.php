@@ -6,13 +6,12 @@ namespace BNT\Planet\DAO;
 
 class PlanetRetrieveManyBySectorDAO extends PlanetDAO
 {
-
     public int $sector;
     public array $planets;
 
     public function serve(): void
     {
-       
+
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
         $qb->from($this->table(), 'p');
@@ -20,7 +19,7 @@ class PlanetRetrieveManyBySectorDAO extends PlanetDAO
         $qb->setParameters([
             'sector_id' => $this->sector,
         ]);
-        
+
         $this->planets = [];
 
         foreach ($qb->fetchAllAssociative() as $planet) {
@@ -40,5 +39,4 @@ class PlanetRetrieveManyBySectorDAO extends PlanetDAO
 
         return $self->planets;
     }
-
 }

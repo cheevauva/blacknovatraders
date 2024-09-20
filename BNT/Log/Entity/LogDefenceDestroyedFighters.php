@@ -8,9 +8,7 @@ use BNT\Log\Enum\LogTypeEnum;
 
 class LogDefenceDestroyedFighters extends Log
 {
-
     public LogTypeEnum $type = LogTypeEnum::DEFS_DESTROYED_F;
     public int $fighterslost;
     public int $sector;
-
 }

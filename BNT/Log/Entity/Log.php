@@ -9,7 +9,6 @@ use BNT\Traits\AsTrait;
 
 abstract class Log
 {
-
     use EventTrait;
     use AsTrait;
 
@@ -23,5 +22,4 @@ abstract class Log
     {
         $this->time = new \DateTime;
     }
-
 }

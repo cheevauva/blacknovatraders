@@ -20,8 +20,7 @@ class BountyException extends \Exception
     public static function notExists(): BountyNotExistsException
     {
         global $l_port_bountypaid;
-        
+
         return new BountyNotExistsException($l_port_bountypaid);
     }
-
 }

@@ -6,7 +6,6 @@ namespace BNT\Traderoute;
 
 class Traderoute
 {
-
     public TraderouteTypeEnum $source_type = TraderouteTypeEnum::Port;
     public TraderouteTypeEnum $dest_type = TraderouteTypeEnum::Port;
     public int $traderoute_id;
@@ -15,5 +14,4 @@ class Traderoute
     public int $owner = 0;
     public TraderouteCircuitEnum $circuit = TraderouteCircuitEnum::Two;
     public TraderouteMoveTypeEnum $move_type = TraderouteMoveTypeEnum::W;
-
 }

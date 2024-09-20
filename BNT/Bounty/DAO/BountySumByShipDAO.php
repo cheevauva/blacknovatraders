@@ -8,7 +8,6 @@ use BNT\Ship\Ship;
 
 class BountySumByShipDAO extends BountyDAO
 {
-
     public Ship $ship;
     public float $total;
 
@@ -27,5 +26,4 @@ class BountySumByShipDAO extends BountyDAO
 
         return $self;
     }
-
 }

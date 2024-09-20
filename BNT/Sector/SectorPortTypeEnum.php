@@ -9,7 +9,6 @@ use BNT\Ship\ShipResourceEnum;
 
 enum SectorPortTypeEnum: string
 {
-
     case Ore = 'ore';
     case Organics = 'organics';
     case Goods = 'goods';
@@ -61,5 +60,4 @@ enum SectorPortTypeEnum: string
             SectorPortTypeEnum::Organics => ShipResourceEnum::Organics
         };
     }
-
 }

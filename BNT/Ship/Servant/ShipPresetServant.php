@@ -11,7 +11,6 @@ use BNT\Ship\DAO\ShipSaveDAO;
 
 class ShipPresetServant implements ServantInterface
 {
-
     public Ship $ship;
     public $preset1;
     public $preset2;
@@ -43,5 +42,4 @@ class ShipPresetServant implements ServantInterface
 
         ShipSaveDAO::call($this->ship);
     }
-
 }

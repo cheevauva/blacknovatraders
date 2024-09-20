@@ -6,7 +6,6 @@ namespace BNT\Zone;
 
 class Zone
 {
-
     public int $zone_id;
     public string $zone_name;
     public int $owner = 0;
@@ -19,5 +18,4 @@ class Zone
     public ?bool $allow_trade = true;
     public ?bool $allow_defenses = true;
     public int $max_hull = 0;
-
 }

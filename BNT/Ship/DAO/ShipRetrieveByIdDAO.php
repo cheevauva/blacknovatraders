@@ -8,7 +8,6 @@ use BNT\Ship\Ship;
 
 class ShipRetrieveByIdDAO extends ShipDAO
 {
-
     public int $id;
     public ?Ship $ship;
 
@@ -34,5 +33,4 @@ class ShipRetrieveByIdDAO extends ShipDAO
 
         return $self->ship;
     }
-
 }

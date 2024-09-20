@@ -10,7 +10,6 @@ use BNT\SectorDefence\Servant\SectorDefenceFightSevant;
 
 class SectorDefenceSneakServant implements \BNT\ServantInterface
 {
-
     public Ship $ship;
     public Ship $fightersOwner;
     public int $sectorId;
@@ -47,5 +46,4 @@ class SectorDefenceSneakServant implements \BNT\ServantInterface
             ShipSaveDAO::call($this->ship);
         }
     }
-
 }

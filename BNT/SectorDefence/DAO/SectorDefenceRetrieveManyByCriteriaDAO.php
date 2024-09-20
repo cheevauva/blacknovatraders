@@ -8,7 +8,6 @@ use BNT\SectorDefence\SectorDefenceTypeEnum;
 
 class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
 {
-
     public ?int $sector_id;
     public ?int $ship_id;
     public ?int $excludeShipId;
@@ -59,5 +58,4 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
             $this->defences[] = $mapper->defence;
         }
     }
-
 }

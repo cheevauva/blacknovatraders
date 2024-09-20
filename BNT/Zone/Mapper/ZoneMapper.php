@@ -9,7 +9,6 @@ use BNT\Zone\Zone;
 
 class ZoneMapper implements ServantInterface
 {
-
     public array $row;
     public ?Zone $zone = null;
 
@@ -37,5 +36,4 @@ class ZoneMapper implements ServantInterface
             $this->row = $row;
         }
     }
-
 }

@@ -8,7 +8,6 @@ use BNT\Log\Enum\LogTypeEnum;
 
 class LogTollPaid extends Log
 {
-
     public LogTypeEnum $type = LogTypeEnum::TOLL_PAID;
     public int $sector;
     public int $fightersToll;

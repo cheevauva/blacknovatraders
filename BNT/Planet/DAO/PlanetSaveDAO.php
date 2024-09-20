@@ -8,7 +8,6 @@ use BNT\Planet\Planet;
 
 class PlanetSaveDAO extends PlanetDAO
 {
-
     public Planet $planet;
 
     public function serve(): void
@@ -28,5 +27,4 @@ class PlanetSaveDAO extends PlanetDAO
         $self->planet = $planet;
         $self->serve();
     }
-
 }

@@ -6,7 +6,5 @@ namespace BNT\Zone\DAO;
 
 class ZoneRetrieveManyByCorpAndOwnerDAO extends ZoneDAO
 {
-
-
-
+    
 }

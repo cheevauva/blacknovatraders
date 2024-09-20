@@ -14,7 +14,6 @@ use BNT\SectorDefence\Servant\SectorDefenceDeployCheckServant;
 
 class SectorDefenceDeployServant implements \BNT\ServantInterface
 {
-
     public Ship $ship;
     public bool $doIt = false;
     public int $numfighters = 0;
@@ -86,5 +85,4 @@ class SectorDefenceDeployServant implements \BNT\ServantInterface
         SectorDefenceSaveDAO::call($this->defenceFighter);
         SectorDefenceSaveDAO::call($this->defenceMine);
     }
-
 }

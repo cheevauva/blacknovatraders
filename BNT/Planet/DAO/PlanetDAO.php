@@ -11,7 +11,6 @@ use BNT\Planet\Mapper\PlanetMapper;
 
 abstract class PlanetDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class PlanetDAO implements ServantInterface
     {
         return new PlanetMapper;
     }
-
 }

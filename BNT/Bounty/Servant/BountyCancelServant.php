@@ -16,7 +16,6 @@ use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
 
 class BountyCancelServant implements ServantInterface
 {
-
     public int $bounty_on;
     public bool $doIt = true;
     public array $logs = [];
@@ -31,7 +30,7 @@ class BountyCancelServant implements ServantInterface
 
         foreach ($retieveBounties->bounties as $bountydetails) {
             $bountydetails = Bounty::as($bountydetails);
-            
+
             $bountyOn = ShipRetrieveByIdDAO::call($bountydetails->bounty_on);
 
             if ($bountydetails->placed_by) {
@@ -50,7 +49,7 @@ class BountyCancelServant implements ServantInterface
 
             $this->bountiesForRemove[] = $bountydetails;
         }
-        
+
         $this->doIt();
     }
 
@@ -85,5 +84,4 @@ class BountyCancelServant implements ServantInterface
         $self->bounty_on = $bountyOn;
         $self->serve();
     }
-
 }

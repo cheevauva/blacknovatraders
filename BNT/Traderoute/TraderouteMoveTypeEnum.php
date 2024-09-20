@@ -6,8 +6,6 @@ namespace BNT\Traderoute;
 
 enum TraderouteMoveTypeEnum: string
 {
-
     case W = 'W';
     case R = 'R';
-
 }

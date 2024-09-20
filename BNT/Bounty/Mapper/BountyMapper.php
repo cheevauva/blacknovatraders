@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Bounty\Mapper;
 
-use BNT\Bounty\Bounty;
+use BNT\Bounty\Entity\Bounty;
 
 class BountyMapper implements \BNT\ServantInterface
 {
@@ -32,5 +32,4 @@ class BountyMapper implements \BNT\ServantInterface
             $this->row = $row;
         }
     }
-
 }

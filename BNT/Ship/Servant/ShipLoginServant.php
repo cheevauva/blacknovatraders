@@ -14,7 +14,6 @@ use BNT\Log\LogBadLogin;
 
 class ShipLoginServant implements ServantInterface
 {
-
     public string $ip;
     public string $email;
     public string $password;
@@ -53,5 +52,4 @@ class ShipLoginServant implements ServantInterface
         $login->ip = $this->ip;
         $login->dispatch();
     }
-
 }

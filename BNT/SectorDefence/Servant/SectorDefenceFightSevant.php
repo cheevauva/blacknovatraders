@@ -20,7 +20,6 @@ use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 
 class SectorDefenceFightSevant implements ServantInterface
 {
-
     public bool $doIt = true;
     public Ship $ship;
     public int $sector_id;
@@ -52,8 +51,7 @@ class SectorDefenceFightSevant implements ServantInterface
         global $energyscooped;
         global $l_sf_sendlog;
         global $torp_dmg_rate;
-        
-        
+
         $hasMyDefence = new SectorDefenceRetrieveManyByCriteriaDAO;
         $hasMyDefence->sector_id = $this->sector_id;
         $hasMyDefence->ship_id = $this->ship->ship_id;
@@ -132,7 +130,7 @@ class SectorDefenceFightSevant implements ServantInterface
         if ($fighterslost < 1) {
             return;
         }
-        
+
         $log = new LogDefenceDestroyedFighters;
         $log->ship_id = $this->ship->ship_id;
         $log->fighterslost = $fighterslost;
@@ -297,5 +295,4 @@ class SectorDefenceFightSevant implements ServantInterface
         $this->destroyShip->doIt = $this->doIt;
         $this->destroyShip->serve();
     }
-
 }

@@ -17,7 +17,7 @@ class LangaugeRetrieveByFileDAO implements ServantInterface
     {
         $retrieveAll = new LanguageRetrieveAllDAO;
         $retrieveAll->serve();
-        
+
         foreach ($retrieveAll->languages as $language) {
             if ($language->file === $this->file) {
                 $this->language = $language;
@@ -25,5 +25,4 @@ class LangaugeRetrieveByFileDAO implements ServantInterface
             }
         }
     }
-
 }

@@ -10,7 +10,6 @@ use BNT\Sector\SectorPortTypeEnum;
 
 class SectorMapper implements ServantInterface
 {
-
     public array $row;
     public ?Sector $sector = null;
 
@@ -41,5 +40,4 @@ class SectorMapper implements ServantInterface
             $this->row = $row;
         }
     }
-
 }

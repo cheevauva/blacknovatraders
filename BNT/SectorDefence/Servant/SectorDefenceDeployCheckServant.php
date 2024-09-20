@@ -17,7 +17,6 @@ use Exception;
 
 class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
 {
-
     public Ship $ship;
     public ?Ship $fightersOwner = null;
     public ?Ship $zoneOwner = null;
@@ -73,7 +72,7 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
         if (is_null($this->zone->allow_defenses) && $this->zone->owner != $this->ship->ship_id) {
             $this->allowDefenses = empty($this->ship->team) && !empty($this->zoneOwner) && $this->ship->team !== $this->zoneOwner->team;
         }
-        
+
         $this->validate();
     }
 
@@ -81,18 +80,17 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
     {
         global $l_mines_nodeploy;
         global $l_mines_nopermit;
-        
+
         if ($this->quite) {
             return;
         }
-        
+
         if (!$this->allowDefenses) {
             throw new Exception($l_mines_nodeploy);
         }
-        
+
         if ($this->hasEmenyShipInSector) {
             throw new Exception($l_mines_nopermit);
         }
     }
-
 }

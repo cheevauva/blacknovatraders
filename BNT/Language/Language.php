@@ -6,8 +6,6 @@ namespace BNT\Language;
 
 class Language
 {
-
     public string $file;
     public string $name;
-
 }

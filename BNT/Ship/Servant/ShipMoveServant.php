@@ -14,7 +14,6 @@ use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
 
 class ShipMoveServant implements ServantInterface
 {
-
     public Ship $ship;
     public SectorDefenceCheckFightersServant $checkFighters;
     public int $sector;
@@ -66,5 +65,4 @@ class ShipMoveServant implements ServantInterface
 
         ShipSaveDAO::call($this->ship);
     }
-
 }

@@ -11,7 +11,6 @@ use BNT\Enum\TableEnum;
 
 abstract class SectorDefenceDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class SectorDefenceDAO implements ServantInterface
     {
         return new SectorDefenceMapper;
     }
-
 }

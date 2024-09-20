@@ -12,7 +12,6 @@ use BNT\Planet\View\PlanetView;
 
 class TraderouteView
 {
-
     private Traderoute $traderoute;
 
     public function __construct(Traderoute $traderoute)
@@ -48,7 +47,7 @@ class TraderouteView
     public function dst(): string
     {
         global $l_defense;
-        
+
         return match ($this->traderoute->dest_type) {
             TraderouteTypeEnum::Port => strval($this->traderoute->dest_id),
             TraderouteTypeEnum::Defense => sprintf('%s [%s]', $l_defense, $this->traderoute->dest_id),
@@ -62,5 +61,4 @@ class TraderouteView
             return new static($traderoute);
         }, $traderoutes);
     }
-
 }

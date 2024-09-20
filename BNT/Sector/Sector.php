@@ -10,7 +10,6 @@ use BNT\Enum\BalanceEnum;
 
 class Sector
 {
-
     public int $sector_id;
     public string $sector_name;
     public int $zone_id = 0;
@@ -106,5 +105,4 @@ class Sector
 
         $this->credits -= $cost;
     }
-
 }

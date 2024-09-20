@@ -6,7 +6,6 @@ namespace BNT\News;
 
 class News
 {
-
     public int $news_id;
     public string $headline;
     public string $newstext;
@@ -18,5 +17,4 @@ class News
     {
         $this->date = new \DateTime;
     }
-
 }

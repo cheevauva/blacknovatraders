@@ -9,7 +9,6 @@ use BNT\ServantInterface;
 
 class ShipMapper implements ServantInterface
 {
-
     public ?array $row = null;
     public ?Ship $ship = null;
 
@@ -140,5 +139,4 @@ class ShipMapper implements ServantInterface
             $this->row = $row;
         }
     }
-
 }

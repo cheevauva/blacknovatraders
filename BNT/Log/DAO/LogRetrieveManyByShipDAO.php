@@ -32,5 +32,4 @@ class LogRetrieveManyByShipDAO extends LogDAO
 
         return $self->logs;
     }
-
 }

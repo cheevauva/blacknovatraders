@@ -11,7 +11,6 @@ use BNT\Bounty\Mapper\BountyMapper;
 
 abstract class BountyDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class BountyDAO implements ServantInterface
     {
         return new BountyMapper;
     }
-
 }

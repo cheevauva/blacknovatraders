@@ -8,7 +8,6 @@ use BNT\Zone\Zone;
 
 class ZoneRetrieveByCriteriaDAO extends ZoneDAO
 {
-
     public ?bool $corp;
     public ?int $owner;
     //
@@ -29,7 +28,7 @@ class ZoneRetrieveByCriteriaDAO extends ZoneDAO
             $qb->andWhere('owner = :owner');
             $qb->setParameter('owner', $this->owner);
         }
-        
+
         $qb->setMaxResults(1);
 
         $mapper = $this->mapper();
@@ -38,5 +37,4 @@ class ZoneRetrieveByCriteriaDAO extends ZoneDAO
 
         $this->zone = $mapper->zone;
     }
-
 }

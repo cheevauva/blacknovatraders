@@ -8,7 +8,6 @@ use BNT\News\News;
 
 class NewsMapper implements \BNT\ServantInterface
 {
-
     public array $row;
     public ?News $news = null;
 
@@ -37,5 +36,4 @@ class NewsMapper implements \BNT\ServantInterface
             $this->row = $row;
         }
     }
-
 }

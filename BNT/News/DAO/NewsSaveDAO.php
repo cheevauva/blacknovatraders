@@ -8,7 +8,6 @@ use BNT\News\News;
 
 class NewsSaveDAO extends NewsDAO
 {
-
     public News $news;
 
     public function serve(): void
@@ -33,5 +32,4 @@ class NewsSaveDAO extends NewsDAO
         $self->news = $news;
         $self->serve();
     }
-
 }

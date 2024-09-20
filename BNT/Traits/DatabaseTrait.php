@@ -17,5 +17,4 @@ trait DatabaseTrait
 
         return $db->getConnection();
     }
-
 }

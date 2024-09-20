@@ -11,7 +11,6 @@ use BNT\DAO\TransactionRollbackDAO;
 
 class TransactionServant implements ServantInterface
 {
-
     public ServantInterface $servant;
 
     public function serve(): void
@@ -35,5 +34,4 @@ class TransactionServant implements ServantInterface
         $self->servant = $servant;
         $self->serve();
     }
-
 }

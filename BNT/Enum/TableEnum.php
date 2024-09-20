@@ -6,7 +6,6 @@ namespace BNT\Enum;
 
 enum TableEnum
 {
-
     case Ships;
     case Traderoutes;
     case Links;
@@ -35,5 +34,4 @@ enum TableEnum
             TableEnum::Logs => $dbtables['logs'],
         };
     }
-
 }

@@ -11,7 +11,6 @@ use BNT\Sector\Mapper\SectorMapper;
 
 abstract class SectorDAO implements ServantInterface
 {
-
     use DatabaseTrait;
 
     protected function table(): string
@@ -23,5 +22,4 @@ abstract class SectorDAO implements ServantInterface
     {
         return new SectorMapper;
     }
-
 }

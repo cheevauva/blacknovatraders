@@ -6,8 +6,6 @@ namespace BNT\Sector\Exception;
 
 class SectorNotEnoughCreditsForPurchaseException extends SectorException
 {
-
     public $current;
     public $needle;
-
 }

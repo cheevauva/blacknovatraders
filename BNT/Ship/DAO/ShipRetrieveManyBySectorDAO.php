@@ -8,7 +8,6 @@ use BNT\Ship\Ship;
 
 class ShipRetrieveManyBySectorDAO extends ShipDAO
 {
-
     public int $sector;
     public ?bool $onPlanet = null;
     public array $ships = [];
@@ -40,5 +39,4 @@ class ShipRetrieveManyBySectorDAO extends ShipDAO
 
         return $self->ships;
     }
-
 }

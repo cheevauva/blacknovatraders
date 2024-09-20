@@ -10,7 +10,6 @@ use BNT\Enum\BalanceEnum;
 
 class SectorPortSpecialOfferServant implements ServantInterface
 {
-
     public Ship $ship;
     public $dev_genesis_number = 0;
     public $dev_beacon_number = 0;
@@ -168,5 +167,4 @@ class SectorPortSpecialOfferServant implements ServantInterface
 
         return intval(round(abs(intval($value ?? 0))));
     }
-
 }

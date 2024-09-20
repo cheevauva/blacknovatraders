@@ -6,6 +6,7 @@ namespace BNT\Planet;
 
 class Planet
 {
+    use \BNT\Traits\AsTrait;
 
     public int $planet_id;
     public int $sector_id = 0;
@@ -29,10 +30,4 @@ class Planet
     public int $prod_fighters = 0;
     public int $prod_torp = 0;
     public bool $defeated = false;
-
-    public static function as(self $planet): static
-    {
-        return $planet;
-    }
-
 }

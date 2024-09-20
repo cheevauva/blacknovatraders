@@ -6,7 +6,6 @@ namespace BNT\Ship;
 
 enum ShipResourceEnum
 {
-
     case Ore;
     case Organics;
     case Goods;
@@ -21,5 +20,4 @@ enum ShipResourceEnum
             ShipResourceEnum::Goods => 'ship_goods',
         };
     }
-
 }

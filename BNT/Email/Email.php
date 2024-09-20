@@ -6,7 +6,6 @@ namespace BNT\Email;
 
 class Email
 {
-
     public string $email;
     public string $subject;
     public string $message;
@@ -15,12 +14,11 @@ class Email
     protected function getHeaders()
     {
         global $admin_mail;
-        
+
         return [
             'From' => $admin_mail,
             'Reply-To' => $admin_mail,
             'X-Mailer' => 'PHP/' . phpversion()
         ];
     }
-
 }

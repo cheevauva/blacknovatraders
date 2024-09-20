@@ -10,7 +10,6 @@ use BNT\Enum\TableEnum;
 
 class TraderouteRetrieveManyByShipAndSourceTypeDAO extends TraderouteDAO
 {
-
     public ?array $traderoutes = [];
     public TraderouteTypeEnum $sourceType;
     public Ship $ship;
@@ -67,7 +66,7 @@ class TraderouteRetrieveManyByShipAndSourceTypeDAO extends TraderouteDAO
         $self->ship = $ship;
         $self->sourceType = $type;
         $self->serve();
-        
+
         return $self->traderoutes;
     }
 }

@@ -6,7 +6,6 @@ namespace BNT\Enum;
 
 enum BalanceEnum
 {
-
     case ore_price;
     case ore_delta;
     case ore_rate;
@@ -125,5 +124,4 @@ enum BalanceEnum
             BalanceEnum::level_factor => $level_factor,
         };
     }
-
 }

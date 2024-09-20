@@ -8,7 +8,6 @@ use BNT\Log\Log;
 
 class LogCreateDAO extends LogDAO
 {
-
     public Log $log;
 
     public function serve(): void
@@ -30,5 +29,4 @@ class LogCreateDAO extends LogDAO
 
         return $self;
     }
-
 }

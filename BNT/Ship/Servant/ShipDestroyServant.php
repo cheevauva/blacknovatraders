@@ -13,7 +13,6 @@ use BNT\Log\Log;
 
 class ShipDestroyServant implements ServantInterface
 {
-
     public Ship $ship;
     public bool $doIt = true;
     public bool $shipDestroyed = false;
@@ -75,5 +74,4 @@ class ShipDestroyServant implements ServantInterface
         $self->ship = $ship;
         $self->serve();
     }
-
 }

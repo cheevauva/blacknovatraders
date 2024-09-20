@@ -8,7 +8,5 @@ use BNT\Ship\Ship;
 
 class ShipHasBeenDestroyedException extends ShipException
 {
-
     public Ship $ship;
-
 }
