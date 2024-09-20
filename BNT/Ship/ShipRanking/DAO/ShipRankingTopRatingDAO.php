@@ -9,12 +9,8 @@ use BNT\Enum\BalanceEnum;
 class ShipRankingTopRatingDAO extends ShipRankingTopDAO
 {
 
-    protected function cacheKey(): string
-    {
-        return 'ranking_top_rating';
-    }
-
-    protected function getShips(): array
+    #[\Override]
+    protected function ships(): array
     {
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
