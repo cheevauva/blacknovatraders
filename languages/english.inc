@@ -1223,7 +1223,7 @@ $l_mail_message			="Greetings,\n\nSomeone from the IP address {ip} requested tha
 $l_global_mmenu			="Click <A HREF=main.php>here</A> to return to the main menu.";
 $l_global_mlogin		="Click <A HREF=login.php>here</A> to return to the login screen.";
 $l_global_needlogin		="You need to log in, click <A HREF=login.php>here</A>.";
-$l_global_died			="Player is DEAD! <a href=log.php>Here</a>'s what happened<BR><BR>Better Luck Next Time!";
+$l_global_died			="Player is DEAD! <a href=log2.php>Here</a>'s what happened<BR><BR>Better Luck Next Time!";
 $l_global_warzone		="Zone is now a War Zone!";
 $l_global_nzone			="Zone is a neutral zone.";
 $l_global_team			="Zone now belongs to alliance";

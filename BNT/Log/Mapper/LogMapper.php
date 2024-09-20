@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace BNT\Log\Mapper;
 
 use BNT\ServantInterface;
+use BNT\Log\Enum\LogTypeEnum;
 use BNT\Log\Entity\Log;
 use BNT\Log\Entity\LogWithIP;
 use BNT\Log\Entity\LogWithPlayer;
 use BNT\Log\Entity\LogRaw;
 use BNT\Log\Entity\LogDefenceDestroyedFighters;
+use BNT\Log\Entity\LogBadLogin;
+use BNT\Log\Entity\LogLogin;
 
 class LogMapper implements ServantInterface
 {
@@ -27,11 +30,20 @@ class LogMapper implements ServantInterface
         }
     }
 
+    protected function getClassByType(LogTypeEnum $type): string
+    {
+        return match ($type) {
+            LogTypeEnum::BADLOGIN => LogBadLogin::class,
+            LogTypeEnum::LOGIN => LogLogin::class,
+            default => var_dump($type),
+        };
+    }
+
     protected function row2log(array $row): Log
     {
         $data = json_decode($row['data'] ?? '{}', true);
 
-        $log = new $data['entity_type'];
+        $log = new ($this->getClassByType(LogTypeEnum::from($row['type'])));
         $log->ship_id = intval($row['ship_id']);
         $log->time = !empty($row['time']) ? new \DateTime($row['time']) : null;
 

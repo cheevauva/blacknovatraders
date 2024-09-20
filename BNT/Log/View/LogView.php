@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Log\View;
 
-use BNT\Log\Log;
+use BNT\Log\Entity\Log;
 use BNT\Log\LogWithIP;
 use BNT\Log\LogWithPlayer;
 use BNT\Log\LogAttackLose;

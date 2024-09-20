@@ -6,6 +6,7 @@ namespace BNT\Log\Entity;
 
 use BNT\Traits\EventTrait;
 use BNT\Traits\AsTrait;
+use BNT\Log\Enum\LogTypeEnum;
 
 abstract class Log
 {

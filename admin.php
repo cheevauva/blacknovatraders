@@ -755,12 +755,12 @@ else
     }
     elseif($module == "logview")
     {
-      echo "<form action=log.php method=POST>" .
+      echo "<form action=log2.php method=POST>" .
            "<INPUT TYPE=HIDDEN NAME=swordfish VALUE=$swordfish>" .
            "<INPUT TYPE=HIDDEN NAME=player VALUE=0>" .
            "<INPUT TYPE=SUBMIT VALUE=\"View admin log\">" .
            "</form>" .
-           "<form action=log.php method=POST>" .
+           "<form action=log2.php method=POST>" .
            "<INPUT TYPE=HIDDEN NAME=swordfish VALUE=$swordfish>" .
            "<SELECT name=player>";
 
