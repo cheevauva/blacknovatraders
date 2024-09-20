@@ -6,7 +6,7 @@ namespace BNT\Message\Servant;
 
 use BNT\ServantInterface;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\Log;
 use BNT\Log\LogRaw;
 use BNT\Log\DAO\LogCreateDAO;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Planet\Mapper;
 
-use BNT\Planet\Planet;
+use BNT\Planet\Entity\Planet;
 use BNT\ServantInterface;
 
 class PlanetMapper implements ServantInterface

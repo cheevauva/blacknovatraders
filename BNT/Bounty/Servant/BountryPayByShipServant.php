@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BNT\Bounty\Servant;
 
 use BNT\ServantInterface;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\DAO\BountySumByShipDAO;
 use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;

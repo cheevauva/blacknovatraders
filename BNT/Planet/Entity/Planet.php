@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Planet;
+namespace BNT\Planet\Entity;
 
 class Planet
 {

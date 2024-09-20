@@ -9,8 +9,8 @@ use BNT\Ship\DAO\ShipRetrieveByEmailAndCharacterAndShipnameDAO;
 use BNT\Ship\DAO\ShipCreateDAO;
 use BNT\Enum\BalanceEnum;
 use BNT\Email\Email;
-use BNT\Ship\Ship;
-use BNT\Zone\Zone;
+use BNT\Ship\Entity\Ship;
+use BNT\Zone\Entity\Zone;
 use BNT\IBankAccount\IBankAccount;
 
 class ShipNewServant implements ServantInterface

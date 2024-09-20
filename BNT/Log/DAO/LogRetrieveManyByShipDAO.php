@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Log\DAO;
 
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 
 class LogRetrieveManyByShipDAO extends LogDAO
 {

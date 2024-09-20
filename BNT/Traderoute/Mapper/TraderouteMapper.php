@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace BNT\Traderoute\Mapper;
 
 use BNT\ServantInterface;
-use BNT\Traderoute\Traderoute;
-use BNT\Traderoute\TraderouteCircuitEnum;
-use BNT\Traderoute\TraderouteTypeEnum;
-use BNT\Traderoute\TraderouteMoveTypeEnum;
+use BNT\Traderoute\Entity\Traderoute;
+use BNT\Traderoute\Enum\TraderouteCircuitEnum;
+use BNT\Traderoute\Enum\TraderouteTypeEnum;
+use BNT\Traderoute\Enum\TraderouteMoveTypeEnum;
 
 class TraderouteMapper implements ServantInterface
 {

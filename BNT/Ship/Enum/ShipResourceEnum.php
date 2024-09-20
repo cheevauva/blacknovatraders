@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship;
+namespace BNT\Ship\Enum;
 
 enum ShipResourceEnum
 {

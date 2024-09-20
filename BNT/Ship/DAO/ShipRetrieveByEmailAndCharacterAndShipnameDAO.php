@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 
 class ShipRetrieveByEmailAndCharacterAndShipnameDAO extends ShipDAO
 {

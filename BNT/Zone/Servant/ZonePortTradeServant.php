@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Zone\Servant;
 
 use BNT\ServantInterface;
-use BNT\Zone\Zone;
+use BNT\Zone\Entity\Zone;
 use BNT\Zone\Exception\ZoneException;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 
 class ZonePortTradeServant implements ServantInterface

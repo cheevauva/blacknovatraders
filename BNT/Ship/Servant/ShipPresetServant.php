@@ -6,7 +6,7 @@ namespace BNT\Ship\Servant;
 
 use BNT\ServantInterface;
 use BNT\Enum\BalanceEnum;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 
 class ShipPresetServant implements ServantInterface

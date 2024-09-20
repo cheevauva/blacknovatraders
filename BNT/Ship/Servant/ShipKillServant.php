@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace BNT\Ship\Servant;
 
 use BNT\ServantInterface;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\Bounty;
 use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
 use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;
-use BNT\Planet\Planet;
+use BNT\Planet\Entity\Planet;
 use BNT\Planet\DAO\PlanetRetrieveManyByCriteria;
 use BNT\Planet\DAO\PlanetSaveDAO;
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\DAO\SectorDefenceRemoveByCriteriaDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Zone\DAO\ZoneRetrieveByCriteriaDAO;
 use BNT\Sector\DAO\SectorRetrieveByCriteriaDAO;
 use BNT\Sector\DAO\SectorSaveDAO;
-use BNT\News\News;
+use BNT\News\Entity\News;
 use BNT\News\DAO\NewsSaveDAO;
 
 class ShipKillServant implements ServantInterface

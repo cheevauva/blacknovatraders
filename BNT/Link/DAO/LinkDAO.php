@@ -8,6 +8,7 @@ use BNT\ServantInterface;
 use BNT\Traits\DatabaseTrait;
 use BNT\Link\Mapper\LinkMapper;
 use BNT\Enum\TableEnum;
+use BNT\Link\Entity\Link;
 
 abstract class LinkDAO implements ServantInterface
 {
@@ -21,5 +22,14 @@ abstract class LinkDAO implements ServantInterface
     protected function mapper(): LinkMapper
     {
         return new LinkMapper;
+    }
+
+    protected function asLink(array $row): Link
+    {
+        $mapper = $this->mapper();
+        $mapper->row = $row;
+        $mapper->serve();
+
+        return $mapper->link;
     }
 }

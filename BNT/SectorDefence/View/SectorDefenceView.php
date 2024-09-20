@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\View;
 
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\View\ShipView;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;

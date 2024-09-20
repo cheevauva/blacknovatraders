@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\DAO;
 
-use BNT\SectorDefence\SectorDefenceTypeEnum;
+use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 
 class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Link\Mapper;
 
-use BNT\Link\Link;
+use BNT\Link\Entity\Link;
 use BNT\ServantInterface;
 
 class LinkMapper implements ServantInterface

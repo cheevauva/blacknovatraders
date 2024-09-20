@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Sector\View;
 
-use BNT\Sector\Sector;
-use BNT\Sector\SectorPortTypeEnum;
+use BNT\Sector\Entity\Sector;
+use BNT\Sector\Enum\SectorPortTypeEnum;
 
 class SectorView
 {

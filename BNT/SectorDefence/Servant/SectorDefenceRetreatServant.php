@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Servant;
 
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 
 class SectorDefenceRetreatServant implements \BNT\ServantInterface

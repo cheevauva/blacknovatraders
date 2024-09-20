@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Link;
+namespace BNT\Link\Entity;
 
 class Link
 {

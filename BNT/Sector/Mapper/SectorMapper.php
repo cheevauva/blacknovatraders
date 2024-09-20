@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BNT\Sector\Mapper;
 
 use BNT\ServantInterface;
-use BNT\Sector\Sector;
-use BNT\Sector\SectorPortTypeEnum;
+use BNT\Sector\Entity\Sector;
+use BNT\Sector\Enum\SectorPortTypeEnum;
 
 class SectorMapper implements ServantInterface
 {

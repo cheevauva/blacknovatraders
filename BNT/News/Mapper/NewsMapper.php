@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\News\Mapper;
 
-use BNT\News\News;
+use BNT\News\Entity\News;
 
 class NewsMapper implements \BNT\ServantInterface
 {

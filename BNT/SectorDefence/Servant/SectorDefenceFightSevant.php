@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace BNT\SectorDefence\Servant;
 
 use BNT\ServantInterface;
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\Log;
 use BNT\Log\LogDefenceKaboom;
 use BNT\Log\LogDefenceDestroyedFighters;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Enum\BalanceEnum;
 use BNT\SectorDefence\Servant\SectorDefenceDestroyFightersServant;

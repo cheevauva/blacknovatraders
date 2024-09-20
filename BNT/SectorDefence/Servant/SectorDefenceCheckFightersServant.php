@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace BNT\SectorDefence\Servant;
 
 use BNT\ServantInterface;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
-use BNT\SectorDefence\SectorDefence;
-use BNT\SectorDefence\SectorDefenceTypeEnum;
+use BNT\SectorDefence\Entity\SectorDefence;
+use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 use BNT\Enum\BalanceEnum;
 
 class SectorDefenceCheckFightersServant implements ServantInterface

@@ -1,6 +1,6 @@
 <?php
 
-use BNT\Sector\SectorPortTypeEnum;
+use BNT\Sector\Enum\SectorPortTypeEnum;
 use BNT\Bounty\DAO\BountySumByShipDAO;
 use BNT\Sector\Servant\SectorPortResourcePreOfferServant;
 use BNT\Sector\Servant\SectorPortSpecialServant;

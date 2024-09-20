@@ -195,30 +195,30 @@ function isNotAuthorized(): bool
     return false;
 }
 
-function ship(): \BNT\Ship\Ship
+function ship(): \BNT\Ship\Entity\Ship
 {
     global $ship;
     
     return $ship;
 }
 
-function asSectorDefence($sectorDefence): BNT\SectorDefence\SectorDefence
+function asSectorDefence($sectorDefence): BNT\SectorDefence\Entity\SectorDefence
 {
     return $sectorDefence;
 }
 
-function asShip($ship): \BNT\Ship\Ship
+function asShip($ship): \BNT\Ship\Entity\Ship
 {
     return $ship;
 }
 
 
-function asPlanet($planet): \BNT\Planet\Planet
+function asPlanet($planet): \BNT\Planet\Entity\Planet
 {
     return $planet;
 }
 
-function asTraderoute($traderoute): \BNT\Traderoute\Traderoute
+function asTraderoute($traderoute): BNT\Traderoute\Entity\Traderoute
 {
     return $traderoute;
 }
@@ -268,7 +268,7 @@ function updatecookie()
 }
 
 
-function shipSave(\BNT\Ship\Ship $ship): void
+function shipSave(\BNT\Ship\Entity\Ship $ship): void
 {
     $save = new \BNT\Ship\DAO\ShipSaveDAO;
     $save->ship = $ship;
@@ -893,7 +893,7 @@ function calc_ownership($sector)
   }
 }
 
-function player_insignia_name(\BNT\Ship\Ship $playerinfo)
+function player_insignia_name(\BNT\Ship\Entity\Ship $playerinfo)
 {
     global $player_insignia;
     global $l_insignia;
@@ -935,7 +935,7 @@ function player_insignia_name(\BNT\Ship\Ship $playerinfo)
     return $player_insignia;
 }
 
-function t_port(BNT\Sector\SectorPortTypeEnum $ptype): string
+function t_port(BNT\Sector\Enum\SectorPortTypeEnum $ptype): string
 {
     global $l_ore;
     global $l_none;
@@ -945,12 +945,12 @@ function t_port(BNT\Sector\SectorPortTypeEnum $ptype): string
     global $l_special;
 
     return match ($ptype) {
-        BNT\Sector\SectorPortTypeEnum::Ore => $l_ore,
-        BNT\Sector\SectorPortTypeEnum::None => $l_none,
-        BNT\Sector\SectorPortTypeEnum::Energy => $l_energy,
-        BNT\Sector\SectorPortTypeEnum::Organics => $l_organics,
-        BNT\Sector\SectorPortTypeEnum::Goods => $l_goods,
-        BNT\Sector\SectorPortTypeEnum::Special => $l_special,
+        BNT\Sector\Enum\SectorPortTypeEnum::Ore => $l_ore,
+        BNT\Sector\Enum\SectorPortTypeEnum::None => $l_none,
+        BNT\Sector\Enum\SectorPortTypeEnum::Energy => $l_energy,
+        BNT\Sector\Enum\SectorPortTypeEnum::Organics => $l_organics,
+        BNT\Sector\Enum\SectorPortTypeEnum::Goods => $l_goods,
+        BNT\Sector\Enum\SectorPortTypeEnum::Special => $l_special,
     };
 }
 

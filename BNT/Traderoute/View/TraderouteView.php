@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BNT\Traderoute\View;
 
-use BNT\Traderoute\Traderoute;
-use BNT\Traderoute\TraderouteCircuitEnum;
-use BNT\Traderoute\TraderouteTypeEnum;
+use BNT\Traderoute\Entity\Traderoute;
+use BNT\Traderoute\Enum\TraderouteCircuitEnum;
+use BNT\Traderoute\Enum\TraderouteTypeEnum;
 use BNT\Planet\DAO\PlanetRetrieveByIdDAO;
 use BNT\Planet\View\PlanetView;
 

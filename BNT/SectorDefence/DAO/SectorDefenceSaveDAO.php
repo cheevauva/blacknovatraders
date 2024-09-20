@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\DAO;
 
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 
 class SectorDefenceSaveDAO extends SectorDefenceDAO
 {

@@ -8,7 +8,7 @@ use BNT\ServantInterface;
 use BNT\Traits\DatabaseTrait;
 use BNT\Ship\Mapper\ShipMapper;
 use BNT\Enum\TableEnum;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 
 abstract class ShipDAO implements ServantInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\SectorDefence;
+namespace BNT\SectorDefence\Entity;
 
 use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;

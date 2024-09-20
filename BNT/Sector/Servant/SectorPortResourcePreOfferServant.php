@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Sector\Servant;
 
 use BNT\ServantInterface;
-use BNT\Sector\Sector;
-use BNT\Sector\SectorPortTypeEnum;
-use BNT\Ship\Ship;
+use BNT\Sector\Entity\Sector;
+use BNT\Sector\Enum\SectorPortTypeEnum;
+use BNT\Ship\Entity\Ship;
 
 class SectorPortResourcePreOfferServant implements ServantInterface
 {

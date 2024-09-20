@@ -854,7 +854,7 @@ Table_Footer("Completed successfully.");
       $update = $db->Execute("INSERT INTO $dbtables[ibank_accounts] (ship_id,balance,loan) VALUES (1,0,0)");
     Table_Row("Inserting Admins ibank Information","Failed","Inserted");
 $password = $adminpass;
-    $ship = new \BNT\Ship\Ship;
+    $ship = new \BNT\Ship\Entity\Ship;
     $ship->ship_name = 'WebMaster';
     $ship->character_name = 'WebMaster';
     $ship->email = $admin_mail;

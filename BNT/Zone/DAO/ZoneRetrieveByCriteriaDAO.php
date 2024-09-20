@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Zone\DAO;
 
-use BNT\Zone\Zone;
+use BNT\Zone\Entity\Zone;
 
 class ZoneRetrieveByCriteriaDAO extends ZoneDAO
 {

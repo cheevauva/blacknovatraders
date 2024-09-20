@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship;
+namespace BNT\Ship\Entity;
 
 use DateTime;
 use BNT\Ship\Exception\ShipException;
+use BNT\Ship\Enum\ShipResourceEnum;
 
 class Ship
 {

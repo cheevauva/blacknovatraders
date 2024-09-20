@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Exception;
 
-use BNT\Sector\SectorPortTypeEnum;
+use BNT\Sector\Enum\SectorPortTypeEnum;
 
 class SectorException extends \Exception
 {

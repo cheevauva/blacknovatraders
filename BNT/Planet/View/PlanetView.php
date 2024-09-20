@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BNT\Planet\View;
 
-use BNT\Planet\Planet;
+use BNT\Planet\Entity\Planet;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 
 class PlanetView
 {

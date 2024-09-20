@@ -5,7 +5,7 @@ use BNT\Sector\Servant\SectorPortSpecialPurchaseServant;
 use BNT\Sector\Servant\SectorPortResourceOfferServant;
 use BNT\Sector\Servant\SectorPortResourcePurchaseServant;
 use BNT\Zone\Servant\ZonePortTradeServant;
-use BNT\Sector\SectorPortTypeEnum;
+use BNT\Sector\Enum\SectorPortTypeEnum;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\Zone\DAO\ZoneRetrieveByIdDAO;
 

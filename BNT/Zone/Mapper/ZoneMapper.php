@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace BNT\Zone\Mapper;
 
 use BNT\ServantInterface;
-use BNT\Zone\Zone;
+use BNT\Zone\Entity\Zone;
+use BNT\Zone\Enum\ZoneAllowEnum;
 
 class ZoneMapper implements ServantInterface
 {
@@ -20,11 +21,12 @@ class ZoneMapper implements ServantInterface
             $zone->zone_name = $this->row['zone_name'];
             $zone->corp_zone = toBool($this->row['corp_zone']);
             $zone->owner = intval($this->row['owner']);
-            $zone->allow_trade = $this->row['allow_trade'] === 'L' ? null : toBool($this->row['allow_trade']);
-            $zone->allow_defenses = $this->row['allow_defenses'] === 'L' ? null : toBool($this->row['allow_defenses']);
-            $zone->allow_planet = $this->row['allow_planet'] === 'L' ? null : toBool($this->row['allow_planet']);
-            $zone->allow_warpedit = $this->row['allow_warpedit'] === 'L' ? null : toBool($this->row['allow_warpedit']);
-            $zone->allow_beacon = $this->row['allow_beacon'] === 'L' ? null : toBool($this->row['allow_beacon']);
+            $zone->allow_trade = ZoneAllowEnum::from($this->row['allow_trade']);
+            $zone->allow_defenses = ZoneAllowEnum::from($this->row['allow_defenses']);
+            $zone->allow_planet = ZoneAllowEnum::from($this->row['allow_planet']);
+            $zone->allow_planetattack = ZoneAllowEnum::from($this->row['allow_planetattack']);
+            $zone->allow_warpedit = ZoneAllowEnum::from($this->row['allow_warpedit']);
+            $zone->allow_beacon = ZoneAllowEnum::from($this->row['allow_beacon']);
         }
 
         if (!empty($this->zone) && empty($this->row)) {

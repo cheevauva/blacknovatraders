@@ -7,7 +7,7 @@ namespace BNT\Ship\Servant;
 use BNT\ServantInterface;
 use BNT\Ship\DAO\ShipRetrieveByEmailDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\Exception\ShipException;
 use BNT\Log\LogLogin;
 use BNT\Log\LogBadLogin;

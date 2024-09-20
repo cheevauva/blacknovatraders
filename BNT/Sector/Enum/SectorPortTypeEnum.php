@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BNT\Sector;
+namespace BNT\Sector\Enum;
 
 use BNT\Enum\BalanceEnum;
-use BNT\Ship\ShipResourceEnum;
+use BNT\Ship\Enum\ShipResourceEnum;
 
 enum SectorPortTypeEnum: string
 {

@@ -8,6 +8,7 @@ use BNT\ServantInterface;
 use BNT\Traits\DatabaseTrait;
 use BNT\Enum\TableEnum;
 use BNT\Zone\Mapper\ZoneMapper;
+use BNT\Zone\Entity\Zone;
 
 abstract class ZoneDAO implements ServantInterface
 {
@@ -21,5 +22,14 @@ abstract class ZoneDAO implements ServantInterface
     protected function mapper(): ZoneMapper
     {
         return new ZoneMapper;
+    }
+
+    protected function asZone(array $row): Zone
+    {
+        $mapper = $this->mapper();
+        $mapper->row = $row;
+        $mapper->serve();
+
+        return $mapper->zone;
     }
 }

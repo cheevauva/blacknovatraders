@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Servant;
 
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\DAO\SectorDefenceSaveDAO;
 use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;

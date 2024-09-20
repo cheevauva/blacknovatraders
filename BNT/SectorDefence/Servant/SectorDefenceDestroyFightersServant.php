@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BNT\SectorDefence\Servant;
 
 use BNT\ServantInterface;
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRemoveByCriteriaDAO;
 use BNT\SectorDefence\DAO\SectorDefenceSaveDAO;

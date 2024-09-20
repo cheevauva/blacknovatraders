@@ -2,7 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BNT\Traderoute;
+namespace BNT\Traderoute\Entity;
+
+use BNT\Traderoute\Enum\TraderouteTypeEnum;
+use BNT\Traderoute\Enum\TraderouteCircuitEnum;
+use BNT\Traderoute\Enum\TraderouteMoveTypeEnum;
 
 class Traderoute
 {

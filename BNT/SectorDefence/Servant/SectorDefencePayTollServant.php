@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Servant;
 
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Enum\BalanceEnum;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\SectorDefenceTypeEnum;
-use BNT\SectorDefence\SectorDefence;
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\LogTollPaid;
 use BNT\Log\LogTollRecieve;
 use BNT\Log\Log;

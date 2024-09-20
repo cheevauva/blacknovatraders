@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BNT\Sector;
+namespace BNT\Sector\Entity;
 
 use BNT\Sector\Exception\SectorException;
-use BNT\Sector\SectorPortTypeEnum;
+use BNT\Sector\Enum\SectorPortTypeEnum;
 use BNT\Enum\BalanceEnum;
 
 class Sector

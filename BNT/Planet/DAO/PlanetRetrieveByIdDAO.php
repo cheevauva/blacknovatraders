@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Planet\DAO;
 
-use BNT\Planet\Planet;
+use BNT\Planet\Entity\Planet;
 
 class PlanetRetrieveByIdDAO extends PlanetDAO
 {

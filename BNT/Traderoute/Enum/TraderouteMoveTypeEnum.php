@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Traderoute;
+namespace BNT\Traderoute\Enum;
 
 enum TraderouteMoveTypeEnum: string
 {

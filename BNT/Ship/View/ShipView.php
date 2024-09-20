@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\View;
 
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 
 class ShipView
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Mapper;
 
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\ServantInterface;
 
 class ShipMapper implements ServantInterface

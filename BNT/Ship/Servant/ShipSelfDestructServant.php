@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BNT\Ship\Servant;
 
 use BNT\ServantInterface;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Log\LogHarakiri;
 use BNT\Bounty\Servant\BountyCancelServant;
 

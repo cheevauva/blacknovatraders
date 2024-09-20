@@ -7,7 +7,7 @@ namespace BNT\Traits;
 trait AsTrait
 {
 
-    public function as(self $self): static
+    public static function as(self $self): static
     {
         return $self;
     }

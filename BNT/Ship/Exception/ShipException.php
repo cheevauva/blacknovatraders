@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Exception;
 
-use BNT\Ship\Ship;
-use BNT\Ship\ShipResourceEnum;
+use BNT\Ship\Entity\Ship;
+use BNT\Ship\Enum\ShipResourceEnum;
 
 class ShipException extends \Exception
 {

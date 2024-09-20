@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\News\DAO;
 
-use BNT\News\News;
+use BNT\News\Entity\News;
 
 class NewsSaveDAO extends NewsDAO
 {

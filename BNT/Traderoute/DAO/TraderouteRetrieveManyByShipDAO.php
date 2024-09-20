@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Traderoute\DAO;
 
-use BNT\Traderoute\TraderouteTypeEnum;
-use BNT\Ship\Ship;
+use BNT\Traderoute\Enum\TraderouteTypeEnum;
+use BNT\Ship\Entity\Ship;
 
 class TraderouteRetrieveManyByShipDAO extends TraderouteDAO
 {

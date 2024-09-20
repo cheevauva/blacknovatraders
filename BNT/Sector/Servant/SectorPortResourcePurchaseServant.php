@@ -6,11 +6,11 @@ namespace BNT\Sector\Servant;
 
 use BNT\ServantInterface;
 use BNT\Sector\DAO\SectorSaveDAO;
-use BNT\Sector\SectorPortTypeEnum;
+use BNT\Sector\Enum\SectorPortTypeEnum;
 use BNT\Sector\Servant\SectorPortResourceOfferServant;
 use BNT\Sector\Exception\SectorException;
-use BNT\Sector\Sector;
-use BNT\Ship\Ship;
+use BNT\Sector\Entity\Sector;
+use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 
 class SectorPortResourcePurchaseServant implements ServantInterface

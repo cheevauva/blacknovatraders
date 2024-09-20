@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Sector\DAO;
 
-use BNT\Sector\Sector;
+use BNT\Sector\Entity\Sector;
 
 class SectorRetrieveByIdDAO extends SectorDAO
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BNT\Sector\Servant;
 
 use BNT\ServantInterface;
-use BNT\Ship\Ship;
+use BNT\Ship\Entity\Ship;
 use BNT\Enum\BalanceEnum;
 
 class SectorPortSpecialOfferServant implements ServantInterface

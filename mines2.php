@@ -38,7 +38,7 @@ try {
             $deploy->ship = $ship;
             $deploy->numfighters = intval($_POST['numfighters'] ?? 0);
             $deploy->nummines = intval($_POST['nummines'] ?? 0);
-            $deploy->mode = SectorDefenceFmSettingEnum::from($_POST['mode']);
+            $deploy->mode = SectorDefenceFmSettingEnum::from(strval($_POST['mode'] ?? ''));
             $deploy->doIt = true;
 
             TransactionServant::call($deploy);
