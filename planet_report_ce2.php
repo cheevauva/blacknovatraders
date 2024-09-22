@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use BNT\Planet\DAO\PlanetRetrieveManyByCriteria;
+use BNT\Planet\Entity\Planet;
+
 require_once './config.php';
 
 connectdb();
@@ -12,7 +15,5 @@ if (isNotAuthorized()) {
 
 $ship = ship();
 
-echo twig()->render('help/help_en.twig', [
-    'allow_navcomp' => $allow_navcomp,
-    'allow_fullscan' => $allow_fullscan,
-]);
+echo '<pre>';
+print_r($_POST);

@@ -1,0 +1,234 @@
+{% macro planet_report_menu(ship) %}
+    <B><A HREF=?PRepType=1 NAME=Planet Status>Planet Status</A></B><BR>
+    Displays the number of each Commodity on the planet (Ore, Organics, Goods, Energy, Colonists, Credits, Fighters, and Torpedoes)<BR>
+    <BR>
+    <B><A HREF=?PRepType=2 NAME=Planet Status>Change Production</A></B> &nbsp;&nbsp; <B>Base Required</B> on Planet<BR>
+    This Report allows you to change the rate of production of commondits on planets that have a base<BR>
+    -- You must travel to the planet to build a base set the planet to coporate or change the name (celebrations and such)<BR>
+    {% if ship.team is not empty %}
+        <BR>
+        <B><A HREF=team_planets2.php>{{ tr.l_pr_teamlink }}</A></B><BR> 
+        Commondity Report (like Planet Status) for planets marked Corporate by you and/or your fellow alliance member<BR>
+        <BR>
+    {% endif %}
+
+{% endmacro %}
+
+{% macro standard_report(ship, planets, base, total, PRepType) %}
+    Planetary report descriptions and <B><A HREF=?PRepType=0>menu</A></B><BR>
+    <BR/>
+    <B><A HREF=?PRepType=2>Change Production</A></B> &nbsp;&nbsp; <B>Base Required</B> on Planet<BR/>
+
+    {% if ship.team is not empty %}
+        <BR>
+        <B><A HREF=team_planets2.php>{{ tr.l_pr_teamlink }}</A></B><BR> 
+        <BR>
+    {% endif %}
+
+    <BR>
+    {% if planets is empty %}
+        {{ tr.l_pr_noplanet }}
+    {% else %}
+        <FORM ACTION=planet_report_ce2.php METHOD=POST>
+            {{ tr.l_pr_clicktosort }}<BR><BR>
+            <B>WARNING:</B> "Build" and "Take Credits" will cause your ship to move. <BR><BR>
+            <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=2>
+                <TR VALIGN=BOTTOM>
+                    <TD><B><A HREF=?PRepType={{ PRepType }}&sort=sector_id>{{ tr.l_sector }}</A></B></TD>
+                    <TD><B><A HREF=?PRepType={{ PRepType }}&sort=name>{{ tr.l_name }}</A></B></TD>
+                    <TD><B><A HREF=?PRepType={{ PRepType }}&sort=ore>{{ tr.l_ore }}</A></B></TD>
+                    <TD><B><A HREF=?PRepType={{ PRepType }}&sort=organics>{{ tr.l_organics }}</A></B></TD>
+                    <TD><B><A HREF=?PRepType={{ PRepType }}&sort=goods>{{ tr.l_goods }}</A></B></TD>
+                    <TD><B><A HREF=?PRepType={{ PRepType }}&sort=energy>{{ tr.l_energy }}</A></B></TD>
+                    <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=colonists>{{ tr.l_colonists }}</A></B></TD>
+                    <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=credits>{{ tr.l_credits }}</A></B></TD>
+                    <TD ALIGN=CENTER><B>Take<BR>Credits</B></TD>
+                    <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=fighters>{{ tr.l_fighters }}</A></B></TD>
+                    <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=torp>{{ tr.l_torps }}</A></B></TD>
+                    <TD ALIGN=RIGHT><B>{{ tr.l_base }}?</B></TD>
+
+                    {% if ship.team is not empty %}
+                        <TD ALIGN=RIGHT><B>Corp?</B></TD>
+
+                    {% endif %}
+                    <TD ALIGN=RIGHT><B>{{ tr.l_selling }}?</B></TD>
+                </tr>
+                {% for planet in planets %}
+                    <TR BGCOLOR="$color">
+                        <TD><A HREF=rsmove.php?engage=1&destination={{ planet.sector_id }}>{{ planet.sector_id }}</A></TD>
+                        <TD>{% if planet.name is empty %}{{ tr.l_unnamed }}{% else %}{{ planet.name }}{% endif %}</TD>
+                        <TD>{{ planet.ore }}</TD>
+                        <TD>{{ planet.organics }}</TD>
+                        <TD>{{ planet.goods }}</TD>
+                        <TD>{{ planet.energy }}</TD>
+                        <TD ALIGN=RIGHT>{{ planet.colonists }}</TD>
+                        <TD ALIGN=RIGHT>{{ planet.credits }}</TD>
+                        <TD ALIGN=CENTER><INPUT TYPE=CHECKBOX NAME=TPCreds[] VALUE="{{ planet.id }}"/></TD>
+                        <TD ALIGN=RIGHT>{{ planet.fighters }}</TD>
+                        <TD ALIGN=RIGHT>{{ planet.torps }}</TD>
+                        <TD ALIGN=CENTER>{{ _self.base_build_check(planet, base) }}</TD>
+
+                        {% if ship.team is not empty %}
+                            <TD ALIGN=CENTER>
+                                {% if planet.corp > 0 %}{{ tr.l_yes }}{% else %}{{ tr.l_no }}{% endif %}
+                            </TD>
+                        {% endif %}
+
+                        <TD ALIGN=CENTER>
+                            {% if planet.sells is not empty %}{{ tr.l_yes }}{% else %}{{ tr.l_no }}{% endif %}
+                        </TD>
+                    </TR>
+
+                {% endfor %}
+
+                <TR>
+                    <TD COLSPAN=2 ALIGN=CENTER>{{ tr.l_pr_totals }}</TD>
+                    <TD>{{ total.ore }}</TD>
+                    <TD>{{ total.organics }}</TD>
+                    <TD>{{ total.goods }}</TD>
+                    <TD>{{ total.energy }}</TD>
+                    <TD ALIGN=RIGHT>{{ total.colonists }}</TD>
+                    <TD ALIGN=RIGHT>{{ total.credits }}</TD>
+                    <TD></TD>
+                    <TD ALIGN=RIGHT>{{ total.fighters }}</TD>
+                    <TD ALIGN=RIGHT>{{ total.torp }}</TD>
+                    <TD ALIGN=CENTER>{{ total.base }}</TD>
+
+                    {% if ship.team is not empty %}
+                        <TD ALIGN=CENTER>{{ total.corp }}</TD>
+
+                    {% endif %}
+                    <TD ALIGN=CENTER>{{ total.selling }}</TD>
+                </TR>
+            </TABLE>
+
+            <BR>
+            <INPUT TYPE=SUBMIT VALUE="Collect Credits">  
+            <INPUT TYPE=RESET VALUE=RESET>
+        </FORM>
+
+    {% endif %}
+{% endmacro %}
+
+{% macro planet_production_change(ship, planets, base, total, PRepType) %}
+    Planetary report <B><A HREF=?PRepType=0>menu</A></B><BR>
+    <BR>
+    <B><A HREF=?PRepType=1>Planet Status</A></B><BR>
+
+    {% if ship.team is not empty %}
+        <BR>
+        <B><A HREF=team_planets2.php>{{ tr.l_pr_teamlink }}</A></B><BR> 
+        <BR>
+
+    {% endif %}
+    <FORM ACTION=planet_report_ce2.php METHOD=POST>
+        <TABLE WIDTH="100%" BORDER=0 CELLSPACING=0 CELLPADDING=2>
+            <TR VALIGN=BOTTOM>
+                <TD><B><A HREF=?PRepType={{ PRepType }}&sort=sector_id>{{ tr.l_sector }}</A></B></TD>
+                <TD><B><A HREF=?PRepType={{ PRepType }}&sort=name>{{ tr.l_name }}</A></B></TD>
+                <TD><B><A HREF=?PRepType={{ PRepType }}&sort=ore>{{ tr.l_ore }}</A></B></TD>
+                <TD><B><A HREF=?PRepType={{ PRepType }}&sort=organics>{{ tr.l_organics }}</A></B></TD>
+                <TD><B><A HREF=?PRepType={{ PRepType }}&sort=goods>{{ tr.l_goods }}</A></B></TD>
+                <TD><B><A HREF=?PRepType={{ PRepType }}&sort=energy>{{ tr.l_energy }}</A></B></TD>
+                <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=colonists>{{ tr.l_colonists }}</A></B></TD>
+                <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=credits>{{ tr.l_credits }}</A></B></TD>
+                <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=fighters>{{ tr.l_fighters }}</A></B></TD>
+                <TD ALIGN=CENTER><B><A HREF=?PRepType={{ PRepType }}&sort=torp>{{ tr.l_torps }}</A></B></TD>
+
+                {% if ship.team is not empty %}
+                    <TD ALIGN=RIGHT><B>Corp?</B></TD>
+
+                {% endif %}
+                <TD ALIGN=RIGHT><B>{{ tr.l_selling }}?</B></TD>
+            </tr>
+            {% for planet in planets %}
+                <TR>
+                    <TD><A HREF="rsmove2.php?engage=1&destination={{ planet.sector_id }}">{{ planet.sector_id }}</A></TD>
+                    <TD>{% if planet.name is empty %}{{ tr.l_unnamed }}{% else %}{{ planet.name }}{% endif %}</TD>
+                    <TD ALIGN=CENTER><input size=6 type=text name="prod_ore[{{ planet.planet_id }}]" value="{{ planet.prod_ore }}"></TD>
+                    <TD ALIGN=CENTER><input size=6 type=text name="prod_organics[{{ planet.planet_id }}]" value="{{ planet.prod_organics }}"></TD>
+                    <TD ALIGN=CENTER><input size=6 type=text name="prod_goods[{{ planet.planet_id }}]" value="{{ planet.prod_goods }}"></TD>
+                    <TD ALIGN=CENTER><input size=6 type=text name="prod_energy[{{ planet.planet_id }}]" value="{{ planet.prod_energy }}"></TD>
+                    <TD ALIGN=RIGHT>{{ planet.colonists }}</TD>
+                    <TD ALIGN=RIGHT>{{ planet.credits }}</TD>
+                    <TD ALIGN=CENTER><input size=6 type=text name="prod_fighters[{{ planet.planet_id }}]" value="{{ planet.prod_fighters }}"></TD>
+                    <TD ALIGN=CENTER><input size=6 type=text name="prod_torp[{{ planet.planet_id }}]" value="{{ planet.prod_torp }}"></TD>
+
+                    {% if ship.team is not empty %}
+                        <TD ALIGN=CENTER>{{  _self.corp_planet_checkboxes(planet) }}</TD>
+
+                    {% endif %}
+
+                    <TD ALIGN=CENTER>{{  _self.selling_checkboxes(planet) }}</TD>
+                </TR>
+            {% endfor %}
+
+            <TR>
+                <TD COLSPAN=2 ALIGN=CENTER>{{ tr.l_pr_totals }}</TD>
+                <TD></TD>
+                <TD></TD>
+                <TD></TD>
+                <TD></TD>
+                <TD ALIGN=RIGHT>{{ total.colonists }}</TD>
+                <TD ALIGN=RIGHT>{{ total.credits }}</TD>
+                <TD></TD>
+                <TD ALIGN=RIGHT></TD>
+                <TD ALIGN=RIGHT></TD>
+
+                {% if ship.team is not empty %}
+                    <TD ALIGN=CENTER>{{ total_corp }}</TD>
+
+                {% endif %}
+                <TD ALIGN=CENTER>{{ total_selling }}</TD>
+            </TR>
+        </table>
+        <BR>
+        <INPUT TYPE=HIDDEN NAME=ship_id VALUE="{{ ship.ship_id }}">
+        <INPUT TYPE=HIDDEN NAME=team_id   VALUE={{ ship.team }}>
+        <INPUT TYPE=SUBMIT VALUE=SUBMIT>  <INPUT TYPE=RESET VALUE=RESET>
+    </FORM>
+{% endmacro %}
+
+{% macro base_build_check(planet, base) %}
+    {% if planet.base is not empty %}
+        {{ tr.l_yes }}
+    {% elseif planet.ore >= base.ore and planet.organics >= base.organics and planet.goods >= base.goods and planet.credits >= base.credits %}
+        <A HREF=planet_report_ce.php?buildp={{ planet.planet_id }}&builds={{ planet.sector_id }}>Build</A>
+
+    {% else %}
+        {{ tr.l_no }}
+    {% endif %}
+{% endmacro %}
+
+{% macro corp_planet_checkboxes(planet) %}
+    {% if planet.corp is empty %}
+        <INPUT TYPE=CHECKBOX NAME=corp[] VALUE="{{ planet.planet_id }}">
+    {% else %}
+        <INPUT TYPE=CHECKBOX NAME=corp[] VALUE="{{ planet.planet_id }}" CHECKED>
+
+    {% endif %}
+{% endmacro %}
+
+{% macro selling_checkboxes(planet) %}
+    {% if planet.sells is empty %}
+        <INPUT TYPE=CHECKBOX NAME=sells[] VALUE="{{ planet.planet_id }}">
+    {% else %}
+        <INPUT TYPE=CHECKBOX NAME=sells[] VALUE="{{ planet.planet_id }}" CHECKED>
+
+    {% endif %}
+{% endmacro %}
+
+{% extends "layout.twig" %}
+{% block title %}{{tr.l_pr_title }}{% endblock %}
+
+{% block content %}
+    {% if PRepType == 0 or PRepType > 2 %}
+        {{ _self.planet_report_menu(ship) }}
+    {% endif %}
+    {% if PRepType == 1 %}
+        {{ _self.standard_report(ship, planets, base, total, PRepType) }}
+    {% endif %}
+    {% if PRepType == 2 %}
+        {{ _self.planet_production_change(ship, planets, base, total, PRepType) }}
+    {% endif %}
+{% endblock %}
