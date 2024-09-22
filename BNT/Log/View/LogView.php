@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Log\View;
 
 use BNT\Log\Entity\Log;
-use BNT\Log\LogWithIP;
-use BNT\Log\LogWithPlayer;
-use BNT\Log\LogAttackLose;
+use BNT\Log\Entity\LogWithIP;
+use BNT\Log\Entity\LogWithPlayer;
+use BNT\Log\Entity\LogAttackLose;
 
 class LogView
 {

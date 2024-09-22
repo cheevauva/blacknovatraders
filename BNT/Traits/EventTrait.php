@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Traits;
 
-use BNT\Log\Log;
+use BNT\Log\Entity\Log;
 use BNT\Log\DAO\LogCreateDAO;
 
 trait EventTrait

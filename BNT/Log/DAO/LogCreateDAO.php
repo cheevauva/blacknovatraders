@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Log\DAO;
 
-use BNT\Log\Log;
+use BNT\Log\Entity\Log;
 
 class LogCreateDAO extends LogDAO
 {

@@ -1,6 +1,6 @@
 <?php
 
-use BNT\Log\LogLogout;
+use BNT\Log\Entity\LogLogout;
 
 require_once './config.php';
 

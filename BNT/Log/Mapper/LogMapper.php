@@ -13,6 +13,7 @@ use BNT\Log\Entity\LogRaw;
 use BNT\Log\Entity\LogDefenceDestroyedFighters;
 use BNT\Log\Entity\LogBadLogin;
 use BNT\Log\Entity\LogLogin;
+use BNT\Log\Entity\LogLogout;
 
 class LogMapper implements ServantInterface
 {
@@ -35,6 +36,7 @@ class LogMapper implements ServantInterface
         return match ($type) {
             LogTypeEnum::BADLOGIN => LogBadLogin::class,
             LogTypeEnum::LOGIN => LogLogin::class,
+            LogTypeEnum::LOGOUT => LogLogout::class,
             default => var_dump($type),
         };
     }
