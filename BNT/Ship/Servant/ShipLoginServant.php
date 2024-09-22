@@ -9,8 +9,8 @@ use BNT\Ship\DAO\ShipRetrieveByEmailDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\Exception\ShipException;
-use BNT\Log\LogLogin;
-use BNT\Log\LogBadLogin;
+use BNT\Log\Entity\LogLogin;
+use BNT\Log\Entity\LogBadLogin;
 
 class ShipLoginServant implements ServantInterface
 {

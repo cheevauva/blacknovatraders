@@ -1,21 +1,86 @@
 {% extends "layout.twig" %}
 {% block title %}{{ tr.l_log_titlet }}{% endblock %}
 {% block content %}
-
-    {% for log in logs %}
-        <table>
-            <tr> 
-                <td>{{ log.title()|raw }}</td> 
-                <td>{{ log.time() }}</td> 
-            </tr>
-            <tr>
-                <td colspan=2> 
-                    {{ log.text()|raw }}
-                </td>
-            </tr> 
-        </table> 
-        <hr>
-    {% endfor %}
-
+    <div BACKGROUND="images/bgoutspace1.gif" bgcolor=#000000 text="#c0c0c0" link="#040658" vlink="#040658" alink="#040658">
+        <center>
+            <table width=80% border=0 cellspacing=0 cellpadding=0>
+                <tr>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td colspan="3" height=20 style="background-image: url(images/top_panel.gif); background-repeat:no-repeat">
+                        <font size=2 color=#040658><b>&nbsp;&nbsp;&nbsp;{{ tr.l_log_log|replace({"[player]": ship.character_name}) }}</b></font>
+                    </td>
+                </tr>
+                {% for logPack in logPacks %}
+                <tr>
+                    <td valign=bottom></td>
+                        <td colspan=2 style="border-width:1px 1px 1px 1px; border-color:#C6D6E7; border-style:solid;" bgcolor=#63639C>
+                            <div id="divScroller1">
+                                <div id="dynPage0" class="dynPage">
+                                    <center>
+                                        <br>
+                                        <font size=2 color=#DEDEEF><b>{{ tr.l_log_start }} {{ tr.l_log_months[logPack.date|date('m') -1]}} {{ logPack.date|date('d') }}, {{ logPack.date|date('Y') }}<b></font>
+                                        <p></p>
+                                        <hr width=80% size=1 NOSHADE style="color: #040658">
+                                    </center>
+                                    {% for log in logPack.logs %}
+                                        <table border=0 cellspacing=5 width=100%>
+                                            <tr>
+                                                <td><font size=2 color=#040658><b>{{ log.title()|raw }}</b></font></td>
+                                                <td align=right><font size=2 color=#040658><b>{{ log.time() }}</b></font></td>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <font size=2 color=#DEDEEF>
+                                                    {{ log.text()|raw }}
+                                                    </font>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <center>
+                                            <hr width=80% size=1 NOSHADE style="color: #040658">
+                                        </center>
+                                    {% endfor %}
+                                    <center>
+                                        <br>
+                                        <font size=2 color=#DEDEEF><b>{{ tr.l_log_end }} {{ tr.l_log_months[logPack.date|date('m') -1]}} {{ logPack.date|date('d') }}, {{ logPack.date|date('Y') }}<b></font>
+                                        <p></p>
+                                    </center>
+                                </div>
+                            </div> 
+                        </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td align=right colspan="3" style="background-image: url(images/bottom_panel.gif); background-repeat:no-repeat">
+                        &nbsp;&nbsp;&nbsp;
+                        <a href="log2.php?startdate={{ backlink|date('Y-m-d') }}&mode=compat" style="color: white;text-decoration: none;"><</a>&nbsp;&nbsp;&nbsp;
+                        <a href="log2.php?startdate={{ nextlink|date('Y-m-d') }}&mode=compat" style="color: white;text-decoration: none;">></a>&nbsp;&nbsp;&nbsp;
+                        <a href="log2.php?startdate={{ backlinkFull|date('Y-m-d') }}&mode=full" style="color: white;text-decoration: none;"><<<</a>&nbsp;&nbsp;&nbsp;
+                        <a href="log2.php?startdate={{ nextlinkFull|date('Y-m-d') }}&mode=full" style="color: white;text-decoration: none;">>>></a>&nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </div>
+    <style>
+            #divScroller1 {
+                position:relative;
+                overflow:hidden;
+                overflow-y:scroll;
+                z-index:9;
+                left:0px;
+                top:0px;
+                width:100%;
+                height:{{ yres }} px;
+                visbility:visible;
+                border-width:1px 1px 1px 1px;
+                border-color:#C6D6E7;
+                border-style:solid;
+                scrollbar-track-color: #DEDEEF;
+                scrollbar-face-color:#040658;
+                scrollbar-arrow-color:#DEDEEF
+            }
+    </style>
 {% endblock %}
 
