@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-use BNT\Planet\DAO\PlanetRetrieveManyByCriteria;
-use BNT\Planet\Entity\Planet;
+use BNT\Planet\Servant\PlanetBuildBaseServant;
 
 require_once './config.php';
 
@@ -16,4 +15,12 @@ if (isNotAuthorized()) {
 $ship = ship();
 
 echo '<pre>';
+if (isset($_GET['buildp']) AND isset($_GET['builds'])) {
+    $buildBase = new PlanetBuildBaseServant;
+    $buildBase->ship = $ship;
+    $buildBase->planet_id = $buildp;
+    $buildBase->sector_id = $builds;
+    $buildBase->serve();
+}
+
 print_r($_POST);

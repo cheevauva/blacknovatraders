@@ -193,7 +193,7 @@
     {% if planet.base is not empty %}
         {{ tr.l_yes }}
     {% elseif planet.ore >= base.ore and planet.organics >= base.organics and planet.goods >= base.goods and planet.credits >= base.credits %}
-        <A HREF=planet_report_ce.php?buildp={{ planet.planet_id }}&builds={{ planet.sector_id }}>Build</A>
+        <A HREF=planet_report_ce2.php?buildp={{ planet.planet_id }}&builds={{ planet.sector_id }}>Build</A>
 
     {% else %}
         {{ tr.l_no }}
