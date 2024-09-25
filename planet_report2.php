@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use BNT\Planet\DAO\PlanetRetrieveManyByCriteria;
+use BNT\Planet\DAO\PlanetRetrieveManyByCriteriaDAO;
 use BNT\Planet\Entity\Planet;
 
 require_once './config.php';
@@ -33,7 +33,7 @@ $context = [
 
 switch ($PRepType) {
     case 1:
-        $retrievePlanets = new PlanetRetrieveManyByCriteria;
+        $retrievePlanets = new PlanetRetrieveManyByCriteriaDAO;
         $retrievePlanets->owner = $ship->ship_id;
         $retrievePlanets->serve();
 
@@ -83,12 +83,12 @@ switch ($PRepType) {
         ]);
         break;
     case 2:
-        $retrievePlanetsWithBase = new PlanetRetrieveManyByCriteria;
+        $retrievePlanetsWithBase = new PlanetRetrieveManyByCriteriaDAO;
         $retrievePlanetsWithBase->owner = $ship->ship_id;
         $retrievePlanetsWithBase->base = true;
         $retrievePlanetsWithBase->serve();
 
-        $retrievePlanets = new PlanetRetrieveManyByCriteria;
+        $retrievePlanets = new PlanetRetrieveManyByCriteriaDAO;
         $retrievePlanets->owner = $ship->ship_id;
         $retrievePlanets->serve();
 

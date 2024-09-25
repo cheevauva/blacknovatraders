@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\DAO;
 
+use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 
 class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
 {
+
     public ?int $sector_id;
     public ?int $ship_id;
     public ?int $excludeShipId;
@@ -16,6 +18,7 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
     public ?int $limit = null;
     //
     public array $defences = [];
+    public ?SectorDefence $firstOfDefences = null;
 
     public function serve(): void
     {
@@ -49,5 +52,7 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
         }
 
         $this->defences = $this->asSectorDefences($qb->fetchAllAssociative());
+        $this->defence = $this->defences[0] ?? null;
     }
+
 }

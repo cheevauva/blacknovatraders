@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace BNT\Planet\DAO;
 
-class PlanetRetrieveManyByCriteria extends PlanetDAO
+use BNT\Planet\Entity\Planet;
+
+class PlanetRetrieveManyByCriteriaDAO extends PlanetDAO
 {
+
     public ?int $owner;
+    public ?int $sector_id;
     public ?bool $base;
     public array $planets;
+    public ?Planet $firstOfPlanets;
 
     #[\Override]
     public function serve(): void
@@ -22,11 +27,18 @@ class PlanetRetrieveManyByCriteria extends PlanetDAO
             $qb->setParameter('owner', $this->owner);
         }
 
-        if (isset($this->base)) {
-            $qb->andWhere('base = :base');
-            $qb->setParameter('base', $this->base ? 'Y' : 'N');
+        if (isset($this->owner)) {
+            $qb->andWhere('p.owner = :owner');
+            $qb->setParameter('owner', $this->owner);
+        }
+
+        if (isset($this->sector_id)) {
+            $qb->andWhere('p.sector_id = :sector_id');
+            $qb->setParameter('sector_id', $this->sector_id);
         }
 
         $this->planets = $this->asPlanets($qb->fetchAllAssociative());
+        $this->firstOfPlanets = $this->planets[0] ?? null;
     }
+
 }

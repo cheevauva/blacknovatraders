@@ -13,15 +13,19 @@ use BNT\Planet\Entity\Planet;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Enum\BalanceEnum;
+use BNT\Servant\RealSpaceMoveServant;
+use BNT\Planet\DTO\CalcOwnershipDTO;
 
 class PlanetBuildBaseServant implements ServantInterface
 {
+
     public Ship $ship;
     public Sector $sector;
     public Planet $planet;
     public int $sector_id;
     public int $planet_id;
     public bool $doIt = true;
+    public RealSpaceMoveServant $realSpaceMove;
 
     #[\Override]
     public function serve(): void
@@ -36,6 +40,11 @@ class PlanetBuildBaseServant implements ServantInterface
             $this->planet->goods -= BalanceEnum::base_goods->val();
             $this->planet->credits -= BalanceEnum::base_credits->val();
         }
+
+        $this->realSpaceMove = new RealSpaceMoveServant;
+        $this->realSpaceMove->destination = $this->sector_id;
+        $this->realSpaceMove->doIt = $this->doIt;
+        $this->realSpaceMove->serve();
 
         $this->doIt();
     }
@@ -62,4 +71,5 @@ class PlanetBuildBaseServant implements ServantInterface
         ShipSaveDAO::call($this->ship);
         PlanetSaveDAO::call($this->planet);
     }
+
 }

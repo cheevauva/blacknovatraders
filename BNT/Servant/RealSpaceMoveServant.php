@@ -6,6 +6,7 @@ namespace BNT\Servant;
 
 use BNT\ServantInterface;
 use BNT\Ship\Entity\Ship;
+use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
@@ -14,6 +15,7 @@ use BNT\Enum\BalanceEnum;
 
 class RealSpaceMoveServant implements ServantInterface
 {
+
     public bool $doIt = true;
     public Ship $ship;
     public Sector $sectorStart;
@@ -40,7 +42,7 @@ class RealSpaceMoveServant implements ServantInterface
         $shipspeed = mypw(BalanceEnum::level_factor->val(), $this->ship->engines);
         $triptime = round($distance / $shipspeed);
 
-        if ($triptime == 0 && $destination != $this->ship->sector) {
+        if ($triptime == 0 && $this->destination != $this->ship->sector) {
             $triptime = 1;
         }
 
@@ -71,7 +73,7 @@ class RealSpaceMoveServant implements ServantInterface
         }
 
         // check to see if already in that sector
-        if ($destination == $this->ship->sector) {
+        if ($this->destination == $this->ship->sector) {
             $triptime = 0;
             $energyscooped = 0;
         }
@@ -82,31 +84,22 @@ class RealSpaceMoveServant implements ServantInterface
         } else {
             $this->hostile = false;
 
-            $defenceByDestAndExcludeShip = new SectorDefenceRetrieveManyByCriteriaDAO;
-            $defenceByDestAndExcludeShip->sector_id = $this->destination;
-            $defenceByDestAndExcludeShip->excludeShipId = $this->ship->ship_id;
-            $defenceByDestAndExcludeShip->limit = 1;
-            $defenceByDestAndExcludeShip->serve();
+            $retrieveDefence = new SectorDefenceRetrieveManyByCriteriaDAO;
+            $retrieveDefence->sector_id = $this->destination;
+            $retrieveDefence->excludeShipId = $this->ship->ship_id;
+            $retrieveDefence->limit = 1;
+            $retrieveDefence->serve();
 
-            if ($defenceByDestAndExcludeShip->defences) {
-                $fighters_owner = $result99->fields;
-                $nsresult = $db->Execute("SELECT * from $dbtables[ships] where ship_id=$fighters_owner[ship_id]");
-                $nsfighters = $nsresult->fields;
-                if ($nsfighters[team] != $playerinfo[team] || $playerinfo[team] == 0) {
+            $defence = $retrieveDefence->firstOfDefences;
+
+            if ($defence) {
+                $nsfighters = ShipRetrieveByIdDAO::call($defence->ship_id);
+
+                if ($nsfighters->team != $this->ship->team || $this->ship->team == 0) {
                     $this->hostile = true;
                 }
             }
-
-            $result98 = $db->Execute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id = $destination AND ship_id <> $playerinfo[ship_id]");
-            if (!$result98->EOF) {
-                $fighters_owner = $result98->fields;
-                $nsresult = $db->Execute("SELECT * from $dbtables[ships] where ship_id=$fighters_owner[ship_id]");
-                $nsfighters = $nsresult->fields;
-                if ($nsfighters[team] != $playerinfo[team] || $playerinfo[team] == 0) {
-                    $this->hostile = true;
-                }
-            }
-
+            
             if ($this->hostile && ($this->ship->hull > BalanceEnum::mine_hullsize->val())) {
                 $this->retval = "HOSTILE";
             } else {
@@ -119,7 +112,7 @@ class RealSpaceMoveServant implements ServantInterface
                 $this->retval = "GO";
             }
         }
-        
+
         $this->doIt();
     }
 
@@ -128,7 +121,8 @@ class RealSpaceMoveServant implements ServantInterface
         if (!$this->doIt()) {
             return;
         }
-        
+
         ShipSaveDAO::call($this->ship);
     }
+
 }

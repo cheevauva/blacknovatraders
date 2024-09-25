@@ -11,7 +11,7 @@ use BNT\Bounty\Bounty;
 use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
 use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;
 use BNT\Planet\Entity\Planet;
-use BNT\Planet\DAO\PlanetRetrieveManyByCriteria;
+use BNT\Planet\DAO\PlanetRetrieveManyByCriteriaDAO;
 use BNT\Planet\DAO\PlanetSaveDAO;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\DAO\SectorDefenceRemoveByCriteriaDAO;
@@ -49,7 +49,7 @@ class ShipKillServant implements ServantInterface
 
         $this->bountiesForRemove = $retrieveBounties->bounties;
 
-        $retrievePlanets = new PlanetRetrieveManyByCriteria;
+        $retrievePlanets = new PlanetRetrieveManyByCriteriaDAO;
         $retrievePlanets->owner = $this->ship->ship_id;
         $retrievePlanets->serve();
 
