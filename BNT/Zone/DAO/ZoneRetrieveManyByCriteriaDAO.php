@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\Zone\DAO;
 
+use BNT\Zone\Entity\Zone;
+
 class ZoneRetrieveManyByCriteriaDAO extends ZoneDAO
 {
+    public ?int $limit;
     public ?int $zone_id;
-    public ?bool $corp;
+    public ?bool $corp_zone;
     public ?int $owner;
     //
     public array $zones;
+    public ?Zone $firstOfZones;
 
     public function serve(): void
     {
@@ -18,9 +22,9 @@ class ZoneRetrieveManyByCriteriaDAO extends ZoneDAO
         $qb->select('*');
         $qb->from($this->table());
 
-        if (isset($this->corp)) {
-            $qb->andWhere('corp_zone = :corp');
-            $qb->setParameter('corp', $this->corp ? 'Y' : 'N');
+        if (isset($this->corp_zone)) {
+            $qb->andWhere('corp_zone = :corp_zone');
+            $qb->setParameter('corp_zone', fromBool($this->corp_zone));
         }
 
         if (isset($this->owner)) {
@@ -28,12 +32,9 @@ class ZoneRetrieveManyByCriteriaDAO extends ZoneDAO
             $qb->setParameter('owner', $this->owner);
         }
 
-        $qb->setMaxResults(1);
+        $qb->setMaxResults($this->limit);
 
-        $mapper = $this->mapper();
-        $mapper->row = $qb->fetchAssociative() ?: [];
-        $mapper->serve();
-
-        $this->zones = $mapper->zone;
+        $this->zones = $this->asZones($qb->fetchAssociative() ?: []);
+        $this->firstOfZones = $this->zones[0] ?? null;
     }
 }

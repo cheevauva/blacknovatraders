@@ -48,6 +48,7 @@ enum BalanceEnum
     case base_goods;
     case base_credits;
     case mine_hullsize;
+    case min_bases_to_own;
 
     public function val(): mixed
     {
@@ -93,6 +94,7 @@ enum BalanceEnum
         global $base_ore;
         global $base_organics;
         global $mine_hullsize;
+        global $min_bases_to_own;
 
         return match ($this) {
             BalanceEnum::ore_price => $ore_price,
@@ -137,6 +139,7 @@ enum BalanceEnum
             BalanceEnum::base_ore => $base_ore,
             BalanceEnum::base_organics => $base_organics,
             BalanceEnum::mine_hullsize => $mine_hullsize,
+            BalanceEnum::min_bases_to_own => $min_bases_to_own,
         };
     }
 }

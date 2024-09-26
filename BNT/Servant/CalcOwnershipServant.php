@@ -5,21 +5,23 @@ declare(strict_types=1);
 namespace BNT\Servant;
 
 use BNT\ServantInterface;
+use BNT\Planet\Entity\Planet;
 use BNT\Planet\DAO\PlanetRetrieveManyByCriteriaDAO;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
-use BNT\Planet\Entity\Planet;
-use BNT\DTO\CalcOwnershipDTO;
+use BNT\Ship\DAO\ShipRetrieveManyByCriteriaDAO;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
-use BNT\Ship\DAO\ShipRetrieveManyByCriteriaDAO;
+use BNT\Enum\BalanceEnum;
+use BNT\DTO\CalcOwnershipDTO;
+use BNT\Zone\DAO\ZoneRetrieveManyByCriteriaDAO;
 
 class CalcOwnershipServant implements ServantInterface
 {
-
     public int $sector_id;
     public Sector $sector;
-    public array $planets;
+    public array $planetsWithBaseOnSector;
     public array $ownerTypes;
+    public ?CalcOwnershipDTO $winner;
     public bool $doIt = true;
 
     public function serve(): void
@@ -32,7 +34,7 @@ class CalcOwnershipServant implements ServantInterface
     {
         $ownerTypes = [];
 
-        foreach ($this->planets as $planet) {
+        foreach ($this->planetsWithBaseOnSector as $planet) {
             $planet = Planet::as($planet);
 
             foreach ($ownerTypes as $owner) {
@@ -84,7 +86,7 @@ class CalcOwnershipServant implements ServantInterface
             return;
         }
 
-        $this->planets = $retrievePlanet->planets;
+        $this->planetsWithBaseOnSector = $retrievePlanet->planets;
         $this->ownerTypes = $this->prepareOwnerTypes();
 
         // We've got all the contenders with their bases.
@@ -151,6 +153,74 @@ class CalcOwnershipServant implements ServantInterface
                 return;
             }
         }
+
+        $this->winner = $this->getWinnerFromOwnerTypes();
+
+        if ($this->winner && $this->winner->num < BalanceEnum::min_bases_to_own->val()) {
+            $this->sector->zone_id = Sector::ZONE_ID_1;
+            return;
+        }
+
+        if ($this->winner->team == CalcOwnershipDTO::TYPE_CORP) {
+            $retrieveZone = new ZoneRetrieveManyByCriteriaDAO;
+            $retrieveZone->corp_zone = true;
+            $retrieveZone->owner = $this->winner->id;
+            $retrieveZone->limit = 1;
+            $retrieveZone->serve();
+
+            $zone = $retrieveZone->firstOfZones;
+
+            $this->sector->zone_id = $zone->zone_id;
+            return;
+        } else {
+            foreach ($this->ownerTypes as $curowner) {
+                $curowner = CalcOwnershipDTO::as($curowner);
+                //Two allies have the same number of bases
+                if ($curowner->type == CalcOwnershipDTO::TYPE_SHIP && $curowner->id != $this->winner->id && $curowner->num == $this->winner->num) {
+                    $this->sector->zone_id = Sector::ZONE_ID_1;
+                    return;
+                }
+                break;
+            }
+
+            $retrieveZone2 = new ZoneRetrieveManyByCriteriaDAO;
+            $retrieveZone2->corp_zone = false;
+            $retrieveZone2->owner = $this->winner->id;
+            $retrieveZone2->limit = 1;
+            $retrieveZone2->serve();
+
+            $zone2 = $retrieveZone->firstOfZones;
+
+            $this->sector->zone_id = $zone2->zone_id;
+        }
+    }
+
+    protected function getWinnerFromOwnerTypes(): ?CalcOwnershipDTO
+    {
+        $winner = null;
+
+        //Ok, all bases are allied at this point. Let's make a winner.
+        foreach ($this->ownerTypes as $ownerType) {
+            if (!$winner) {
+                $winner = $ownerType;
+                continue;
+            }
+
+            $ownerType = CalcOwnershipDTO::as($ownerType);
+            $winner = CalcOwnershipDTO::as($winner);
+
+            if ($ownerType->num > $winner->num) {
+                $winner = $ownerType;
+                continue;
+            }
+
+            if ($ownerType->num == $winner->num && $ownerType->type == CalcOwnershipDTO::TYPE_CORP) {
+                $winner = $ownerType;
+                continue;
+            }
+        }
+
+        return $winner;
     }
 
     private function doIt(): void
@@ -344,5 +414,4 @@ class CalcOwnershipServant implements ServantInterface
             }
         }
     }
-
 }

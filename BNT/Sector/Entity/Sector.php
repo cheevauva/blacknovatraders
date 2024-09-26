@@ -10,6 +10,7 @@ use BNT\Enum\BalanceEnum;
 
 class Sector
 {
+    public const ZONE_ID_1 = 1;
     public const ZONE_ID_WAR = 4;
     
     public int $sector_id;

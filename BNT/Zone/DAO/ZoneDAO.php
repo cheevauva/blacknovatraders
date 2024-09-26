@@ -24,6 +24,17 @@ abstract class ZoneDAO implements ServantInterface
         return new ZoneMapper;
     }
 
+    protected function asZones(array $rows): array
+    {
+        $zones = [];
+        
+        foreach ($rows as $row) {
+            $zones[] = $this->asZone($row);
+        }
+        
+        return $zones;
+    }
+
     protected function asZone(array $row): Zone
     {
         $mapper = $this->mapper();
