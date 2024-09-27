@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Servant;
+namespace BNT\Sector\Servant;
 
 use BNT\ServantInterface;
 use BNT\Planet\Entity\Planet;
@@ -17,7 +17,7 @@ use BNT\DTO\CalcOwnershipDTO;
 use BNT\Zone\Entity\Zone;
 use BNT\Zone\DAO\ZoneRetrieveManyByCriteriaDAO;
 
-class CalcOwnershipServant implements ServantInterface
+class SectorCalcOwnershipServant implements ServantInterface
 {
     public int $sector_id;
     public Sector $sector;

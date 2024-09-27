@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Servant;
+namespace BNT\Ship\Servant;
 
 use BNT\ServantInterface;
 use BNT\Ship\Entity\Ship;
@@ -13,7 +13,7 @@ use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Enum\BalanceEnum;
 
-class RealSpaceMoveServant implements ServantInterface
+class ShipRealSpaceMoveServant implements ServantInterface
 {
 
     public bool $doIt = true;
