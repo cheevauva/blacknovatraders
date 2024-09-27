@@ -8,6 +8,9 @@ use BNT\Zone\Enum\ZoneAllowEnum;
 
 class Zone
 {
+    public const ZONE_ID_UNCHARTERED_SPACE = 1;
+    public const ZONE_ID_WAR = 4;
+
     public int $zone_id;
     public string $zone_name;
     public int $owner = 0;

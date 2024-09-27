@@ -11,8 +11,10 @@ use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipRetrieveManyByCriteriaDAO;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
+use BNT\Sector\DAO\SectorSaveDAO;
 use BNT\Enum\BalanceEnum;
 use BNT\DTO\CalcOwnershipDTO;
+use BNT\Zone\Entity\Zone;
 use BNT\Zone\DAO\ZoneRetrieveManyByCriteriaDAO;
 
 class CalcOwnershipServant implements ServantInterface
@@ -21,6 +23,8 @@ class CalcOwnershipServant implements ServantInterface
     public Sector $sector;
     public array $planetsWithBaseOnSector;
     public array $ownerTypes;
+    public array $ownerCorps;
+    public array $ownerShips;
     public ?CalcOwnershipDTO $winner;
     public bool $doIt = true;
 
@@ -30,47 +34,37 @@ class CalcOwnershipServant implements ServantInterface
         $this->doIt();
     }
 
-    protected function prepareOwnerTypes(): array
+    protected function prepareOwnerTypes(): void
     {
-        $ownerTypes = [];
-
         foreach ($this->planetsWithBaseOnSector as $planet) {
             $planet = Planet::as($planet);
 
-            foreach ($ownerTypes as $owner) {
-                $owner = CalcOwnershipDTO::as($owner);
-
-                if ($planet->corp != 0 && $owner->type == CalcOwnershipDTO::TYPE_CORP && $owner->id == $planet->corp) {
-                    $owner->num++;
-                    continue;
-                }
-
-                if ($planet->owner != 0 && $owner->type == CalcOwnershipDTO::TYPE_SHIP && $owner->id == $planet->owner) {
-                    $owner->num++;
-                    continue;
-                }
-            }
-
-            if ($planet->corp != 0) {
+            if (!empty($planet->corp) && empty($this->ownerCorps[$planet->corp])) {
                 $ownerCorp = new CalcOwnershipDTO;
                 $ownerCorp->id = $planet->owner;
                 $ownerCorp->num = 1;
                 $ownerCorp->type = CalcOwnershipDTO::TYPE_CORP;
 
-                $ownerTypes[] = $ownerCorp;
+                $this->ownerCorps[$planet->corp] = $ownerCorp;
             }
 
-            if ($planet->owner != 0) {
+            if (!empty($planet->owner) && empty($this->ownerShips[$planet->owner])) {
                 $ownerShip = new CalcOwnershipDTO;
                 $ownerShip->id = $planet->owner;
                 $ownerShip->num = 1;
                 $ownerShip->type = CalcOwnershipDTO::TYPE_SHIP;
 
-                $ownerTypes[] = $ownerShip;
+                $this->ownerShips[$planet->owner] = $ownerShip;
+            }
+
+            if (!empty($planet->corp) && !empty($this->ownerCorps[$planet->corp])) {
+                CalcOwnershipDTO::as($this->ownerCorps[$planet->corp])->num++;
+            }
+
+            if (!empty($planet->owner) && !empty($this->ownerShips[$planet->owner])) {
+                CalcOwnershipDTO::as($this->ownerShips[$planet->owner])->num++;
             }
         }
-
-        return $ownerTypes;
     }
 
     protected function process(): void
@@ -87,39 +81,28 @@ class CalcOwnershipServant implements ServantInterface
         }
 
         $this->planetsWithBaseOnSector = $retrievePlanet->planets;
-        $this->ownerTypes = $this->prepareOwnerTypes();
+        $this->prepareOwnerTypes();
 
         // We've got all the contenders with their bases.
         // Time to test for conflict
 
-        $nbcorps = 0; // number corps
-        $nbships = 0; // number ships
+        $nbcorps = count($this->ownerCorps);
+        $nbships = count($this->ownerShips);
         $ships = [];
         $scorps = [];
 
-        foreach ($this->ownerTypes as $owner) {
-            $owner = CalcOwnershipDTO::as($owner);
-
-            switch ($owner->type) {
-                case CalcOwnershipDTO::TYPE_CORP:
-                    $nbcorps++;
-                    break;
-                case CalcOwnershipDTO::TYPE_SHIP:
-                    $currentShip = ShipRetrieveByIdDAO::call($owner->id);
-                    $ships[] = $owner->id;
-                    $scorps[] = $currentShip->team;
-                    $owner->team = $currentShip->team;
-                    $nbships++;
-                    break;
-            }
+        foreach ($this->ownerShips as $ownerShip) {
+            $ownerShip->team = ShipRetrieveByIdDAO::call($ownerShip->id)->team;
+            $scorps[] = $ownerShip->team;
+            $ships[] = $ownerShip->id;
         }
+
 
         // More than one corp, war
         if ($nbcorps > 1) {
-            $this->sector->zone_id = Sector::ZONE_ID_WAR;
+            $this->sector->zone_id = Zone::ZONE_ID_WAR;
             return;
         }
-
 
         // More than one unallied ship, war
         $numunallied = 0;
@@ -131,13 +114,13 @@ class CalcOwnershipServant implements ServantInterface
         }
 
         if ($numunallied > 1) {
-            $this->sector->zone_id = Sector::ZONE_ID_WAR;
+            $this->sector->zone_id = Zone::ZONE_ID_WAR;
             return;
         }
 
         // Unallied ship, another corp present, war
         if ($numunallied > 0 && $nbcorps > 0) {
-            $this->sector->zone_id = Sector::ZONE_ID_WAR;
+            $this->sector->zone_id = Zone::ZONE_ID_WAR;
             return;
         }
 
@@ -148,39 +131,36 @@ class CalcOwnershipServant implements ServantInterface
             $shipsWithTeam->limit = 1;
             $shipsWithTeam->serve();
 
-            if (!empty($shipsWithTeam->ships)) {
-                $this->sector->zone_id = Sector::ZONE_ID_WAR;
+            if ($shipsWithTeam->firstOfShip) {
+                $this->sector->zone_id = Zone::ZONE_ID_WAR;
                 return;
             }
         }
 
-        $this->winner = $this->getWinnerFromOwnerTypes();
+        $this->winner = $this->makeWinner();
 
-        if ($this->winner && $this->winner->num < BalanceEnum::min_bases_to_own->val()) {
-            $this->sector->zone_id = Sector::ZONE_ID_1;
+        if ($this->winner->num < BalanceEnum::min_bases_to_own->val()) {
+            $this->sector->zone_id = Zone::ZONE_ID_UNCHARTERED_SPACE;
             return;
         }
 
-        if ($this->winner->team == CalcOwnershipDTO::TYPE_CORP) {
+        if ($this->winner->type == CalcOwnershipDTO::TYPE_CORP) {
             $retrieveZone = new ZoneRetrieveManyByCriteriaDAO;
             $retrieveZone->corp_zone = true;
             $retrieveZone->owner = $this->winner->id;
             $retrieveZone->limit = 1;
             $retrieveZone->serve();
 
-            $zone = $retrieveZone->firstOfZones;
-
-            $this->sector->zone_id = $zone->zone_id;
+            $this->sector->zone_id = $retrieveZone->firstOfZones->zone_id;
             return;
         } else {
-            foreach ($this->ownerTypes as $curowner) {
-                $curowner = CalcOwnershipDTO::as($curowner);
-                //Two allies have the same number of bases
-                if ($curowner->type == CalcOwnershipDTO::TYPE_SHIP && $curowner->id != $this->winner->id && $curowner->num == $this->winner->num) {
-                    $this->sector->zone_id = Sector::ZONE_ID_1;
+            foreach ($this->ownerShips as $ownerShip) {
+                $ownerShip = CalcOwnershipDTO::as($ownerShip);
+                // Two allies have the same number of bases
+                if ($ownerShip->id != $this->winner->id && $ownerShip->num == $this->winner->num) {
+                    $this->sector->zone_id = Zone::ZONE_ID_UNCHARTERED_SPACE;
                     return;
                 }
-                break;
             }
 
             $retrieveZone2 = new ZoneRetrieveManyByCriteriaDAO;
@@ -189,38 +169,46 @@ class CalcOwnershipServant implements ServantInterface
             $retrieveZone2->limit = 1;
             $retrieveZone2->serve();
 
-            $zone2 = $retrieveZone->firstOfZones;
-
-            $this->sector->zone_id = $zone2->zone_id;
+            $this->sector->zone_id = $retrieveZone->firstOfZones->zone_id;
         }
     }
 
-    protected function getWinnerFromOwnerTypes(): ?CalcOwnershipDTO
+    protected function makeWinner(): ?CalcOwnershipDTO
     {
-        $winner = null;
+        $shipWinner = null;
+        $corpWinner = null;
 
-        //Ok, all bases are allied at this point. Let's make a winner.
-        foreach ($this->ownerTypes as $ownerType) {
-            if (!$winner) {
-                $winner = $ownerType;
+        // Ok, all bases are allied at this point. Let's make a winner.
+
+        foreach ($this->ownerShips as $ownerShip) {
+            if (!$shipWinner) {
+                $shipWinner = $ownerShip;
                 continue;
             }
 
-            $ownerType = CalcOwnershipDTO::as($ownerType);
-            $winner = CalcOwnershipDTO::as($winner);
+            $ownerShip = CalcOwnershipDTO::as($ownerShip);
+            $shipWinner = CalcOwnershipDTO::as($shipWinner);
 
-            if ($ownerType->num > $winner->num) {
-                $winner = $ownerType;
-                continue;
-            }
-
-            if ($ownerType->num == $winner->num && $ownerType->type == CalcOwnershipDTO::TYPE_CORP) {
-                $winner = $ownerType;
+            if ($ownerShip->num > $shipWinner->num) {
+                $shipWinner = $ownerShip;
                 continue;
             }
         }
 
-        return $winner;
+        foreach ($this->ownerCorps as $ownerCorp) {
+            if (!$corpWinner) {
+                $corpWinner = $ownerCorp;
+                continue;
+            }
+            $ownerCorp = CalcOwnershipDTO::as($ownerCorp);
+
+            if ($ownerCorp->num == $corpWinner->num) {
+                $corpWinner = $ownerCorp;
+                continue;
+            }
+        }
+
+        return $corpWinner?->num >= $shipWinner?->num ? $corpWinner : $shipWinner;
     }
 
     private function doIt(): void
@@ -228,190 +216,16 @@ class CalcOwnershipServant implements ServantInterface
         if (!$this->doIt) {
             return;
         }
+
+        SectorSaveDAO::call($this->sector);
     }
 
-    function calc_ownership($sector)
+    public static function call(int $sector): self
     {
-        global $min_bases_to_own, $l_global_warzone, $l_global_nzone, $l_global_team, $l_global_player;
-        global $db, $dbtables;
+        $self = new static;
+        $self->sector_id = $sector;
+        $self->serve();
 
-        $res = $db->Execute("SELECT owner, corp FROM $dbtables[planets] WHERE sector_id=$sector AND base='Y'");
-        $num_bases = $res->RecordCount();
-
-        $i = 0;
-        if ($num_bases > 0) {
-
-            while (!$res->EOF) {
-                $bases[$i] = $res->fields;
-                $i++;
-                $res->MoveNext();
-            }
-        } else
-            return "Sector ownership didn't change";
-
-        $owner_num = 0;
-
-        foreach ($bases as $curbase) {
-            $curcorp = -1;
-            $curship = -1;
-            $loop = 0;
-            while ($loop < $owner_num) {
-                if ($curbase[corp] != 0) {
-                    if ($owners[$loop][type] == 'C') {
-                        if ($owners[$loop][id] == $curbase[corp]) {
-                            $curcorp = $loop;
-                            $owners[$loop][num]++;
-                        }
-                    }
-                }
-
-                if ($owners[$loop][type] == 'S') {
-                    if ($owners[$loop][id] == $curbase[owner]) {
-                        $curship = $loop;
-                        $owners[$loop][num]++;
-                    }
-                }
-
-                $loop++;
-            }
-
-            if ($curcorp == -1) {
-                if ($curbase[corp] != 0) {
-                    $curcorp = $owner_num;
-                    $owner_num++;
-                    $owners[$curcorp][type] = 'C';
-                    $owners[$curcorp][num] = 1;
-                    $owners[$curcorp][id] = $curbase[corp];
-                }
-            }
-
-            if ($curship == -1) {
-                if ($curbase[owner] != 0) {
-                    $curship = $owner_num;
-                    $owner_num++;
-                    $owners[$curship][type] = 'S';
-                    $owners[$curship][num] = 1;
-                    $owners[$curship][id] = $curbase[owner];
-                }
-            }
-        }
-
-        // We've got all the contenders with their bases.
-        // Time to test for conflict
-
-        $loop = 0;
-        $nbcorps = 0;
-        $nbships = 0;
-        while ($loop < $owner_num) {
-            if ($owners[$loop][type] == 'C')
-                $nbcorps++;
-            else {
-                $res = $db->Execute("SELECT team FROM $dbtables[ships] WHERE ship_id=" . $owners[$loop][id]);
-                if ($res && $res->RecordCount() != 0) {
-                    $curship = $res->fields;
-                    $ships[$nbships] = $owners[$loop][id];
-                    $scorps[$nbships] = $curship[team];
-                    $nbships++;
-                }
-            }
-
-            $loop++;
-        }
-
-        //More than one corp, war
-        if ($nbcorps > 1) {
-            $db->Execute("UPDATE $dbtables[universe] SET zone_id=4 WHERE sector_id=$sector");
-            return $l_global_warzone;
-        }
-
-        //More than one unallied ship, war
-        $numunallied = 0;
-        foreach ($scorps as $corp) {
-            if ($corp == 0)
-                $numunallied++;
-        }
-        if ($numunallied > 1) {
-            $db->Execute("UPDATE $dbtables[universe] SET zone_id=4 WHERE sector_id=$sector");
-            return $l_global_warzone;
-        }
-
-        //Unallied ship, another corp present, war
-        if ($numunallied > 0 && $nbcorps > 0) {
-            $db->Execute("UPDATE $dbtables[universe] SET zone_id=4 WHERE sector_id=$sector");
-            return $l_global_warzone;
-        }
-
-        //Unallied ship, another ship in a corp, war
-        if ($numunallied > 0) {
-            $query = "SELECT team FROM $dbtables[ships] WHERE (";
-            $i = 0;
-            foreach ($ships as $ship) {
-                $query = $query . "ship_id=$ship";
-                $i++;
-                if ($i != $nbships)
-                    $query = $query . " OR ";
-                else
-                    $query = $query . ")";
-            }
-            $query = $query . " AND team!=0";
-            $res = $db->Execute($query);
-            if ($res->RecordCount() != 0) {
-                $db->Execute("UPDATE $dbtables[universe] SET zone_id=4 WHERE sector_id=$sector");
-                return $l_global_warzone;
-            }
-        }
-
-
-        //Ok, all bases are allied at this point. Let's make a winner.
-        $winner = 0;
-        $i = 1;
-        while ($i < $owner_num) {
-            if ($owners[$i][num] > $owners[$winner][num])
-                $winner = $i;
-            elseif ($owners[$i][num] == $owners[$winner][num]) {
-                if ($owners[$i][type] == 'C')
-                    $winner = $i;
-            }
-            $i++;
-        }
-
-        if ($owners[$winner][num] < $min_bases_to_own) {
-            $db->Execute("UPDATE $dbtables[universe] SET zone_id=1 WHERE sector_id=$sector");
-            return $l_global_nzone;
-        }
-
-
-        if ($owners[$winner][type] == 'C') {
-            $res = $db->Execute("SELECT zone_id FROM $dbtables[zones] WHERE corp_zone='Y' && owner=" . $owners[$winner][id]);
-            $zone = $res->fields;
-
-            $res = $db->Execute("SELECT team_name FROM $dbtables[teams] WHERE id=" . $owners[$winner][id]);
-            $corp = $res->fields;
-
-            $db->Execute("UPDATE $dbtables[universe] SET zone_id=$zone[zone_id] WHERE sector_id=$sector");
-            return "$l_global_team $corp[team_name]!";
-        } else {
-            $onpar = 0;
-            foreach ($owners as $curowner) {
-                if ($curowner[type] == 'S' && $curowner[id] != $owners[$winner][id] && $curowner[num] == $owners[winners][num])
-                    $onpar = 1;
-                break;
-            }
-
-            //Two allies have the same number of bases
-            if ($onpar == 1) {
-                $db->Execute("UPDATE $dbtables[universe] SET zone_id=1 WHERE sector_id=$sector");
-                return $l_global_nzone;
-            } else {
-                $res = $db->Execute("SELECT zone_id FROM $dbtables[zones] WHERE corp_zone='N' && owner=" . $owners[$winner][id]);
-                $zone = $res->fields;
-
-                $res = $db->Execute("SELECT character_name FROM $dbtables[ships] WHERE ship_id=" . $owners[$winner][id]);
-                $ship = $res->fields;
-
-                $db->Execute("UPDATE $dbtables[universe] SET zone_id=$zone[zone_id] WHERE sector_id=$sector");
-                return "$l_global_player $ship[character_name]!";
-            }
-        }
+        return $self;
     }
 }
