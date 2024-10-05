@@ -33,10 +33,11 @@ class PlanetBuildBaseServant implements ServantInterface
         $this->sector = SectorRetrieveByIdDAO::call($this->sector_id);
         $this->planet = PlanetRetrieveByIdDAO::call($this->planet_id);
 
-        $this->realSpaceMove = new ShipRealSpaceMoveServant;
-        $this->realSpaceMove->destination = $this->sector_id;
-        $this->realSpaceMove->doIt = $this->doIt;
-        $this->realSpaceMove->serve();
+        $realSpaceMove = $this->realSpaceMove = new ShipRealSpaceMoveServant;
+        $realSpaceMove->ship = $this->ship;
+        $realSpaceMove->destination = $this->sector_id;
+        $realSpaceMove->doIt = $this->doIt;
+        $realSpaceMove->serve();
 
         if ($this->isCanBuildBase()) {
             $this->planet->base = true;

@@ -17,7 +17,7 @@ class PlanetRetrieveByIdDAO extends PlanetDAO
         $qb = $this->db()->createQueryBuilder();
         $qb->select('*');
         $qb->from($this->table());
-        $qb->andWhere('ship_id = :id');
+        $qb->andWhere('planet_id = :id');
         $qb->setParameters([
             'id' => $this->id,
         ]);

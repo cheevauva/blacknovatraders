@@ -40,7 +40,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
         $z = ($this->sectorStart->distance * cos($sa1)) - ($this->sectorFinish->distance * cos($fa1));
         $distance = round(sqrt(mypw($x, 2) + mypw($y, 2) + mypw($z, 2)));
         $shipspeed = mypw(BalanceEnum::level_factor->val(), $this->ship->engines);
-        $triptime = round($distance / $shipspeed);
+        $triptime = intval(round($distance / $shipspeed));
 
         if ($triptime == 0 && $this->destination != $this->ship->sector) {
             $triptime = 1;
@@ -118,7 +118,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
 
     private function doIt(): void
     {
-        if (!$this->doIt()) {
+        if (!$this->doIt) {
             return;
         }
 

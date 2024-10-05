@@ -14,13 +14,14 @@ if (isNotAuthorized()) {
 
 $ship = ship();
 
-echo '<pre>';
 if (isset($_GET['buildp']) AND isset($_GET['builds'])) {
     $buildBase = new PlanetBuildBaseServant;
     $buildBase->ship = $ship;
-    $buildBase->planet_id = $buildp;
-    $buildBase->sector_id = $builds;
+    $buildBase->planet_id = intval($_GET['buildp']);
+    $buildBase->sector_id = intval($_GET['builds']);
+    $buildBase->doIt = false;
     $buildBase->serve();
+    echo '<pre>';
+    print_r($buildBase);
 }
 
-print_r($_POST);
