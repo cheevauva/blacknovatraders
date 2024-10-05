@@ -1,0 +1,13 @@
+{% extends "layout.twig" %}
+{% block title %}{{ tr.l_ship_title }}{% endblock %}
+{% block content %}
+    {% if othership.sector != ship.sector %}
+        {{ tr.l_ship_the }} <font color=white>{{ othership.ship_name }}</font> {{ tr.l_ship_nolonger }} {{ ship.sector }}<BR>
+    {% else %}
+        {{ tr.l_ship_youc }} <font color=white>{{ othership.ship_name }}</font> {{ tr.l_ship_owned }} <font color=white>{{ othership.character_name }}</font>.<br><br>
+        {{ tr.l_ship_perform }}<BR><BR>
+        <a href=scan.php?ship_id={{ ship_id }}>{{ tr.l_planet_scn_link }}</a><br>
+        <a href=attack.php?ship_id={{ ship_id }}>{{ tr.l_planet_att_link }}</a><br>
+        <a href=mailto.php?to={{ ship_id }}>{{ tr.l_send_msg }}</a><br>
+    {% endif %}
+{% endblock %}

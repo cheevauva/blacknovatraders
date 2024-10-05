@@ -52,7 +52,7 @@ class SectorDefenceRetrieveManyByCriteriaDAO extends SectorDefenceDAO
         }
 
         $this->defences = $this->asSectorDefences($qb->fetchAllAssociative());
-        $this->defence = $this->defences[0] ?? null;
+        $this->firstOfDefences = $this->defences[0] ?? null;
     }
 
 }
