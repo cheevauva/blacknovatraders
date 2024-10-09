@@ -51,7 +51,7 @@ abstract class PlanetDAO implements ServantInterface
     protected function asRow(Planet $planet): array
     {
         $mapper = $this->mapper();
-        $mapper->news = $planet;
+        $mapper->planet = $planet;
         $mapper->serve();
 
         return $mapper->row;

@@ -56,15 +56,15 @@ class PlanetMapper implements ServantInterface
             $this->row['torps'] = $planet->torps;
             $this->row['owner'] = $planet->owner;
             $this->row['corp'] = $planet->corp;
-            $this->row['base'] = $planet->base;
-            $this->row['sells'] = $planet->sells;
+            $this->row['base'] = fromBool($planet->base);
+            $this->row['sells'] = fromBool($planet->sells);
             $this->row['prod_organics'] = $planet->prod_organics;
             $this->row['prod_ore'] = $planet->prod_ore;
             $this->row['prod_goods'] = $planet->prod_goods;
             $this->row['prod_energy'] = $planet->prod_energy;
             $this->row['prod_fighters'] = $planet->prod_fighters;
             $this->row['prod_torp'] = $planet->prod_torp;
-            $this->row['defeated'] = $planet->defeated;
+            $this->row['defeated'] = fromBool($planet->defeated);
         }
     }
 }

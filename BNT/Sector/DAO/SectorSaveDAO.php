@@ -16,9 +16,14 @@ class SectorSaveDAO extends SectorDAO
         $mapper->sector = $this->sector;
         $mapper->serve();
 
-        $this->db()->update($this->table(), $mapper->row, [
-            'ship_id' => $this->sector->sector_id,
-        ]);
+        if (!isset($this->sector->sector_id)) {
+            $this->db()->insert($this->table(), $mapper->row);
+            $this->sector->sector_id = (int) $this->db()->lastInsertId();
+        } else {
+            $this->db()->update($this->table(), $mapper->row, [
+                'sector_id' => $this->sector->sector_id,
+            ]);
+        }
     }
 
     public static function call(Sector $sector): self

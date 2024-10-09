@@ -12,6 +12,7 @@ use BNT\Sector\Entity\Sector;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Enum\BalanceEnum;
+use BNT\Enum\CommandEnum;
 
 class ShipRealSpaceMoveServant implements ServantInterface
 {
@@ -21,7 +22,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
     public Sector $sectorStart;
     public Sector $sectorFinish;
     public int $destination;
-    public string $retval;
+    public CommandEnum $retval;
     public bool $hostile = false;
 
     public function serve(): void
@@ -80,7 +81,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
 
         if ($triptime > $this->ship->turns) {
             $this->ship->cleared_defences = null;
-            $this->retval = "BREAK-TURNS";
+            $this->retval = CommandEnum::breakTurns;
         } else {
             $this->hostile = false;
 
@@ -101,7 +102,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
             }
             
             if ($this->hostile && ($this->ship->hull > BalanceEnum::mine_hullsize->val())) {
-                $this->retval = "HOSTILE";
+                $this->retval = CommandEnum::hostile;
             } else {
                 $this->ship->last_login = new \DateTime;
                 $this->ship->sector = $this->destination;
@@ -109,7 +110,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
                 $this->ship->turns -= $triptime;
                 $this->ship->turns_used += $triptime;
 
-                $this->retval = "GO";
+                $this->retval = CommandEnum::go;
             }
         }
 
