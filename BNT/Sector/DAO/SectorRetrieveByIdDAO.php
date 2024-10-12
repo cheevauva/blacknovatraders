@@ -31,7 +31,7 @@ class SectorRetrieveByIdDAO extends SectorDAO
 
     public static function call(int $id): ?Sector
     {
-        $self = new static;
+        $self = new static();
         $self->id = $id;
         $self->serve();
 

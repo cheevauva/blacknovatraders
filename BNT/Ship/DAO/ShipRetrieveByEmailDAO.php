@@ -27,7 +27,7 @@ class ShipRetrieveByEmailDAO extends ShipDAO
 
     public static function call(string $email): ?Ship
     {
-        $self = new static;
+        $self = new static();
         $self->email = $email;
         $self->serve();
 

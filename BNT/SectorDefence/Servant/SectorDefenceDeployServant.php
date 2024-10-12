@@ -24,7 +24,7 @@ class SectorDefenceDeployServant implements \BNT\ServantInterface
 
     public function serve(): void
     {
-        $deployCheck = new SectorDefenceDeployCheckServant;
+        $deployCheck = SectorDefenceDeployCheckServant::build();
         $deployCheck->ship = $this->ship;
         $deployCheck->serve();
 
@@ -43,7 +43,7 @@ class SectorDefenceDeployServant implements \BNT\ServantInterface
         }
 
         if (!$this->defenceFighter) {
-            $this->defenceFighter = new SectorDefence;
+            $this->defenceFighter = new SectorDefence();
             $this->defenceFighter->ship_id = $this->ship->ship_id;
             $this->defenceFighter->sector_id = $this->ship->sector;
             $this->defenceFighter->quantity += $this->numfighters;
@@ -55,7 +55,7 @@ class SectorDefenceDeployServant implements \BNT\ServantInterface
         }
 
         if (!$this->defenceMine) {
-            $this->defenceMine = new SectorDefence;
+            $this->defenceMine = new SectorDefence();
             $this->defenceMine->ship_id = $this->ship->ship_id;
             $this->defenceMine->sector_id = $this->ship->sector;
             $this->defenceMine->quantity += $this->nummines;

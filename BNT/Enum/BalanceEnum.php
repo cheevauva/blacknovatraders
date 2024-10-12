@@ -39,6 +39,13 @@ enum BalanceEnum
     case start_credits;
     case start_energy;
     case start_fighters;
+    case start_turns;
+    case start_editors;
+    case start_genesis;
+    case start_beacon;
+    case start_emerwarp;
+    case start_minedeflectors;
+    case start_lssd;
     case max_turns;
     case sector_max;
     case max_rank;
@@ -49,6 +56,7 @@ enum BalanceEnum
     case base_credits;
     case mine_hullsize;
     case min_bases_to_own;
+    case default_lang;
 
     public function val(): mixed
     {
@@ -86,6 +94,13 @@ enum BalanceEnum
         global $start_credits;
         global $start_energy;
         global $start_fighters;
+        global $start_turns;
+        global $start_editors;
+        global $start_genesis;
+        global $start_beacon;
+        global $start_emerwarp;
+        global $start_minedeflectors;
+        global $start_lssd;
         global $max_turns;
         global $sector_max;
         global $max_rank;
@@ -95,6 +110,7 @@ enum BalanceEnum
         global $base_organics;
         global $mine_hullsize;
         global $min_bases_to_own;
+        global $default_lang;
 
         return match ($this) {
             BalanceEnum::ore_price => $ore_price,
@@ -130,6 +146,13 @@ enum BalanceEnum
             BalanceEnum::start_credits => $start_credits,
             BalanceEnum::start_energy => $start_energy,
             BalanceEnum::start_fighters => $start_fighters,
+            BalanceEnum::start_turns => $start_turns,
+            BalanceEnum::start_editors => $start_editors,
+            BalanceEnum::start_genesis => $start_genesis,
+            BalanceEnum::start_beacon => $start_beacon,
+            BalanceEnum::start_emerwarp => $start_emerwarp,
+            BalanceEnum::start_minedeflectors => $start_minedeflectors,
+            BalanceEnum::start_lssd => $start_lssd,
             BalanceEnum::max_turns => $max_turns,
             BalanceEnum::sector_max => $sector_max,
             BalanceEnum::max_rank => $max_rank,
@@ -140,6 +163,7 @@ enum BalanceEnum
             BalanceEnum::base_organics => $base_organics,
             BalanceEnum::mine_hullsize => $mine_hullsize,
             BalanceEnum::min_bases_to_own => $min_bases_to_own,
+            BalanceEnum::default_lang => $default_lang,
         };
     }
 }

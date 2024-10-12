@@ -16,9 +16,12 @@ use BNT\Enum\BalanceEnum;
 use BNT\DTO\CalcOwnershipDTO;
 use BNT\Zone\Entity\Zone;
 use BNT\Zone\DAO\ZoneRetrieveManyByCriteriaDAO;
+use BNT\Traits\BuildTrait;
 
 class SectorCalcOwnershipServant implements ServantInterface
 {
+    use BuildTrait;
+    
     public int $sector_id;
     public Sector $sector;
     public array $planetsWithBaseOnSector;
@@ -40,7 +43,7 @@ class SectorCalcOwnershipServant implements ServantInterface
             $planet = Planet::as($planet);
 
             if (!empty($planet->corp) && empty($this->ownerCorps[$planet->corp])) {
-                $ownerCorp = new CalcOwnershipDTO;
+                $ownerCorp = new CalcOwnershipDTO();
                 $ownerCorp->id = $planet->owner;
                 $ownerCorp->num = 1;
                 $ownerCorp->type = CalcOwnershipDTO::TYPE_CORP;
@@ -49,7 +52,7 @@ class SectorCalcOwnershipServant implements ServantInterface
             }
 
             if (!empty($planet->owner) && empty($this->ownerShips[$planet->owner])) {
-                $ownerShip = new CalcOwnershipDTO;
+                $ownerShip = new CalcOwnershipDTO();
                 $ownerShip->id = $planet->owner;
                 $ownerShip->num = 1;
                 $ownerShip->type = CalcOwnershipDTO::TYPE_SHIP;
@@ -71,7 +74,7 @@ class SectorCalcOwnershipServant implements ServantInterface
     {
         $this->sector = SectorRetrieveByIdDAO::call($this->sector_id);
 
-        $retrievePlanet = new PlanetRetrieveManyByCriteriaDAO;
+        $retrievePlanet = PlanetRetrieveManyByCriteriaDAO::build();
         $retrievePlanet->sector_id = $this->sector_id;
         $retrievePlanet->base = true;
         $retrievePlanet->serve();
@@ -125,7 +128,7 @@ class SectorCalcOwnershipServant implements ServantInterface
         }
 
         if ($numunallied > 0) {
-            $shipsWithTeam = new ShipRetrieveManyByCriteriaDAO;
+            $shipsWithTeam = ShipRetrieveManyByCriteriaDAO::build();
             $shipsWithTeam->ships = $ships;
             $shipsWithTeam->excludeTeam = 0;
             $shipsWithTeam->limit = 1;
@@ -145,7 +148,7 @@ class SectorCalcOwnershipServant implements ServantInterface
         }
 
         if ($this->winner->type == CalcOwnershipDTO::TYPE_CORP) {
-            $retrieveZone = new ZoneRetrieveManyByCriteriaDAO;
+            $retrieveZone = ZoneRetrieveManyByCriteriaDAO::build();
             $retrieveZone->corp_zone = true;
             $retrieveZone->owner = $this->winner->id;
             $retrieveZone->limit = 1;
@@ -163,7 +166,7 @@ class SectorCalcOwnershipServant implements ServantInterface
                 }
             }
 
-            $retrieveZone2 = new ZoneRetrieveManyByCriteriaDAO;
+            $retrieveZone2 = ZoneRetrieveManyByCriteriaDAO::build();
             $retrieveZone2->corp_zone = false;
             $retrieveZone2->owner = $this->winner->id;
             $retrieveZone2->limit = 1;
@@ -222,7 +225,7 @@ class SectorCalcOwnershipServant implements ServantInterface
 
     public static function call(int $sector): self
     {
-        $self = new static;
+        $self = new static();
         $self->sector_id = $sector;
         $self->serve();
 

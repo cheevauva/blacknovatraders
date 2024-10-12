@@ -32,7 +32,7 @@ class BountryPayByShipServant implements ServantInterface
 
         ShipSaveDAO::call($ship);
 
-        $removeBounty = new BountyRemoveByCriteriaDAO;
+        $removeBounty = BountyRemoveByCriteriaDAO::build();
         $removeBounty->bountyOn = $this->ship->ship_id;
         $removeBounty->placedBy = 0;
         $removeBounty->serve();
@@ -40,7 +40,7 @@ class BountryPayByShipServant implements ServantInterface
 
     public static function call(Ship $ship): self
     {
-        $self = new static;
+        $self = new static();
         $self->ship = $ship;
         $self->serve();
 

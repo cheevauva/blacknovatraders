@@ -27,7 +27,7 @@ class SectorDefenceCheckFightersServant implements ServantInterface
     {
         $sectorObj = SectorRetrieveByIdDAO::call($this->sector);
 
-        $retrieveDefences = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
         $retrieveDefences->sector_id = $sectorObj->sector_id;
         $retrieveDefences->defence_type = SectorDefenceTypeEnum::Fighters;
         $retrieveDefences->orderByQuantityDESC = true;

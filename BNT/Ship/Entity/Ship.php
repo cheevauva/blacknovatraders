@@ -69,7 +69,7 @@ class Ship
 
     public function __construct()
     {
-        $this->last_login = new \DateTime;
+        $this->last_login = new \DateTime();
     }
 
     protected function reset(): void

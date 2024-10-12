@@ -15,7 +15,7 @@ class ShipMapper implements ServantInterface
     public function serve(): void
     {
         if (empty($this->ship) && !empty($this->row)) {
-            $ship = $this->ship = new Ship;
+            $ship = $this->ship = new Ship();
             $ship->ship_id = intval($this->row['ship_id']);
             $ship->ship_name = $this->row['ship_name'];
             $ship->ship_destroyed = toBool($this->row['ship_destroyed']);

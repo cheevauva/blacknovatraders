@@ -42,7 +42,7 @@ class ShipException extends \Exception
 
     public static function notEnoughCredits($credits, $cost): ShipNotEnoughCreditsException
     {
-        $ex = new ShipNotEnoughCreditsException;
+        $ex = new ShipNotEnoughCreditsException();
         $ex->credits = $credits;
         $ex->cost = $cost;
 

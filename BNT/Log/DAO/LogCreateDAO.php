@@ -23,7 +23,7 @@ class LogCreateDAO extends LogDAO
 
     public static function call(Log $log): self
     {
-        $self = new static;
+        $self = new static();
         $self->log = $log;
         $self->serve();
 

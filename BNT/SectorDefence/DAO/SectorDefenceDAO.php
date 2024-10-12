@@ -9,11 +9,13 @@ use BNT\Traits\DatabaseTrait;
 use BNT\SectorDefence\Mapper\SectorDefenceMapper;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Enum\TableEnum;
+use BNT\Traits\BuildTrait;
 
 abstract class SectorDefenceDAO implements ServantInterface
 {
     use DatabaseTrait;
-
+    use BuildTrait;
+    
     protected function table(): string
     {
         return TableEnum::SectorDefences->toDb();

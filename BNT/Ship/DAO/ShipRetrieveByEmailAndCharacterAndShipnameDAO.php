@@ -32,7 +32,7 @@ class ShipRetrieveByEmailAndCharacterAndShipnameDAO extends ShipDAO
 
     public static function call(string $email, string $character, string $shipname): ?Ship
     {
-        $self = new static;
+        $self = new static();
         $self->email = $email;
         $self->character_name = $character;
         $self->ship_name = $shipname;

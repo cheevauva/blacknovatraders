@@ -14,7 +14,7 @@ class NewsMapper implements \BNT\ServantInterface
     public function serve(): void
     {
         if (empty($this->news) && !empty($this->row)) {
-            $news = $this->news = new News;
+            $news = $this->news = new News();
             $news->news_id = intval($this->row['news_id']);
             $news->headline = $this->row['headline'];
             $news->newstext = $this->row['newstext'];

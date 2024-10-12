@@ -27,7 +27,7 @@ class ShipSelfDestructServant implements ServantInterface
 
     public static function call(Ship $ship, string $ip): self
     {
-        $self = new static;
+        $self = new static();
         $self->ship = $ship;
         $self->ip = $ip;
         $self->serve();

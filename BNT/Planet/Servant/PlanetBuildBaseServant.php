@@ -15,9 +15,12 @@ use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Servant\ShipRealSpaceMoveServant;
 use BNT\Enum\BalanceEnum;
+use BNT\Traits\BuildTrait;
 
 class PlanetBuildBaseServant implements ServantInterface
 {
+    use BuildTrait;
+    
     public Ship $ship;
     public Sector $sector;
     public Planet $planet;
@@ -33,7 +36,7 @@ class PlanetBuildBaseServant implements ServantInterface
         $this->sector = SectorRetrieveByIdDAO::call($this->sector_id);
         $this->planet = PlanetRetrieveByIdDAO::call($this->planet_id);
 
-        $realSpaceMove = $this->realSpaceMove = new ShipRealSpaceMoveServant;
+        $realSpaceMove = $this->realSpaceMove = ShipRealSpaceMoveServant::build();
         $realSpaceMove->ship = $this->ship;
         $realSpaceMove->destination = $this->sector_id;
         $realSpaceMove->doIt = $this->doIt;

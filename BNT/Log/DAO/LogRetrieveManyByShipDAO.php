@@ -33,7 +33,7 @@ class LogRetrieveManyByShipDAO extends LogDAO
 
     public static function call(Ship $ship): array
     {
-        $self = new static;
+        $self = new static();
         $self->ship_id = $ship->ship_id;
         $self->serve();
 

@@ -35,26 +35,26 @@ class PlanetCollectCreditsServant implements ServantInterface
         });
 
         foreach ($this->planets as $planet) {
-            $realSpaceMove = new ShipRealSpaceMoveServant;
+            $realSpaceMove = ShipRealSpaceMoveServant::build();
             $realSpaceMove->ship = $this->ship;
             $realSpaceMove->destination = $planet->sector_id;
             $realSpaceMove->doIt = $this->doIt;
             $realSpaceMove->serve();
 
             $cs = $realSpaceMove->retval;
-            
+
             if ($cs == CommandEnum::hostile) {
                 $cs = CommandEnum::go;
                 continue;
             }
-            
+
             if ($cs == CommandEnum::go) {
-                $takeCredits = new PlanetTakeCreditsServant;
+                $takeCredits = PlanetTakeCreditsServant::build();
                 $takeCredits->doIt = $this->doIt;
                 $takeCredits->planet = $planet;
                 $takeCredits->ship = $this->ship;
                 $takeCredits->serve();
-                
+
                 $cs = $takeCredits->retval;
             }
         }

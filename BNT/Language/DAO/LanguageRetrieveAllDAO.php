@@ -21,7 +21,7 @@ class LanguageRetrieveAllDAO implements ServantInterface
         $this->languages = [];
 
         foreach ($avail_lang as $key => $value) {
-            $lang = new Language;
+            $lang = new Language();
             $lang->file = $value['file'];
             $lang->name = $value['name'];
 

@@ -31,7 +31,7 @@ class ZoneRetrieveByIdDAO extends ZoneDAO
 
     public static function call(int $id): ?Zone
     {
-        $self = new static;
+        $self = new static();
         $self->id = $id;
         $self->serve();
 

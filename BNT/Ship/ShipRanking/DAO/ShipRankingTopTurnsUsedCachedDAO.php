@@ -16,7 +16,7 @@ class ShipRankingTopTurnsUsedCachedDAO extends ShipRankingTopCachedDAO
     #[\Override]
     public function serve(): void
     {
-        $this->shipRankingTop = new ShipRankingTopTurnsUsedDAO;
+        $this->shipRankingTop = ShipRankingTopTurnsUsedDAO::build();
 
         parent::serve();
     }

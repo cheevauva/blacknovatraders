@@ -15,7 +15,7 @@ class LangaugeRetrieveByFileDAO implements ServantInterface
 
     public function serve(): void
     {
-        $retrieveAll = new LanguageRetrieveAllDAO;
+        $retrieveAll = new LanguageRetrieveAllDAO();
         $retrieveAll->serve();
 
         foreach ($retrieveAll->languages as $language) {

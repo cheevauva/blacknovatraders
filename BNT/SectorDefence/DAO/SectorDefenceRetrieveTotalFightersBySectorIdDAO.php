@@ -22,7 +22,7 @@ class SectorDefenceRetrieveTotalFightersBySectorIdDAO extends SectorDefenceDAO
 
     public static function call(int $sectorId): int
     {
-        $self = new static;
+        $self = new static();
         $self->sectorId = $sectorId;
         $self->serve();
 

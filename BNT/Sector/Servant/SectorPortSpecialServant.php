@@ -43,7 +43,7 @@ class SectorPortSpecialServant implements ServantInterface
 
     public static function call(Ship $ship): self
     {
-        $self = new static;
+        $self = new static();
         $self->ship = $ship;
         $self->serve();
 

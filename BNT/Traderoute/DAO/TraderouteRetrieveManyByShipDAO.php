@@ -23,7 +23,7 @@ class TraderouteRetrieveManyByShipDAO extends TraderouteDAO
 
     public static function call(Ship $ship): array
     {
-        $self = new static;
+        $self = new static();
         $self->ship = $ship;
         $self->serve();
 

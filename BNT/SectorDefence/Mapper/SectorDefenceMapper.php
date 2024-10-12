@@ -17,7 +17,7 @@ class SectorDefenceMapper implements ServantInterface
     public function serve(): void
     {
         if (empty($this->defence) && !empty($this->row)) {
-            $this->defence = new SectorDefence;
+            $this->defence = new SectorDefence();
             $this->defence->defence_id = intval($this->row['defence_id']);
             $this->defence->defence_type = SectorDefenceTypeEnum::tryFrom($this->row['defence_type']);
             $this->defence->fm_setting = SectorDefenceFmSettingEnum::tryFrom($this->row['fm_setting']);

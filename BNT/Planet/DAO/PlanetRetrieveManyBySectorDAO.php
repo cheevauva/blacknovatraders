@@ -25,7 +25,7 @@ class PlanetRetrieveManyBySectorDAO extends PlanetDAO
 
     public static function call(int $sector): array
     {
-        $self = new static;
+        $self = new static();
         $self->sector = $sector;
         $self->serve();
 

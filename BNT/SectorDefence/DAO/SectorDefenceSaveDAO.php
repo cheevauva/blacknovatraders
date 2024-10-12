@@ -25,7 +25,7 @@ class SectorDefenceSaveDAO extends SectorDefenceDAO
 
     public static function call(SectorDefence $defence): self
     {
-        $self = new static;
+        $self = new static();
         $self->defence = $defence;
         $self->serve();
 

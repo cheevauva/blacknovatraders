@@ -10,9 +10,12 @@ use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\Log;
 use BNT\Log\LogRaw;
 use BNT\Log\DAO\LogCreateDAO;
+use BNT\Traits\BuildTrait;
 
 class MessageDefenceOwnerServant implements ServantInterface
 {
+    use BuildTrait;
+    
     public int $sector;
     public string $message;
     public bool $doIt = true;
@@ -24,14 +27,14 @@ class MessageDefenceOwnerServant implements ServantInterface
 
     public function serve(): void
     {
-        $retrieveSectorDefences = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $retrieveSectorDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
         $retrieveSectorDefences->sector_id = $this->sector;
         $retrieveSectorDefences->serve();
 
         foreach ($retrieveSectorDefences->defences as $defence) {
             $defence = SectorDefence::as($defence);
 
-            $log = new LogRaw;
+            $log = new LogRaw();
             $log->ship_id = $defence->ship_id;
             $log->message = $this->message;
 

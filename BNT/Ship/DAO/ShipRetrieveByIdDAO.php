@@ -27,7 +27,7 @@ class ShipRetrieveByIdDAO extends ShipDAO
 
     public static function call(int $id): ?Ship
     {
-        $self = new static;
+        $self = new static();
         $self->id = $id;
         $self->serve();
 

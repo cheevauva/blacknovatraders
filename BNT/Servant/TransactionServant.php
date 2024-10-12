@@ -30,7 +30,7 @@ class TransactionServant implements ServantInterface
 
     public static function call(ServantInterface $servant): void
     {
-        $self = new static;
+        $self = new static();
         $self->servant = $servant;
         $self->serve();
     }

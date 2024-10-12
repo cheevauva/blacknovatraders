@@ -9,10 +9,12 @@ use BNT\Traits\DatabaseTrait;
 use BNT\Link\Mapper\LinkMapper;
 use BNT\Enum\TableEnum;
 use BNT\Link\Entity\Link;
+use BNT\Traits\BuildTrait;
 
 abstract class LinkDAO implements ServantInterface
 {
     use DatabaseTrait;
+    use BuildTrait;
 
     protected function table(): string
     {

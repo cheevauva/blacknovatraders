@@ -28,7 +28,7 @@ class SectorSaveDAO extends SectorDAO
 
     public static function call(Sector $sector): self
     {
-        $self = new static;
+        $self = new static();
         $self->sector = $sector;
         $self->serve();
 

@@ -9,10 +9,12 @@ use BNT\Traits\DatabaseTrait;
 use BNT\Enum\TableEnum;
 use BNT\Zone\Mapper\ZoneMapper;
 use BNT\Zone\Entity\Zone;
+use BNT\Traits\BuildTrait;
 
 abstract class ZoneDAO implements ServantInterface
 {
     use DatabaseTrait;
+    use BuildTrait;
 
     protected function table(): string
     {

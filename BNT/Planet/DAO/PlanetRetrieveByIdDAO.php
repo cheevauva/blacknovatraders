@@ -28,7 +28,7 @@ class PlanetRetrieveByIdDAO extends PlanetDAO
 
     public static function call(int $id): ?Planet
     {
-        $self = new static;
+        $self = new static();
         $self->id = $id;
         $self->serve();
 

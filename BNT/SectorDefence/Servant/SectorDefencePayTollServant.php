@@ -15,9 +15,12 @@ use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\LogTollPaid;
 use BNT\Log\LogTollRecieve;
 use BNT\Log\Log;
+use BNT\Traits\BuildTrait;
 
 class SectorDefencePayTollServant implements \BNT\ServantInterface
 {
+    use BuildTrait;
+    
     public bool $doIt = true;
     public Ship $ship;
     public int $sector;
@@ -39,7 +42,7 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
             throw new \Exception($l_chf_notenoughcreditstoll);
         }
 
-        $log = new LogTollPaid;
+        $log = new LogTollPaid();
         $log->sector = $this->sector;
         $log->fightersToll = $this->fightersToll;
 
@@ -55,7 +58,7 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
 
     private function distributeToll()
     {
-        $retrieveDefences = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
         $retrieveDefences->sector_id = $this->sector;
         $retrieveDefences->defence_type = SectorDefenceTypeEnum::Fighters;
         $retrieveDefences->serve();
@@ -70,7 +73,7 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
 
             $this->shipsForChange[] = $ship;
 
-            $log = new LogTollRecieve;
+            $log = new LogTollRecieve();
             $log->tollAmount = $tollAmount;
             $log->sector = $this->sector;
 

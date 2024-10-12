@@ -15,7 +15,7 @@ class PlanetMapper implements ServantInterface
     public function serve(): void
     {
         if (empty($this->planet) && !empty($this->row)) {
-            $planet = $this->planet = new Planet;
+            $planet = $this->planet = new Planet();
             $planet->planet_id = intval($this->row['planet_id']);
             $planet->sector_id = $this->row['sector_id'];
             $planet->name = $this->row['name'];

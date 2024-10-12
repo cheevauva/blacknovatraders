@@ -49,7 +49,7 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
 
     public static function call(SectorPortSpecialOfferServant $offer): self
     {
-        $self = new static;
+        $self = new static();
         $self->offer = $offer;
         $self->serve();
 

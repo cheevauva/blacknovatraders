@@ -100,7 +100,7 @@ class SectorPortResourcePreOfferServant implements ServantInterface
 
     public static function call(Sector $sector, Ship $ship): self
     {
-        $self = new static;
+        $self = new static();
         $self->sector = $sector;
         $self->ship = $ship;
         $self->serve();

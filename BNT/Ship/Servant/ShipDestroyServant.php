@@ -10,9 +10,12 @@ use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\Servant\BountyCancelServant;
 use BNT\Ship\Servant\ShipKillServant;
 use BNT\Log\Log;
+use BNT\Traits\BuildTrait;
 
 class ShipDestroyServant implements ServantInterface
 {
+    use BuildTrait;
+    
     public Ship $ship;
     public bool $doIt = true;
     public bool $shipDestroyed = false;
@@ -41,7 +44,7 @@ class ShipDestroyServant implements ServantInterface
 
     private function shipKill(): void
     {
-        $this->shipKill = new ShipKillServant;
+        $this->shipKill = ShipKillServant::build();
         $this->shipKill->ship = $this->ship;
         $this->shipKill->doIt = $this->doIt;
         $this->shipKill->serve();
@@ -49,7 +52,7 @@ class ShipDestroyServant implements ServantInterface
 
     private function cancelBounty(): void
     {
-        $this->cancelBounty = new BountyCancelServant;
+        $this->cancelBounty = BountyCancelServant::build();
         $this->cancelBounty->bounty_on = $this->ship->ship_id;
         $this->cancelBounty->doIt = $this->doIt;
         $this->cancelBounty->serve();
@@ -70,7 +73,7 @@ class ShipDestroyServant implements ServantInterface
 
     public static function call(Ship $ship): void
     {
-        $self = new static;
+        $self = new static();
         $self->ship = $ship;
         $self->serve();
     }

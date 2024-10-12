@@ -50,7 +50,7 @@ class PlanetChangeProductionServitor implements ServantInterface
     {
         global $l_unnamed;
 
-        $retrievePlanets = new PlanetRetrieveManyByCriteriaDAO;
+        $retrievePlanets = PlanetRetrieveManyByCriteriaDAO::build();
         $retrievePlanets->owner = $this->ship->ship_id;
         $retrievePlanets->serve();
 
@@ -103,7 +103,7 @@ class PlanetChangeProductionServitor implements ServantInterface
         if (!$this->doIt) {
             return;
         }
-        
+
         foreach ($this->changedPlanets as $planet) {
             PlanetSaveDAO::call($planet);
         }

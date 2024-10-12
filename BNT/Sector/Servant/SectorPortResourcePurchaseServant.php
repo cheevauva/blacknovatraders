@@ -70,7 +70,7 @@ class SectorPortResourcePurchaseServant implements ServantInterface
 
     public static function call(SectorPortResourceOfferServant $offer, Ship $ship): self
     {
-        $self = new static;
+        $self = new static();
         $self->offer = $offer;
         $self->ship = $ship;
         $self->serve();

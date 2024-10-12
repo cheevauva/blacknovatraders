@@ -17,9 +17,12 @@ use BNT\SectorDefence\Servant\SectorDefenceDestroyFightersServant;
 use BNT\Message\Servant\MessageDefenceOwnerServant;
 use BNT\Ship\Servant\ShipDestroyServant;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
+use BNT\Traits\BuildTrait;
 
 class SectorDefenceFightSevant implements ServantInterface
 {
+    use BuildTrait;
+    
     public bool $doIt = true;
     public Ship $ship;
     public int $sector_id;
@@ -52,7 +55,7 @@ class SectorDefenceFightSevant implements ServantInterface
         global $l_sf_sendlog;
         global $torp_dmg_rate;
 
-        $hasMyDefence = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $hasMyDefence = SectorDefenceRetrieveManyByCriteriaDAO::build();
         $hasMyDefence->sector_id = $this->sector_id;
         $hasMyDefence->ship_id = $this->ship->ship_id;
         $hasMyDefence->limit = 1;
@@ -131,7 +134,7 @@ class SectorDefenceFightSevant implements ServantInterface
             return;
         }
 
-        $log = new LogDefenceDestroyedFighters;
+        $log = new LogDefenceDestroyedFighters();
         $log->ship_id = $this->ship->ship_id;
         $log->fighterslost = $fighterslost;
         $log->sector = $this->sector_id;
@@ -141,7 +144,7 @@ class SectorDefenceFightSevant implements ServantInterface
 
     private function logKaboom(): void
     {
-        $log = new LogDefenceKaboom;
+        $log = new LogDefenceKaboom();
         $log->sector = $this->sector_id;
         $log->dev_escapepod = $this->ship->dev_escapepod;
 
@@ -150,7 +153,7 @@ class SectorDefenceFightSevant implements ServantInterface
 
     protected function destroyFighters(int $fighterslost): void
     {
-        $this->destroyFighters = new SectorDefenceDestroyFightersServant;
+        $this->destroyFighters = SectorDefenceDestroyFightersServant::build();
         $this->destroyFighters->sector = $this->sector_id;
         $this->destroyFighters->fighters = $fighterslost;
         $this->destroyFighters->doIt = $this->doIt;
@@ -268,7 +271,7 @@ class SectorDefenceFightSevant implements ServantInterface
 
     private function messageDefenceOwner(int $sector, string $message): void
     {
-        $messageDefenceOwner = new MessageDefenceOwnerServant;
+        $messageDefenceOwner = MessageDefenceOwnerServant::build();
         $messageDefenceOwner->sector = $sector;
         $messageDefenceOwner->message = $message;
         $messageDefenceOwner->doIt = false;
@@ -290,7 +293,7 @@ class SectorDefenceFightSevant implements ServantInterface
             '[sector]' => $this->sector_id,
         ]));
 
-        $this->destroyShip = new ShipDestroyServant;
+        $this->destroyShip = ShipDestroyServant::build();
         $this->destroyShip->ship = $this->ship;
         $this->destroyShip->doIt = $this->doIt;
         $this->destroyShip->serve();

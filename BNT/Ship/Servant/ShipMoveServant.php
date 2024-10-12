@@ -22,7 +22,7 @@ class ShipMoveServant implements ServantInterface
 
     public function serve(): void
     {
-        $retrieveLinks = new LinkRetrieveManyByCriteriaDAO;
+        $retrieveLinks = LinkRetrieveManyByCriteriaDAO::build();
         $retrieveLinks->link_start = $this->ship->sector;
         $retrieveLinks->link_dest = $this->sector;
         $retrieveLinks->limit = 1;

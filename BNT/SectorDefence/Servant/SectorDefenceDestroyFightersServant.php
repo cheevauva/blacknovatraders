@@ -10,9 +10,12 @@ use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRemoveByCriteriaDAO;
 use BNT\SectorDefence\DAO\SectorDefenceSaveDAO;
 use BNT\SectorDefence\SectorDefenceTypeEnum;
+use BNT\Traits\BuildTrait;
 
 class SectorDefenceDestroyFightersServant implements ServantInterface
 {
+    use BuildTrait;
+    
     public int $sector;
     public int $fighters;
     public array $defencesForChange = [];
@@ -25,7 +28,7 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
             return;
         }
 
-        $retrieveDefences = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
         $retrieveDefences->sector_id = $this->sector;
         $retrieveDefences->defence_type = SectorDefenceTypeEnum::Fighters;
         $retrieveDefences->orderByQuantityDESC = true;
@@ -70,7 +73,7 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
         foreach ($this->defencesAsRemoved as $defenceForRemove) {
             $defenceForRemove = SectorDefence::as($defenceForRemove);
 
-            $removeDefence = new SectorDefenceRemoveByCriteriaDAO;
+            $removeDefence = SectorDefenceRemoveByCriteriaDAO::build();
             $removeDefence->defence_id = $defenceForRemove->id;
             $removeDefence->serve();
         }
@@ -78,7 +81,7 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
 
     public static function call(SectorDefence|int $sector, int $fighters): self
     {
-        $self = new static;
+        $self = new static();
         $self->sector = is_int($sector) ? $sector : $sector->sector_id;
         $self->fighters = $fighters;
         $self->serve();

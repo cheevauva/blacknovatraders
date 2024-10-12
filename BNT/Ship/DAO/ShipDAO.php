@@ -9,10 +9,12 @@ use BNT\Traits\DatabaseTrait;
 use BNT\Ship\Mapper\ShipMapper;
 use BNT\Enum\TableEnum;
 use BNT\Ship\Entity\Ship;
+use BNT\Traits\BuildTrait;
 
 abstract class ShipDAO implements ServantInterface
 {
     use DatabaseTrait;
+    use BuildTrait;
 
     protected function table(): string
     {

@@ -19,7 +19,7 @@ abstract class ShipRankingTopDAO extends ShipDAO
 
     public static function call(): array
     {
-        $self = new static;
+        $self = new static();
         $self->serve();
 
         return $self->ships;

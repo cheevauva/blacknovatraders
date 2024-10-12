@@ -13,9 +13,11 @@ use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Enum\BalanceEnum;
 use BNT\Enum\CommandEnum;
+use BNT\Traits\BuildTrait;
 
 class ShipRealSpaceMoveServant implements ServantInterface
 {
+    use BuildTrait;
 
     public bool $doIt = true;
     public Ship $ship;
@@ -100,7 +102,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
                     $this->hostile = true;
                 }
             }
-            
+
             if ($this->hostile && ($this->ship->hull > BalanceEnum::mine_hullsize->val())) {
                 $this->retval = CommandEnum::hostile;
             } else {
@@ -125,5 +127,4 @@ class ShipRealSpaceMoveServant implements ServantInterface
 
         ShipSaveDAO::call($this->ship);
     }
-
 }

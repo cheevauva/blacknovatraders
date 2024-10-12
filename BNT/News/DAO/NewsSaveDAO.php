@@ -25,7 +25,7 @@ class NewsSaveDAO extends NewsDAO
 
     public static function call(News $news): void
     {
-        $self = new static;
+        $self = new static();
         $self->news = $news;
         $self->serve();
     }

@@ -69,7 +69,7 @@ class ZonePortTradeServant implements ServantInterface
 
     public static function call(Zone $zone, Ship $ship): self
     {
-        $self = new static;
+        $self = new static();
         $self->zone = $zone;
         $self->ship = $ship;
         $self->serve();

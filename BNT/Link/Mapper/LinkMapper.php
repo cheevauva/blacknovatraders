@@ -15,7 +15,7 @@ class LinkMapper implements ServantInterface
     public function serve(): void
     {
         if (empty($this->link) && !empty($this->row)) {
-            $link = $this->link = new Link;
+            $link = $this->link = new Link();
             $link->link_id = intval($this->row['link_id']);
             $link->link_dest = intval($this->row['link_dest']);
             $link->link_start = intval($this->row['link_start']);

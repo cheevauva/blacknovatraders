@@ -10,9 +10,12 @@ use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Planet\Entity\Planet;
 use BNT\Planet\DAO\PlanetSaveDAO;
 use BNT\Enum\CommandEnum;
+use BNT\Traits\BuildTrait;
 
 class PlanetTakeCreditsServant implements ServantInterface
 {
+    use BuildTrait;
+    
     public Ship $ship;
     public Planet $planet;
     public bool $doIt = true;

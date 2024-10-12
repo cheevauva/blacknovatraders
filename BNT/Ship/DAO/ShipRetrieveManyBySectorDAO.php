@@ -32,7 +32,7 @@ class ShipRetrieveManyBySectorDAO extends ShipDAO
 
     public static function call(int $sector, ?bool $onPlanet = null): array
     {
-        $self = new static;
+        $self = new static();
         $self->sector = $sector;
         $self->onPlanet = $onPlanet;
         $self->serve();

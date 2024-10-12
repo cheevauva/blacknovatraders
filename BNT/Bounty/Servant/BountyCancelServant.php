@@ -13,9 +13,12 @@ use BNT\Bounty\Bounty;
 use BNT\Log\LogBountyCancelled;
 use BNT\Log\DAO\LogCreateDAO;
 use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
+use BNT\Traits\BuildTrait;
 
 class BountyCancelServant implements ServantInterface
 {
+    use BuildTrait;
+    
     public int $bounty_on;
     public bool $doIt = true;
     public array $logs = [];
@@ -24,7 +27,7 @@ class BountyCancelServant implements ServantInterface
 
     public function serve(): void
     {
-        $retieveBounties = new BountyRetrieveManyByCriteriaDAO;
+        $retieveBounties = BountyRetrieveManyByCriteriaDAO::build();
         $retieveBounties->bounty_on = $this->bounty_on;
         $retieveBounties->serve();
 
@@ -39,7 +42,7 @@ class BountyCancelServant implements ServantInterface
 
                 $this->shipsForChange[] = $placedBy;
 
-                $log = new LogBountyCancelled;
+                $log = new LogBountyCancelled();
                 $log->ship_id = $bountydetails->placed_by;
                 $log->amount = $bountydetails->amount;
                 $log->characterName = $bountyOn->character_name;
@@ -60,7 +63,7 @@ class BountyCancelServant implements ServantInterface
         }
 
         foreach ($this->bountiesForRemove as $bountyForRemove) {
-            $removeBounty = new BountyRemoveByCriteriaDAO;
+            $removeBounty = BountyRemoveByCriteriaDAO::build();
             $removeBounty->bounty_id = Bounty::as($bountyForRemove)->bounty_id;
             $removeBounty->serve();
         }
@@ -80,7 +83,7 @@ class BountyCancelServant implements ServantInterface
             $bountyOn = $bountyOn->ship_id;
         }
 
-        $self = new static;
+        $self = new static();
         $self->bounty_on = $bountyOn;
         $self->serve();
     }

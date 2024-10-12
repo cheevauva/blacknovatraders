@@ -9,10 +9,12 @@ use BNT\Traits\DatabaseTrait;
 use BNT\Enum\TableEnum;
 use BNT\Planet\Mapper\PlanetMapper;
 use BNT\Planet\Entity\Planet;
+use BNT\Traits\BuildTrait;
 
 abstract class PlanetDAO implements ServantInterface
 {
     use DatabaseTrait;
+    use BuildTrait;
 
     protected function table(): string
     {

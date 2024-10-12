@@ -21,6 +21,6 @@ abstract class Log
 
     public function __construct()
     {
-        $this->time = new \DateTime;
+        $this->time = new \DateTime();
     }
 }

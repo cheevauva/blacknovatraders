@@ -35,11 +35,11 @@ class SectorDefenceSneakServant implements \BNT\ServantInterface
         $this->roll = rand(1, 100);
 
         if ($this->roll < $this->success) {
-            $this->fight = new SectorDefenceFightSevant;
-            $this->fight->sector_id = $this->sectorId;
-            $this->fight->ship = $this->ship;
-            $this->fight->doIt = $this->doIt;
-            $this->fight->serve();
+            $fight = $this->fight = SectorDefenceFightSevant::build();
+            $fight->sector_id = $this->sectorId;
+            $fight->ship = $this->ship;
+            $fight->doIt = $this->doIt;
+            $fight->serve();
         }
 
         if ($this->doIt) {

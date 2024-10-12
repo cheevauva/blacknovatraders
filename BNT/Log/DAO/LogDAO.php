@@ -9,10 +9,12 @@ use BNT\Enum\TableEnum;
 use BNT\Log\Entity\Log;
 use BNT\Log\Mapper\LogMapper;
 use BNT\Traits\DatabaseTrait;
+use BNT\Traits\BuildTrait;
 
 abstract class LogDAO implements ServantInterface
 {
     use DatabaseTrait;
+    use BuildTrait;
 
     protected function table(): string
     {

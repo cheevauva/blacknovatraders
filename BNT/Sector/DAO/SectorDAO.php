@@ -8,10 +8,12 @@ use BNT\ServantInterface;
 use BNT\Traits\DatabaseTrait;
 use BNT\Enum\TableEnum;
 use BNT\Sector\Mapper\SectorMapper;
+use BNT\Traits\BuildTrait;
 
 abstract class SectorDAO implements ServantInterface
 {
     use DatabaseTrait;
+    use BuildTrait;
 
     protected function table(): string
     {

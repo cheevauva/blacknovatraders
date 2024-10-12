@@ -14,9 +14,12 @@ use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\Zone\Entity\Zone;
 use BNT\Zone\DAO\ZoneRetrieveByIdDAO;
 use Exception;
+use BNT\Traits\BuildTrait;
 
 class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
 {
+    use BuildTrait;
+    
     public Ship $ship;
     public ?Ship $fightersOwner = null;
     public ?Ship $zoneOwner = null;
@@ -38,7 +41,7 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
         $this->zone = ZoneRetrieveByIdDAO::call($this->sector->zone_id);
         $this->zoneOwner = ShipRetrieveByIdDAO::call($this->zone->owner);
 
-        $defencesBySector = new SectorDefenceRetrieveManyByCriteriaDAO;
+        $defencesBySector = SectorDefenceRetrieveManyByCriteriaDAO::build();
         $defencesBySector->sector_id = $this->sector->sector_id;
         $defencesBySector->serve();
 

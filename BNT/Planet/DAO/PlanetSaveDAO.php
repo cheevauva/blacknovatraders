@@ -26,7 +26,7 @@ class PlanetSaveDAO extends PlanetDAO
 
     public static function call(Planet $planet): void
     {
-        $self = new static;
+        $self = new static();
         $self->planet = $planet;
         $self->serve();
     }

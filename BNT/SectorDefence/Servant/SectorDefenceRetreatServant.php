@@ -17,7 +17,7 @@ class SectorDefenceRetreatServant implements \BNT\ServantInterface
         $this->ship->turns -= 2;
         $this->ship->turns_used += 2;
         $this->ship->cleared_defences = null;
-        $this->ship->last_login = new \DateTime;
+        $this->ship->last_login = new \DateTime();
 
         if ($this->doIt) {
             ShipSaveDAO::call($this->ship);
@@ -26,7 +26,7 @@ class SectorDefenceRetreatServant implements \BNT\ServantInterface
 
     public static function call(Ship $ship): self
     {
-        $self = new static;
+        $self = new static();
         $self->ship = $ship;
         $self->serve();
 
