@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipCreateDAO;
 use BNT\Enum\BalanceEnum;
 
-class ShipCreateServant implements ServantInterface
+class ShipCreateServant extends Servant
 {
     public Ship $ship;
 
@@ -35,7 +35,7 @@ class ShipCreateServant implements ServantInterface
         $ship->lang = BalanceEnum::default_lang->val();
         $ship->dhtml = true;
 
-        $create = ShipCreateDAO::build();
+        $create = ShipCreateDAO::new($this->container);
         $create->ship = $ship;
         $create->serve();
     }

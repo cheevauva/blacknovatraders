@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\DAO;
 
-class TransactionBeginTransactionDAO implements \BNT\ServantInterface
+class TransactionBeginTransactionDAO implements \BNT\DAO
 {
     use \BNT\Traits\DatabaseTrait;
 

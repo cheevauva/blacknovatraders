@@ -15,11 +15,10 @@ use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\LogTollPaid;
 use BNT\Log\LogTollRecieve;
 use BNT\Log\Log;
-use BNT\Traits\BuildTrait;
+use BNT\Servant;
 
-class SectorDefencePayTollServant implements \BNT\ServantInterface
+class SectorDefencePayTollServant extends Servant
 {
-    use BuildTrait;
     
     public bool $doIt = true;
     public Ship $ship;
@@ -35,7 +34,7 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
     {
         global $l_chf_notenoughcreditstoll;
 
-        $this->totalSectorFighters = SectorDefenceRetrieveTotalFightersBySectorIdDAO::call($this->sector);
+        $this->totalSectorFighters = SectorDefenceRetrieveTotalFightersBySectorIdDAO::call($this->container, $this->sector);
         $this->fightersToll = intval($this->totalSectorFighters * BalanceEnum::fighter_price->val() * 0.6);
 
         if ($this->ship->credits < $this->fightersToll) {
@@ -58,7 +57,7 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
 
     private function distributeToll()
     {
-        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
+        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveDefences->sector_id = $this->sector;
         $retrieveDefences->defence_type = SectorDefenceTypeEnum::Fighters;
         $retrieveDefences->serve();
@@ -68,7 +67,7 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
 
             $tollAmount = round(($defence->quantity / $this->totalSectorFighters) * $this->fightersToll);
 
-            $ship = ShipRetrieveByIdDAO::call($defence->ship_id);
+            $ship = ShipRetrieveByIdDAO::call($this->container, $defence->ship_id);
             $ship->credits += $tollAmount;
 
             $this->shipsForChange[] = $ship;
@@ -85,13 +84,13 @@ class SectorDefencePayTollServant implements \BNT\ServantInterface
     {
         foreach ($this->distributeTolls as $distributeToll) {
             $distributeToll = SectorDefenceDistributeTollDTO::as($distributeToll);
-            ShipSaveDAO::call($distributeToll->ship);
+            ShipSaveDAO::call($this->container, $distributeToll->ship);
         }
 
-        ShipSaveDAO::call($this->ship);
+        ShipSaveDAO::call($this->container, $this->ship);
 
         foreach ($this->shipsForChange as $ship) {
-            ShipSaveDAO::call($ship);
+            ShipSaveDAO::call($this->container, $ship);
         }
 
         foreach ($this->logs as $log) {

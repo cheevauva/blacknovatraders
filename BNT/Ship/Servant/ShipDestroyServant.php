@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\Servant\BountyCancelServant;
 use BNT\Ship\Servant\ShipKillServant;
 use BNT\Log\Log;
-use BNT\Traits\BuildTrait;
 
-class ShipDestroyServant implements ServantInterface
+
+class ShipDestroyServant extends Servant
 {
-    use BuildTrait;
+
     
     public Ship $ship;
     public bool $doIt = true;
@@ -44,7 +44,7 @@ class ShipDestroyServant implements ServantInterface
 
     private function shipKill(): void
     {
-        $this->shipKill = ShipKillServant::build();
+        $this->shipKill = ShipKillServant::new($this->container);
         $this->shipKill->ship = $this->ship;
         $this->shipKill->doIt = $this->doIt;
         $this->shipKill->serve();
@@ -52,7 +52,7 @@ class ShipDestroyServant implements ServantInterface
 
     private function cancelBounty(): void
     {
-        $this->cancelBounty = BountyCancelServant::build();
+        $this->cancelBounty = BountyCancelServant::new($this->container);
         $this->cancelBounty->bounty_on = $this->ship->ship_id;
         $this->cancelBounty->doIt = $this->doIt;
         $this->cancelBounty->serve();
@@ -64,16 +64,16 @@ class ShipDestroyServant implements ServantInterface
             return;
         }
 
-        ShipSaveDAO::call($this->ship);
+        ShipSaveDAO::call($this->container, $this->ship);
 
         foreach ($this->logs as $log) {
             Log::as($log)->dispatch();
         }
     }
 
-    public static function call(Ship $ship): void
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): void
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->serve();
     }

@@ -60,9 +60,9 @@ class TraderouteRetrieveManyByShipAndSourceTypeDAO extends TraderouteDAO
         }
     }
 
-    public static function call(Ship $ship, TraderouteTypeEnum $type): array
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship, TraderouteTypeEnum $type): array
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->sourceType = $type;
         $self->serve();

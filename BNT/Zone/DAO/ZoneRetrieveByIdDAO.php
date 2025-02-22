@@ -29,9 +29,9 @@ class ZoneRetrieveByIdDAO extends ZoneDAO
         $this->zone = $mapper->zone;
     }
 
-    public static function call(int $id): ?Zone
+    public static function call(\Psr\Container\ContainerInterface $container, int $id): ?Zone
     {
-        $self = new static();
+        $self = static::new($container);
         $self->id = $id;
         $self->serve();
 

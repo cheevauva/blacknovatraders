@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Planet\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\Sector\Servant\SectorCalcOwnershipServant;
@@ -15,11 +15,11 @@ use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Servant\ShipRealSpaceMoveServant;
 use BNT\Enum\BalanceEnum;
-use BNT\Traits\BuildTrait;
 
-class PlanetBuildBaseServant implements ServantInterface
+
+class PlanetBuildBaseServant extends Servant
 {
-    use BuildTrait;
+
     
     public Ship $ship;
     public Sector $sector;
@@ -33,10 +33,10 @@ class PlanetBuildBaseServant implements ServantInterface
     #[\Override]
     public function serve(): void
     {
-        $this->sector = SectorRetrieveByIdDAO::call($this->sector_id);
-        $this->planet = PlanetRetrieveByIdDAO::call($this->planet_id);
+        $this->sector = SectorRetrieveByIdDAO::call($this->container, $this->sector_id);
+        $this->planet = PlanetRetrieveByIdDAO::call($this->container, $this->planet_id);
 
-        $realSpaceMove = $this->realSpaceMove = ShipRealSpaceMoveServant::build();
+        $realSpaceMove = $this->realSpaceMove = ShipRealSpaceMoveServant::new($this->container);
         $realSpaceMove->ship = $this->ship;
         $realSpaceMove->destination = $this->sector_id;
         $realSpaceMove->doIt = $this->doIt;
@@ -73,9 +73,9 @@ class PlanetBuildBaseServant implements ServantInterface
 
         $this->ship->turn();
 
-        ShipSaveDAO::call($this->ship);
-        PlanetSaveDAO::call($this->planet);
+        ShipSaveDAO::call($this->container, $this->ship);
+        PlanetSaveDAO::call($this->container, $this->planet);
 
-        $this->calcOwnership = SectorCalcOwnershipServant::call($this->ship->sector);
+        $this->calcOwnership = SectorCalcOwnershipServant::call($this->container, $this->ship->sector);
     }
 }

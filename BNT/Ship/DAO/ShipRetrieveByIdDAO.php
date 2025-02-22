@@ -25,9 +25,9 @@ class ShipRetrieveByIdDAO extends ShipDAO
         $this->ship = $this->asShip($qb->fetchAssociative() ?: []);
     }
 
-    public static function call(int $id): ?Ship
+    public static function call(\Psr\Container\ContainerInterface $container, int $id): ?Ship
     {
-        $self = new static();
+        $self = static::new($container);
         $self->id = $id;
         $self->serve();
 

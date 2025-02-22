@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\ShipRanking\DAO;
 
-abstract class ShipRankingTopCachedDAO implements \BNT\ServantInterface
+abstract class ShipRankingTopCachedDAO implements \BNT\DAO
 {
     use \BNT\Traits\CacheTrait;
 
@@ -36,9 +36,9 @@ abstract class ShipRankingTopCachedDAO implements \BNT\ServantInterface
         }
     }
 
-    public static function call(): array
+    public static function call(\Psr\Container\ContainerInterface $container, ): array
     {
-        $self = new static();
+        $self = static::new($container);
         $self->serve();
 
         return $self->ships;

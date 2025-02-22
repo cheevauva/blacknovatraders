@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Enum\BalanceEnum;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 
-class ShipPresetServant implements ServantInterface
+class ShipPresetServant extends Servant
 {
     public Ship $ship;
     public $preset1;
@@ -40,6 +40,6 @@ class ShipPresetServant implements ServantInterface
         $this->ship->preset2 = $this->preset2;
         $this->ship->preset3 = $this->preset3;
 
-        ShipSaveDAO::call($this->ship);
+        ShipSaveDAO::call($this->container, $this->ship);
     }
 }

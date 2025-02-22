@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BNT\Language\DAO;
 
-use BNT\ServantInterface;
+use BNT\DAO;
 use BNT\Language\Language;
 use BNT\Language\DAO\LanguageRetrieveAllDAO;
 
-class LangaugeRetrieveByFileDAO implements ServantInterface
+class LangaugeRetrieveByFileDAO extends DAO
 {
     public string $file;
     public ?Language $language;

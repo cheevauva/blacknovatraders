@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Log\LogHarakiri;
 use BNT\Bounty\Servant\BountyCancelServant;
 
-class ShipSelfDestructServant implements ServantInterface
+class ShipSelfDestructServant extends Servant
 {
     public Ship $ship;
     public string $ip;
 
     public function serve(): void
     {
-        BountyCancelServant::call($this->ship);
-        ShipKillServant::call($this->ship);
+        BountyCancelServant::call($this->container, $this->ship);
+        ShipKillServant::call($this->container, $this->ship);
 
         $harakiri = new LogHarakiri;
         $harakiri->ship_id = $this->ship->ship_id;
@@ -25,9 +25,9 @@ class ShipSelfDestructServant implements ServantInterface
         $harakiri->dispatch();
     }
 
-    public static function call(Ship $ship, string $ip): self
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship, string $ip): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->ip = $ip;
         $self->serve();

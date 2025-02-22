@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace BNT\Link\DAO;
 
-use BNT\ServantInterface;
-use BNT\Traits\DatabaseTrait;
+use BNT\DAO;
+
 use BNT\Link\Mapper\LinkMapper;
 use BNT\Enum\TableEnum;
 use BNT\Link\Entity\Link;
-use BNT\Traits\BuildTrait;
 
-abstract class LinkDAO implements ServantInterface
+abstract class LinkDAO extends DAO
 {
-    use DatabaseTrait;
-    use BuildTrait;
+    
 
     protected function table(): string
     {

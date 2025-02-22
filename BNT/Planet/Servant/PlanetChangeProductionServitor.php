@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Planet\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Planet\Entity\Planet;
 use BNT\Planet\DAO\PlanetRetrieveManyByCriteriaDAO;
@@ -50,7 +50,7 @@ class PlanetChangeProductionServitor implements ServantInterface
     {
         global $l_unnamed;
 
-        $retrievePlanets = PlanetRetrieveManyByCriteriaDAO::build();
+        $retrievePlanets = PlanetRetrieveManyByCriteriaDAO::new($this->container);
         $retrievePlanets->owner = $this->ship->ship_id;
         $retrievePlanets->serve();
 
@@ -105,7 +105,7 @@ class PlanetChangeProductionServitor implements ServantInterface
         }
 
         foreach ($this->changedPlanets as $planet) {
-            PlanetSaveDAO::call($planet);
+            PlanetSaveDAO::call($this->container, $planet);
         }
     }
 }

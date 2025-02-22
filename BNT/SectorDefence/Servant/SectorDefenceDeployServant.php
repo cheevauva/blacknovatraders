@@ -11,8 +11,9 @@ use BNT\SectorDefence\DAO\SectorDefenceSaveDAO;
 use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 use BNT\SectorDefence\Servant\SectorDefenceDeployCheckServant;
+use BNT\Servant;
 
-class SectorDefenceDeployServant implements \BNT\ServantInterface
+class SectorDefenceDeployServant extends Servant
 {
     public Ship $ship;
     public bool $doIt = false;
@@ -24,7 +25,7 @@ class SectorDefenceDeployServant implements \BNT\ServantInterface
 
     public function serve(): void
     {
-        $deployCheck = SectorDefenceDeployCheckServant::build();
+        $deployCheck = SectorDefenceDeployCheckServant::new($this->container);
         $deployCheck->ship = $this->ship;
         $deployCheck->serve();
 
@@ -81,8 +82,8 @@ class SectorDefenceDeployServant implements \BNT\ServantInterface
 
         $this->ship->turn();
 
-        ShipSaveDAO::call($this->ship);
-        SectorDefenceSaveDAO::call($this->defenceFighter);
-        SectorDefenceSaveDAO::call($this->defenceMine);
+        ShipSaveDAO::call($this->container, $this->ship);
+        SectorDefenceSaveDAO::call($this->container, $this->defenceFighter);
+        SectorDefenceSaveDAO::call($this->container, $this->defenceMine);
     }
 }

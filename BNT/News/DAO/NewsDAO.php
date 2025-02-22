@@ -7,12 +7,12 @@ namespace BNT\News\DAO;
 use BNT\Enum\TableEnum;
 use BNT\News\Mapper\NewsMapper;
 use BNT\News\Entity\News;
-use BNT\ServantInterface;
-use BNT\Traits\DatabaseTrait;
+use BNT\DAO;
 
-abstract class NewsDAO implements ServantInterface
+
+abstract class NewsDAO extends DAO
 {
-    use DatabaseTrait;
+    
 
     protected function table(): string
     {

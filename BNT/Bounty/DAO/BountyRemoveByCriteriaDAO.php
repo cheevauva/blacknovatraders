@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Bounty\DAO;
 
-use BNT\Traits\BuildTrait;
-
 class BountyRemoveByCriteriaDAO extends BountyDAO
 {
-    use BuildTrait;
-
     public ?int $placedBy;
     public ?int $bountyOn;
     public ?int $bounty_id;

@@ -9,6 +9,8 @@ use Doctrine\DBAL\Connection;
 trait DatabaseTrait
 {
 
+    use ContainerTrait;
+
     protected function db(): Connection
     {
         global $db;
@@ -17,4 +19,5 @@ trait DatabaseTrait
 
         return $db->getConnection();
     }
+
 }

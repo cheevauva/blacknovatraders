@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Log\Mapper;
 
-use BNT\ServantInterface;
+use BNT\Mapper;
 use BNT\Log\Enum\LogTypeEnum;
 use BNT\Log\Entity\Log;
 use BNT\Log\Entity\LogWithIP;
@@ -15,7 +15,7 @@ use BNT\Log\Entity\LogBadLogin;
 use BNT\Log\Entity\LogLogin;
 use BNT\Log\Entity\LogLogout;
 
-class LogMapper implements ServantInterface
+class LogMapper implements Mapper
 {
     public Log $log;
     public array $row;

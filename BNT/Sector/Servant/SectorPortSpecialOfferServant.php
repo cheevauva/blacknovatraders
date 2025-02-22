@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Enum\BalanceEnum;
 
-class SectorPortSpecialOfferServant implements ServantInterface
+class SectorPortSpecialOfferServant extends Servant
 {
     public Ship $ship;
     public $dev_genesis_number = 0;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace BNT\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\DAO\TransactionBeginTransactionDAO;
 use BNT\DAO\TransactionCommitDAO;
 use BNT\DAO\TransactionRollbackDAO;
 
-class TransactionServant implements ServantInterface
+class TransactionServant extends Servant
 {
-    public ServantInterface $servant;
+    public Servant $servant;
 
     public function serve(): void
     {
@@ -28,9 +28,9 @@ class TransactionServant implements ServantInterface
         }
     }
 
-    public static function call(ServantInterface $servant): void
+    public static function call(\Psr\Container\ContainerInterface $container, Servant $servant): void
     {
-        $self = new static();
+        $self = static::new($container);
         $self->servant = $servant;
         $self->serve();
     }

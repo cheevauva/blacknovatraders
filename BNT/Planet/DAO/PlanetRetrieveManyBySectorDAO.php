@@ -23,9 +23,9 @@ class PlanetRetrieveManyBySectorDAO extends PlanetDAO
         $this->planets = $this->asPlanets($qb->fetchAllAssociative());
     }
 
-    public static function call(int $sector): array
+    public static function call(\Psr\Container\ContainerInterface $container, int $sector): array
     {
-        $self = new static();
+        $self = static::new($container);
         $self->sector = $sector;
         $self->serve();
 

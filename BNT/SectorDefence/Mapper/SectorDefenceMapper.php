@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Mapper;
 
-use BNT\ServantInterface;
+use BNT\Mapper;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 
-class SectorDefenceMapper implements ServantInterface
+class SectorDefenceMapper implements Mapper
 {
     public ?array $row = null;
     public ?SectorDefence $defence = null;

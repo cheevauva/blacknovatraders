@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Bounty\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
@@ -13,11 +13,9 @@ use BNT\Bounty\Bounty;
 use BNT\Log\LogBountyCancelled;
 use BNT\Log\DAO\LogCreateDAO;
 use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
-use BNT\Traits\BuildTrait;
 
-class BountyCancelServant implements ServantInterface
+class BountyCancelServant extends Servant
 {
-    use BuildTrait;
     
     public int $bounty_on;
     public bool $doIt = true;
@@ -27,17 +25,17 @@ class BountyCancelServant implements ServantInterface
 
     public function serve(): void
     {
-        $retieveBounties = BountyRetrieveManyByCriteriaDAO::build();
+        $retieveBounties = BountyRetrieveManyByCriteriaDAO::new($this->container);
         $retieveBounties->bounty_on = $this->bounty_on;
         $retieveBounties->serve();
 
         foreach ($retieveBounties->bounties as $bountydetails) {
             $bountydetails = Bounty::as($bountydetails);
 
-            $bountyOn = ShipRetrieveByIdDAO::call($bountydetails->bounty_on);
+            $bountyOn = ShipRetrieveByIdDAO::call($this->container, $bountydetails->bounty_on);
 
             if ($bountydetails->placed_by) {
-                $placedBy = ShipRetrieveByIdDAO::call($bountydetails->placed_by);
+                $placedBy = ShipRetrieveByIdDAO::call($this->container, $bountydetails->placed_by);
                 $placedBy->credits += $bountydetails->amount;
 
                 $this->shipsForChange[] = $placedBy;
@@ -63,27 +61,27 @@ class BountyCancelServant implements ServantInterface
         }
 
         foreach ($this->bountiesForRemove as $bountyForRemove) {
-            $removeBounty = BountyRemoveByCriteriaDAO::build();
+            $removeBounty = BountyRemoveByCriteriaDAO::new($this->container);
             $removeBounty->bounty_id = Bounty::as($bountyForRemove)->bounty_id;
             $removeBounty->serve();
         }
 
         foreach ($this->shipsForChange as $ship) {
-            ShipSaveDAO::call($ship);
+            ShipSaveDAO::call($this->container, $ship);
         }
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($log);
+            LogCreateDAO::call($this->container, $log);
         }
     }
 
-    public static function call(Ship|int $bountyOn): void
+    public static function call(\Psr\Container\ContainerInterface $container, Ship|int $bountyOn): void
     {
         if ($bountyOn instanceof Ship) {
             $bountyOn = $bountyOn->ship_id;
         }
 
-        $self = new static();
+        $self = static::new($container);
         $self->bounty_on = $bountyOn;
         $self->serve();
     }

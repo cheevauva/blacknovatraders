@@ -23,9 +23,9 @@ class NewsSaveDAO extends NewsDAO
         }
     }
 
-    public static function call(News $news): void
+    public static function call(\Psr\Container\ContainerInterface $container, News $news): void
     {
-        $self = new static();
+        $self = static::new($container);
         $self->news = $news;
         $self->serve();
     }

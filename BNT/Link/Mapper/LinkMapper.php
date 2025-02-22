@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Link\Mapper;
 
 use BNT\Link\Entity\Link;
-use BNT\ServantInterface;
+use BNT\Mapper;
 
-class LinkMapper implements ServantInterface
+class LinkMapper implements Mapper
 {
     public ?array $row = null;
     public ?Link $link = null;

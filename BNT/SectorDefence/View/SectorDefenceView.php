@@ -47,7 +47,7 @@ class SectorDefenceView
 
     public function shipname(): string
     {
-        return (new ShipView(ShipRetrieveByIdDAO::call($this->sectorDefence->ship_id)))->name();
+        return (new ShipView(ShipRetrieveByIdDAO::call($this->container, $this->sectorDefence->ship_id)))->name();
     }
 
     public static function map(array $sectorDefences): array

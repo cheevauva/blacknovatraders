@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\DAO;
 
-class TransactionRollbackDAO implements \BNT\ServantInterface
+class TransactionRollbackDAO implements \BNT\DAO
 {
     use \BNT\Traits\DatabaseTrait;
 

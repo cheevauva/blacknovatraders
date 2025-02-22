@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace BNT\Bounty\DAO;
 
-use BNT\ServantInterface;
-use BNT\Traits\DatabaseTrait;
+use BNT\DAO;
+
 use BNT\Enum\TableEnum;
 use BNT\Bounty\Mapper\BountyMapper;
-use BNT\Traits\BuildTrait;
 
-abstract class BountyDAO implements ServantInterface
+abstract class BountyDAO extends DAO
 {
-    use DatabaseTrait;
-    use BuildTrait;
+    
 
     protected function table(): string
     {

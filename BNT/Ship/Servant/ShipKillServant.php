@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\Bounty;
@@ -21,11 +21,11 @@ use BNT\Sector\DAO\SectorRetrieveByCriteriaDAO;
 use BNT\Sector\DAO\SectorSaveDAO;
 use BNT\News\Entity\News;
 use BNT\News\DAO\NewsSaveDAO;
-use BNT\Traits\BuildTrait;
 
-class ShipKillServant implements ServantInterface
+
+class ShipKillServant extends Servant
 {
-    use BuildTrait;
+
     
     public Ship $ship;
     public bool $doIt = true;
@@ -46,13 +46,13 @@ class ShipKillServant implements ServantInterface
         $this->ship->sector = 0;
         $this->ship->cleared_defences = null;
 
-        $retrieveBounties = BountyRetrieveManyByCriteriaDAO::build();
+        $retrieveBounties = BountyRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveBounties->placed_by = $this->ship->ship_id;
         $retrieveBounties->serve();
 
         $this->bountiesForRemove = $retrieveBounties->bounties;
 
-        $retrievePlanets = PlanetRetrieveManyByCriteriaDAO::build();
+        $retrievePlanets = PlanetRetrieveManyByCriteriaDAO::new($this->container);
         $retrievePlanets->owner = $this->ship->ship_id;
         $retrievePlanets->serve();
 
@@ -76,20 +76,20 @@ class ShipKillServant implements ServantInterface
             calc_ownership($sector);
         }
 
-        $retrieveSectorDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
+        $retrieveSectorDefences = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveSectorDefences->ship_id = $this->ship->ship_id;
         $retrieveSectorDefences->serve();
 
         $this->sectorDefencesForRemove = $retrieveSectorDefences->defences;
 
-        $retrieveZone = ZoneRetrieveByCriteriaDAO::build();
+        $retrieveZone = ZoneRetrieveByCriteriaDAO::new($this->container);
         $retrieveZone->corp = false;
         $retrieveZone->owner = $this->ship->ship_id;
         $retrieveZone->serve();
 
         $zone = $retrieveZone->zone;
 
-        $retrieveSector = SectorRetrieveByCriteriaDAO::build();
+        $retrieveSector = SectorRetrieveByCriteriaDAO::new($this->container);
         $retrieveSector->zone_id = $zone->zone_id;
         $retrieveSector->serve();
 
@@ -118,35 +118,35 @@ class ShipKillServant implements ServantInterface
         }
 
         foreach ($this->bountiesForRemove as $bounty) {
-            $removeBounty = BountyRemoveByCriteriaDAO::build();
+            $removeBounty = BountyRemoveByCriteriaDAO::new($this->container);
             $removeBounty->bounty_id = Bounty::as($bounty)->bounty_id;
             $removeBounty->serve();
         }
 
         foreach ($this->sectorDefencesForRemove as $defence) {
-            $removeDefence = SectorDefenceRemoveByCriteriaDAO::build();
+            $removeDefence = SectorDefenceRemoveByCriteriaDAO::new($this->container);
             $removeDefence->defence_id = SectorDefence::as($defence)->defence_id;
             $removeDefence->serve();
         }
 
         foreach ($this->planetsForChange as $planet) {
-            PlanetSaveDAO::call($planet);
+            PlanetSaveDAO::call($this->container, $planet);
         }
 
         foreach ($this->sectorsForChange as $sector) {
-            SectorSaveDAO::call($sector);
+            SectorSaveDAO::call($this->container, $sector);
         }
 
-        ShipSaveDAO::call($this->ship);
+        ShipSaveDAO::call($this->container, $this->ship);
 
         foreach ($this->news as $news) {
-            NewsSaveDAO::call($news);
+            NewsSaveDAO::call($this->container, $news);
         }
     }
 
-    public static function call(Ship $ship): void
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): void
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->serve();
     }

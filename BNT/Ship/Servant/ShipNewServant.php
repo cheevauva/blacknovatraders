@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\DAO\ShipRetrieveByEmailAndCharacterAndShipnameDAO;
 use BNT\Ship\DAO\ShipCreateDAO;
 use BNT\Enum\BalanceEnum;
@@ -13,7 +13,7 @@ use BNT\Ship\Entity\Ship;
 use BNT\Zone\Entity\Zone;
 use BNT\IBankAccount\IBankAccount;
 
-class ShipNewServant implements ServantInterface
+class ShipNewServant extends Servant
 {
     public string $username;
     public string $character;
@@ -51,7 +51,7 @@ class ShipNewServant implements ServantInterface
             throw new \Exception($l_new_blank);
         }
 
-        $ship = ShipRetrieveByEmailAndCharacterAndShipnameDAO::call($this->username, $this->character, $this->shipname);
+        $ship = ShipRetrieveByEmailAndCharacterAndShipnameDAO::call($this->container, $this->username, $this->character, $this->shipname);
 
         if ($ship) {
             if ($ship->email === $this->username) {
@@ -90,7 +90,7 @@ class ShipNewServant implements ServantInterface
         $ship->lang = $default_lang;
         $ship->dev_lssd = $this->start_lssd;
 
-        ShipCreateDAO::call($ship);
+        ShipCreateDAO::call($this->container, $ship);
 
         $zone = new Zone;
         $zone->zone_name = sprintf("%s 's Territory", $this->character);

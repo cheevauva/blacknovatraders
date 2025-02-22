@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Planet\Mapper;
 
 use BNT\Planet\Entity\Planet;
-use BNT\ServantInterface;
+use BNT\Mapper;
 
-class PlanetMapper implements ServantInterface
+class PlanetMapper implements Mapper
 {
     public array $row;
     public Planet $planet;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\DAO\ShipRetrieveByEmailDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Entity\Ship;
@@ -12,7 +12,7 @@ use BNT\Ship\Exception\ShipException;
 use BNT\Log\Entity\LogLogin;
 use BNT\Log\Entity\LogBadLogin;
 
-class ShipLoginServant implements ServantInterface
+class ShipLoginServant extends Servant
 {
     public string $ip;
     public string $email;
@@ -21,7 +21,7 @@ class ShipLoginServant implements ServantInterface
 
     public function serve(): void
     {
-        $this->ship = ShipRetrieveByEmailDAO::call($this->email);
+        $this->ship = ShipRetrieveByEmailDAO::call($this->container, $this->email);
 
         if (empty($this->ship)) {
             throw ShipException::notFound();
@@ -45,7 +45,7 @@ class ShipLoginServant implements ServantInterface
         $ship->last_login = new \DateTime;
         $ship->ip_address = $this->ip;
 
-        ShipSaveDAO::call($ship);
+        ShipSaveDAO::call($this->container, $ship);
 
         $login = new LogLogin;
         $login->ship_id = $ship->ship_id;

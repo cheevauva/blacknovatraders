@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
@@ -13,11 +13,9 @@ use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Enum\BalanceEnum;
 use BNT\Enum\CommandEnum;
-use BNT\Traits\BuildTrait;
 
-class ShipRealSpaceMoveServant implements ServantInterface
+class ShipRealSpaceMoveServant extends Servant
 {
-    use BuildTrait;
 
     public bool $doIt = true;
     public Ship $ship;
@@ -31,8 +29,8 @@ class ShipRealSpaceMoveServant implements ServantInterface
     {
         $deg = pi() / 180;
 
-        $this->sectorStart = SectorRetrieveByIdDAO::call($this->ship->sector);
-        $this->sectorFinish = SectorRetrieveByIdDAO::call($this->destination);
+        $this->sectorStart = SectorRetrieveByIdDAO::call($this->container, $this->ship->sector);
+        $this->sectorFinish = SectorRetrieveByIdDAO::call($this->container, $this->destination);
 
         $sa1 = $this->sectorStart->angle1 * $deg;
         $sa2 = $this->sectorStart->angle2 * $deg;
@@ -87,7 +85,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
         } else {
             $this->hostile = false;
 
-            $retrieveDefence = new SectorDefenceRetrieveManyByCriteriaDAO;
+            $retrieveDefence = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
             $retrieveDefence->sector_id = $this->destination;
             $retrieveDefence->excludeShipId = $this->ship->ship_id;
             $retrieveDefence->limit = 1;
@@ -96,7 +94,7 @@ class ShipRealSpaceMoveServant implements ServantInterface
             $defence = $retrieveDefence->firstOfDefences;
 
             if ($defence) {
-                $nsfighters = ShipRetrieveByIdDAO::call($defence->ship_id);
+                $nsfighters = ShipRetrieveByIdDAO::call($this->container, $defence->ship_id);
 
                 if ($nsfighters->team != $this->ship->team || $this->ship->team == 0) {
                     $this->hostile = true;
@@ -125,6 +123,6 @@ class ShipRealSpaceMoveServant implements ServantInterface
             return;
         }
 
-        ShipSaveDAO::call($this->ship);
+        ShipSaveDAO::call($this->container, $this->ship);
     }
 }

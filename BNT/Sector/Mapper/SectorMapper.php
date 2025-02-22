@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Mapper;
 
-use BNT\ServantInterface;
+use BNT\Mapper;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\Enum\SectorPortTypeEnum;
 
-class SectorMapper implements ServantInterface
+class SectorMapper implements Mapper
 {
     public array $row;
     public ?Sector $sector = null;

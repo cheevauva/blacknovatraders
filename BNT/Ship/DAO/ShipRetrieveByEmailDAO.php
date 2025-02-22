@@ -25,9 +25,9 @@ class ShipRetrieveByEmailDAO extends ShipDAO
         $this->ship = $this->asShip($qb->fetchAssociative() ?: []);
     }
 
-    public static function call(string $email): ?Ship
+    public static function call(\Psr\Container\ContainerInterface $container, string $email): ?Ship
     {
-        $self = new static();
+        $self = static::new($container);
         $self->email = $email;
         $self->serve();
 

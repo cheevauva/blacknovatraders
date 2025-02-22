@@ -20,9 +20,9 @@ class SectorDefenceRetrieveTotalFightersBySectorIdDAO extends SectorDefenceDAO
         $this->totalFighters = (int) $qb->fetchOne();
     }
 
-    public static function call(int $sectorId): int
+    public static function call(\Psr\Container\ContainerInterface $container, int $sectorId): int
     {
-        $self = new static();
+        $self = static::new($container);
         $self->sectorId = $sectorId;
         $self->serve();
 

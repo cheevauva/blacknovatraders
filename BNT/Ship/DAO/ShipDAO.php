@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
-use BNT\ServantInterface;
-use BNT\Traits\DatabaseTrait;
+use BNT\DAO;
+
 use BNT\Ship\Mapper\ShipMapper;
 use BNT\Enum\TableEnum;
 use BNT\Ship\Entity\Ship;
-use BNT\Traits\BuildTrait;
 
-abstract class ShipDAO implements ServantInterface
+
+abstract class ShipDAO extends DAO
 {
-    use DatabaseTrait;
-    use BuildTrait;
+    
+
 
     protected function table(): string
     {

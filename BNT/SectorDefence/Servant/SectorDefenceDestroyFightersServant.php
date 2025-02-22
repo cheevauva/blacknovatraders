@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRemoveByCriteriaDAO;
 use BNT\SectorDefence\DAO\SectorDefenceSaveDAO;
 use BNT\SectorDefence\SectorDefenceTypeEnum;
-use BNT\Traits\BuildTrait;
 
-class SectorDefenceDestroyFightersServant implements ServantInterface
+
+class SectorDefenceDestroyFightersServant extends Servant
 {
-    use BuildTrait;
+
     
     public int $sector;
     public int $fighters;
@@ -28,7 +28,7 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
             return;
         }
 
-        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
+        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveDefences->sector_id = $this->sector;
         $retrieveDefences->defence_type = SectorDefenceTypeEnum::Fighters;
         $retrieveDefences->orderByQuantityDESC = true;
@@ -67,21 +67,21 @@ class SectorDefenceDestroyFightersServant implements ServantInterface
         foreach ($this->defencesForChange as $defenceForChange) {
             $defenceForChange = SectorDefence::as($defenceForChange);
 
-            SectorDefenceSaveDAO::call($defenceForChange);
+            SectorDefenceSaveDAO::call($this->container, $defenceForChange);
         }
 
         foreach ($this->defencesAsRemoved as $defenceForRemove) {
             $defenceForRemove = SectorDefence::as($defenceForRemove);
 
-            $removeDefence = SectorDefenceRemoveByCriteriaDAO::build();
+            $removeDefence = SectorDefenceRemoveByCriteriaDAO::new($this->container);
             $removeDefence->defence_id = $defenceForRemove->id;
             $removeDefence->serve();
         }
     }
 
-    public static function call(SectorDefence|int $sector, int $fighters): self
+    public static function call(\Psr\Container\ContainerInterface $container, SectorDefence|int $sector, int $fighters): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->sector = is_int($sector) ? $sector : $sector->sector_id;
         $self->fighters = $fighters;
         $self->serve();

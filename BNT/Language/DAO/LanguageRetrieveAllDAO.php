@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BNT\Language\DAO;
 
-use BNT\ServantInterface;
+use BNT\DAO;
 use BNT\Language\Language;
 
-class LanguageRetrieveAllDAO implements ServantInterface
+class LanguageRetrieveAllDAO extends DAO
 {
     /**
      * @var array<Language>

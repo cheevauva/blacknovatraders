@@ -40,7 +40,7 @@ class TraderouteView
         return match ($this->traderoute->source_type) {
             TraderouteTypeEnum::Port => $l_port,
             TraderouteTypeEnum::Defense => $l_defense,
-            TraderouteTypeEnum::Personal, TraderouteTypeEnum::Corperate => (new PlanetView(PlanetRetrieveByIdDAO::call($this->traderoute->source_id)))->name(),
+            TraderouteTypeEnum::Personal, TraderouteTypeEnum::Corperate => (new PlanetView(PlanetRetrieveByIdDAO::call($this->container, $this->traderoute->source_id)))->name(),
         };
     }
 
@@ -51,7 +51,7 @@ class TraderouteView
         return match ($this->traderoute->dest_type) {
             TraderouteTypeEnum::Port => strval($this->traderoute->dest_id),
             TraderouteTypeEnum::Defense => sprintf('%s [%s]', $l_defense, $this->traderoute->dest_id),
-            TraderouteTypeEnum::Personal, BNT\Traderoute\TraderouteTypeEnum::Corperate => (new PlanetView(PlanetRetrieveByIdDAO::call($this->traderoute->dest_id)))->name(),
+            TraderouteTypeEnum::Personal, BNT\Traderoute\TraderouteTypeEnum::Corperate => (new PlanetView(PlanetRetrieveByIdDAO::call($this->container, $this->traderoute->dest_id)))->name(),
         };
     }
 

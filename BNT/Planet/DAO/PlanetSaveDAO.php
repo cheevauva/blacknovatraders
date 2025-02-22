@@ -24,9 +24,9 @@ class PlanetSaveDAO extends PlanetDAO
         }
     }
 
-    public static function call(Planet $planet): void
+    public static function call(\Psr\Container\ContainerInterface $container, Planet $planet): void
     {
-        $self = new static();
+        $self = static::new($container);
         $self->planet = $planet;
         $self->serve();
     }

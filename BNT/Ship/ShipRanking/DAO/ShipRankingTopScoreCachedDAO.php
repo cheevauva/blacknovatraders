@@ -16,7 +16,7 @@ class ShipRankingTopScoreCachedDAO extends ShipRankingTopCachedDAO
     #[\Override]
     public function serve(): void
     {
-        $this->shipRankingTop = ShipRankingTopScoreDAO::build();
+        $this->shipRankingTop = ShipRankingTopScoreDAO::new($this->container);
         
         parent::serve();
     }

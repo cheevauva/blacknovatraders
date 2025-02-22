@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace BNT\Ship\Mapper;
 
 use BNT\Ship\Entity\Ship;
-use BNT\ServantInterface;
+use BNT\Mapper;
 
-class ShipMapper implements ServantInterface
+class ShipMapper implements Mapper
 {
     public ?array $row = null;
     public ?Ship $ship = null;

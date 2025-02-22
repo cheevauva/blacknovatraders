@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace BNT\Traderoute\Mapper;
 
-use BNT\ServantInterface;
+use BNT\Mapper;
 use BNT\Traderoute\Entity\Traderoute;
 use BNT\Traderoute\Enum\TraderouteCircuitEnum;
 use BNT\Traderoute\Enum\TraderouteTypeEnum;
 use BNT\Traderoute\Enum\TraderouteMoveTypeEnum;
 
-class TraderouteMapper implements ServantInterface
+class TraderouteMapper implements Mapper
 {
     public ?array $row = null;
     public ?Traderoute $traderoute = null;

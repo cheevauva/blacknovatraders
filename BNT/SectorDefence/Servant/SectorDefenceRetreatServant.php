@@ -6,8 +6,9 @@ namespace BNT\SectorDefence\Servant;
 
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
+use BNT\Servant;
 
-class SectorDefenceRetreatServant implements \BNT\ServantInterface
+class SectorDefenceRetreatServant extends Servant
 {
     public bool $doIt = true;
     public Ship $ship;
@@ -20,13 +21,13 @@ class SectorDefenceRetreatServant implements \BNT\ServantInterface
         $this->ship->last_login = new \DateTime();
 
         if ($this->doIt) {
-            ShipSaveDAO::call($this->ship);
+            ShipSaveDAO::call($this->container, $this->ship);
         }
     }
 
-    public static function call(Ship $ship): self
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->serve();
 

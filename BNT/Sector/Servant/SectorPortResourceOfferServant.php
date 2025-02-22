@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\Enum\SectorPortTypeEnum;
 
-class SectorPortResourceOfferServant implements ServantInterface
+class SectorPortResourceOfferServant extends Servant
 {
     use \BNT\Traits\AsTrait;
 

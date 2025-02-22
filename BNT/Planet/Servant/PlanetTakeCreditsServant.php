@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\Planet\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Planet\Entity\Planet;
 use BNT\Planet\DAO\PlanetSaveDAO;
 use BNT\Enum\CommandEnum;
-use BNT\Traits\BuildTrait;
 
-class PlanetTakeCreditsServant implements ServantInterface
+
+class PlanetTakeCreditsServant extends Servant
 {
-    use BuildTrait;
+
     
     public Ship $ship;
     public Planet $planet;
@@ -69,7 +69,7 @@ class PlanetTakeCreditsServant implements ServantInterface
             return;
         }
 
-        ShipSaveDAO::call($this->ship);
-        PlanetSaveDAO::call($this->planet);
+        ShipSaveDAO::call($this->container, $this->ship);
+        PlanetSaveDAO::call($this->container, $this->planet);
     }
 }

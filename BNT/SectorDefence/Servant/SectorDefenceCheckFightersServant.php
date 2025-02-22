@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Sector\DAO\SectorRetrieveByIdDAO;
@@ -13,7 +13,7 @@ use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 use BNT\Enum\BalanceEnum;
 
-class SectorDefenceCheckFightersServant implements ServantInterface
+class SectorDefenceCheckFightersServant extends Servant
 {
     public int $sector;
     public Ship $ship;
@@ -25,9 +25,9 @@ class SectorDefenceCheckFightersServant implements ServantInterface
 
     public function serve(): void
     {
-        $sectorObj = SectorRetrieveByIdDAO::call($this->sector);
+        $sectorObj = SectorRetrieveByIdDAO::call($this->container, $this->sector);
 
-        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
+        $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveDefences->sector_id = $sectorObj->sector_id;
         $retrieveDefences->defence_type = SectorDefenceTypeEnum::Fighters;
         $retrieveDefences->orderByQuantityDESC = true;
@@ -61,7 +61,7 @@ class SectorDefenceCheckFightersServant implements ServantInterface
 
         foreach ($defences as $defence) {
             $defence = SectorDefence::as($defence);
-            $fightersOwner = ShipRetrieveByIdDAO::call($defence->ship_id);
+            $fightersOwner = ShipRetrieveByIdDAO::call($this->container, $defence->ship_id);
             $fightersDefence = $defence;
 
             if (!empty($this->ship->team) && $this->ship->team === $this->fightersOwner->team) {

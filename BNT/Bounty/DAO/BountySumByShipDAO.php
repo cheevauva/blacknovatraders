@@ -18,9 +18,9 @@ class BountySumByShipDAO extends BountyDAO
         ]) ?? 0);
     }
 
-    public static function call(Ship $ship): self
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): self
     {
-        $self = new static;
+        $self = static::new($container);
         $self->ship = $ship;
         $self->serve();
 

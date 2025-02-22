@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BNT\Zone\Mapper;
 
-use BNT\ServantInterface;
+use BNT\Mapper;
 use BNT\Zone\Entity\Zone;
 use BNT\Zone\Enum\ZoneAllowEnum;
 
-class ZoneMapper implements ServantInterface
+class ZoneMapper implements Mapper
 {
     public array $row;
     public ?Zone $zone = null;

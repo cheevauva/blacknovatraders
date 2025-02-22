@@ -30,9 +30,9 @@ class ShipRetrieveByEmailAndCharacterAndShipnameDAO extends ShipDAO
         $this->ship = $this->asShip($qb->fetchAssociative() ?: []);
     }
 
-    public static function call(string $email, string $character, string $shipname): ?Ship
+    public static function call(\Psr\Container\ContainerInterface $container, string $email, string $character, string $shipname): ?Ship
     {
-        $self = new static();
+        $self = static::new($container);
         $self->email = $email;
         $self->character_name = $character;
         $self->ship_name = $shipname;

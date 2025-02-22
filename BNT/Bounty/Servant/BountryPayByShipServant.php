@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace BNT\Bounty\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\DAO\BountySumByShipDAO;
 use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;
 use BNT\Bounty\Exception\BountyException;
 
-class BountryPayByShipServant implements ServantInterface
+class BountryPayByShipServant extends Servant
 {
     public Ship $ship;
 
     public function serve(): void
     {
         $ship = $this->ship;
-        $amount = BountySumByShipDAO::call($ship)->total;
+        $amount = BountySumByShipDAO::call($this->container, $ship)->total;
 
         if (empty($amount)) {
             throw BountyException::notExists();
@@ -30,17 +30,17 @@ class BountryPayByShipServant implements ServantInterface
 
         $ship->credits = intval($ship->credits - $amount);
 
-        ShipSaveDAO::call($ship);
+        ShipSaveDAO::call($this->container, $ship);
 
-        $removeBounty = BountyRemoveByCriteriaDAO::build();
+        $removeBounty = BountyRemoveByCriteriaDAO::new($this->container);
         $removeBounty->bountyOn = $this->ship->ship_id;
         $removeBounty->placedBy = 0;
         $removeBounty->serve();
     }
 
-    public static function call(Ship $ship): self
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->serve();
 

@@ -17,9 +17,9 @@ abstract class ShipRankingTopDAO extends ShipDAO
 
     abstract protected function ships(): array;
 
-    public static function call(): array
+    public static function call(\Psr\Container\ContainerInterface $container, ): array
     {
-        $self = new static();
+        $self = static::new($container);
         $self->serve();
 
         return $self->ships;

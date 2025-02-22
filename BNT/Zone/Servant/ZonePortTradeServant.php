@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace BNT\Zone\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Zone\Entity\Zone;
 use BNT\Zone\Exception\ZoneException;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 
-class ZonePortTradeServant implements ServantInterface
+class ZonePortTradeServant extends Servant
 {
     public Zone $zone;
     public Ship $ship;
@@ -45,7 +45,7 @@ class ZonePortTradeServant implements ServantInterface
     private function isAllowForOutsiders(Zone $zone, Ship $ship): bool
     {
         if (empty($zone->corp_zone)) {
-            $owner = ShipRetrieveByIdDAO::call($zone->owner);
+            $owner = ShipRetrieveByIdDAO::call($this->container, $zone->owner);
 
             if (empty($owner)) {
                 return true;
@@ -67,9 +67,9 @@ class ZonePortTradeServant implements ServantInterface
         return true;
     }
 
-    public static function call(Zone $zone, Ship $ship): self
+    public static function call(\Psr\Container\ContainerInterface $container, Zone $zone, Ship $ship): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->zone = $zone;
         $self->ship = $ship;
         $self->serve();

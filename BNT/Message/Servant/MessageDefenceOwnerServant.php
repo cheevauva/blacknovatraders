@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\Message\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\Log;
 use BNT\Log\LogRaw;
 use BNT\Log\DAO\LogCreateDAO;
-use BNT\Traits\BuildTrait;
 
-class MessageDefenceOwnerServant implements ServantInterface
+
+class MessageDefenceOwnerServant extends Servant
 {
-    use BuildTrait;
+
     
     public int $sector;
     public string $message;
@@ -27,7 +27,7 @@ class MessageDefenceOwnerServant implements ServantInterface
 
     public function serve(): void
     {
-        $retrieveSectorDefences = SectorDefenceRetrieveManyByCriteriaDAO::build();
+        $retrieveSectorDefences = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveSectorDefences->sector_id = $this->sector;
         $retrieveSectorDefences->serve();
 

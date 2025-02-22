@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\DAO;
 
-class TransactionCommitDAO implements \BNT\ServantInterface
+class TransactionCommitDAO implements \BNT\DAO
 {
     use \BNT\Traits\DatabaseTrait;
 

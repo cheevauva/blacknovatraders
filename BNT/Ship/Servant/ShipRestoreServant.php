@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 
-class ShipRestoreServant implements ServantInterface
+class ShipRestoreServant extends Servant
 {
     public Ship $ship;
 
@@ -26,6 +26,6 @@ class ShipRestoreServant implements ServantInterface
             $ship->resetWithoutEscapePod();
         }
 
-        ShipSaveDAO::call($ship);
+        ShipSaveDAO::call($this->container, $ship);
     }
 }

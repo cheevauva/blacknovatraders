@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\Enum\SectorPortTypeEnum;
 use BNT\Ship\Entity\Ship;
 
-class SectorPortResourcePreOfferServant implements ServantInterface
+class SectorPortResourcePreOfferServant extends Servant
 {
     use \BNT\Traits\AsTrait;
 
@@ -98,9 +98,9 @@ class SectorPortResourcePreOfferServant implements ServantInterface
         };
     }
 
-    public static function call(Sector $sector, Ship $ship): self
+    public static function call(\Psr\Container\ContainerInterface $container, Sector $sector, Ship $ship): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->sector = $sector;
         $self->ship = $ship;
         $self->serve();

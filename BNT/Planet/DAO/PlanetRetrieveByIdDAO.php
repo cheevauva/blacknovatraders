@@ -26,9 +26,9 @@ class PlanetRetrieveByIdDAO extends PlanetDAO
         $this->planet = $this->asPlanet($qb->fetchAssociative() ?: []);
     }
 
-    public static function call(int $id): ?Planet
+    public static function call(\Psr\Container\ContainerInterface $container, int $id): ?Planet
     {
-        $self = new static();
+        $self = static::new($container);
         $self->id = $id;
         $self->serve();
 

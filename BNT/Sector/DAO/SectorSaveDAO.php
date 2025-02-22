@@ -26,9 +26,9 @@ class SectorSaveDAO extends SectorDAO
         }
     }
 
-    public static function call(Sector $sector): self
+    public static function call(\Psr\Container\ContainerInterface $container, Sector $sector): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->sector = $sector;
         $self->serve();
 

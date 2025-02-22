@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\DAO\ShipSaveDAO;
 
-class SectorPortSpecialPurchaseServant implements ServantInterface
+class SectorPortSpecialPurchaseServant extends Servant
 {
     public SectorPortSpecialOfferServant $offer;
 
@@ -44,12 +44,12 @@ class SectorPortSpecialPurchaseServant implements ServantInterface
         $ship->dev_fuelscoop = $ship->dev_fuelscoop ?: !empty($offer->fuelscoop_purchase);
         $ship->dev_lssd = $ship->dev_lssd ?: !empty($offer->lssd_purchase);
 
-        ShipSaveDAO::call($ship);
+        ShipSaveDAO::call($this->container, $ship);
     }
 
-    public static function call(SectorPortSpecialOfferServant $offer): self
+    public static function call(\Psr\Container\ContainerInterface $container, SectorPortSpecialOfferServant $offer): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->offer = $offer;
         $self->serve();
 

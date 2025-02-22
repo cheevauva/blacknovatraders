@@ -29,9 +29,9 @@ class SectorRetrieveByIdDAO extends SectorDAO
         $this->sector = $mapper->sector;
     }
 
-    public static function call(int $id): ?Sector
+    public static function call(\Psr\Container\ContainerInterface $container, int $id): ?Sector
     {
-        $self = new static();
+        $self = static::new($container);
         $self->id = $id;
         $self->serve();
 

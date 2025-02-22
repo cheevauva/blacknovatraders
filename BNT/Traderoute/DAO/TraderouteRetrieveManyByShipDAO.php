@@ -15,15 +15,15 @@ class TraderouteRetrieveManyByShipDAO extends TraderouteDAO
     public function serve(): void
     {
         $this->traderoutes = [];
-        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->ship, TraderouteTypeEnum::Port);
-        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->ship, TraderouteTypeEnum::Defense);
-        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->ship, TraderouteTypeEnum::Personal);
-        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->ship, TraderouteTypeEnum::Corperate);
+        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->container, $this->ship, TraderouteTypeEnum::Port);
+        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->container, $this->ship, TraderouteTypeEnum::Defense);
+        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->container, $this->ship, TraderouteTypeEnum::Personal);
+        $this->traderoutes += TraderouteRetrieveManyByShipAndSourceTypeDAO::call($this->container, $this->ship, TraderouteTypeEnum::Corperate);
     }
 
-    public static function call(Ship $ship): array
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): array
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->serve();
 

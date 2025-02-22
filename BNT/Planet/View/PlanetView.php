@@ -46,7 +46,7 @@ class PlanetView
             return null;
         }
 
-        return ShipRetrieveByIdDAO::call($this->planet->owner);
+        return ShipRetrieveByIdDAO::call($this->container, $this->planet->owner);
     }
 
     public function level(): int

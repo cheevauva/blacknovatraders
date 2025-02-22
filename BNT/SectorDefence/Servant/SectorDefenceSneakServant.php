@@ -7,8 +7,9 @@ namespace BNT\SectorDefence\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\SectorDefence\Servant\SectorDefenceFightSevant;
+use BNT\Servant;
 
-class SectorDefenceSneakServant implements \BNT\ServantInterface
+class SectorDefenceSneakServant extends Servant
 {
     public Ship $ship;
     public Ship $fightersOwner;
@@ -35,7 +36,7 @@ class SectorDefenceSneakServant implements \BNT\ServantInterface
         $this->roll = rand(1, 100);
 
         if ($this->roll < $this->success) {
-            $fight = $this->fight = SectorDefenceFightSevant::build();
+            $fight = $this->fight = SectorDefenceFightSevant::new($this->container);
             $fight->sector_id = $this->sectorId;
             $fight->ship = $this->ship;
             $fight->doIt = $this->doIt;
@@ -43,7 +44,7 @@ class SectorDefenceSneakServant implements \BNT\ServantInterface
         }
 
         if ($this->doIt) {
-            ShipSaveDAO::call($this->ship);
+            ShipSaveDAO::call($this->container, $this->ship);
         }
     }
 }

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\DAO;
 
-use BNT\ServantInterface;
-use BNT\Traits\DatabaseTrait;
+use BNT\DAO;
+
 use BNT\SectorDefence\Mapper\SectorDefenceMapper;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Enum\TableEnum;
-use BNT\Traits\BuildTrait;
 
-abstract class SectorDefenceDAO implements ServantInterface
+
+abstract class SectorDefenceDAO extends DAO
 {
-    use DatabaseTrait;
-    use BuildTrait;
+    
+
     
     protected function table(): string
     {

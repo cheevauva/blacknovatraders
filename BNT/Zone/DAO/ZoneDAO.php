@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace BNT\Zone\DAO;
 
-use BNT\ServantInterface;
-use BNT\Traits\DatabaseTrait;
+use BNT\DAO;
+
 use BNT\Enum\TableEnum;
 use BNT\Zone\Mapper\ZoneMapper;
 use BNT\Zone\Entity\Zone;
-use BNT\Traits\BuildTrait;
 
-abstract class ZoneDAO implements ServantInterface
+
+abstract class ZoneDAO extends DAO
 {
-    use DatabaseTrait;
-    use BuildTrait;
+
+    
+
 
     protected function table(): string
     {
@@ -29,11 +30,11 @@ abstract class ZoneDAO implements ServantInterface
     protected function asZones(array $rows): array
     {
         $zones = [];
-        
+
         foreach ($rows as $row) {
             $zones[] = $this->asZone($row);
         }
-        
+
         return $zones;
     }
 
@@ -45,4 +46,5 @@ abstract class ZoneDAO implements ServantInterface
 
         return $mapper->zone;
     }
+
 }

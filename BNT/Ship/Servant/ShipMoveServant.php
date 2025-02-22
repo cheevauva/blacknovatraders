@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Exception\ShipMoveTurnException;
@@ -12,7 +12,7 @@ use BNT\Link\DAO\LinkRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\Servant\SectorDefenceCheckFightersServant;
 use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
 
-class ShipMoveServant implements ServantInterface
+class ShipMoveServant extends Servant
 {
     public Ship $ship;
     public SectorDefenceCheckFightersServant $checkFighters;
@@ -22,7 +22,7 @@ class ShipMoveServant implements ServantInterface
 
     public function serve(): void
     {
-        $retrieveLinks = LinkRetrieveManyByCriteriaDAO::build();
+        $retrieveLinks = LinkRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveLinks->link_start = $this->ship->sector;
         $retrieveLinks->link_dest = $this->sector;
         $retrieveLinks->limit = 1;
@@ -63,6 +63,6 @@ class ShipMoveServant implements ServantInterface
             throw new ShipMoveTurnException($l_move_failed);
         }
 
-        ShipSaveDAO::call($this->ship);
+        ShipSaveDAO::call($this->container, $this->ship);
     }
 }

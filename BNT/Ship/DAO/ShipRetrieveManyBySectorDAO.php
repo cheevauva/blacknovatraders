@@ -30,9 +30,9 @@ class ShipRetrieveManyBySectorDAO extends ShipDAO
         $this->ships = $this->asShips($qb->fetchAllAssociative() ?: []);
     }
 
-    public static function call(int $sector, ?bool $onPlanet = null): array
+    public static function call(\Psr\Container\ContainerInterface $container, int $sector, ?bool $onPlanet = null): array
     {
-        $self = new static();
+        $self = static::new($container);
         $self->sector = $sector;
         $self->onPlanet = $onPlanet;
         $self->serve();

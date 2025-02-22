@@ -31,9 +31,9 @@ class LogRetrieveManyByShipDAO extends LogDAO
         $this->logs = $this->asLogs($qb->fetchAllAssociative() ?: []);
     }
 
-    public static function call(Ship $ship): array
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): array
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship_id = $ship->ship_id;
         $self->serve();
 

@@ -14,12 +14,11 @@ use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\Zone\Entity\Zone;
 use BNT\Zone\DAO\ZoneRetrieveByIdDAO;
 use Exception;
-use BNT\Traits\BuildTrait;
+use BNT\Servant;
 
-class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
+class SectorDefenceDeployCheckServant extends Servant
 {
-    use BuildTrait;
-    
+
     public Ship $ship;
     public ?Ship $fightersOwner = null;
     public ?Ship $zoneOwner = null;
@@ -37,11 +36,11 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
 
     public function serve(): void
     {
-        $this->sector = SectorRetrieveByIdDAO::call($this->ship->sector);
-        $this->zone = ZoneRetrieveByIdDAO::call($this->sector->zone_id);
-        $this->zoneOwner = ShipRetrieveByIdDAO::call($this->zone->owner);
+        $this->sector = SectorRetrieveByIdDAO::call($this->container, $this->ship->sector);
+        $this->zone = ZoneRetrieveByIdDAO::call($this->container, $this->sector->zone_id);
+        $this->zoneOwner = ShipRetrieveByIdDAO::call($this->container, $this->zone->owner);
 
-        $defencesBySector = SectorDefenceRetrieveManyByCriteriaDAO::build();
+        $defencesBySector = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
         $defencesBySector->sector_id = $this->sector->sector_id;
         $defencesBySector->serve();
 
@@ -50,7 +49,7 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
 
             if ($this->ship->ship_id != $defence->ship_id) {
                 $this->hasOtherOwner = true;
-                $this->fightersOwner = ShipRetrieveByIdDAO::call($defence->ship_id);
+                $this->fightersOwner = ShipRetrieveByIdDAO::call($this->container, $defence->ship_id);
             }
 
             if ($defence->defence_type === SectorDefenceTypeEnum::Fighters) {
@@ -96,4 +95,5 @@ class SectorDefenceDeployCheckServant implements \BNT\ServantInterface
             throw new Exception($l_mines_nopermit);
         }
     }
+
 }

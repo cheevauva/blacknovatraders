@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Planet\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Planet\Entity\Planet;
 use BNT\Planet\DAO\PlanetRetrieveByIdDAO;
 use BNT\Ship\Entity\Ship;
@@ -12,7 +12,7 @@ use BNT\Ship\Servant\ShipRealSpaceMoveServant;
 use BNT\Planet\Servant\PlanetTakeCreditsServant;
 use BNT\Enum\CommandEnum;
 
-class PlanetCollectCreditsServant implements ServantInterface
+class PlanetCollectCreditsServant extends Servant
 {
     public Ship $ship;
     public array $planetIds;
@@ -25,7 +25,7 @@ class PlanetCollectCreditsServant implements ServantInterface
         $this->planets = [];
 
         foreach ($this->planetIds as $planetId) {
-            $this->planets[] = PlanetRetrieveByIdDAO::call($planetId);
+            $this->planets[] = PlanetRetrieveByIdDAO::call($this->container, $planetId);
         }
 
         // Sort the array so that it is in order of sectors, lowest number first, not closest
@@ -35,7 +35,7 @@ class PlanetCollectCreditsServant implements ServantInterface
         });
 
         foreach ($this->planets as $planet) {
-            $realSpaceMove = ShipRealSpaceMoveServant::build();
+            $realSpaceMove = ShipRealSpaceMoveServant::new($this->container);
             $realSpaceMove->ship = $this->ship;
             $realSpaceMove->destination = $planet->sector_id;
             $realSpaceMove->doIt = $this->doIt;
@@ -49,7 +49,7 @@ class PlanetCollectCreditsServant implements ServantInterface
             }
 
             if ($cs == CommandEnum::go) {
-                $takeCredits = PlanetTakeCreditsServant::build();
+                $takeCredits = PlanetTakeCreditsServant::new($this->container);
                 $takeCredits->doIt = $this->doIt;
                 $takeCredits->planet = $planet;
                 $takeCredits->ship = $this->ship;

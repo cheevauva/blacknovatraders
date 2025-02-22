@@ -13,7 +13,7 @@ trait EventTrait
     public function dispatch(): void
     {
         if ($this instanceof Log) {
-            LogCreateDAO::call($this); // @todo replace on event dispatcher
+            LogCreateDAO::call($this->container, $this); // @todo replace on event dispatcher
         }
     }
 }

@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace BNT\Log\DAO;
 
-use BNT\ServantInterface;
+use BNT\DAO;
 use BNT\Enum\TableEnum;
 use BNT\Log\Entity\Log;
 use BNT\Log\Mapper\LogMapper;
-use BNT\Traits\DatabaseTrait;
-use BNT\Traits\BuildTrait;
 
-abstract class LogDAO implements ServantInterface
+
+abstract class LogDAO extends DAO
 {
-    use DatabaseTrait;
-    use BuildTrait;
+    
 
     protected function table(): string
     {

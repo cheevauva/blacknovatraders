@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Sector\DAO\SectorSaveDAO;
 use BNT\Sector\Enum\SectorPortTypeEnum;
 use BNT\Sector\Servant\SectorPortResourceOfferServant;
@@ -13,7 +13,7 @@ use BNT\Sector\Entity\Sector;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 
-class SectorPortResourcePurchaseServant implements ServantInterface
+class SectorPortResourcePurchaseServant extends Servant
 {
     public Ship $ship;
     public SectorPortResourceOfferServant $offer;
@@ -41,8 +41,8 @@ class SectorPortResourcePurchaseServant implements ServantInterface
         print_r($ship);
         die;
 
-//        ShipSaveDAO::call($ship);
-//        SectorSaveDAO::call($sector);
+//        ShipSaveDAO::call($this->container, $ship);
+//        SectorSaveDAO::call($this->container, $sector);
     }
 
     private function trade(Sector $sector, Ship $ship, SectorPortTypeEnum $resource, $amount): void
@@ -68,9 +68,9 @@ class SectorPortResourcePurchaseServant implements ServantInterface
         }
     }
 
-    public static function call(SectorPortResourceOfferServant $offer, Ship $ship): self
+    public static function call(\Psr\Container\ContainerInterface $container, SectorPortResourceOfferServant $offer, Ship $ship): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->offer = $offer;
         $self->ship = $ship;
         $self->serve();

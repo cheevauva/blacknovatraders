@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace BNT\Sector\DAO;
 
-use BNT\ServantInterface;
-use BNT\Traits\DatabaseTrait;
+use BNT\DAO;
+
 use BNT\Enum\TableEnum;
 use BNT\Sector\Mapper\SectorMapper;
-use BNT\Traits\BuildTrait;
 
-abstract class SectorDAO implements ServantInterface
+
+abstract class SectorDAO extends DAO
 {
-    use DatabaseTrait;
-    use BuildTrait;
+    
+
 
     protected function table(): string
     {

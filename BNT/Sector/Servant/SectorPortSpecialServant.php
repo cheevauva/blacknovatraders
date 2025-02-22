@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Servant;
 
-use BNT\ServantInterface;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 
-class SectorPortSpecialServant implements ServantInterface
+class SectorPortSpecialServant extends Servant
 {
     public Ship $ship;
     public float $totalBounty;
@@ -41,9 +41,9 @@ class SectorPortSpecialServant implements ServantInterface
         $this->colonist_free = $playerinfo->getFreeHolds();
     }
 
-    public static function call(Ship $ship): self
+    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): self
     {
-        $self = new static();
+        $self = static::new($container);
         $self->ship = $ship;
         $self->serve();
 
