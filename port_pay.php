@@ -12,6 +12,6 @@ if (isNotAuthorized()) {
 
 $ship = ship();
 
-BountryPayByShipServant::call($ship);
+BountryPayByShipServant::call($container, $ship);
 
 echo twig()->render('port/port_bounty_pay.twig');

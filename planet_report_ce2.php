@@ -17,14 +17,14 @@ $ship = ship();
 try {
 
     if (!empty($_POST['TPCreds']) && is_array($_POST['TPCreds'])) {
-        $collectCredits = new PlanetCollectCreditsServant;
+        $collectCredits = PlanetCollectCreditsServant::new($container);
         $collectCredits->planetIds = $_POST['TPCreds'];
         $collectCredits->ship = $ship;
         $collectCredits->serve();
     }
     
     if (isset($_GET['buildp']) AND isset($_GET['builds'])) {
-        $buildBase = new PlanetBuildBaseServant;
+        $buildBase = PlanetBuildBaseServant::new($container);
         $buildBase->ship = $ship;
         $buildBase->planet_id = intval($_GET['buildp']);
         $buildBase->sector_id = intval($_GET['builds']);

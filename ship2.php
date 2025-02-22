@@ -13,7 +13,7 @@ if (isNotAuthorized()) {
 
 $shipId = intval($_GET['ship_id'] ?? 0);
 $ship = ship();
-$othership = BNT\Ship\DAO\ShipRetrieveByIdDAO::call($shipId);
+$othership = BNT\Ship\DAO\ShipRetrieveByIdDAO::call($container, $shipId);
 
 echo twig()->render('ship/ship.twig', [
     'ship_id' => $shipId,

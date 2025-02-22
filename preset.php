@@ -21,7 +21,7 @@ if (!isset($_POST['change'])) {
     $message = null;
     
     try {
-        $preset = new ShipPresetServant;
+        $preset = ShipPresetServant::new($container);
         $preset->ship = $playerinfo;
         $preset->preset1 = intval(abs($_POST['preset1'] ?? 0));
         $preset->preset2 = intval(abs($_POST['preset2'] ?? 0));

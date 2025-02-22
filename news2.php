@@ -14,7 +14,7 @@ $startdate = new \DateTimeImmutable($_GET['startdate'] ?? 'now');
 $previousday = $startdate->sub(new \DateInterval('P1D'));
 $nextday = $startdate->add(new \DateInterval('P1D'));
 
-$retrieveNews = new NewsRetrieveManyByCriteriaDAO;
+$retrieveNews = NewsRetrieveManyByCriteriaDAO::new($container);
 $retrieveNews->dateFrom = $previousday;
 $retrieveNews->dateTo = $nextday;
 $retrieveNews->sortByNewsIdDESC = true;

@@ -24,13 +24,13 @@ $ship = ship();
 try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            $checkFighters = new SectorDefenceCheckFightersServant;
+            $checkFighters = SectorDefenceCheckFightersServant::new($container);
             $checkFighters->sector = intval($_GET['sector']);
             $checkFighters->ship = $ship;
             $checkFighters->serve();
 
             try {
-                $move = new ShipMoveServant;
+                $move = ShipMoveServant::new($container);
                 $move->checkFighters = $checkFighters;
                 $move->ship = $ship;
                 $move->sector = intval($_GET['sector']);
@@ -49,7 +49,7 @@ try {
         case 'POST':
             switch ($_POST['response']) {
                 case 'fight':
-                    $fight = new SectorDefenceFightSevant;
+                    $fight = SectorDefenceFightSevant::new($container);
                     $fight->ship = $ship;
                     $fight->sector_id = intval($_GET['sector']);
                     $fight->doIt = false;
@@ -59,22 +59,22 @@ try {
                     die;
                     break;
                 case 'retreat':
-                    SectorDefenceRetreatServant::call($this->ship);
+                    SectorDefenceRetreatServant::call($container, $this->ship);
                     break;
                 case 'pay':
-                    $pay = new SectorDefencePayTollServant;
+                    $pay = SectorDefencePayTollServant::new($container);
                     $pay->ship = $this->ship;
                     $pay->sector = intval($_GET['sector']);
                     $pay->serve();
                     break;
                 case 'sneak':
                     try {
-                        $sneak = new SectorDefenceSneakServant;
+                        $sneak = SectorDefenceSneakServant::new($container);
                         $sneak->fightersOwner = $fightersOwner;
                         $sneak->ship = $ship;
                         $sneak->serve();
                     } catch (SectorDefenceDetectYourShipException $ex) {
-                        $fight = new SectorDefenceFightSevant;
+                        $fight = SectorDefenceFightSevant::new($container);
                         $fight->ship = $ship;
                         $fight->sector_id = intval($_GET['sector']);
                         ;

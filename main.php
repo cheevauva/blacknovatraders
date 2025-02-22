@@ -29,7 +29,7 @@ if (!empty($playerinfo->cleared_defences)) {
 }
 
 if ($playerinfo->on_planet) {
-    $currentPlanet = BNT\Planet\DAO\PlanetRetrieveByIdDAO::call($playerinfo->planet_id);
+    $currentPlanet = \BNT\Planet\DAO\PlanetRetrieveByIdDAO::call($container, $playerinfo->planet_id);
 
     if (!$currentPlanet) {
         $playerinfo->on_planet = false;
@@ -40,13 +40,13 @@ if ($playerinfo->on_planet) {
     }
 }
 
-$sectorinfo = SectorRetrieveByIdDAO::call($playerinfo->sector);
+$sectorinfo = SectorRetrieveByIdDAO::call($container, $playerinfo->sector);
 
-$retriveLinks = new LinkRetrieveManyByCriteriaDAO;
+$retriveLinks = LinkRetrieveManyByCriteriaDAO::new($container);
 $retriveLinks->link_start = $playerinfo->sector;
 $retriveLinks->serve();
 
-$retrieveSectorDefences = new SectorDefenceRetrieveManyByCriteriaDAO;
+$retrieveSectorDefences = SectorDefenceRetrieveManyByCriteriaDAO::new($container);
 $retrieveSectorDefences->sector_id = $playerinfo->sector;
 $retrieveSectorDefences->serve();
 
@@ -54,9 +54,9 @@ echo twig()->render('main.twig', [
     'playerinfo' => new ShipView($playerinfo),
     'sectorinfo' => $sectorinfo ? new SectorView($sectorinfo) : null,
     'links' => $retriveLinks->links,
-    'planetsInSector' => PlanetView::map(PlanetRetrieveManyBySectorDAO::call($playerinfo->sector)),
-    'traderoutes' => TraderouteView::map(TraderouteRetrieveManyByShipDAO::call($playerinfo)),
+    'planetsInSector' => PlanetView::map(PlanetRetrieveManyBySectorDAO::call($container, $playerinfo->sector)),
+    'traderoutes' => TraderouteView::map(TraderouteRetrieveManyByShipDAO::call($container, $playerinfo)),
     'defencesInSector' => SectorDefenceView::map($retrieveSectorDefences->defences),
-    'zoneinfo' => $sectorinfo ? ZoneRetrieveByIdDAO::call($sectorinfo->zone_id) : null,
-    'shipsInSector' => ShipView::map(ShipRetrieveManyBySectorDAO::call($playerinfo->sector)),
+    'zoneinfo' => $sectorinfo ? ZoneRetrieveByIdDAO::call($container, $sectorinfo->zone_id) : null,
+    'shipsInSector' => ShipView::map(ShipRetrieveManyBySectorDAO::call($container, $playerinfo->sector)),
 ]);

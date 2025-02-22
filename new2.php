@@ -8,7 +8,7 @@ loadlanguage($lang);
 connectdb();
 
 try {
-    $new = new ShipNewServant;
+    $new = ShipNewServant::new($container);
     $new->character = strval($_POST['character'] ?? '');
     $new->username = strval($_POST['username'] ?? '');
     $new->shipname = strval($_POST['shipname'] ?? '');

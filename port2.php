@@ -19,10 +19,10 @@ if (isNotAuthorized()) {
 }
 
 $playerinfo = ship();
-$sectorinfo = SectorRetrieveByIdDAO::call($playerinfo->sector);
-$zoneinfo = ZoneRetrieveByIdDAO::call($sectorinfo->zone_id);
+$sectorinfo = SectorRetrieveByIdDAO::call($container, $playerinfo->sector);
+$zoneinfo = ZoneRetrieveByIdDAO::call($container, $sectorinfo->zone_id);
 
-ZonePortTradeServant::call($zoneinfo, $playerinfo);
+ZonePortTradeServant::call($container, $zoneinfo, $playerinfo);
 
 switch ($sectorinfo->port_type) {
     case SectorPortTypeEnum::Special:
@@ -34,7 +34,7 @@ switch ($sectorinfo->port_type) {
             return;
         }
 
-        $offer = new SectorPortSpecialOfferServant;
+        $offer = SectorPortSpecialOfferServant::new($container);
         $offer->dev_genesis_number = abs(intval($_POST['dev_genesis_number']));
         $offer->dev_beacon_number = abs(intval($_POST['dev_beacon_number']));
         $offer->dev_emerwarp_number = abs(intval($_POST['dev_emerwarp_number']));
@@ -60,7 +60,7 @@ switch ($sectorinfo->port_type) {
         $offer->ship = $playerinfo;
         $offer->serve();
 
-        $purchase = SectorPortSpecialPurchaseServant::call($offer);
+        $purchase = SectorPortSpecialPurchaseServant::call($container, $offer);
         $purchase->serve();
 
         echo twig()->render('port/port2_special.twig', [
@@ -72,7 +72,7 @@ switch ($sectorinfo->port_type) {
     case SectorPortTypeEnum::Organics:
     case SectorPortTypeEnum::Goods:
     case SectorPortTypeEnum::Energy:
-        $offerResource = new SectorPortResourceOfferServant;
+        $offerResource = SectorPortResourceOfferServant::new($container);
         $offerResource->sector = $sectorinfo;
         $offerResource->needle_trade_energy = intval(abs($_POST['trade_energy'] ?? 0));
         $offerResource->needle_trade_goods = intval(abs($_POST['trade_goods'] ?? 0));
@@ -80,7 +80,7 @@ switch ($sectorinfo->port_type) {
         $offerResource->needle_trade_organics = intval(abs($_POST['trade_organics'] ?? 0));
         $offerResource->serve();
 
-        SectorPortResourcePurchaseServant::call($offerResource, $playerinfo);
+        SectorPortResourcePurchaseServant::call($container, $offerResource, $playerinfo);
 
         echo twig()->render('port/port2_resource.twig', [
             'offerResource' => $offerResource,

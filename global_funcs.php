@@ -166,13 +166,14 @@ function isNotAuthorized(): bool
     global $l_login_died;
     global $l_die_please;
     global $ship;
+    global $container;
 
     if (empty($_SESSION['ship_id'])) {
         echo $l_global_needlogin;
         return true;
     }
     
-    $retrieveById = new \BNT\Ship\DAO\ShipRetrieveByIdDAO;
+    $retrieveById = \BNT\Ship\DAO\ShipRetrieveByIdDAO::new($container);
     $retrieveById->id = $_SESSION['ship_id'];
     $retrieveById->serve();
     
@@ -180,7 +181,7 @@ function isNotAuthorized(): bool
 
     if ($ship->ship_destroyed) {
         if ($ship->dev_escapepod) {
-            $new = new \BNT\Ship\DAO\ShipNewWishEscapePodDAO;
+            $new = \BNT\Ship\DAO\ShipNewWishEscapePodDAO::new($container);
             $new->shipId = $ship->id;
             $new->serve();
             echo $l_login_died;
@@ -270,7 +271,9 @@ function updatecookie()
 
 function shipSave(\BNT\Ship\Entity\Ship $ship): void
 {
-    $save = new \BNT\Ship\DAO\ShipSaveDAO;
+    global $container;
+    
+    $save = \BNT\Ship\DAO\ShipSaveDAO::new($container);
     $save->ship = $ship;
     $save->serve();
 }

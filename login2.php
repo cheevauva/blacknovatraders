@@ -11,7 +11,7 @@ loadlanguage($language);
 
 try {
     try {
-        $login = new ShipLoginServant;
+        $login = ShipLoginServant::new($container);
         $login->email = strval($_POST['email'] ?? '');
         $login->password = strval($_POST['pass'] ?? '');
         $login->ip = $ip;
@@ -25,10 +25,10 @@ try {
         header('Location: main.php?id=' . $ship->ship_id);
         die;
     } catch (ShipHasBeenDestroyedException $ex) {
-        $restore = new ShipRestoreServant;
+        $restore = ShipRestoreServant::new($container);
         $restore->ship = $ex->ship;
 
-        TransactionServant::call($restore);
+        TransactionServant::call($container, $restore);
         
         throw $ex;
     }

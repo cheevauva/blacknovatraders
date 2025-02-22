@@ -21,7 +21,7 @@ $ship = ship();
 try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            $deployCheck = new SectorDefenceDeployCheckServant;
+            $deployCheck = SectorDefenceDeployCheckServant::new($container);
             $deployCheck->ship = $ship;
             $deployCheck->quite = false;
             $deployCheck->serve();
@@ -34,14 +34,14 @@ try {
             ]);
             break;
         case 'POST':
-            $deploy = new SectorDefenceDeployServant;
+            $deploy = SectorDefenceDeployServant::new($container);
             $deploy->ship = $ship;
             $deploy->numfighters = intval($_POST['numfighters'] ?? 0);
             $deploy->nummines = intval($_POST['nummines'] ?? 0);
             $deploy->mode = SectorDefenceFmSettingEnum::from(strval($_POST['mode'] ?? ''));
             $deploy->doIt = true;
 
-            TransactionServant::call($deploy);
+            TransactionServant::call($container, $deploy);
             header('Location: mines2.php');
             break;
     }

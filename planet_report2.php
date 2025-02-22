@@ -33,7 +33,7 @@ $context = [
 
 switch ($PRepType) {
     case 1:
-        $retrievePlanets = new PlanetRetrieveManyByCriteriaDAO;
+        $retrievePlanets = PlanetRetrieveManyByCriteriaDAO::new($container);
         $retrievePlanets->owner = $ship->ship_id;
         $retrievePlanets->serve();
 
@@ -83,12 +83,12 @@ switch ($PRepType) {
         ]);
         break;
     case 2:
-        $retrievePlanetsWithBase = new PlanetRetrieveManyByCriteriaDAO;
+        $retrievePlanetsWithBase = PlanetRetrieveManyByCriteriaDAO::new($container);
         $retrievePlanetsWithBase->owner = $ship->ship_id;
         $retrievePlanetsWithBase->base = true;
         $retrievePlanetsWithBase->serve();
 
-        $retrievePlanets = new PlanetRetrieveManyByCriteriaDAO;
+        $retrievePlanets = PlanetRetrieveManyByCriteriaDAO::new($container);
         $retrievePlanets->owner = $ship->ship_id;
         $retrievePlanets->serve();
 

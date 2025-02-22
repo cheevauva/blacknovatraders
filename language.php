@@ -8,14 +8,14 @@ include 'config.php';
 
 $lang = $lang ?? $default_lang;
 
-$retrieveAll = new LanguageRetrieveAllDAO;
+$retrieveAll = LanguageRetrieveAllDAO::new($container);
 $retrieveAll->serve();
 
 $languages = $retrieveAll->languages;
 $newlang = $_POST['newlang'] ?? null;
 
 if (!empty($newlang)) {
-    $retrieveByFile = new LangaugeRetrieveByFileDAO;
+    $retrieveByFile = LangaugeRetrieveByFileDAO::new($container);
     $retrieveByFile->file = $newlang;
     $retrieveByFile->serve();
 

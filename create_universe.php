@@ -861,7 +861,7 @@ $password = $adminpass;
     
     $ship->password($password);
 
-    $createShip = new \BNT\Ship\Servant\ShipCreateServant;
+    $createShip = \BNT\Ship\Servant\ShipCreateServant::new($container);
     $createShip->ship = $ship;
     $createShip->serve();
     

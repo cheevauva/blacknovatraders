@@ -22,11 +22,11 @@ switch ($_GET['sure'] ?? null) {
         echo twig()->render('harakiri/step1.twig');
         break;
     case 2:
-        $selfDestruct = new ShipSelfDestructServant;
+        $selfDestruct = ShipSelfDestructServant::new($container);
         $selfDestruct->ship = $playerinfo;
         $selfDestruct->ip = $ip;
         
-        TransactionServant::call($selfDestruct);
+        TransactionServant::call($container, $selfDestruct);
         header('Location: logout.php');
         die;
         break;

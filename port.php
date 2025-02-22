@@ -17,10 +17,10 @@ if (isNotAuthorized()) {
 }
 
 $playerinfo = ship();
-$sectorinfo = SectorRetrieveByIdDAO::call($playerinfo->sector);
-$zoneinfo = ZoneRetrieveByIdDAO::call($sectorinfo->zone_id);
+$sectorinfo = SectorRetrieveByIdDAO::call($container, $playerinfo->sector);
+$zoneinfo = ZoneRetrieveByIdDAO::call($container, $sectorinfo->zone_id);
 
-ZonePortTradeServant::call($zoneinfo, $playerinfo);
+ZonePortTradeServant::call($container, $zoneinfo, $playerinfo);
 
 switch ($sectorinfo->port_type) {
     case SectorPortTypeEnum::Energy:
@@ -29,18 +29,18 @@ switch ($sectorinfo->port_type) {
     case SectorPortTypeEnum::Organics:
         echo twig()->render('port/port_resource.twig', [
             'sector' => $sectorinfo,
-            'calculator' => SectorPortResourcePreOfferServant::call($sectorinfo, $playerinfo),
+            'calculator' => SectorPortResourcePreOfferServant::call($container, $sectorinfo, $playerinfo),
             'freeHolds' => $playerinfo->getFreeHolds(),
             'freePower' => $playerinfo->getFreePower(),
             'credits' => $playerinfo->credits,
         ]);
         break;
     case SectorPortTypeEnum::Special:
-        $totalBounty = BountySumByShipDAO::call($playerinfo)->total;
+        $totalBounty = BountySumByShipDAO::call($container, $playerinfo)->total;
         
         if ($totalBounty > 0) {
             echo twig()->render('port/port_special_unpaid_bounty.twig', [
-                'totalBounty' => BountySumByShipDAO::call($playerinfo)->total,
+                'totalBounty' => BountySumByShipDAO::call($container, $playerinfo)->total,
             ]);
             return;
         }
@@ -48,7 +48,7 @@ switch ($sectorinfo->port_type) {
         echo twig()->render('port/port_special.twig', [
             'ship' => $playerinfo,
             'sector' => $sectorinfo,
-            'calculator' => SectorPortSpecialServant::call($playerinfo),
+            'calculator' => SectorPortSpecialServant::call($container, $playerinfo),
         ]);
         break;
     case SectorPortTypeEnum::None:

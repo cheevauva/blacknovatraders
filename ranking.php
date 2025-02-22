@@ -12,7 +12,7 @@ loadlanguage($lang);
 connectdb();
 
 echo twig()->render('ranking/ranking.twig', [
-    'shipsAsTopScore' => ShipView::map(ShipRankingTopScoreCachedDAO::call()),
-    'shipsAsTopTurnsUsed' => ShipView::map(ShipRankingTopTurnsUsedCachedDAO::call()),
-    'shipsAsTopRating' => ShipView::map(ShipRankingTopRatingCachedDAO::call()),
+    'shipsAsTopScore' => ShipView::map(ShipRankingTopScoreCachedDAO::call($container)),
+    'shipsAsTopTurnsUsed' => ShipView::map(ShipRankingTopTurnsUsedCachedDAO::call($container)),
+    'shipsAsTopRating' => ShipView::map(ShipRankingTopRatingCachedDAO::call($container)),
 ]);
