@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace BNT\Log\DAO;
 
 use BNT\Log\Entity\Log;
+use Psr\Container\ContainerInterface;
 
 class LogCreateDAO extends LogDAO
 {
+
     public Log $log;
 
     public function serve(): void
@@ -21,7 +23,7 @@ class LogCreateDAO extends LogDAO
         $this->log->log_id = intval($this->db()->lastInsertId());
     }
 
-    public static function call(\Psr\Container\ContainerInterface $container, Log $log): self
+    public static function call(ContainerInterface $container, Log $log): self
     {
         $self = static::new($container);
         $self->log = $log;
@@ -29,4 +31,5 @@ class LogCreateDAO extends LogDAO
 
         return $self;
     }
+
 }

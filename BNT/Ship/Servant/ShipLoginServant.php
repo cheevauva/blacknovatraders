@@ -11,9 +11,11 @@ use BNT\Ship\Entity\Ship;
 use BNT\Ship\Exception\ShipException;
 use BNT\Log\Entity\LogLogin;
 use BNT\Log\Entity\LogBadLogin;
+use BNT\Log\DAO\LogCreateDAO;
 
 class ShipLoginServant extends Servant
 {
+
     public string $ip;
     public string $email;
     public string $password;
@@ -33,7 +35,8 @@ class ShipLoginServant extends Servant
             $badLogin = new LogBadLogin;
             $badLogin->ship_id = $ship->ship_id;
             $badLogin->ip = $this->ip;
-            $badLogin->dispatch();
+
+            LogCreateDAO::call($this->container, $badLogin);
 
             throw ShipException::incorrectPassword($ship);
         }
@@ -50,6 +53,8 @@ class ShipLoginServant extends Servant
         $login = new LogLogin;
         $login->ship_id = $ship->ship_id;
         $login->ip = $this->ip;
-        $login->dispatch();
+
+        LogCreateDAO::call($this->container, $login);
     }
+
 }

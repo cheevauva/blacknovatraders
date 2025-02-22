@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Servant;
 
+use BNT\Log\DAO\LogCreateDAO;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
@@ -14,7 +15,6 @@ use BNT\SectorDefence\SectorDefenceTypeEnum;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Log\LogTollPaid;
 use BNT\Log\LogTollRecieve;
-use BNT\Log\Log;
 use BNT\Servant;
 
 class SectorDefencePayTollServant extends Servant
@@ -94,7 +94,7 @@ class SectorDefencePayTollServant extends Servant
         }
 
         foreach ($this->logs as $log) {
-            Log::as($log)->dispatch();
+            LogCreateDAO::call($this->container, $log);
         }
     }
 }

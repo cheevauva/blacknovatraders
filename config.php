@@ -11,6 +11,13 @@ require_once 'vendor/autoload.php';
 /* Main scheduler variables (game flow control)
 -----------------------------------------------*/
 
+$container = new \BNT\Container([
+    \Psr\EventDispatcher\EventDispatcherInterface::class => function ($container) {
+        return new \BNT\EventDispatcher($container);
+    },
+    'events' => require_once 'resources/events.php',
+]);
+
 /*
   Set this to how often (in minutes) you are running
   the scheduler script.

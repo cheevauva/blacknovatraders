@@ -7,7 +7,7 @@ namespace BNT\Ship\Mapper;
 use BNT\Ship\Entity\Ship;
 use BNT\Mapper;
 
-class ShipMapper implements Mapper
+class ShipMapper extends Mapper
 {
     public ?array $row = null;
     public ?Ship $ship = null;

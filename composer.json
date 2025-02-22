@@ -7,7 +7,8 @@
         "ext-json": "*",
         "doctrine/dbal": "3.5.1",
         "twig/twig": "v3.4.3",
-        "symfony/cache": "v6.2.3"
+        "symfony/cache": "v6.2.3",
+        "psr/event-dispatcher": "1.0.0"
     },
     "autoload": {
         "psr-4": {

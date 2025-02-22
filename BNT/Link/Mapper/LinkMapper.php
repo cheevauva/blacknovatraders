@@ -7,7 +7,7 @@ namespace BNT\Link\Mapper;
 use BNT\Link\Entity\Link;
 use BNT\Mapper;
 
-class LinkMapper implements Mapper
+class LinkMapper extends Mapper
 {
     public ?array $row = null;
     public ?Link $link = null;

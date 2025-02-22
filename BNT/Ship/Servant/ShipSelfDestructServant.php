@@ -8,6 +8,7 @@ use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Log\LogHarakiri;
 use BNT\Bounty\Servant\BountyCancelServant;
+use BNT\Log\DAO\LogCreateDAO;
 
 class ShipSelfDestructServant extends Servant
 {
@@ -22,7 +23,8 @@ class ShipSelfDestructServant extends Servant
         $harakiri = new LogHarakiri;
         $harakiri->ship_id = $this->ship->ship_id;
         $harakiri->ip = $this->ip;
-        $harakiri->dispatch();
+        
+        LogCreateDAO::call($this->container, $harakiri);
     }
 
     public static function call(\Psr\Container\ContainerInterface $container, Ship $ship, string $ip): self

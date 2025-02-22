@@ -10,7 +10,7 @@ use BNT\Traderoute\Enum\TraderouteCircuitEnum;
 use BNT\Traderoute\Enum\TraderouteTypeEnum;
 use BNT\Traderoute\Enum\TraderouteMoveTypeEnum;
 
-class TraderouteMapper implements Mapper
+class TraderouteMapper extends Mapper
 {
     public ?array $row = null;
     public ?Traderoute $traderoute = null;

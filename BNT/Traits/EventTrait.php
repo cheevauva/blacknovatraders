@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace BNT\Traits;
 
-use BNT\Log\Entity\Log;
-use BNT\Log\DAO\LogCreateDAO;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 trait EventTrait
 {
 
-    public function dispatch(): void
+    public function dispatch(EventDispatcherInterface $eventDispatcher): void
     {
-        if ($this instanceof Log) {
-            LogCreateDAO::call($this->container, $this); // @todo replace on event dispatcher
-        }
+        $eventDispatcher->dispatch($this);
     }
+
 }

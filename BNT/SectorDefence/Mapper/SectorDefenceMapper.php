@@ -9,7 +9,7 @@ use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\Enum\SectorDefenceFmSettingEnum;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 
-class SectorDefenceMapper implements Mapper
+class SectorDefenceMapper extends Mapper
 {
     public ?array $row = null;
     public ?SectorDefence $defence = null;

@@ -6,7 +6,7 @@ namespace BNT\SectorDefence\Servant;
 
 use BNT\Servant;
 use BNT\SectorDefence\Entity\SectorDefence;
-use BNT\Log\Log;
+use BNT\Log\DAO\LogCreateDAO;
 use BNT\Log\LogDefenceKaboom;
 use BNT\Log\LogDefenceDestroyedFighters;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
@@ -18,11 +18,9 @@ use BNT\Message\Servant\MessageDefenceOwnerServant;
 use BNT\Ship\Servant\ShipDestroyServant;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 
-
 class SectorDefenceFightSevant extends Servant
 {
 
-    
     public bool $doIt = true;
     public Ship $ship;
     public int $sector_id;
@@ -124,7 +122,7 @@ class SectorDefenceFightSevant extends Servant
         ShipSaveDAO::call($this->container, $this->ship);
 
         foreach ($this->logs as $log) {
-            Log::as($log)->dispatch();
+            LogCreateDAO::call($this->container, $log);
         }
     }
 
@@ -298,4 +296,5 @@ class SectorDefenceFightSevant extends Servant
         $this->destroyShip->doIt = $this->doIt;
         $this->destroyShip->serve();
     }
+
 }

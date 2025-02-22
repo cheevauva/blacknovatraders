@@ -7,7 +7,7 @@ namespace BNT\Planet\Mapper;
 use BNT\Planet\Entity\Planet;
 use BNT\Mapper;
 
-class PlanetMapper implements Mapper
+class PlanetMapper extends Mapper
 {
     public array $row;
     public Planet $planet;

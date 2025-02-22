@@ -8,7 +8,7 @@ use BNT\Mapper;
 use BNT\Sector\Entity\Sector;
 use BNT\Sector\Enum\SectorPortTypeEnum;
 
-class SectorMapper implements Mapper
+class SectorMapper extends Mapper
 {
     public array $row;
     public ?Sector $sector = null;

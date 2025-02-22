@@ -15,7 +15,7 @@ use BNT\Log\Entity\LogBadLogin;
 use BNT\Log\Entity\LogLogin;
 use BNT\Log\Entity\LogLogout;
 
-class LogMapper implements Mapper
+class LogMapper extends Mapper
 {
     public Log $log;
     public array $row;
