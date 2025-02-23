@@ -8,19 +8,21 @@ use BNT\Traits\EventTrait;
 use BNT\Traits\AsTrait;
 use BNT\Log\Enum\LogTypeEnum;
 
-abstract class Log
+class Log
 {
+
     use EventTrait;
     use AsTrait;
 
     public int $log_id;
     public int $ship_id = 0;
     public LogTypeEnum $type = LogTypeEnum::UNDEFINED;
-    public ?\DateTime $time = null;
-    public $message;
+    public ?\DateTimeImmutable $time = null;
+    public array $payload = [];
 
     public function __construct()
     {
-        $this->time = new \DateTime();
+        $this->time = new \DateTimeImmutable();
     }
+
 }

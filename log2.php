@@ -2,7 +2,7 @@
 
 use BNT\Ship\View\ShipView;
 use BNT\Log\View\LogView;
-use BNT\Log\DAO\LogRetrieveManyByShipDAO;
+use BNT\Log\DAO\LogRetrieveManyByCriteriaDAO;
 
 require_once './config.php';
 
@@ -26,7 +26,7 @@ $nextlinkFull = $startdate->add(new \DateInterval('P3D'));
 
 $logPacks = [];
 
-$logByShipAndStartDate = LogRetrieveManyByShipDAO::new($container);
+$logByShipAndStartDate = LogRetrieveManyByCriteriaDAO::new($container);
 $logByShipAndStartDate->time = $startdate;
 $logByShipAndStartDate->ship_id = $ship->ship_id;
 $logByShipAndStartDate->serve();
@@ -37,12 +37,12 @@ $logPacks[] = [
 ];
 
 if ($mode !== 'compat') {
-    $logByShipAndYesterday = LogRetrieveManyByShipDAO::new($container);
+    $logByShipAndYesterday = LogRetrieveManyByCriteriaDAO::new($container);
     $logByShipAndYesterday->time = $yesterday;
     $logByShipAndYesterday->ship_id = $ship->ship_id;
     $logByShipAndYesterday->serve();
 
-    $logByShipAndYesterday2 = LogRetrieveManyByShipDAO::new($container);
+    $logByShipAndYesterday2 = LogRetrieveManyByCriteriaDAO::new($container);
     $logByShipAndYesterday2->time = $yesterday2;
     $logByShipAndYesterday2->ship_id = $ship->ship_id;
     $logByShipAndYesterday2->serve();

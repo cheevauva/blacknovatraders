@@ -6,9 +6,9 @@ namespace BNT\SectorDefence\Servant;
 
 use BNT\Servant;
 use BNT\SectorDefence\Entity\SectorDefence;
-use BNT\Log\DAO\LogCreateDAO;
-use BNT\Log\LogDefenceKaboom;
-use BNT\Log\LogDefenceDestroyedFighters;
+use BNT\Log\Event\LogEvent;
+use BNT\Log\Event\LogDefenceKaboomEvent;
+use BNT\Log\Event\LogDefenceDestroyedFightersEvent;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
@@ -122,7 +122,7 @@ class SectorDefenceFightSevant extends Servant
         ShipSaveDAO::call($this->container, $this->ship);
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($this->container, $log);
+            LogEvent::as($log)->dispatch($this->eventDispatcher());
         }
     }
 
@@ -132,8 +132,8 @@ class SectorDefenceFightSevant extends Servant
             return;
         }
 
-        $log = new LogDefenceDestroyedFighters();
-        $log->ship_id = $this->ship->ship_id;
+        $log = new LogDefenceDestroyedFightersEvent();
+        $log->shipId = $this->ship->ship_id;
         $log->fighterslost = $fighterslost;
         $log->sector = $this->sector_id;
 
@@ -142,7 +142,7 @@ class SectorDefenceFightSevant extends Servant
 
     private function logKaboom(): void
     {
-        $log = new LogDefenceKaboom();
+        $log = new LogDefenceKaboomEvent();
         $log->sector = $this->sector_id;
         $log->dev_escapepod = $this->ship->dev_escapepod;
 

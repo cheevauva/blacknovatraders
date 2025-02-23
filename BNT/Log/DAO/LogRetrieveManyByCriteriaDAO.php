@@ -6,7 +6,7 @@ namespace BNT\Log\DAO;
 
 use BNT\Ship\Entity\Ship;
 
-class LogRetrieveManyByShipDAO extends LogDAO
+class LogRetrieveManyByCriteriaDAO extends LogDAO
 {
     public ?int $ship_id;
     public ?\DateTimeImmutable $time;

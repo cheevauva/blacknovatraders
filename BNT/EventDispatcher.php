@@ -6,7 +6,7 @@ namespace BNT;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
-use BNT\Servant;
+use BNT\UnitInterface;
 use BNT\FromToInterface;
 
 class EventDispatcher implements EventDispatcherInterface
@@ -17,19 +17,36 @@ class EventDispatcher implements EventDispatcherInterface
     public function dispatch(object $event): object
     {
         $events = $this->container->get('events');
+        $class = get_class($event);
 
-        $handlers = $events[get_class($event)] ?? ($events[get_parent_class($event)] ?? []);
+        if (!empty($events[$class])) {
+            $handlers = $events[$class];
+        } else {
+            while (true) {
+                $class = get_parent_class($class);
+
+                if ($class === false) {
+                    break;
+                }
+
+                if (!empty($events[$class])) {
+                    $handlers = $events[$class];
+                    break;
+                }
+            }
+        }
 
         foreach ($handlers as $handler) {
+
             if ($event instanceof StoppableEventInterface) {
                 if ($event->isPropagationStopped()) {
                     break;
                 }
             }
 
-            if (is_a($handler, Servant::class, true) && is_a($handler, FromToInterface::class, true)) {
-                $handlerObject = new $handler($this->container);
+            $handlerObject = new $handler($this->container);
 
+            if ($handlerObject instanceof UnitInterface && $event instanceof FromToInterface) {
                 $event->to($handlerObject);
 
                 $handlerObject->serve();
@@ -37,7 +54,7 @@ class EventDispatcher implements EventDispatcherInterface
                 $event->from($handlerObject);
             }
         }
-        
+
         return $event;
     }
 

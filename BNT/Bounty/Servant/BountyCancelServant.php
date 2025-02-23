@@ -10,13 +10,12 @@ use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;
 use BNT\Bounty\Bounty;
-use BNT\Log\LogBountyCancelled;
-use BNT\Log\DAO\LogCreateDAO;
+use BNT\Log\Event\LogBountyCancelledEvent;
 use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
 
 class BountyCancelServant extends Servant
 {
-    
+
     public int $bounty_on;
     public bool $doIt = true;
     public array $logs = [];
@@ -40,8 +39,8 @@ class BountyCancelServant extends Servant
 
                 $this->shipsForChange[] = $placedBy;
 
-                $log = new LogBountyCancelled();
-                $log->ship_id = $bountydetails->placed_by;
+                $log = new LogBountyCancelledEvent();
+                $log->shipId = $bountydetails->placed_by;
                 $log->amount = $bountydetails->amount;
                 $log->characterName = $bountyOn->character_name;
 
@@ -71,7 +70,7 @@ class BountyCancelServant extends Servant
         }
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($this->container, $log);
+            $log->dispatch($this->eventDispatcher());
         }
     }
 

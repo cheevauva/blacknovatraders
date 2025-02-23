@@ -7,9 +7,8 @@ namespace BNT\Message\Servant;
 use BNT\Servant;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\Entity\SectorDefence;
-use BNT\Log\DAO\LogCreateDAO;
-use BNT\Log\LogRaw;
-use BNT\Log\DAO\LogCreateDAO;
+use BNT\Log\Event\LogEvent;
+use BNT\Log\Event\LogRawEvent;
 
 class MessageDefenceOwnerServant extends Servant
 {
@@ -19,7 +18,7 @@ class MessageDefenceOwnerServant extends Servant
     public bool $doIt = true;
 
     /**
-     * @var LogRaw|LogCreateDAO[]
+     * @var LogEvent
      */
     public array $logs = [];
 
@@ -32,8 +31,8 @@ class MessageDefenceOwnerServant extends Servant
         foreach ($retrieveSectorDefences->defences as $defence) {
             $defence = SectorDefence::as($defence);
 
-            $log = new LogRaw();
-            $log->ship_id = $defence->ship_id;
+            $log = new LogRawEvent();
+            $log->shipId = $defence->ship_id;
             $log->message = $this->message;
 
             $this->logs[] = $log;
@@ -49,7 +48,7 @@ class MessageDefenceOwnerServant extends Servant
         }
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($this->container, $log);
+            LogEvent::as($log)->dispatch($this->eventDispatcher());
         }
     }
 

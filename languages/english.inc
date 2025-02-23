@@ -474,6 +474,7 @@ $l_log_text[LOG_PLANET_DEFEATED] = "Your planet [planet_name] in sector [sector]
 $l_log_title[LOG_PLANET_DEFEATED] = "<font color=red>Planet captured!</font>";
 $l_log_text[LOG_PLANET_NOT_DEFEATED] = "Your planet [planet_name] in sector [sector] was attacked by [name]. The citizens organized a valliant defense however, and managed to destroy the opponent. They salvage some resources from the space debris : [goods] goods, [ore] ore, [organics] organics and [salvage]% of the ship's worth of [credits] credits.";
 $l_log_title[LOG_PLANET_NOT_DEFEATED] = "Victory!";
+$l_log_text[LOG_RAW] = "[message]";
 $l_log_title[LOG_RAW] = "Notice";
 $l_log_text[LOG_TOLL_RECV] = "Your fighters in sector [sector] have collected a 'tax' of [toll] credits.";
 $l_log_title[LOG_TOLL_RECV] = "Toll income";

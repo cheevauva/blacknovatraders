@@ -9,20 +9,16 @@ use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Bounty\Servant\BountyCancelServant;
 use BNT\Ship\Servant\ShipKillServant;
-use BNT\Log\DAO\LogCreateDAO;
-
 
 class ShipDestroyServant extends Servant
 {
 
-    
     public Ship $ship;
     public bool $doIt = true;
     public bool $shipDestroyed = false;
     public bool $shipHasEscapePod = false;
     public BountyCancelServant $cancelBounty;
     public ?ShipKillServant $shipKill = null;
-    public array $logs = [];
 
     public function serve(): void
     {
@@ -65,10 +61,6 @@ class ShipDestroyServant extends Servant
         }
 
         ShipSaveDAO::call($this->container, $this->ship);
-
-        foreach ($this->logs as $log) {
-            LogCreateDAO::call($this->container, $log);
-        }
     }
 
     public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): void
@@ -77,4 +69,5 @@ class ShipDestroyServant extends Servant
         $self->ship = $ship;
         $self->serve();
     }
+
 }

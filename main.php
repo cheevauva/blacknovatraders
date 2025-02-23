@@ -12,6 +12,7 @@ use BNT\Ship\View\ShipView;
 use BNT\Sector\View\SectorView;
 use BNT\Traderoute\View\TraderouteView;
 use BNT\SectorDefence\View\SectorDefenceView;
+use BNT\Planet\DAO\PlanetRetrieveByIdDAO;
 
 require_once './config.php';
 
@@ -29,7 +30,7 @@ if (!empty($playerinfo->cleared_defences)) {
 }
 
 if ($playerinfo->on_planet) {
-    $currentPlanet = \BNT\Planet\DAO\PlanetRetrieveByIdDAO::call($container, $playerinfo->planet_id);
+    $currentPlanet = PlanetRetrieveByIdDAO::call($container, $playerinfo->planet_id);
 
     if (!$currentPlanet) {
         $playerinfo->on_planet = false;

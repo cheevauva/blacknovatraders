@@ -7,10 +7,10 @@ namespace BNT\Log\View;
 use BNT\Log\Entity\Log;
 use BNT\Log\Entity\LogWithIP;
 use BNT\Log\Entity\LogWithPlayer;
-use BNT\Log\Entity\LogAttackLose;
 
 class LogView
 {
+
     protected Log $log;
 
     public function __construct(Log $log)
@@ -39,31 +39,15 @@ class LogView
 
     protected function prepareReplace(): array
     {
-        global $l_log_pod;
-        global $l_log_nopod;
-
-        $log = $this->log;
-
-        if ($log instanceof LogWithIP) {
-            return [
-                '[ip]' => $log->ip,
-            ];
+        $payload = $this->log->payload;
+        
+        foreach ($payload as $key => $value) {
+            $payload[sprintf('[%s]', $key)] = $value;
+            
+            unset($payload[$key]);
         }
-
-        if ($log instanceof LogWithPlayer) {
-            return [
-                '[player]' => $log->player,
-            ];
-        }
-
-        if ($log instanceof LogAttackLose) {
-            return [
-                '[player]' => $log->player,
-                '[text]' => $log->escapepod ? $l_log_pod : $l_log_nopod,
-            ];
-        }
-
-        return [];
+        
+        return $payload;
     }
 
     public static function map(array $logs): array
@@ -322,4 +306,5 @@ class LogView
         }
         return $retvalue;
     }
+
 }

@@ -1,7 +1,7 @@
 <?php
 
-use BNT\Log\Entity\LogLogout;
-use BNT\Log\DAO\LogCreateDAO;
+use BNT\Log\Event\LogLogoutEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 require_once './config.php';
 
@@ -13,11 +13,10 @@ if (isNotAuthorized()) {
 
 $ship = ship();
 
-$logout = new LogLogout;
-$logout->ship_id = $ship->ship_id;
+$logout = new LogLogoutEvent();
+$logout->shipId = $ship->ship_id;
 $logout->ip = $ip;
-
-LogCreateDAO::call($container, $logout);
+$logout->dispatch($container->get(EventDispatcherInterface::class));
 
 unset($_SESSION['ship_id']);
 

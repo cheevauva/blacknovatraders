@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\SectorDefence\Servant;
 
-use BNT\Log\DAO\LogCreateDAO;
+use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 use BNT\Ship\DAO\ShipSaveDAO;
@@ -13,13 +13,13 @@ use BNT\SectorDefence\DAO\SectorDefenceRetrieveTotalFightersBySectorIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\SectorDefenceTypeEnum;
 use BNT\SectorDefence\Entity\SectorDefence;
-use BNT\Log\LogTollPaid;
-use BNT\Log\LogTollRecieve;
-use BNT\Servant;
+use BNT\Log\Event\LogEvent;
+use BNT\Log\Event\LogTollPaidEvent;
+use BNT\Log\Event\LogTollRecieveEvent;
 
 class SectorDefencePayTollServant extends Servant
 {
-    
+
     public bool $doIt = true;
     public Ship $ship;
     public int $sector;
@@ -41,7 +41,7 @@ class SectorDefencePayTollServant extends Servant
             throw new \Exception($l_chf_notenoughcreditstoll);
         }
 
-        $log = new LogTollPaid();
+        $log = new LogTollPaidEvent();
         $log->sector = $this->sector;
         $log->fightersToll = $this->fightersToll;
 
@@ -72,7 +72,7 @@ class SectorDefencePayTollServant extends Servant
 
             $this->shipsForChange[] = $ship;
 
-            $log = new LogTollRecieve();
+            $log = new LogTollRecieveEvent();
             $log->tollAmount = $tollAmount;
             $log->sector = $this->sector;
 
@@ -94,7 +94,8 @@ class SectorDefencePayTollServant extends Servant
         }
 
         foreach ($this->logs as $log) {
-            LogCreateDAO::call($this->container, $log);
+            LogEvent::as($log)->dispatch($this->eventDispatcher());
         }
     }
+
 }

@@ -8,7 +8,8 @@ abstract class Event implements FromToInterface
 {
 
     use Traits\EventTrait;
-
+    use Traits\AsTrait;
+    
     public function from(object $object): void
     {
         // nothing
