@@ -16,7 +16,7 @@ trait BuildTrait
         return new static($container);
     }
 
-    public static function instance(ContainerInterface $container): static
+    public static function singleton(ContainerInterface $container): static
     {
         return $container->get(static::class);
     }

@@ -6,6 +6,7 @@ namespace BNT\Enum;
 
 enum BalanceEnum
 {
+
     case ore_price;
     case ore_delta;
     case ore_rate;
@@ -56,7 +57,8 @@ enum BalanceEnum
     case base_credits;
     case mine_hullsize;
     case min_bases_to_own;
-    case default_lang;
+    case default_lang; 
+    case torp_dmg_rate;
 
     public function val(): mixed
     {
@@ -111,6 +113,7 @@ enum BalanceEnum
         global $mine_hullsize;
         global $min_bases_to_own;
         global $default_lang;
+        global $torp_dmg_rate;
 
         return match ($this) {
             BalanceEnum::ore_price => $ore_price,
@@ -164,6 +167,8 @@ enum BalanceEnum
             BalanceEnum::mine_hullsize => $mine_hullsize,
             BalanceEnum::min_bases_to_own => $min_bases_to_own,
             BalanceEnum::default_lang => $default_lang,
+            BalanceEnum::torp_dmg_rate => $torp_dmg_rate,
         };
     }
+
 }

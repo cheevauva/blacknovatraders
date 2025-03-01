@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use BNT\Ship\Servant\ShipMoveServant;
-use BNT\SectorDefence\Servant\SectorDefenceCheckFightersServant;
+use BNT\SectorDefence\Servant\SectorDefenceAttackFightersServant;
 use BNT\SectorDefence\Servant\SectorDefencePayTollServant;
 use BNT\SectorDefence\Servant\SectorDefenceFightSevant;
 use BNT\SectorDefence\Servant\SectorDefenceSneakServant;
@@ -24,7 +24,7 @@ $ship = ship();
 try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            $checkFighters = SectorDefenceCheckFightersServant::new($container);
+            $checkFighters = SectorDefenceAttackFightersServant::new($container);
             $checkFighters->sector = intval($_GET['sector']);
             $checkFighters->ship = $ship;
             $checkFighters->serve();

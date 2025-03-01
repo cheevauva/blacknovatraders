@@ -6,5 +6,6 @@ namespace BNT;
 
 abstract class Mapper implements UnitInterface
 {
-    
+
+    use Traits\BuildTrait;
 }

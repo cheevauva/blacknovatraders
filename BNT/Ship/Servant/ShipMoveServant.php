@@ -9,13 +9,13 @@ use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Exception\ShipMoveTurnException;
 use BNT\Link\DAO\LinkRetrieveManyByCriteriaDAO;
-use BNT\SectorDefence\Servant\SectorDefenceCheckFightersServant;
+use BNT\SectorDefence\Servant\SectorDefenceAttackFightersServant;
 use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
 
 class ShipMoveServant extends Servant
 {
     public Ship $ship;
-    public SectorDefenceCheckFightersServant $checkFighters;
+    public SectorDefenceAttackFightersServant $checkFighters;
     public int $sector;
     public bool $doIt = true;
     public array $links = [];
@@ -30,7 +30,7 @@ class ShipMoveServant extends Servant
 
         $this->links = $retrieveLinks->links;
 
-        $this->checkFighters = $this->checkFighters ?? new SectorDefenceCheckFightersServant;
+        $this->checkFighters = $this->checkFighters ?? new SectorDefenceAttackFightersServant;
         $this->checkFighters->sector = $this->sector;
         $this->checkFighters->ship = $this->ship;
         $this->checkFighters->serve();
