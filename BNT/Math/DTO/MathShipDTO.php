@@ -18,8 +18,12 @@ class MathShipDTO extends \BNT\DTO
     public $torpLaunchers = 0;
     public $cloak = 0;
     public $dev_minedeflector = 0;
+    public $dev_emerwarp;
     public $energy = 0;
     public $armorPts = 0;
     public $fighters = 0;
+    public $ore = 0;
+    public $organics = 0;
+    public $goods;
 
 }

@@ -11,7 +11,7 @@ use BNT\Sector\DAO\SectorRetrieveByIdDAO;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
-use BNT\Math\Event\MathDefenceCalculateFightersEvent;
+use BNT\Math\Mediator\MathDefenceCalculateFightersMediator;
 use BNT\SectorDefence\Mapper\SectorDefenceToMathDefenceMapper;
 
 class SectorDefenceAttackFightersServant extends Servant
@@ -36,7 +36,7 @@ class SectorDefenceAttackFightersServant extends Servant
         $retrieveDefences->orderByQuantityDESC = true;
         $retrieveDefences->serve();
 
-        $math = new MathDefenceCalculateFightersEvent();
+        $math = new MathDefenceCalculateFightersMediator();
 
         foreach ($retrieveDefences->defences as $defence) {
             $defence = SectorDefence::as($defence);
@@ -55,7 +55,7 @@ class SectorDefenceAttackFightersServant extends Servant
             $this->fightersDefence = $fightersDefence;
         }
 
-        $math->dispatch($this->eventDispatcher());
+        $math->serve();
 
         $this->totalSectorFightes = $math->totalFighters;
         $this->fightersToll = $math->fightersToll;

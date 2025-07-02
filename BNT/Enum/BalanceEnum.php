@@ -57,8 +57,11 @@ enum BalanceEnum
     case base_credits;
     case mine_hullsize;
     case min_bases_to_own;
-    case default_lang; 
+    case default_lang;
     case torp_dmg_rate;
+    case fighter_max;
+    case torpedo_max;
+    case armor_max;
 
     public function val(): mixed
     {
@@ -114,6 +117,9 @@ enum BalanceEnum
         global $min_bases_to_own;
         global $default_lang;
         global $torp_dmg_rate;
+        global $fighter_max;
+        global $torpedo_max;
+        global $armor_max;
 
         return match ($this) {
             BalanceEnum::ore_price => $ore_price,
@@ -168,6 +174,9 @@ enum BalanceEnum
             BalanceEnum::min_bases_to_own => $min_bases_to_own,
             BalanceEnum::default_lang => $default_lang,
             BalanceEnum::torp_dmg_rate => $torp_dmg_rate,
+            BalanceEnum::fighter_max => $fighter_max,
+            BalanceEnum::torpedo_max => $torpedo_max,
+            BalanceEnum::armor_max => $armor_max,
         };
     }
 

@@ -7,7 +7,7 @@ namespace BNT\SectorDefence\Servant;
 use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
-use BNT\Math\Event\MathDefenceCalculateMinesEvent;
+use BNT\Math\Mediator\MathDefenceCalculateMinesMediator;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 use BNT\SectorDefence\Entity\SectorDefence;
 use BNT\Ship\Mapper\ShipToMathShipMapper;
@@ -26,7 +26,7 @@ class SectorDefenceAttackMinesServant extends Servant
         $retrieveDefences->orderByQuantityDESC = true;
         $retrieveDefences->serve();
 
-        $math = new MathDefenceCalculateMinesEvent();
+        $math = new MathDefenceCalculateMinesMediator();
         
         $shipMapper = ShipToMathShipMapper::new($this->container);
         $shipMapper->mathShip = $math->ship;

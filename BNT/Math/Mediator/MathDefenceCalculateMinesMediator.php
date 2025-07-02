@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BNT\Math\Event;
+namespace BNT\Math\Mediator;
 
 use BNT\Math\DTO\MathDefencesDTO;
 use BNT\Math\DTO\MathShipDTO;
 use BNT\Math\Servant\MathDefenceCalculateMinesServant;
 
-class MathDefenceCalculateMinesEvent extends \BNT\Event
+class MathDefenceCalculateMinesMediator extends \BNT\Mediator
 {
 
     public MathShipDTO $ship;
@@ -20,14 +20,12 @@ class MathDefenceCalculateMinesEvent extends \BNT\Event
         $this->defences = new MathDefencesDTO();
     }
 
-    public function to(object $object): void
+    #[\Override]
+    public function serve(): void
     {
-        parent::to($object);
-
-        if ($object instanceof MathDefenceCalculateMinesServant) {
-            $object->defences = $this->defences;
-            $object->ship = $this->ship;
-        }
+        $calculate = MathDefenceCalculateMinesServant::new($this->container);
+        $calculate->defences = $this->defences;
+        $calculate->ship = $this->ship;
+        $calculate->serve();
     }
-
 }
