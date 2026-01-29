@@ -1,8 +1,7 @@
 <?php
 //$Id$
-error_reporting(0);
 //ini_set('display_errors', 0);
-
+date_default_timezone_set('UTC');
 include("db_config.php");
 include("$ADOdbpath" . "/adodb.inc.php");
 
@@ -55,7 +54,7 @@ $game_name = "Default Game Name"; // Please set this to a unique name for your g
 $release_version = "0.55";     // Please do not change this. Doing so will cause problems for the server lists, and setupinfo, and more.
 
 $fed_max_hull = 8;
-$maxlen_password = 16;
+$maxlen_password = 30;
 $max_rank=100;
 $rating_combat_factor=.8;    //ammount of rating gained from combat
 $server_closed=false;        //true = block logins but not new account creation

@@ -61,10 +61,11 @@ if (!function_exists('Table_Row'))
 {
     function Table_Row($data,$failed="Failed",$passed="Passed")
     {
-        $err = TRUEFALSE(0,mysql_errno(),"No errors found",mysql_errno() . ": " . mysql_error());
+        global $db;
+        $err = TRUEFALSE(0,$db->ErrorNo(),"No errors found",$db->ErrorNo() . ": " . $db->ErrorMsg());
         PrintFlush( "    <tr title=\"$err\">\n");
         PrintFlush( "      <td width=\"600\" bgcolor=\"#CCCCFF\"><font face=\"Verdana\" size=\"1\" color=\"#000000\">$data</font></td>\n");
-        if(mysql_errno()!=0)
+        if($db->ErrorNo()!=0)
             {PrintFlush( "      <td width=\"100\" align=\"center\" bgcolor=\"#C0C0C0\"><font face=\"Verdana\" size=\"1\" color=\"red\">$failed</font></td>\n");}
         else
             {PrintFlush( "      <td width=\"100\" align=\"center\" bgcolor=\"#C0C0C0\"><font face=\"Verdana\" size=\"1\" color=\"Blue\">$passed</font></td>\n");}
@@ -122,7 +123,7 @@ if (!function_exists('Table_Footer'))
 
 ## ---- ##
 
-### Description: Create Benchmark Class
+### Description: Create Benchmark Class 
 
 class c_Timer
 {

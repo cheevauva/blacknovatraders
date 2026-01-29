@@ -16,7 +16,7 @@
  <style type="text/css">
  <!--
 <?php
-if($interface == "")
+if(empty($interface))
 {
   $interface = "main.php";
 }

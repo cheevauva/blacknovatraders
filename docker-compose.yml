@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    container_name: blacknova_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.5
+    container_name: blacknova_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bnt
+      MYSQL_USER: bnt
+      MYSQL_PASSWORD: bnt
+    command: --sql-mode=""

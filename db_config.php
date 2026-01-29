@@ -2,7 +2,7 @@
 
 // Path on the filesystem where the blacknova files
 // will reside:
-$gameroot = "/home/bob/public_html/bnt";
+$gameroot = __DIR__;
 
 // The ADOdb db module is now required to run BNT. You
 // can find it at http://php.weblogs.com/ADODB. Enter the
@@ -17,17 +17,17 @@ $ADOdbpath = "backends/adodb";
 // Do not enter slashes for $gamedomain or anything that would come after a slash
 // if you get weird errors with cookies then make sure the game domain has TWO dots
 // i.e. if you reside your game on http://www.blacknova.net put .blacknova.net as $gamedomain. If your game is on http://www.some.site.net put .some.site.net as your game domain. Do not put port numbers in $gamedomain.
-$gamedomain = ".127.0.0.1";
+$gamedomain = "/";
 
 // This is the trailing part of the URL, that is not part of the domain.
 // If you enter www.blah.com/blacknova to access the game, you would leave the line as it is.
 // If you do not need to specify blacknova, just enter a single slash eg:
 // $gamepath = "/";
-$gamepath = "/~bob/bnt/";
+$gamepath = "/";
 
 // Hostname and port of the database server:
 // These are defaults, you normally won't have to change them
-$dbhost = "localhost";
+$dbhost = "mysql:host=db;dbname=bnt";
 
 // Note : if you do not know the port, set this to "" for default. Ex, MySQL default is 3306
 $dbport = "";
@@ -52,7 +52,7 @@ $dbname = "bnt";
 // "postgres7" for PostgreSQL ver 7 and up
 // "sybase" for a SyBase database
 // NOTE: only mysql work as of right now, due to SQL compat code
-$db_type = "mysql";
+$db_type = "pdo_mysql";
 
 // Set this to 1 to use db persistent connections, 0 otherwise - persistent connections can cause load problems!
 $db_persistent = 0;
@@ -71,4 +71,3 @@ $adminname = "Admin Name";
 
 // Address the forum link, link's to:
 $link_forums = "http://forums.blacknova.net";
-?>
