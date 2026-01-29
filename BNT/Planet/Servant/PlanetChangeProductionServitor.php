@@ -39,11 +39,12 @@ use BNT\Enum\BalanceEnum;
  * This should patch the game from being hack with planet Hack.
  * Patched by TMD [TheMightyDude]
  */
+
 class PlanetChangeProductionServitor implements ServantInterface
 {
+
     public Ship $ship;
     public array $changedPlanets = [];
-    public bool $doIt = true;
 
     #[\Override]
     public function serve(): void
@@ -95,13 +96,6 @@ class PlanetChangeProductionServitor implements ServantInterface
 
                 $this->changedPlanets[] = $planet;
             }
-        }
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
         }
 
         foreach ($this->changedPlanets as $planet) {

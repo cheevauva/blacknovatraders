@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Ship\Servant;
 
+use Psr\Container\ContainerInterface;
 use BNT\Servant;
 use BNT\Ship\Entity\Ship;
 use BNT\Ship\DAO\ShipSaveDAO;
@@ -22,13 +23,10 @@ use BNT\Sector\DAO\SectorSaveDAO;
 use BNT\News\Entity\News;
 use BNT\News\DAO\NewsSaveDAO;
 
-
 class ShipKillServant extends Servant
 {
 
-    
     public Ship $ship;
-    public bool $doIt = true;
     public array $news = [];
     public array $sectorsForChange = [];
     public array $planetsForChange = [];
@@ -108,15 +106,6 @@ class ShipKillServant extends Servant
 
         $this->news[] = $news;
 
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
-        }
-
         foreach ($this->bountiesForRemove as $bounty) {
             $removeBounty = BountyRemoveByCriteriaDAO::new($this->container);
             $removeBounty->bounty_id = Bounty::as($bounty)->bounty_id;
@@ -144,7 +133,7 @@ class ShipKillServant extends Servant
         }
     }
 
-    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): void
+    public static function call(ContainerInterface $container, Ship $ship): void
     {
         $self = static::new($container);
         $self->ship = $ship;

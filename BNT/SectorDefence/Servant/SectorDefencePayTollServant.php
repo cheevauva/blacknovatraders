@@ -20,7 +20,6 @@ use BNT\Log\Event\LogTollRecieveEvent;
 class SectorDefencePayTollServant extends Servant
 {
 
-    public bool $doIt = true;
     public Ship $ship;
     public int $sector;
     //
@@ -52,7 +51,20 @@ class SectorDefencePayTollServant extends Servant
         //
         $this->distributeToll();
 
-        $this->doIt();
+        foreach ($this->distributeTolls as $distributeToll) {
+            $distributeToll = SectorDefenceDistributeTollDTO::as($distributeToll);
+            ShipSaveDAO::call($this->container, $distributeToll->ship);
+        }
+
+        ShipSaveDAO::call($this->container, $this->ship);
+
+        foreach ($this->shipsForChange as $ship) {
+            ShipSaveDAO::call($this->container, $ship);
+        }
+
+        foreach ($this->logs as $log) {
+            LogEvent::as($log)->dispatch($this->eventDispatcher());
+        }
     }
 
     private function distributeToll()
@@ -80,22 +92,5 @@ class SectorDefencePayTollServant extends Servant
         }
     }
 
-    private function doIt(): void
-    {
-        foreach ($this->distributeTolls as $distributeToll) {
-            $distributeToll = SectorDefenceDistributeTollDTO::as($distributeToll);
-            ShipSaveDAO::call($this->container, $distributeToll->ship);
-        }
-
-        ShipSaveDAO::call($this->container, $this->ship);
-
-        foreach ($this->shipsForChange as $ship) {
-            ShipSaveDAO::call($this->container, $ship);
-        }
-
-        foreach ($this->logs as $log) {
-            LogEvent::as($log)->dispatch($this->eventDispatcher());
-        }
-    }
 
 }

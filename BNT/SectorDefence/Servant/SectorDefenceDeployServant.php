@@ -16,7 +16,6 @@ use BNT\Servant;
 class SectorDefenceDeployServant extends Servant
 {
     public Ship $ship;
-    public bool $doIt = false;
     public int $numfighters = 0;
     public int $nummines = 0;
     public SectorDefenceFmSettingEnum $mode;
@@ -70,15 +69,6 @@ class SectorDefenceDeployServant extends Servant
         $this->ship->last_login = new \DateTime;
         $this->ship->ship_fighters -= $this->numfighters;
         $this->ship->torps -= $this->nummines;
-
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
-        }
 
         $this->ship->turn();
 

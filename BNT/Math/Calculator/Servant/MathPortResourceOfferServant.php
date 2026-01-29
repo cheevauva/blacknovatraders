@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\Math\Servant;
+namespace BNT\Math\Calculator\Servant;
 
 use BNT\Math\DTO\MathSectorDTO;
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BNT\Ship\DAO;
 
 use BNT\Ship\Entity\Ship;
+use Psr\Container\ContainerInterface;
 
 class ShipCreateDAO extends ShipDAO
 {
@@ -21,7 +22,7 @@ class ShipCreateDAO extends ShipDAO
         $this->ship->ship_id = intval($this->db()->lastInsertId());
     }
 
-    public static function call(\Psr\Container\ContainerInterface $container, Ship $ship): self
+    public static function call(ContainerInterface $container, Ship $ship): self
     {
         $self = static::new($container);
         $self->ship = $ship;

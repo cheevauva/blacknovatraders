@@ -17,7 +17,6 @@ use BNT\Enum\CommandEnum;
 class ShipRealSpaceMoveServant extends Servant
 {
 
-    public bool $doIt = true;
     public Ship $ship;
     public Sector $sectorStart;
     public Sector $sectorFinish;
@@ -112,15 +111,6 @@ class ShipRealSpaceMoveServant extends Servant
 
                 $this->retval = CommandEnum::go;
             }
-        }
-
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
         }
 
         ShipSaveDAO::call($this->container, $this->ship);

@@ -4,28 +4,24 @@ declare(strict_types=1);
 
 namespace BNT\Math\Mediator;
 
+use BNT\Math\Calculator\Servant\MathDefenceCalculateMinesServant;
 use BNT\Math\DTO\MathDefencesDTO;
-use BNT\Math\DTO\MathShipDTO;
-use BNT\Math\Servant\MathDefenceCalculateMinesServant;
+use BNT\Ship\Entity\Ship;
+use BNT\Ship\Mapper\ShipToMathShipMapper;
 
 class MathDefenceCalculateMinesMediator extends \BNT\Mediator
 {
 
-    public MathShipDTO $ship;
+    public Ship $ship;
     public MathDefencesDTO $defences;
 
-    public function __construct()
-    {
-        $this->ship = new MathShipDTO;
-        $this->defences = new MathDefencesDTO();
-    }
 
     #[\Override]
     public function serve(): void
     {
         $calculate = MathDefenceCalculateMinesServant::new($this->container);
         $calculate->defences = $this->defences;
-        $calculate->ship = $this->ship;
+        $calculate->ship = ShipToMathShipMapper::call($this->container, $this->ship)->mathShip;
         $calculate->serve();
     }
 }

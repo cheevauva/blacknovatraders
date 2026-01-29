@@ -6,6 +6,7 @@ namespace BNT\Ship\Mapper;
 
 use BNT\Ship\Entity\Ship;
 use BNT\Math\DTO\MathShipDTO;
+use Psr\Container\ContainerInterface;
 
 class ShipToMathShipMapper extends \BNT\Mapper
 {
@@ -32,4 +33,13 @@ class ShipToMathShipMapper extends \BNT\Mapper
         $this->mathShip->fighters = $this->ship->ship_fighters;
     }
 
+    public static function call(ContainerInterface $container, Ship $ship, ?MathShipDTO $mathShip = null): self
+    {
+        $self = self::new($container);
+        $self->ship = $ship;
+        $self->mathShip = $mathShip ?? new MathShipDTO();
+        $self->serve();
+
+        return $self;
+    }
 }

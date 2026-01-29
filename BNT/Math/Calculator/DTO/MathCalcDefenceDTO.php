@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BNT\Math\DTO;
+namespace BNT\Math\Calculator\DTO;
 
-class MathDefenceDTO extends \BNT\DTO
+class MathCalcDefenceDTO extends \BNT\DTO
 {
 
     public int $quantity = 0;

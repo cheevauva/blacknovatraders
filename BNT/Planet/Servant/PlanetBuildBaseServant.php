@@ -16,17 +16,14 @@ use BNT\Ship\DAO\ShipSaveDAO;
 use BNT\Ship\Servant\ShipRealSpaceMoveServant;
 use BNT\Enum\BalanceEnum;
 
-
 class PlanetBuildBaseServant extends Servant
 {
 
-    
     public Ship $ship;
     public Sector $sector;
     public Planet $planet;
     public int $sector_id;
     public int $planet_id;
-    public bool $doIt = true;
     public ShipRealSpaceMoveServant $realSpaceMove;
     public ?SectorCalcOwnershipServant $calcOwnership = null;
 
@@ -39,7 +36,6 @@ class PlanetBuildBaseServant extends Servant
         $realSpaceMove = $this->realSpaceMove = ShipRealSpaceMoveServant::new($this->container);
         $realSpaceMove->ship = $this->ship;
         $realSpaceMove->destination = $this->sector_id;
-        $realSpaceMove->doIt = $this->doIt;
         $realSpaceMove->serve();
 
         if ($this->isCanBuildBase()) {
@@ -50,7 +46,12 @@ class PlanetBuildBaseServant extends Servant
             $this->planet->credits -= BalanceEnum::base_credits->val();
         }
 
-        $this->doIt();
+        $this->ship->turn();
+
+        ShipSaveDAO::call($this->container, $this->ship);
+        PlanetSaveDAO::call($this->container, $this->planet);
+
+        $this->calcOwnership = SectorCalcOwnershipServant::call($this->container, $this->ship->sector);
     }
 
     private function isCanBuildBase(): bool
@@ -63,19 +64,5 @@ class PlanetBuildBaseServant extends Servant
         $youCanBuildBase &= $this->planet->credits >= BalanceEnum::base_credits->val();
 
         return !empty($youCanBuildBase);
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
-        }
-
-        $this->ship->turn();
-
-        ShipSaveDAO::call($this->container, $this->ship);
-        PlanetSaveDAO::call($this->container, $this->planet);
-
-        $this->calcOwnership = SectorCalcOwnershipServant::call($this->container, $this->ship->sector);
     }
 }

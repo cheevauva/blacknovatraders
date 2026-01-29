@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace BNT\Math\DTO;
+namespace BNT\Math\Calculator\DTO;
 
-use BNT\Math\DTO\MathDefenceDTO;
+use BNT\Math\DTO\MathCalcDefenceDTO;
 use BNT\Math\DTO\MathShipDTO;
 
-class MathDefencesDTO extends \BNT\DTO
+class MathCalcDefencesDTO extends \BNT\DTO
 {
 
     protected array $defences = [];
     public MathShipDTO $ship;
 
-    public function defence(): MathDefenceDTO
+    public function defence(): MathCalcDefenceDTO
     {
-        return $this->defences[] = $defence = new MathDefenceDTO();
+        return $this->defences[] = $defence = new MathCalcDefenceDTO();
     }
 
     public function ship(): MathShipDTO

@@ -15,7 +15,6 @@ class MessageDefenceOwnerServant extends Servant
 
     public int $sector;
     public string $message;
-    public bool $doIt = true;
 
     /**
      * @var LogEvent
@@ -36,15 +35,6 @@ class MessageDefenceOwnerServant extends Servant
             $log->message = $this->message;
 
             $this->logs[] = $log;
-        }
-
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
         }
 
         foreach ($this->logs as $log) {

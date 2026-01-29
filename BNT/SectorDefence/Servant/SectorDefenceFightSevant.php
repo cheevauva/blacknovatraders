@@ -21,7 +21,6 @@ use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 class SectorDefenceFightSevant extends Servant
 {
 
-    public bool $doIt = true;
     public Ship $ship;
     public int $sector_id;
     //
@@ -110,15 +109,6 @@ class SectorDefenceFightSevant extends Servant
             $this->destroy();
         }
 
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
-        }
-
         ShipSaveDAO::call($this->container, $this->ship);
 
         foreach ($this->logs as $log) {
@@ -154,7 +144,6 @@ class SectorDefenceFightSevant extends Servant
         $this->destroyFighters = SectorDefenceDestroyFightersServant::new($this->container);
         $this->destroyFighters->sector = $this->sector_id;
         $this->destroyFighters->fighters = $fighterslost;
-        $this->destroyFighters->doIt = $this->doIt;
         $this->destroyFighters->serve();
     }
 
@@ -272,7 +261,6 @@ class SectorDefenceFightSevant extends Servant
         $messageDefenceOwner = MessageDefenceOwnerServant::new($this->container);
         $messageDefenceOwner->sector = $sector;
         $messageDefenceOwner->message = $message;
-        $messageDefenceOwner->doIt = false;
         $messageDefenceOwner->serve();
 
         array_push($this->logs, ...$messageDefenceOwner->logs);
@@ -291,10 +279,7 @@ class SectorDefenceFightSevant extends Servant
             '[sector]' => $this->sector_id,
         ]));
 
-        $this->destroyShip = ShipDestroyServant::new($this->container);
-        $this->destroyShip->ship = $this->ship;
-        $this->destroyShip->doIt = $this->doIt;
-        $this->destroyShip->serve();
+        ShipDestroyServant::call($this->container, $this->ship);
     }
 
 }

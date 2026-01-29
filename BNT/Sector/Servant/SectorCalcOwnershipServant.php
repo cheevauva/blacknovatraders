@@ -17,11 +17,9 @@ use BNT\DTO\CalcOwnershipDTO;
 use BNT\Zone\Entity\Zone;
 use BNT\Zone\DAO\ZoneRetrieveManyByCriteriaDAO;
 
-
 class SectorCalcOwnershipServant extends Servant
 {
 
-    
     public int $sector_id;
     public Sector $sector;
     public array $planetsWithBaseOnSector;
@@ -29,12 +27,12 @@ class SectorCalcOwnershipServant extends Servant
     public array $ownerCorps;
     public array $ownerShips;
     public ?CalcOwnershipDTO $winner;
-    public bool $doIt = true;
 
     public function serve(): void
     {
         $this->process();
-        $this->doIt();
+        
+        SectorSaveDAO::call($this->container, $this->sector);
     }
 
     protected function prepareOwnerTypes(): void
@@ -212,15 +210,6 @@ class SectorCalcOwnershipServant extends Servant
         }
 
         return $corpWinner?->num >= $shipWinner?->num ? $corpWinner : $shipWinner;
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
-        }
-
-        SectorSaveDAO::call($this->container, $this->sector);
     }
 
     public static function call(\Psr\Container\ContainerInterface $container, int $sector): self

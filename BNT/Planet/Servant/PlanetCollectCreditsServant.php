@@ -17,7 +17,6 @@ class PlanetCollectCreditsServant extends Servant
     public Ship $ship;
     public array $planetIds;
     public array $planets;
-    public bool $doIt = true;
 
     #[\Override]
     public function serve(): void
@@ -38,7 +37,6 @@ class PlanetCollectCreditsServant extends Servant
             $realSpaceMove = ShipRealSpaceMoveServant::new($this->container);
             $realSpaceMove->ship = $this->ship;
             $realSpaceMove->destination = $planet->sector_id;
-            $realSpaceMove->doIt = $this->doIt;
             $realSpaceMove->serve();
 
             $cs = $realSpaceMove->retval;
@@ -50,7 +48,6 @@ class PlanetCollectCreditsServant extends Servant
 
             if ($cs == CommandEnum::go) {
                 $takeCredits = PlanetTakeCreditsServant::new($this->container);
-                $takeCredits->doIt = $this->doIt;
                 $takeCredits->planet = $planet;
                 $takeCredits->ship = $this->ship;
                 $takeCredits->serve();

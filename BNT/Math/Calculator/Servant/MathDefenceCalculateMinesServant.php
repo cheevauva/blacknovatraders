@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BNT\Math\Servant;
+namespace BNT\Math\Calculator\Servant;
 
 use BNT\Servant;
 use BNT\Enum\BalanceEnum;
-use BNT\Math\DTO\MathDefencesDTO;
-use BNT\Math\DTO\MathDefenceDTO;
-use BNT\Math\DTO\MathShipDTO;
+use BNT\Math\Calculator\DTO\MathCalcDefencesDTO;
+use BNT\Math\Calculator\DTO\MathCalcDefenceDTO;
+use BNT\Math\Calculator\DTO\MathCalcShipDTO;
 
 class MathDefenceCalculateMinesServant extends Servant
 {
 
-    public MathDefencesDTO $defences;
-    public MathShipDTO $ship;
+    public MathCalcDefencesDTO $defences;
+    public MathCalcShipDTO $ship;
     //
     public int $minesToll = 0;
     public int $totalMines = 0;
@@ -41,7 +41,7 @@ class MathDefenceCalculateMinesServant extends Servant
         foreach ($this->defences as $defence) {
             $this->firstDefence ??= $defence;
 
-            $defence = MathDefenceDTO::as($defence);
+            $defence = MathCalcDefenceDTO::as($defence);
 
             if (!$this->hasEmenyMines && $defence->isMines && (!$defence->isOwner || !$defence->isOwnerTeam)) {
                 $this->hasEmenyMines = true;

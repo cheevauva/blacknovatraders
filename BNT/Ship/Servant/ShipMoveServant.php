@@ -14,14 +14,17 @@ use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
 
 class ShipMoveServant extends Servant
 {
+
     public Ship $ship;
     public SectorDefenceAttackFightersServant $checkFighters;
     public int $sector;
-    public bool $doIt = true;
-    public array $links = [];
+    public protected(set) array $links = [];
 
     public function serve(): void
     {
+        global $l_move_failed;
+        global $l_move_turn;
+
         $retrieveLinks = LinkRetrieveManyByCriteriaDAO::new($this->container);
         $retrieveLinks->link_start = $this->ship->sector;
         $retrieveLinks->link_dest = $this->sector;
@@ -30,21 +33,11 @@ class ShipMoveServant extends Servant
 
         $this->links = $retrieveLinks->links;
 
-        $this->checkFighters = $this->checkFighters ?? new SectorDefenceAttackFightersServant;
-        $this->checkFighters->sector = $this->sector;
-        $this->checkFighters->ship = $this->ship;
-        $this->checkFighters->serve();
-
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        global $l_move_failed;
-        global $l_move_turn;
-
-        if (!$this->doIt) {
-            return;
+        if (empty($this->checkFighters)) {
+            $this->checkFighters = SectorDefenceAttackFightersServant::new($this->container);
+            $this->checkFighters->sector = $this->sector;
+            $this->checkFighters->ship = $this->ship;
+            $this->checkFighters->serve();
         }
 
         if ($this->checkFighters->hasEnemy) {

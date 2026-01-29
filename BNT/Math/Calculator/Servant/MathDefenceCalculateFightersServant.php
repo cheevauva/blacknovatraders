@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BNT\Math\Servant;
+namespace BNT\Math\Calculator\Servant;
 
 use BNT\Servant;
 use BNT\Enum\BalanceEnum;
-use BNT\Math\DTO\MathDefencesDTO;
-use BNT\Math\DTO\MathDefenceDTO;
-use BNT\Math\DTO\MathShipDTO;
+use BNT\Math\Calculator\DTO\MathCalcDefencesDTO;
+use BNT\Math\Calculator\DTO\MathCalcDefenceDTO;
+use BNT\Math\Calculator\DTO\MathCalcShipDTO;
 
 class MathDefenceCalculateFightersServant extends Servant
 {
 
-    public MathDefencesDTO $defences;
-    public MathShipDTO $ship;
+    public MathCalcDefencesDTO $defences;
+    public MathCalcShipDTO $ship;
     //
     public int $fightersToll = 0;
     public int $totalFighters = 0;
@@ -45,7 +45,7 @@ class MathDefenceCalculateFightersServant extends Servant
         $this->totalSectorFightes = 0;
 
         foreach ($this->defences as $defence) {
-            $defence = MathDefenceDTO::as($defence);
+            $defence = MathCalcDefenceDTO::as($defence);
 
             if (!$this->hasEmenyFighters && $defence->isFighters && (!$defence->isOwner || !$defence->isOwnerTeam)) {
                 $this->hasEmenyFighters = true;

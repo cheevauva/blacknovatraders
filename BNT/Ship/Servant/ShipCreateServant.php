@@ -11,6 +11,7 @@ use BNT\Enum\BalanceEnum;
 
 class ShipCreateServant extends Servant
 {
+
     public Ship $ship;
 
     public function serve(): void
@@ -35,8 +36,6 @@ class ShipCreateServant extends Servant
         $ship->lang = BalanceEnum::default_lang->val();
         $ship->dhtml = true;
 
-        $create = ShipCreateDAO::new($this->container);
-        $create->ship = $ship;
-        $create->serve();
+        ShipCreateDAO::call($this->container, $ship);
     }
 }

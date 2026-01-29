@@ -11,14 +11,11 @@ use BNT\Planet\Entity\Planet;
 use BNT\Planet\DAO\PlanetSaveDAO;
 use BNT\Enum\CommandEnum;
 
-
 class PlanetTakeCreditsServant extends Servant
 {
 
-    
     public Ship $ship;
     public Planet $planet;
-    public bool $doIt = true;
     public CommandEnum $retval;
     public int $creditsTaken;
     public int $creditsOnShip;
@@ -58,15 +55,6 @@ class PlanetTakeCreditsServant extends Servant
 
             $this->ship->credits = $this->newShipCredits;
             $this->ship->turn();
-        }
-
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
         }
 
         ShipSaveDAO::call($this->container, $this->ship);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use BNT\Ship\Servant\ShipMoveServant;
 use BNT\SectorDefence\Servant\SectorDefenceAttackFightersServant;
 use BNT\SectorDefence\Servant\SectorDefencePayTollServant;
-use BNT\SectorDefence\Servant\SectorDefenceFightSevant;
+use BNT\SectorDefence\Servant\SectorDefenceFightServant;
 use BNT\SectorDefence\Servant\SectorDefenceSneakServant;
 use BNT\SectorDefence\Servant\SectorDefenceRetreatServant;
 use BNT\SectorDefence\Exception\SectorDefenceHasEmenyException;
@@ -30,7 +30,7 @@ try {
             $checkFighters->serve();
 
             try {
-                $move = ShipMoveServant::new($container);
+                $move = ShipMoveServant::call($container, $ship);
                 $move->checkFighters = $checkFighters;
                 $move->ship = $ship;
                 $move->sector = intval($_GET['sector']);
@@ -49,10 +49,9 @@ try {
         case 'POST':
             switch ($_POST['response']) {
                 case 'fight':
-                    $fight = SectorDefenceFightSevant::new($container);
+                    $fight = BNT\SectorDefence\Servant\SectorDefenceFightSevant::new($container);
                     $fight->ship = $ship;
                     $fight->sector_id = intval($_GET['sector']);
-                    $fight->doIt = false;
                     $fight->serve();
                     echo '<pre>';
                     print_r($fight);
@@ -74,10 +73,9 @@ try {
                         $sneak->ship = $ship;
                         $sneak->serve();
                     } catch (SectorDefenceDetectYourShipException $ex) {
-                        $fight = SectorDefenceFightSevant::new($container);
+                        $fight = SectorDefenceFightServant::new($container);
                         $fight->ship = $ship;
                         $fight->sector_id = intval($_GET['sector']);
-                        ;
                         $fight->serve();
                         // todo
                     }

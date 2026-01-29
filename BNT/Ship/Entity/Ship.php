@@ -10,6 +10,7 @@ use BNT\Ship\Enum\ShipResourceEnum;
 
 class Ship
 {
+
     public int $ship_id;
     public string $ship_name;
     public bool $ship_destroyed = false;
@@ -325,5 +326,15 @@ class Ship
     public function password(string $password): void
     {
         $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    public function isMe(Ship $ship): bool
+    {
+        return $this->ship_id == $ship->ship_id;
+    }
+
+    public function isMyTeam(Ship $ship): bool
+    {
+        return !empty($this->team) && $this->team == $ship->team;
     }
 }

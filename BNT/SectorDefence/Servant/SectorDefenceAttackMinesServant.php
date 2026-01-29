@@ -10,7 +10,7 @@ use BNT\SectorDefence\DAO\SectorDefenceRetrieveManyByCriteriaDAO;
 use BNT\Math\Mediator\MathDefenceCalculateMinesMediator;
 use BNT\SectorDefence\Enum\SectorDefenceTypeEnum;
 use BNT\SectorDefence\Entity\SectorDefence;
-use BNT\Ship\Mapper\ShipToMathShipMapper;
+use BNT\Ship\DAO\ShipRetrieveByIdDAO;
 
 class SectorDefenceAttackMinesServant extends Servant
 {
@@ -18,6 +18,7 @@ class SectorDefenceAttackMinesServant extends Servant
     public int $sector;
     public Ship $ship;
 
+    #[\Override]
     public function serve(): void
     {
         $retrieveDefences = SectorDefenceRetrieveManyByCriteriaDAO::new($this->container);
@@ -26,28 +27,20 @@ class SectorDefenceAttackMinesServant extends Servant
         $retrieveDefences->orderByQuantityDESC = true;
         $retrieveDefences->serve();
 
-        $math = new MathDefenceCalculateMinesMediator();
-        
-        $shipMapper = ShipToMathShipMapper::new($this->container);
-        $shipMapper->mathShip = $math->ship;
-        $shipMapper->ship = $this->ship;
-        $shipMapper->serve();
+        $mathDefences = [];
 
         foreach ($retrieveDefences->defences as $defence) {
-            $defence = SectorDefence::as($retrieveDefences);
-
-            $fightersOwner = ShipRetrieveByIdDAO::call($this->container, $defence->ship_id);
-
-            $mathMapper = SectorDefenceToMathDefenceMapper::new($this->container);
-            $mathMapper->sectorDefence = $defence;
-            $mathMapper->mathDefence = $math->defences->defence();
-            $mathMapper->ship = $this->ship;
-            $mathMapper->defenceShip = $fightersOwner;
-            $mathMapper->serve();
-            
+            $mathDefences[] = [
+                $defence,
+                $this->ship,
+                ShipRetrieveByIdDAO::call($this->container, SectorDefence::as($defence)->ship_id)
+            ];
             break;
         }
-        
-    }
 
+        $math = new MathDefenceCalculateMinesMediator();
+        $math->ship = $this->ship;
+        $math->defences = $mathDefences;
+        $math->serve();
+    }
 }

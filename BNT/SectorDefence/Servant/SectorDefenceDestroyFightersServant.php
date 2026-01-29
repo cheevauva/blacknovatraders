@@ -20,7 +20,6 @@ class SectorDefenceDestroyFightersServant extends Servant
     public int $fighters;
     public array $defencesForChange = [];
     public array $defencesForRemove = [];
-    public bool $doIt = true;
 
     public function serve(): void
     {
@@ -55,14 +54,6 @@ class SectorDefenceDestroyFightersServant extends Servant
             }
         }
 
-        $this->doIt();
-    }
-
-    protected function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
-        }
 
         foreach ($this->defencesForChange as $defenceForChange) {
             $defenceForChange = SectorDefence::as($defenceForChange);

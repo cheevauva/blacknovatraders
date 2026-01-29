@@ -12,12 +12,12 @@ use BNT\Bounty\DAO\BountyRemoveByCriteriaDAO;
 use BNT\Bounty\Bounty;
 use BNT\Log\Event\LogBountyCancelledEvent;
 use BNT\Bounty\DAO\BountyRetrieveManyByCriteriaDAO;
+use Psr\Container\ContainerInterface;
 
 class BountyCancelServant extends Servant
 {
 
     public int $bounty_on;
-    public bool $doIt = true;
     public array $logs = [];
     public array $shipsForChange = [];
     public array $bountiesForRemove = [];
@@ -50,14 +50,6 @@ class BountyCancelServant extends Servant
             $this->bountiesForRemove[] = $bountydetails;
         }
 
-        $this->doIt();
-    }
-
-    private function doIt(): void
-    {
-        if (!$this->doIt) {
-            return;
-        }
 
         foreach ($this->bountiesForRemove as $bountyForRemove) {
             $removeBounty = BountyRemoveByCriteriaDAO::new($this->container);
@@ -74,7 +66,7 @@ class BountyCancelServant extends Servant
         }
     }
 
-    public static function call(\Psr\Container\ContainerInterface $container, Ship|int $bountyOn): void
+    public static function call(ContainerInterface $container, Ship|int $bountyOn): void
     {
         if ($bountyOn instanceof Ship) {
             $bountyOn = $bountyOn->ship_id;
