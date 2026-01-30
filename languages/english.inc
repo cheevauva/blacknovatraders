@@ -1424,4 +1424,3 @@ $l_insignia[18] = "Vice Admiral";
 $l_insignia[19] = "Admiral";           
 
 
-?>

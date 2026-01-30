@@ -61,29 +61,18 @@ function fromPost($name, $default = null)
 
 // Ensure lang is set
 $found = 0;
-if(!empty($lang))
-{
-  if(!preg_match("/^[\w]+$/", $lang))
-  {
-     $lang = $default_lang;
-
-  }
-  foreach($avail_lang as $key => $value)
-  {
-    if($lang == $value[file])
-    {
-      SetCookie("lang",$lang,time()+(3600*24)*365,$gamepath,$gamedomain);
-      $found = 1;
-      break;
+$lang = $default_lang;
+if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    switch (mb_strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2))) {
+        case 'ru': 
+            $lang = 'russian';
+            break;
+        case 'en': 
+            $lang = 'english';
+            break;
     }
-  }
-
-  if($found == 0)
-    $lang = $default_lang;
 }
 
-if (!isset($lang) || empty($lang))
-  $lang = $default_lang;
 $lang = $lang . ".inc";
 //Log constants
 

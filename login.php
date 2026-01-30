@@ -1,40 +1,10 @@
 <?php
 
 include("config.php");
-
-if (empty($lang)) {
-    $lang = $default_lang;
-}
+include("languages/$lang");
 
 $found = 0;
-if (!empty($newlang)) {
-    if (!preg_match("/^[\w]+$/", $newlang)) {
-        $lang = $default_lang;
-    } else {
-        foreach ($avail_lang as $key => $value) {
-            if ($newlang == $value['file']) {
-                $lang = $newlang;
-                SetCookie("lang", $lang, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-                $found = 1;
-                break;
-            }
-        }
 
-        if ($found == 0) {
-            $lang = $default_lang;
-        }
-    }
-    $lang = $lang . ".inc";
-} elseif (!empty($_COOKIE['lang'])) {
-    $lang = $_COOKIE['lang'] . ".inc";
-}
-
-// Подключение языкового файла
-if (empty($lang)) {
-    $lang = $default_lang . ".inc";
-}
-
-include("languages/$lang");
 $title = $l_login_title;
 
 $template_data = [

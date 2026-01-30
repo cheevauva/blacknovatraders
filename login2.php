@@ -10,8 +10,9 @@ try {
         $title = $l_login_sclosed;
         throw new \Exception($l_login_closed_message);
     }
-    
+
     $title = $l_login_title2;
+
     $email = fromPost('email', new \Exception('email is required'));
     $pass = fromPost('pass', new \Exception('pass is required'));
 
@@ -22,13 +23,9 @@ try {
     if (empty($lang)) {
         $lang = $default_lang;
     }
-    SetCookie("lang", $lang, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-    include("languages/$lang" . ".inc");
-
+    
     setcookie("interface", $mainfilename);
-
-    $userpass = $email . "+" . $pass;
-    SetCookie("userpass", $userpass, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
+    setcookie("userpass", $email . "+" . $pass, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
 
     if (sqlCheckIpBan($ip, $playerinfo['ip_address'])) {
         SetCookie("userpass", "", 0, $gamepath, $gamedomain);
@@ -39,6 +36,8 @@ try {
         setcookie("res", "", 0);
         throw new \Exception($l_login_banned);
     }
+
+    include("languages/$lang" . ".inc");
 
     $youHaveDied = "You have died in a horrible incident, <a href=log.php>here</a> is the blackbox information that was retrieved from your ships wreckage.<BR><BR>";
 
@@ -68,10 +67,7 @@ try {
     }
 
     if ($playerinfo['ship_destroyed'] == 'Y' && $newbie_nice == 'YES') {
-        $newbie_info = sqlCheckNewbieShip($playerinfo['ship_id']);
-        $num_rows = $newbie_info->RecordCount();
-
-        if (!$num_rows) {
+        if (!sqlCheckNewbieShip($playerinfo['ship_id'])) {
             throw new \Exception($youHaveDied . $l_login_looser);
         }
 

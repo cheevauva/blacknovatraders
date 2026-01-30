@@ -33,7 +33,6 @@ if(!preg_match("/^[\w]+$/", $newlang))
    $newlang = $default_lang;
 }
 $lang=$newlang;
-SetCookie("lang",$lang,time()+(3600*24)*365,$gamepath,$gamedomain);
 include("languages/$lang" . ".inc");
 
 include("header.php");

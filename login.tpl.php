@@ -31,14 +31,6 @@
     <A HREF="ranking.php"><?php echo $l_rankings; ?></A><?php echo " - "; ?>
     <A HREF="settings.php"><?php echo $l_login_settings; ?></A>
     <BR><BR>
-    <form action="login.php" method="POST">
-        <?php echo $l_login_lang; ?>&nbsp;&nbsp;<select name="newlang">
-            <?php foreach ($avail_lang as $curlang) : ?>
-                <?php $selected = $curlang['file'] . ".inc" == $lang ? 'selected' : ''; ?>
-                <option value="<?php echo htmlspecialchars($curlang['file']); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($curlang['name']); ?></option>
-            <?php endforeach; ?>
-        </select>&nbsp;&nbsp;<input type="submit" value="<?php echo $l_login_change; ?>">
-    </form>
 </CENTER>
 
 <?php include("footer.php"); ?>

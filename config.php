@@ -198,7 +198,8 @@ $avail_lang[1]['file'] = 'french';
 $avail_lang[1]['name'] = 'Francais';
 $avail_lang[2]['file'] = 'spanish';
 $avail_lang[2]['name'] = 'Spanish';
-
+$avail_lang[0]['file'] = 'russian';
+$avail_lang[0]['name'] = 'Русский';
 $IGB_min_turns = $start_turns; //Turns a player has to play before ship transfers are allowed 0=disable
 $IGB_svalue = 0.15; //Max amount of sender's value allowed for ship transfers 0=disable
 $IGB_trate = 1440; //Time (in minutes) before two similar transfers are allowed for ship transfers.0=disable
@@ -225,4 +226,3 @@ $xen_planets = 5;                     //Percent of created xenobe that will own 
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
 
 include("global_funcs.php");
-?>
