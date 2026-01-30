@@ -4,21 +4,9 @@ include("languages/$lang");
 
 updatecookie();
 
-
-$basefontsize = 0;
-$stylefontsize = "8Pt";
-$picsperrow = 5;
-
-if($screenres == 640)
-  $picsperrow = 3;
-
-if($screenres >= 1024)
-{
-  $basefontsize = 1;
-  $stylefontsize = "12Pt";
-  $picsperrow = 7;
-}
-
+$basefontsize = 1;
+$stylefontsize = "12Pt";
+$picsperrow = 7;
 connectdb();
 
 $title=$l_main_title;
@@ -28,9 +16,7 @@ if(checklogin())
 {
   die();
 }
-
 //-------------------------------------------------------------------------------------------------
-
 
 $res = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
 $playerinfo = $res->fields;

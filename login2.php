@@ -13,31 +13,15 @@ try {
 
     $title = $l_login_title2;
 
-    $email = fromPost('email', new \Exception('email is required'));
-    $pass = fromPost('pass', new \Exception('pass is required'));
+    $email = fromPost('email', new \Exception($l_login_email . ' ' . $l_none));
+    $pass = fromPost('pass', new \Exception($l_login_pw . ' ' . $l_none));
 
     $playerinfo = sqlGetPlayerByEmail($email);
     $playerfound = !empty($playerinfo);
 
-    $lang = $playerinfo['lang'];
-    if (empty($lang)) {
-        $lang = $default_lang;
-    }
-    
-    setcookie("interface", $mainfilename);
-    setcookie("userpass", $email . "+" . $pass, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-
-    if (sqlCheckIpBan($ip, $playerinfo['ip_address'])) {
-        SetCookie("userpass", "", 0, $gamepath, $gamedomain);
-        SetCookie("userpass", "", 0);
-        setcookie("username", "", 0);
-        setcookie("password", "", 0);
-        setcookie("id", "", 0);
-        setcookie("res", "", 0);
+    if (sqlCheckIpBan($ip)) {
         throw new \Exception($l_login_banned);
     }
-
-    include("languages/$lang" . ".inc");
 
     $youHaveDied = "You have died in a horrible incident, <a href=log.php>here</a> is the blackbox information that was retrieved from your ships wreckage.<BR><BR>";
 
@@ -51,8 +35,10 @@ try {
     }
 
     if ($playerinfo['ship_destroyed'] == 'N') {
+        $token = uuidv7();
+        setcookie('token', $token, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
         playerlog($playerinfo['ship_id'], LOG_LOGIN, $ip);
-        sqlUpdateLogin($playerinfo['ship_id'], $ip);
+        sqlUpdateLogin($playerinfo['ship_id'], $token);
         header('Location:' . "main.php?id=" . $playerinfo['ship_id']);
         die;
     }

@@ -181,72 +181,74 @@ $db->Execute("CREATE TABLE $dbtables[traderoutes](" .
 $err = DBTRUEFALSE(0,$db->ErrorNo(),"No errors found",$db->ErrorNo() . ": " . $db->ErrorMsg());
 
 Table_Row("Creating traderoutes Table","Failed","Passed");
-
-$db->Execute("CREATE TABLE $dbtables[ships](" .
-             "ship_id int unsigned NOT NULL auto_increment," .
-             "ship_name char(20)," .
-             "ship_destroyed enum('Y','N') DEFAULT 'N' NOT NULL," .
-             "character_name char(20) NOT NULL," .
-             "password char($maxlen_password) NOT NULL," .
-             "email char(60) NOT NULL," .
-             "hull tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "engines tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "power tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "computer tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "sensors tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "beams tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "torp_launchers tinyint(3) DEFAULT '0' NOT NULL," .
-             "torps bigint(20) DEFAULT '0' NOT NULL," .
-             "shields tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "armor tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "armor_pts bigint(20) DEFAULT '0' NOT NULL," .
-             "cloak tinyint(3) unsigned DEFAULT '0' NOT NULL," .
-             "credits bigint(20) DEFAULT '0' NOT NULL," .
-             "sector int unsigned DEFAULT '0' NOT NULL," .
-             "ship_ore bigint(20) DEFAULT '0' NOT NULL," .
-             "ship_organics bigint(20) DEFAULT '0' NOT NULL," .
-             "ship_goods bigint(20) DEFAULT '0' NOT NULL," .
-             "ship_energy bigint(20) DEFAULT '0' NOT NULL," .
-             "ship_colonists bigint(20) DEFAULT '0' NOT NULL," .
-             "ship_fighters bigint(20) DEFAULT '0' NOT NULL," .
-             "ship_damage smallint(5) DEFAULT '0' NOT NULL," .
-             "turns smallint(4) DEFAULT '0' NOT NULL," .
-             "on_planet enum('Y','N') DEFAULT 'N' NOT NULL," .
-             "dev_warpedit smallint(5) DEFAULT '0' NOT NULL," .
-             "dev_genesis smallint(5) DEFAULT '0' NOT NULL," .
-             "dev_beacon smallint(5) DEFAULT '0' NOT NULL," .
-             "dev_emerwarp smallint(5) DEFAULT '0' NOT NULL," .
-             "dev_escapepod enum('Y','N') DEFAULT 'N' NOT NULL," .
-             "dev_fuelscoop enum('Y','N') DEFAULT 'N' NOT NULL," .
-             "dev_minedeflector bigint(20) DEFAULT '0' NOT NULL," .
-             "turns_used int unsigned DEFAULT '0' NOT NULL," .
-             "last_login datetime," .
-             "rating int DEFAULT '0' NOT NULL," .
-             "score int DEFAULT '0' NOT NULL," .
-             "team int DEFAULT '0' NOT NULL," .
-             "team_invite int DEFAULT '0' NOT NULL," .
-             "interface enum('N','O') DEFAULT 'N' NOT NULL," .
-             "ip_address tinytext NOT NULL," .
-             "planet_id int unsigned DEFAULT '0' NOT NULL," .
-             "preset1 int DEFAULT '0' NOT NULL," .
-             "preset2 int DEFAULT '0' NOT NULL," .
-             "preset3 int DEFAULT '0' NOT NULL," .
-             "trade_colonists enum('Y', 'N') DEFAULT 'Y' NOT NULL," .
-             "trade_fighters enum('Y', 'N') DEFAULT 'N' NOT NULL," .
-             "trade_torps enum('Y', 'N') DEFAULT 'N' NOT NULL," .
-             "trade_energy enum('Y', 'N') DEFAULT 'Y' NOT NULL," .
-             "cleared_defences tinytext," .
-             "lang varchar(30) DEFAULT 'english.inc' NOT NULL," .
-             "dhtml enum('Y', 'N') DEFAULT 'Y' NOT NULL," .
-             "dev_lssd enum('Y','N') DEFAULT 'Y' NOT NULL," .
-             "PRIMARY KEY (email)," .
-             "KEY email (email)," .
-             "KEY sector (sector)," .
-             "KEY ship_destroyed (ship_destroyed)," .
-             "KEY on_planet (on_planet)," .
-             "KEY team (team)," .
-             "KEY ship_id (ship_id)" .
-             ")");
+$sql = "
+CREATE TABLE $dbtables[ships] (
+    ship_id int unsigned NOT NULL auto_increment,
+    ship_name char(20),
+    ship_destroyed enum('Y','N') DEFAULT 'N' NOT NULL,
+    character_name char(20) NOT NULL,
+    password char($maxlen_password) NOT NULL,
+    email char(60) NOT NULL,
+    hull tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    engines tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    power tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    computer tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    sensors tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    beams tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    torp_launchers tinyint(3) DEFAULT '0' NOT NULL,
+    torps bigint(20) DEFAULT '0' NOT NULL,
+    shields tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    armor tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    armor_pts bigint(20) DEFAULT '0' NOT NULL,
+    cloak tinyint(3) unsigned DEFAULT '0' NOT NULL,
+    credits bigint(20) DEFAULT '0' NOT NULL,
+    sector int unsigned DEFAULT '0' NOT NULL,
+    ship_ore bigint(20) DEFAULT '0' NOT NULL,
+    ship_organics bigint(20) DEFAULT '0' NOT NULL,
+    ship_goods bigint(20) DEFAULT '0' NOT NULL,
+    ship_energy bigint(20) DEFAULT '0' NOT NULL,
+    ship_colonists bigint(20) DEFAULT '0' NOT NULL,
+    ship_fighters bigint(20) DEFAULT '0' NOT NULL,
+    ship_damage smallint(5) DEFAULT '0' NOT NULL,
+    turns smallint(4) DEFAULT '0' NOT NULL,
+    on_planet enum('Y','N') DEFAULT 'N' NOT NULL,
+    dev_warpedit smallint(5) DEFAULT '0' NOT NULL,
+    dev_genesis smallint(5) DEFAULT '0' NOT NULL,
+    dev_beacon smallint(5) DEFAULT '0' NOT NULL,
+    dev_emerwarp smallint(5) DEFAULT '0' NOT NULL,
+    dev_escapepod enum('Y','N') DEFAULT 'N' NOT NULL,
+    dev_fuelscoop enum('Y','N') DEFAULT 'N' NOT NULL,
+    dev_minedeflector bigint(20) DEFAULT '0' NOT NULL,
+    turns_used int unsigned DEFAULT '0' NOT NULL,
+    last_login datetime,
+    rating int DEFAULT '0' NOT NULL,
+    score int DEFAULT '0' NOT NULL,
+    team int DEFAULT '0' NOT NULL,
+    team_invite int DEFAULT '0' NOT NULL,
+    interface enum('N','O') DEFAULT 'N' NOT NULL,
+    token tinytext NULL,
+    planet_id int unsigned DEFAULT '0' NOT NULL,
+    preset1 int DEFAULT '0' NOT NULL,
+    preset2 int DEFAULT '0' NOT NULL,
+    preset3 int DEFAULT '0' NOT NULL,
+    trade_colonists enum('Y', 'N') DEFAULT 'Y' NOT NULL,
+    trade_fighters enum('Y', 'N') DEFAULT 'N' NOT NULL,
+    trade_torps enum('Y', 'N') DEFAULT 'N' NOT NULL,
+    trade_energy enum('Y', 'N') DEFAULT 'Y' NOT NULL,
+    cleared_defences tinytext,
+    lang varchar(30) DEFAULT 'english.inc' NOT NULL,
+    dhtml enum('Y', 'N') DEFAULT 'Y' NOT NULL,
+    dev_lssd enum('Y','N') DEFAULT 'Y' NOT NULL,
+    PRIMARY KEY (email),
+    KEY email (email),
+    KEY sector (sector),
+    KEY ship_destroyed (ship_destroyed),
+    KEY on_planet (on_planet),
+    KEY team (team),
+    KEY ship_id (ship_id),
+    KEY token (token(255))
+)";
+$db->Execute($sql);
 $err = DBTRUEFALSE(0,$db->ErrorNo(),"No errors found",$db->ErrorNo() . ": " . $db->ErrorMsg());
 
 Table_Row("Creating ships Table","Failed","Passed");

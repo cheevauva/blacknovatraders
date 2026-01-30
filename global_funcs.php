@@ -7,7 +7,12 @@ if (preg_match("/global_funcs.php/i", $PHP_SELF)) {
       echo "You can not access this file directly!";
       die();
 }
+function uuidv7()
+{
+    $timestamp = intval(microtime(true) * 1000);
 
+    return sprintf('%02x%02x%02x%02x-%02x%02x-%04x-%04x-%012x', ($timestamp >> 40) & 0xFF, ($timestamp >> 32) & 0xFF, ($timestamp >> 24) & 0xFF, ($timestamp >> 16) & 0xFF, ($timestamp >> 8) & 0xFF, $timestamp & 0xFF, mt_rand(0, 0x0FFF) | 0x7000, mt_rand(0, 0x3FFF) | 0x8000, mt_rand(0, 0xFFFFFFFFFFFF));
+}
 
 //----- Start register_globals fix ----
 // reg_global_fix,0.1.1,22-09-2004,BNT DevTeam
@@ -40,12 +45,12 @@ $reg_globals_on = (bool) ini_get('register_globals');
   }
 //------ End register_globals fix
 
-if ($userpass != '' and $userpass != '+') {
-  $username = substr($userpass, 0, strpos($userpass, "+"));
-  $password = substr($userpass, strpos($userpass, "+")+1);
+$token = uuidv7();
 
+if (!empty($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
 }
- 
+
 function fromPost($name, $default = null)
 {
     if (empty($_POST[$name]) && $default instanceof \Exception) {
@@ -185,55 +190,46 @@ function TEXT_JAVASCRIPT_END()
   echo "</SCRIPT>\n";
 }
 
-function checklogin()
+function checklogin($return = true)
 {
-  $flag = 0;
+    global $username, $playerinfo, $token, $l_global_needlogin, $l_global_died;
+    global $l_login_died, $l_die_please;
+    global $dbtables, $server_closed, $l_login_closed_message;
+    
+    if ($server_closed) {
+        echo $return ? $l_login_closed_message : '';
+        return true;
+    }
+    
+    $stmt = db()->PrepareStmt("SELECT * FROM {$dbtables['ships']} WHERE token=:token LIMIT 1");
+    $stmt->InParameter($token, ':token');
 
-  global $username, $l_global_needlogin, $l_global_died;
-  global $password, $l_login_died, $l_die_please;
-  global $db, $dbtables;
+    $playerinfo = $stmt->Execute()->fields;
+    
+    /* Check the cookie to see if username/password are empty - check password against database */
+    if (empty($playerinfo)) {
+        echo $return ? $l_global_needlogin :  '';
+        return true;
+    }
 
-  $result1 = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username' LIMIT 1");
-  $playerinfo = $result1->fields;
-
-  /* Check the cookie to see if username/password are empty - check password against database */
-  if($username == "" or $password == "" or $password != $playerinfo['password'])
-  {
-    echo $l_global_needlogin;
-    $flag = 1;
-  }
-
-  /* Check for destroyed ship */
-  if($playerinfo['ship_destroyed'] == "Y")
-  {
+    /* Check for destroyed ship */
+    if ($playerinfo['ship_destroyed'] == "N") {
+        $username = $playerinfo['email'];
+        return false;
+    }
     /* if the player has an escapepod, set the player up with a new ship */
-    if($playerinfo['dev_escapepod'] == "Y")
-    {
-      $result2 = $db->Execute("UPDATE $dbtables[ships] SET hull=0, engines=0, power=0, computer=0,sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N',dev_lssd='N' where email='$username'");
-      echo $l_login_died;
-      $flag = 1;
-    }
-    else
-    {
-      /* if the player doesn't have an escapepod - they're dead, delete them. */
-      /* uhhh  don't delete them to prevent self-distruct inherit*/
-      echo $l_global_died;
-
-      echo $l_die_please;
-      $flag = 1;
-    }
-  }
-  global $server_closed;
-  global $l_login_closed_message;
-  if($server_closed && $flag==0)
-  {
-    echo $l_login_closed_message;
-    $flag=1;
-  }
-
-
-
-  return $flag;
+    if ($playerinfo['dev_escapepod'] == "Y") {
+        $stmt = db()->Prepare("UPDATE {$dbtables['ships']} SET token=NULL,hull=0, engines=0, power=0, computer=0,sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N',dev_lssd='N' where email=:email");
+        $stmt->InParameter('email', $playerinfo['email']);
+        $stmt->Execute();
+        echo $return ? $l_login_died : '';
+        return true;
+    } 
+    /* if the player doesn't have an escapepod - they're dead, delete them. */
+    /* uhhh  don't delete them to prevent self-distruct inherit */
+    echo $return ? $l_global_died . $l_die_please : '';
+    
+    return true;
 }
 
 function connectdb($do_die=true)
@@ -274,27 +270,19 @@ function connectdb($do_die=true)
 
 function updatecookie()
 {
-  // refresh the cookie with username/password/id/res - times out after 60 mins, and player must login again.
-  global $gamepath;
-  global $gamedomain;
-  global $userpass;
-  global $username;
-  global $password;
-  global $id;
-  global $res;
-  // The new combined cookie login.
-  $userpass = $username."+".$password;
-  SetCookie("userpass",$userpass,time()+(3600*24)*365,$gamepath,$gamedomain);
-  if ($userpass != '' and $userpass != '+') {
-      setcookie("username","",0); // Legacy support, delete the old login cookies.
-      setcookie("password","",0); // Legacy support, delete the old login cookies.
-    $username = substr($userpass, 0, strpos($userpass, "+"));
-    $password = substr($userpass, strpos($userpass, "+")+1);
-  }
-  setcookie("id", $id);
-  setcookie("res", $res);
-}
+    // refresh the cookie with token/id/res - times out after 60 mins, and player must login again.
+    global $gamepath;
+    global $gamedomain;
+    global $id;
+    global $res;
 
+    if (!empty($_COOKIE['token'])) {
+        setcookie("token", $_COOKIE['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
+    }
+
+    setcookie("id", $id);
+    setcookie("res", $res);
+}
 
 function playerlog($sid, $log_type, $data = "")
 {

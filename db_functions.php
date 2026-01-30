@@ -20,25 +20,24 @@ function sqlGetPlayerByEmail($email)
     return $stmt->Execute()->fields;
 }
 
-function sqlCheckIpBan($ip, $playerIp)
+function sqlCheckIpBan($ip)
 {
     global $dbtables;
 
-    $stmt = db()->PrepareStmt("SELECT * FROM {$dbtables['ip_bans']} WHERE :ip LIKE ban_mask OR :playerIp LIKE ban_mask");
+    $stmt = db()->PrepareStmt("SELECT * FROM {$dbtables['ip_bans']} WHERE :ip LIKE ban_mask");
     $stmt->InParameter($ip, ':ip');
-    $stmt->InParameter($playerIp, ':playerIp');
 
     return $stmt->Execute()->RecordCount();
 }
 
-function sqlUpdateLogin($ship_id, $ip)
+function sqlUpdateLogin($ship_id, $token)
 {
     global $dbtables;
 
     $stamp = date("Y-m-d H-i-s");
-    $stmt = db()->PrepareStmt("UPDATE {$dbtables['ships']} SET last_login = :last_login, ip_address = :ip_address WHERE ship_id = :ship_id");
+    $stmt = db()->PrepareStmt("UPDATE {$dbtables['ships']} SET last_login = :last_login, token = :token WHERE ship_id = :ship_id");
     $stmt->InParameter($stamp, ':last_login');
-    $stmt->InParameter($ip, ':ip_address');
+    $stmt->InParameter($token, ':token');
     $stmt->InParameter($ship_id, ':ship_id');
 
     return $stmt->Execute();
