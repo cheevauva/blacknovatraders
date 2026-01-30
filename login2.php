@@ -37,7 +37,7 @@ setcookie("interface", $mainfilename);
 
 /* first placement of cookie - don't use updatecookie. */
 $userpass = $email."+".$pass;
-SetCookie("userpass",$userpass,time()+(3600*24)*365);
+SetCookie("userpass",$userpass,time()+(3600*24)*365,$gamepath,$gamedomain);
 
 $banned = 0;
 $res = $db->Execute("SELECT * FROM $dbtables[ip_bans] WHERE '$ip' LIKE ban_mask OR '$playerinfo[ip_address]' LIKE ban_mask");

@@ -17,13 +17,13 @@ $ADOdbpath = "backends/adodb";
 // Do not enter slashes for $gamedomain or anything that would come after a slash
 // if you get weird errors with cookies then make sure the game domain has TWO dots
 // i.e. if you reside your game on http://www.blacknova.net put .blacknova.net as $gamedomain. If your game is on http://www.some.site.net put .some.site.net as your game domain. Do not put port numbers in $gamedomain.
-$gamedomain = "/";
+$gamedomain = "";
 
 // This is the trailing part of the URL, that is not part of the domain.
 // If you enter www.blah.com/blacknova to access the game, you would leave the line as it is.
 // If you do not need to specify blacknova, just enter a single slash eg:
 // $gamepath = "/";
-$gamepath = "/";
+$gamepath = "";
 
 // Hostname and port of the database server:
 // These are defaults, you normally won't have to change them
