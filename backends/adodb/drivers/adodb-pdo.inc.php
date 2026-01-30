@@ -318,6 +318,10 @@ class ADODB_pdo extends ADOConnection {
 		return false;
 	}
 	
+        /**
+         * @param string $sql
+         * @return bool|\ADOPDOStatement
+         */
 	function PrepareStmt($sql)
 	{
 		$stmt = $this->_connectionID->prepare($sql);
@@ -388,14 +392,22 @@ class ADOPDOStatement {
 	var $databaseType = "pdo";		
 	var $dataProvider = "pdo";
 	var $_stmt;
+        /**
+         * 
+         * @var ADOConnection
+         */
 	var $_connectionID;
 	
 	function ADOPDOStatement($stmt,$connection)
 	{
+       
 		$this->_stmt = $stmt;
 		$this->_connectionID = $connection;
 	}
-	
+	/**
+         * @param type $inputArr
+         * @return ADORecordSet
+         */
 	function Execute($inputArr=false)
 	{
 		$savestmt = $this->_connectionID->_stmt;

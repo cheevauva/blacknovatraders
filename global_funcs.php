@@ -1,4 +1,5 @@
 <?php
+include_once 'db_functions.php';
 $PHP_SELF = $_SERVER['PHP_SELF'];
 //$Id$
 // Separate userpass into username & password to support the legacy of multiple cookies for login.
@@ -43,6 +44,19 @@ if ($userpass != '' and $userpass != '+') {
   $username = substr($userpass, 0, strpos($userpass, "+"));
   $password = substr($userpass, strpos($userpass, "+")+1);
 
+}
+ 
+function fromPost($name, $default = null)
+{
+    if (empty($_POST[$name]) && $default instanceof \Exception) {
+        throw $default;
+    }
+
+    if (empty($_POST[$name])) {
+        return $default;
+    }
+    
+    return $_POST[$name];
 }
 
 // Ensure lang is set
