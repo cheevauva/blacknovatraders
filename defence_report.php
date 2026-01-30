@@ -13,7 +13,7 @@ if(checklogin())
   die();
 }
 
-$res = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
+$res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 
 $query = "SELECT * FROM $dbtables[sector_defence] WHERE ship_id=$playerinfo[ship_id]";

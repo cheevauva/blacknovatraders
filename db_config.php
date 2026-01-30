@@ -61,12 +61,13 @@ $db_persistent = 0;
 one game of BNT on the same database, or if the current table
 names conflict with tables you already have in your db, you will
 need to change this */
-$db_prefix = "bnt_";
+$db_prefix = "";
 
 // Administrator's password and email:
 // Be sure to change these. Don't leave them as is.
 $adminpass = "secret";
 $admin_mail = "admin@example.com";
+$admin_pass = "admin@example.com";
 $adminname = "Admin Name";
 
 // Address the forum link, link's to:

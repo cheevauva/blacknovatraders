@@ -14,10 +14,10 @@ if(checklogin())
   die();
 }
 //adding db lock to prevent more than 5 planets in a sector - rjordan
-$db->Execute("LOCK TABLES $dbtables[ships] WRITE, $dbtables[planets] WRITE, $dbtables[universe] READ, $dbtables[zones] READ");
+$db->Execute("LOCK TABLES ships WRITE, $dbtables[planets] WRITE, $dbtables[universe] READ, $dbtables[zones] READ");
 
 //-------------------------------------------------------------------------------------------------
-$result = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
+$result = $db->Execute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $result->fields;
 
 $result2 = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
@@ -66,7 +66,7 @@ elseif($sectorinfo[planet] == "Y")
       {
         $deltarating=$sectorinfo[planet_colonists];
         $update = $db->Execute("UPDATE $dbtables[universe] SET planet_name=NULL, planet_organics=0, planet_energy=0, planet_ore=0, planet_goods=0, planet_colonists=0, planet_credits=0, planet_fighters=0, planet_owner=null, planet_corp=null, base='N',base_sells='N', base_torp=0, planet_defeated='N', planet='N' WHERE sector_id=$playerinfo[sector]");
-        $update2=$db->Execute("UPDATE $dbtables[ships] SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1, rating=rating-$deltarating WHERE ship_id=$playerinfo[ship_id]");
+        $update2=$db->Execute("UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1, rating=rating-$deltarating WHERE ship_id=$playerinfo[ship_id]");
         echo "<BR>Errr, there was one with $deltarating colonists here....<BR>";
       }
       else
@@ -118,7 +118,7 @@ else
       }
       else
       {
-        $res = $db->Execute("SELECT team FROM $dbtables[ships] WHERE ship_id=$zoneinfo[owner]");
+        $res = $db->Execute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
         $ownerinfo = $res->fields;
         if($ownerinfo[team] != $playerinfo[team])
         {
@@ -128,7 +128,7 @@ else
         {
           $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
           $update1 = $db->Execute($query1);
-          $query2 = "UPDATE $dbtables[ships] SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
+          $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
           $update2 = $db->Execute($query2);
           echo $l_gns_pcreate;
         }
@@ -142,7 +142,7 @@ else
     {
       $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
       $update1 = $db->Execute($query1);
-      $query2 = "UPDATE $dbtables[ships] SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
+      $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
       $update2 = $db->Execute($query2);
       echo $l_gns_pcreate;
     }
@@ -151,7 +151,7 @@ else
   {
     $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
     $update1 = $db->Execute($query1);
-    $query2 = "UPDATE $dbtables[ships] SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
+    $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
     $update2 = $db->Execute($query2);
     echo $l_gns_pcreate;
   }

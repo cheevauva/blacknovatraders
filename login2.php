@@ -28,8 +28,8 @@ try {
     if (!$playerfound) {
         throw new \Exception($l_login_noone);
     }
-
-    if ($playerinfo['password'] !== $pass) {
+    
+    if ($playerinfo['password'] !== md5($pass)) {
         playerlog($playerinfo['ship_id'], LOG_BADLOGIN, $ip);
         throw new \Exception("$l_login_4gotpw1 <A HREF=mail.php?mail=$email>$l_clickme</A> $l_login_4gotpw2 <a href=login.php>$l_clickme</a> $l_login_4gotpw3 $ip");
     }

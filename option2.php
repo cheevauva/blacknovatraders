@@ -52,7 +52,7 @@ elseif($newpass1 != $newpass2)
 }
 else
 {
-  $res = $db->Execute("SELECT ship_id,password FROM $dbtables[ships] WHERE email='$username'");
+  $res = $db->Execute("SELECT ship_id,password FROM ships WHERE email='$username'");
   $playerinfo = $res->fields;
   if($oldpass != $playerinfo[password])
   {
@@ -60,7 +60,7 @@ else
   }
   else
   {
-    $res = $db->Execute("UPDATE $dbtables[ships] SET password='$newpass1' WHERE ship_id=$playerinfo[ship_id]");
+    $res = $db->Execute("UPDATE ships SET password='$newpass1' WHERE ship_id=$playerinfo[ship_id]");
     if($res)
     {
       echo $l_opt2_passchanged;
@@ -72,7 +72,7 @@ else
   }
 }
 
-$res = $db->Execute("UPDATE $dbtables[ships] SET interface='$intrf' WHERE email='$username'");
+$res = $db->Execute("UPDATE ships SET interface='$intrf' WHERE email='$username'");
 if($res)
 {
   echo $l_opt2_userintup;
@@ -82,7 +82,7 @@ else
   echo $l_opt2_userintfail;
 }
 
-$res = $db->Execute("UPDATE $dbtables[ships] SET lang='$lang' WHERE email='$username'");
+$res = $db->Execute("UPDATE ships SET lang='$lang' WHERE email='$username'");
 foreach($avail_lang as $curlang)
 {
   if($lang == $curlang[file])
@@ -97,7 +97,7 @@ foreach($avail_lang as $curlang)
 if($dhtml != 'Y')
   $dhtml = 'N';
 
-$res = $db->Execute("UPDATE $dbtables[ships] SET dhtml='$dhtml' WHERE email='$username'");
+$res = $db->Execute("UPDATE ships SET dhtml='$dhtml' WHERE email='$username'");
 if($res)
 {
   echo $l_opt2_dhtmlup;

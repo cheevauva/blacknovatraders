@@ -15,7 +15,7 @@ if(checklogin())
 
 bigtitle();
 
-$res = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
+$res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 
 $res = $db->Execute("SELECT * FROM $dbtables[zones] WHERE zone_id='$zone'");
@@ -46,7 +46,7 @@ else
   {
     if($row[corp_zone] == 'N')
     {
-      $result = $db->Execute("SELECT ship_id, character_name FROM $dbtables[ships] WHERE ship_id=$row[owner]");
+      $result = $db->Execute("SELECT ship_id, character_name FROM ships WHERE ship_id=$row[owner]");
       $ownerinfo = $result->fields;
       $ownername = $ownerinfo[character_name];
     }

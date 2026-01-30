@@ -14,7 +14,7 @@ function sqlGetPlayerByEmail($email)
 {
     global $dbtables;
 
-    $stmt = db()->PrepareStmt("SELECT * FROM {$dbtables['ships']} WHERE email= :email");
+    $stmt = db()->PrepareStmt("SELECT * FROM ships WHERE email= :email");
     $stmt->InParameter($email, ':email');
 
     return $stmt->Execute()->fields;
@@ -35,7 +35,7 @@ function sqlUpdateLogin($ship_id, $token)
     global $dbtables;
 
     $stamp = date("Y-m-d H-i-s");
-    $stmt = db()->PrepareStmt("UPDATE {$dbtables['ships']} SET last_login = :last_login, token = :token WHERE ship_id = :ship_id");
+    $stmt = db()->PrepareStmt("UPDATE ships SET last_login = :last_login, token = :token WHERE ship_id = :ship_id");
     $stmt->InParameter($stamp, ':last_login');
     $stmt->InParameter($token, ':token');
     $stmt->InParameter($ship_id, ':ship_id');
@@ -49,7 +49,7 @@ function sqlRestoreShipEscapepod($ship_id)
     
     $sql = "
     UPDATE 
-        {$dbtables['ships']} 
+        ships 
     SET 
         hull = 0,
         engines = 0,
@@ -98,7 +98,7 @@ function sqlCheckNewbieShip($ship_id, $newbie_hull, $newbie_engines, $newbie_pow
     SELECT 
         COUNT(id)
     FROM 
-        {$dbtables['ships']}
+        ships
     WHERE 
         ship_id = :ship_id
         AND hull <= :newbie_hull
@@ -133,7 +133,7 @@ function sqlRestoreNewbieShip($ship_id)
 {
     global $dbtables;
 
-    $stmt = db()->PrepareStmt("UPDATE {$dbtables['ships']} SET 
+    $stmt = db()->PrepareStmt("UPDATE ships SET 
         hull = 0,
         engines = 0,
         power = 0,

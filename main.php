@@ -18,7 +18,7 @@ if(checklogin())
 }
 //-------------------------------------------------------------------------------------------------
 
-$res = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
+$res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 if($playerinfo['cleared_defences'] > ' ')
 {
@@ -46,7 +46,7 @@ if($playerinfo[on_planet] == "Y")
   }
   else
   {
-    $db->Execute("UPDATE $dbtables[ships] SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
+    $db->Execute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
     echo "<BR>$l_nonexistant_pl<BR><BR>";
   }
 }
@@ -79,8 +79,8 @@ if($res > 0)
 }
 $num_planets = $i;
 
-$res = $db->Execute("SELECT * FROM $dbtables[sector_defence],$dbtables[ships] WHERE $dbtables[sector_defence].sector_id='$playerinfo[sector]'
-                                                    AND $dbtables[ships].ship_id = $dbtables[sector_defence].ship_id ");
+$res = $db->Execute("SELECT * FROM $dbtables[sector_defence],ships WHERE $dbtables[sector_defence].sector_id='$playerinfo[sector]'
+                                                    AND ships.ship_id = $dbtables[sector_defence].ship_id ");
 $i = 0;
 if($res > 0)
 {
@@ -404,7 +404,7 @@ if($num_planets > 0)
   {
     if($planets[$i][owner] != 0)
     {
-      $result5 = $db->Execute("SELECT * FROM $dbtables[ships] WHERE ship_id=" . $planets[$i][owner]);
+      $result5 = $db->Execute("SELECT * FROM ships WHERE ship_id=" . $planets[$i][owner]);
       $planet_owner = $result5->fields;
 
       $planetavg = $planet_owner[hull] + $planet_owner[engines] + $planet_owner[computer] + $planet_owner[beams] + $planet_owner[torp_launchers] + $planet_owner[shields] + $planet_owner[armor];
@@ -482,15 +482,15 @@ else
 if($playerinfo[sector] != 0)
 {
   $result4 = $db->Execute(" SELECT
-                              $dbtables[ships].*,
+                              ships.*,
                               $dbtables[teams].team_name,
                               $dbtables[teams].id
-                           FROM $dbtables[ships]
+                           FROM ships
                               LEFT OUTER JOIN $dbtables[teams]
-                              ON $dbtables[ships].team = $dbtables[teams].id
-                           WHERE $dbtables[ships].ship_id<>$playerinfo[ship_id]
-                           AND $dbtables[ships].sector=$playerinfo[sector]
-                           AND $dbtables[ships].on_planet='N'");
+                              ON ships.team = $dbtables[teams].id
+                           WHERE ships.ship_id<>$playerinfo[ship_id]
+                           AND ships.sector=$playerinfo[sector]
+                           AND ships.on_planet='N'");
    $totalcount=0;
 
    if($result4 > 0)

@@ -416,7 +416,7 @@ class ADOPDOStatement {
 		return $rs;
 	}
 	
-	function InParameter(&$var,$name,$maxLen=4000,$type=false)
+	function InParameter($var,$name,$maxLen=4000,$type=false)
 	{
 
 		if ($type) $this->_stmt->bindParam($name,$var,$type,$maxLen);

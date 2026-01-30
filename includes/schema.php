@@ -182,12 +182,12 @@ $err = DBTRUEFALSE(0,$db->ErrorNo(),"No errors found",$db->ErrorNo() . ": " . $d
 
 Table_Row("Creating traderoutes Table","Failed","Passed");
 $sql = "
-CREATE TABLE $dbtables[ships] (
+CREATE TABLE ships (
     ship_id int unsigned NOT NULL auto_increment,
     ship_name char(20),
     ship_destroyed enum('Y','N') DEFAULT 'N' NOT NULL,
     character_name char(20) NOT NULL,
-    password char($maxlen_password) NOT NULL,
+    password varchar(36) NOT NULL,
     email char(60) NOT NULL,
     hull tinyint(3) unsigned DEFAULT '0' NOT NULL,
     engines tinyint(3) unsigned DEFAULT '0' NOT NULL,

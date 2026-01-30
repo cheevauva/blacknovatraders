@@ -52,7 +52,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
 {
    // find out if the mine owner and player are on the same team
    $fm_owner = $defences[0][ship_id];
-   $result2 = $db->Execute("SELECT * from $dbtables[ships] where ship_id=$fm_owner");
+   $result2 = $db->Execute("SELECT * from ships where ship_id=$fm_owner");
 
    $mine_owner = $result2->fields;
    if ($mine_owner[team] != $playerinfo[team] || $playerinfo[team]==0)
@@ -92,7 +92,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
 
          $l_chm_youlostminedeflectors = str_replace("[chm_roll]", $roll, $l_chm_youlostminedeflectors);
          echo "$l_chm_youlostminedeflectors<BR>";
-         $result2 = $db->Execute("UPDATE $dbtables[ships] set dev_minedeflector=dev_minedeflector-$roll where ship_id=$playerinfo[ship_id]");
+         $result2 = $db->Execute("UPDATE ships set dev_minedeflector=dev_minedeflector-$roll where ship_id=$playerinfo[ship_id]");
 
       } else {
             if($playerinfo[dev_minedeflector] > 0)
@@ -116,7 +116,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                $l_chm_yourshieldshitforminesdmg = str_replace("[chm_mines_left]", $mines_left, $l_chm_yourshieldshitforminesdmg);
                echo "$l_chm_yourshieldshitforminesdmg<BR>";
 
-               $result2 = $db->Execute("UPDATE $dbtables[ships] set ship_energy=ship_energy-$mines_left, dev_minedeflector=0 where ship_id=$playerinfo[ship_id]");
+               $result2 = $db->Execute("UPDATE ships set ship_energy=ship_energy-$mines_left, dev_minedeflector=0 where ship_id=$playerinfo[ship_id]");
                if($playershields == $mines_left)
                   echo "$l_chm_yourshieldsaredown<BR>";
             }
@@ -129,7 +129,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                {
                   $l_chm_yourarmorhitforminesdmg = str_replace("[chm_mines_left]", $mines_left, $l_chm_yourarmorhitforminesdmg);
                   echo "$l_chm_yourarmorhitforminesdmg<BR>";
-                  $result2 = $db->Execute("UPDATE $dbtables[ships] set armor_pts=armor_pts-$mines_left,ship_energy=0,dev_minedeflector=0 where ship_id=$playerinfo[ship_id]");
+                  $result2 = $db->Execute("UPDATE ships set armor_pts=armor_pts-$mines_left,ship_energy=0,dev_minedeflector=0 where ship_id=$playerinfo[ship_id]");
                   if($playerinfo[armor_pts] == $mines_left)
                      echo "$l_chm_yourhullisbreached<BR>";
                }
@@ -153,7 +153,7 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                   {
                      $rating=round($playerinfo[rating]/2);
                      echo "$l_chm_luckescapepod<BR><BR>";
-                     $db->Execute("UPDATE $dbtables[ships] SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=$start_energy,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating='$rating',cleared_defences=' ',dev_lssd='N' WHERE ship_id=$playerinfo[ship_id]");
+                     $db->Execute("UPDATE ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=$start_energy,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating='$rating',cleared_defences=' ',dev_lssd='N' WHERE ship_id=$playerinfo[ship_id]");
                      cancel_bounty($playerinfo[ship_id]);
                   }
                   else

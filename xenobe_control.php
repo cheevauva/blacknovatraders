@@ -133,7 +133,7 @@ else
       if(empty($user))
       {
         echo "<SELECT SIZE=20 NAME=user>";
-        $res = $db->Execute("SELECT email,character_name,ship_destroyed,active,sector FROM $dbtables[ships] JOIN $dbtables[xenobe] WHERE email=xenobe_id ORDER BY sector");
+        $res = $db->Execute("SELECT email,character_name,ship_destroyed,active,sector FROM ships JOIN $dbtables[xenobe] WHERE email=xenobe_id ORDER BY sector");
         while(!$res->EOF)
         {
           $row=$res->fields;
@@ -152,7 +152,7 @@ else
       {
         if(empty($operation))
         {
-          $res = $db->Execute("SELECT * FROM $dbtables[ships] JOIN $dbtables[xenobe] WHERE email=xenobe_id AND email='$user'");
+          $res = $db->Execute("SELECT * FROM ships JOIN $dbtables[xenobe] WHERE email=xenobe_id AND email='$user'");
           $row = $res->fields;
           echo "<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=5>";
           echo "<TR><TD>Xenobe name</TD><TD><INPUT TYPE=TEXT NAME=character_name VALUE=\"$row[character_name]\"></TD></TR>";
@@ -263,7 +263,7 @@ else
           $_dev_escapepod = empty($dev_escapepod) ? "N" : "Y";
           $_dev_fuelscoop = empty($dev_fuelscoop) ? "N" : "Y";
           $_active = empty($active) ? "N" : "Y";
-          $result = $db->Execute("UPDATE $dbtables[ships] SET character_name='$character_name',ship_name='$ship_name',ship_destroyed='$_ship_destroyed',hull='$hull',engines='$engines',power='$power',computer='$computer',sensors='$sensors',armor='$armor',shields='$shields',beams='$beams',torp_launchers='$torp_launchers',cloak='$cloak',credits='$credits',turns='$turns',dev_warpedit='$dev_warpedit',dev_genesis='$dev_genesis',dev_beacon='$dev_beacon',dev_emerwarp='$dev_emerwarp',dev_escapepod='$_dev_escapepod',dev_fuelscoop='$_dev_fuelscoop',dev_minedeflector='$dev_minedeflector',sector='$sector',ship_ore='$ship_ore',ship_organics='$ship_organics',ship_goods='$ship_goods',ship_energy='$ship_energy',ship_colonists='$ship_colonists',ship_fighters='$ship_fighters',torps='$torps',armor_pts='$armor_pts' WHERE email='$user'");
+          $result = $db->Execute("UPDATE ships SET character_name='$character_name',ship_name='$ship_name',ship_destroyed='$_ship_destroyed',hull='$hull',engines='$engines',power='$power',computer='$computer',sensors='$sensors',armor='$armor',shields='$shields',beams='$beams',torp_launchers='$torp_launchers',cloak='$cloak',credits='$credits',turns='$turns',dev_warpedit='$dev_warpedit',dev_genesis='$dev_genesis',dev_beacon='$dev_beacon',dev_emerwarp='$dev_emerwarp',dev_escapepod='$_dev_escapepod',dev_fuelscoop='$_dev_fuelscoop',dev_minedeflector='$dev_minedeflector',sector='$sector',ship_ore='$ship_ore',ship_organics='$ship_organics',ship_goods='$ship_goods',ship_energy='$ship_energy',ship_colonists='$ship_colonists',ship_fighters='$ship_fighters',torps='$torps',armor_pts='$armor_pts' WHERE email='$user'");
           if(!$result) {
             echo "Changes to Xenobe ship record have FAILED Due to the following Error:<BR><BR>";
             echo $db->ErrorMsg() . "<br>";
@@ -308,7 +308,7 @@ else
       {
         // Delete all xenobe in the ships table
         echo "Deleting xenobe records in the ships table...<BR>";
-        $db->Execute("DELETE FROM $dbtables[ships] WHERE email LIKE '%@xenobe'");
+        $db->Execute("DELETE FROM ships WHERE email LIKE '%@xenobe'");
         echo "deleted.<BR>";
         // Drop xenobe table
         echo "Dropping xenobe table...<BR>";
@@ -351,7 +351,7 @@ else
       }
       elseif($operation == "clearxenlog")
       {
-        $res = $db->Execute("SELECT email,ship_id FROM $dbtables[ships] WHERE email LIKE '%@xenobe'");
+        $res = $db->Execute("SELECT email,ship_id FROM ships WHERE email LIKE '%@xenobe'");
         while(!$res->EOF)
         {
           $row = $res->fields;
@@ -387,7 +387,7 @@ else
         $sy3roll = rand(0,19);
         $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
         $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-        $resultnm = $db->Execute ("select character_name from $dbtables[ships] where character_name='$character'");
+        $resultnm = $db->Execute ("select character_name from ships where character_name='$character'");
         $namecheck = $resultnm->fields;
         $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
         $nametry = 1;
@@ -398,7 +398,7 @@ else
           $sy3roll = rand(0,19);
           $character = $Sylable1[$sy1roll] . $Sylable2[$sy2roll] . $Sylable3[$sy3roll];
           $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-          $resultnm = $db->Execute ("select character_name from $dbtables[ships] where character_name='$character'");
+          $resultnm = $db->Execute ("select character_name from ships where character_name='$character'");
           $namecheck = $resultnm->fields;
           $ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
           $nametry++;
@@ -443,7 +443,7 @@ else
         // Create emailname from character
         $emailname = str_replace(" ","_",$character) . "@xenobe";
         $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-        $result = $db->Execute ("select email, character_name, ship_name from $dbtables[ships] where email='$emailname' OR character_name='$character' OR ship_name='$shipname'");
+        $result = $db->Execute ("select email, character_name, ship_name from ships where email='$emailname' OR character_name='$character' OR ship_name='$shipname'");
         if ($result>0)
         {
           while (!$result->EOF)
@@ -478,7 +478,7 @@ else
 // *****************************************************************************
 // *** ADD Xenobe RECORD TO ships TABLE ... MODIFY IF ships SCHEMA CHANGES ***
 // *****************************************************************************
-          $thesql = "INSERT INTO $dbtables[ships] ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `token` , `planet_id` , `preset1` , `preset2` , `preset3` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defences` , `lang` , `dhtml` , `dev_lssd` )
+          $thesql = "INSERT INTO ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `token` , `planet_id` , `preset1` , `preset2` , `preset3` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defences` , `lang` , `dhtml` , `dev_lssd` )
                                     VALUES (NULL,'$shipname','N','$character','$makepass','$emailname',$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$xenlevel,$maxtorps,$xenlevel,$xenlevel,$maxarmor,$xenlevel,$start_credits,$sector,0,0,0,$maxenergy,0,$maxfighters,0,$start_turns,'N',0,0,0,0,'N','N',0,0, '$stamp',0,0,0,0,'N',NULL,0,0,0,0,'Y','N','N','Y',NULL,'$default_lang','N','Y')";
           $result2 = $db->Execute($thesql);
           if(!$result2)

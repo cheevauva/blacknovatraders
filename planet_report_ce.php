@@ -50,7 +50,7 @@ function go_build_base($planet_id, $sector_id)
 
   echo "<BR>Click <A HREF=planet_report.php?PRepType=1>here</A> to return to the Planet Status Report<BR><BR>";
 
-  $result = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
+  $result = $db->Execute("SELECT * FROM ships WHERE email='$username'");
   $playerinfo=$result->fields;
 
   $result2 = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
@@ -74,7 +74,7 @@ function go_build_base($planet_id, $sector_id)
     // ** Create The Base
     $update1 = $db->Execute("UPDATE $dbtables[planets] SET base='Y', ore=$planetinfo[ore]-$base_ore, organics=$planetinfo[organics]-$base_organics, goods=$planetinfo[goods]-$base_goods, credits=$planetinfo[credits]-$base_credits WHERE planet_id=$planet_id");
     // ** Update User Turns
-    $update1b = $db->Execute("UPDATE $dbtables[ships] SET turns=turns-1, turns_used=turns_used+1 where ship_id=$playerinfo[ship_id]");
+    $update1b = $db->Execute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 where ship_id=$playerinfo[ship_id]");
     // ** Refresh Plant Info
     $result3 = $db->Execute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
     $planetinfo=$result3->fields;
@@ -178,7 +178,7 @@ function change_planet_production($prodpercentarray)
   global $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp;
   global $username;
 
-  $result = $db->Execute("SELECT ship_id,team FROM $dbtables[ships] WHERE email='$username'");
+  $result = $db->Execute("SELECT ship_id,team FROM ships WHERE email='$username'");
   $ship_id = $result->fields[ship_id]; $team_id = $result->fields[team]; 
 
   echo "Click <A HREF=planet_report.php?PRepType=2>here</A> to return to the Change Planet Production Report<br><br>";
@@ -210,7 +210,7 @@ function change_planet_production($prodpercentarray)
         {
           /* Compare entered team_id and one in the db */
           /* If different then use one from db */
-          $res = $db->Execute("SELECT $dbtables[ships].team as owner FROM $dbtables[ships], $dbtables[planets] WHERE ( $dbtables[ships].ship_id = $dbtables[planets].owner ) AND ( $dbtables[planets].planet_id ='$prodpercent')");
+          $res = $db->Execute("SELECT ships.team as owner FROM ships, $dbtables[planets] WHERE ( ships.ship_id = $dbtables[planets].owner ) AND ( $dbtables[planets].planet_id ='$prodpercent')");
           if($res) $team_id=$res->fields["owner"]; else $team_id = 0;
 
           $db->Execute("UPDATE $dbtables[planets] SET corp=$team_id WHERE planet_id=$prodpercent AND owner = $ship_id");
@@ -289,7 +289,7 @@ function Take_Credits($sector_id, $planet_id)
   global $db, $dbtables, $username;
 
   // Get basic Database information (ship and planet)
-  $res = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
+  $res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
   $playerinfo = $res->fields;
   $res = $db->Execute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
   $planetinfo = $res->fields;
@@ -318,9 +318,9 @@ function Take_Credits($sector_id, $planet_id)
 
         // update the player record
         // credits
-        $res = $db->Execute("UPDATE $dbtables[ships] SET credits=$NewShipCredits WHERE email='$username'");
+        $res = $db->Execute("UPDATE ships SET credits=$NewShipCredits WHERE email='$username'");
         // turns
-        $res = $db->Execute("UPDATE $dbtables[ships] SET turns=turns-1 WHERE email='$username'");
+        $res = $db->Execute("UPDATE ships SET turns=turns-1 WHERE email='$username'");
 
         echo "Took " . NUMBER($CreditsTaken) . " Credits from planet $planetinfo[name]. <BR>";
         echo "Your ship - " . $playerinfo[ship_name] . " - now has " . NUMBER($NewShipCredits) . " onboard. <BR>";
@@ -354,7 +354,7 @@ function Real_Space_Move($destination)
   global $username;
   global $lang;
 
-  $res = $db->Execute("SELECT * FROM $dbtables[ships] WHERE email='$username'");
+  $res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
   $playerinfo = $res->fields;
 
   $result2 = $db->Execute("SELECT angle1,angle2,distance FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
@@ -422,7 +422,7 @@ function Real_Space_Move($destination)
     $l_rs_movetime=str_replace("[triptime]",NUMBER($triptime),$l_rs_movetime);
     echo "$l_rs_movetime<BR><BR>";
     echo "$l_rs_noturns";
-    $db->Execute("UPDATE $dbtables[ships] SET cleared_defences=' ' where ship_id=$playerinfo[ship_id]");
+    $db->Execute("UPDATE ships SET cleared_defences=' ' where ship_id=$playerinfo[ship_id]");
 
     $retval = "BREAK-TURNS";
   }
@@ -439,7 +439,7 @@ function Real_Space_Move($destination)
   if(!$result99->EOF)
   {
      $fighters_owner = $result99->fields;
-     $nsresult = $db->Execute("SELECT * from $dbtables[ships] where ship_id=$fighters_owner[ship_id]");
+     $nsresult = $db->Execute("SELECT * from ships where ship_id=$fighters_owner[ship_id]");
      $nsfighters = $nsresult->fields;
      if ($nsfighters[team] != $playerinfo[team] || $playerinfo[team]==0)
      {
@@ -451,7 +451,7 @@ function Real_Space_Move($destination)
   if(!$result98->EOF)
   {
      $fighters_owner = $result98->fields;
-     $nsresult = $db->Execute("SELECT * from $dbtables[ships] where ship_id=$fighters_owner[ship_id]");
+     $nsresult = $db->Execute("SELECT * from ships where ship_id=$fighters_owner[ship_id]");
      $nsfighters = $nsresult->fields;
      if ($nsfighters[team] != $playerinfo[team] || $playerinfo[team]==0)
      {
@@ -469,7 +469,7 @@ function Real_Space_Move($destination)
   } else
   {
        $stamp = date("Y-m-d H-i-s");
-       $update = $db->Execute("UPDATE $dbtables[ships] SET last_login='$stamp',sector=$destination,ship_energy=ship_energy+$energyscooped,turns=turns-$triptime,turns_used=turns_used+$triptime WHERE ship_id=$playerinfo[ship_id]");
+       $update = $db->Execute("UPDATE ships SET last_login='$stamp',sector=$destination,ship_energy=ship_energy+$energyscooped,turns=turns-$triptime,turns_used=turns_used+$triptime WHERE ship_id=$playerinfo[ship_id]");
        $l_rs_ready=str_replace("[sector]",$destination,$l_rs_ready);
    
        $l_rs_ready= str_replace("[triptime]",NUMBER($triptime),$l_rs_ready);

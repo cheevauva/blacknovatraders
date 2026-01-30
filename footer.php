@@ -1,7 +1,7 @@
 <?
 global $db,$dbtables;
 connectdb();
-$res = $db->Execute("SELECT COUNT(*) as loggedin from $dbtables[ships] WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP($dbtables[ships].last_login)) / 60 <= 5 and email NOT LIKE '%@xenobe'");
+$res = $db->Execute("SELECT COUNT(*) as loggedin from ships WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(ships.last_login)) / 60 <= 5 and email NOT LIKE '%@xenobe'");
 $row = $res->fields;
 $online = $row[loggedin];
 ?><br>

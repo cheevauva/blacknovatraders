@@ -11,7 +11,7 @@ bigtitle();
 
 //-------------------------------------------------------------------------------------------------
 
-$res = $db->Execute("SELECT COUNT(*) AS num_players FROM $dbtables[ships] WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe'");
+$res = $db->Execute("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe'");
 $row = $res->fields;
 $num_players = $row['num_players'];
 
@@ -44,7 +44,7 @@ else
   $by="score DESC,character_name ASC";
 }
 
-$res = $db->Execute("SELECT $dbtables[ships].email,$dbtables[ships].score,$dbtables[ships].character_name,$dbtables[ships].turns_used,$dbtables[ships].last_login,UNIX_TIMESTAMP($dbtables[ships].last_login) as online,$dbtables[ships].rating, $dbtables[teams].team_name, IF($dbtables[ships].turns_used<150,0,ROUND($dbtables[ships].score/$dbtables[ships].turns_used)) AS efficiency FROM $dbtables[ships] LEFT JOIN $dbtables[teams] ON $dbtables[ships].team = $dbtables[teams].id  WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' ORDER BY $by LIMIT $max_rank");
+$res = $db->Execute("SELECT ships.email,ships.score,ships.character_name,ships.turns_used,ships.last_login,UNIX_TIMESTAMP(ships.last_login) as online,ships.rating, $dbtables[teams].team_name, IF(ships.turns_used<150,0,ROUND(ships.score/ships.turns_used)) AS efficiency FROM ships LEFT JOIN $dbtables[teams] ON ships.team = $dbtables[teams].id  WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' ORDER BY $by LIMIT $max_rank");
 
 //-------------------------------------------------------------------------------------------------
 
