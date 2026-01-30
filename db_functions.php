@@ -171,3 +171,124 @@ function sqlRestoreNewbieShip($ship_id)
 
     return $stmt->Execute();
 }
+/**
+ * Получить максимальное количество ходов среди всех игроков
+ * @return int Максимальное количество ходов
+ */
+function sqlGetMaxTurns()
+{
+    global $db, $max_turns;
+    $query = $db->Execute("SELECT MAX(turns_used + turns) AS mturns FROM ships");
+    $res = $query->fields;
+    $mturns = $res['mturns'];
+
+    if ($mturns > $max_turns) {
+        $mturns = $max_turns;
+    }
+
+    return $mturns;
+}
+
+function sqlCreatePlayer($playerData)
+{
+    global $db, $default_lang;
+
+    $sql = "
+    INSERT INTO ships (
+        ship_name, ship_destroyed, character_name, password, email, 
+        armor_pts, credits, ship_energy, ship_fighters, turns, 
+        on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, 
+        dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, 
+        interface, token, trade_colonists, trade_fighters, trade_torps, 
+        trade_energy, cleared_defences, lang, dhtml, dev_lssd
+    ) VALUES (
+        :ship_name, :ship_destroyed, :character_name, :password, :email,
+        :armor_pts, :credits, :ship_energy, :ship_fighters, :turns,
+        :on_planet, :dev_warpedit, :dev_genesis, :dev_beacon, :dev_emerwarp,
+        :dev_escapepod, :dev_fuelscoop, :dev_minedeflector, :last_login,
+        :interface, :token, :trade_colonists, :trade_fighters, :trade_torps,
+        :trade_energy, :cleared_defences, :lang, :dhtml, :dev_lssd
+    )
+    ";
+
+    $stmt = db()->PrepareStmt($sql);
+    $stmt->InParameter($playerData['ship_name'], ':ship_name');
+    $stmt->InParameter($playerData['ship_destroyed'], ':ship_destroyed');
+    $stmt->InParameter($playerData['character_name'], ':character_name');
+    $stmt->InParameter($playerData['password'], ':password');
+    $stmt->InParameter($playerData['email'], ':email');
+    $stmt->InParameter($playerData['on_planet'], ':on_planet');
+    $stmt->InParameter($playerData['dev_escapepod'], ':dev_escapepod');
+    $stmt->InParameter($playerData['dev_fuelscoop'], ':dev_fuelscoop');
+    $stmt->InParameter($playerData['last_login'], ':last_login');
+    $stmt->InParameter($playerData['interface'], ':interface');
+    $stmt->InParameter($playerData['token'], ':token');
+    $stmt->InParameter($playerData['trade_colonists'], ':trade_colonists');
+    $stmt->InParameter($playerData['trade_fighters'], ':trade_fighters');
+    $stmt->InParameter($playerData['trade_torps'], ':trade_torps');
+    $stmt->InParameter($playerData['trade_energy'], ':trade_energy');
+    $stmt->InParameter($playerData['cleared_defences'], ':cleared_defences');
+    $stmt->InParameter($playerData['lang'], ':lang');
+    $stmt->InParameter($playerData['dhtml'], ':dhtml');
+    $stmt->InParameter($playerData['armor_pts'], ':armor_pts');
+    $stmt->InParameter($playerData['credits'], ':credits');
+    $stmt->InParameter($playerData['ship_energy'], ':ship_energy');
+    $stmt->InParameter($playerData['ship_fighters'], ':ship_fighters');
+    $stmt->InParameter($playerData['turns'], ':turns');
+    $stmt->InParameter($playerData['dev_warpedit'], ':dev_warpedit');
+    $stmt->InParameter($playerData['dev_genesis'], ':dev_genesis');
+    $stmt->InParameter($playerData['dev_beacon'], ':dev_beacon');
+    $stmt->InParameter($playerData['dev_emerwarp'], ':dev_emerwarp');
+    $stmt->InParameter($playerData['dev_minedeflector'], ':dev_minedeflector');
+    $stmt->InParameter($playerData['dev_lssd'], ':dev_lssd');
+
+    return $stmt->Execute();
+}
+
+function sqlCreateZone($shipId, $zoneName)
+{
+    global $db;
+
+    $sql = "
+    INSERT INTO zones VALUES(
+        NULL, 
+        :zone_name, 
+        :ship_id, 
+        :allow_attack, 
+        :allow_planetattack, 
+        :allow_trade, 
+        :allow_defenses, 
+        :allow_shipyard, 
+        :allow_build, 
+        :allow_energy, 
+        :allow_warpedit, 
+        0
+    )
+    ";
+
+    $stmt = $db->PrepareStmt($sql);
+    $stmt->InParameter($zoneName, ':zone_name');
+    $stmt->InParameter((int) $shipId, ':ship_id');
+    $stmt->InParameter('N', ':allow_attack');
+    $stmt->InParameter('Y', ':allow_planetattack');
+    $stmt->InParameter('Y', ':allow_trade');
+    $stmt->InParameter('Y', ':allow_defenses');
+    $stmt->InParameter('Y', ':allow_shipyard');
+    $stmt->InParameter('Y', ':allow_build');
+    $stmt->InParameter('Y', ':allow_energy');
+    $stmt->InParameter('Y', ':allow_warpedit');
+
+    return $stmt->Execute();
+}
+
+function sqlCreateBankAccount($shipId)
+{
+    global $db;
+
+    $stmt = $db->PrepareStmt("INSERT INTO ibank_accounts (ship_id, balance, loan) VALUES(:ship_id, :balance, :loan)");
+    $stmt->InParameter((int) $shipId, ':ship_id');
+    $stmt->InParameter(0, ':balance');
+    $stmt->InParameter(0, ':loan');
+
+    return $stmt->Execute();
+}
