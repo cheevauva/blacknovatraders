@@ -4,6 +4,7 @@
 date_default_timezone_set('UTC');
 include("db_config.php");
 include("$ADOdbpath" . "/adodb.inc.php");
+define('MICROTIME_START', microtime(true));
 
 /* Main scheduler variables (game flow control)
 -----------------------------------------------*/
