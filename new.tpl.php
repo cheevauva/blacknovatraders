@@ -2,29 +2,28 @@
 <?php include("header.php"); ?>
 <?php bigtitle(); ?>
 <form action="new2.php" method="post">
-    <center>
-        <table  width="" border="0" cellspacing="0" cellpadding="4">
-            <tr>
-                <td><? echo $l_login_email; ?></td>
-                <td><input type="text" name="username" size="20" maxlength="40" value=""></td>
-            </tr>
-            <tr>
-                <td><? echo $l_new_shipname; ?></td>
-                <td><input type="text" name="shipname" size="20" maxlength="20" value=""></td>
-            </tr>
-            <tr>
-                <td><? echo $l_new_pname; ?></td>
-                <td><input type="text" name="character" size="20" maxlength="20" value=""></td>
-            </tr>
-            <tr>
-                <td><? echo $l_login_pw; ?></td>
-                <td><input type="text" name="password" size="20" maxlength="20" value=""></td>
-            </tr>
-        </table>
-        <br>
-        <input type="submit" value="<? echo $l_submit; ?>">
-        <input type="reset" value="<? echo $l_reset; ?>">
-        <br><br><? echo $l_new_info; ?><br>
-    </center>
+    <div class="mb-3">
+        <div class="form-text">
+            <? echo $l_new_info; ?>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><?php echo $l_login_email; ?></label>
+        <input type="text" name="username" class="form-control" maxlength="40" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><? echo $l_new_shipname; ?></label>
+        <input type="text" name="shipname" class="form-control" maxlength="20"  required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><? echo $l_new_pname; ?></label>
+        <input type="text" name="character" class="form-control" maxlength="20"  required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><? echo $l_new_pname; ?></label>
+        <input type="password" name="password" class="form-control" maxlength="20"  required>
+    </div>
+    <input type="submit" class="btn btn-primary" value="<? echo $l_submit; ?>">
+    <input type="reset"  class="btn btn-primary" value="<? echo $l_reset; ?>">
 </form>
 <? include("footer.php"); ?>

@@ -42,7 +42,7 @@ if($mode == 'full')
 elseif($mode == 'moz')
   echo "#divScroller1 {position:relative; overflow:visible; overflow-y:scroll; z-index:9; left:0px; top:0px; width:100%; height:${yres}px; visbility:visible; scrollbar-track-color: #DEDEEF; scrollbar-face-color:#040658; scrollbar-arrow-color:#DEDEEF}";
 
-echo '<BODY BACKGROUND="images/bgoutspace1.gif" bgcolor=#000000 text="#c0c0c0" link="#040658" vlink="#040658" alink="#040658">';
+echo '<BODY BACKGROUND="" bgcolor=#000000 text="#c0c0c0" link="#040658" vlink="#040658" alink="#040658">';
 
 echo '<center>';
 
@@ -296,7 +296,7 @@ if($swordfish == $adminpass)
        "<input type=hidden name=menu value=logview>" .
        "<input type=submit value=\"Return to Admin\"></td></tr>";
 else
-  echo "<tr><td><td><p><font size=2 face=arial>$l_log_click</td></tr>";
+  echo "<tr><td><td><p><font size=2 face=arial></td></tr>";
 
 if($mode != 'compat')
   echo "<tr><td><td align=center><br><font size=2 color=white>$l_log_note</a>.</td></tr>";

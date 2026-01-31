@@ -6,8 +6,7 @@ include("languages/$lang");
 connectdb();
 
 if (checklogin(false)) {
-    $no_body = 1;
-    include 'index.tpl.php';
+    header('Location: login.php');
 } else {
     header('Location: main.php');
 }

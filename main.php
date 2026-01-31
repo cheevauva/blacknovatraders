@@ -199,8 +199,6 @@ if($zoneinfo[zone_id] < 5)
 &nbsp;<a class=mnu href="defence_report.php"><? echo $l_sector_def ?></a>&nbsp;<br>
 &nbsp;<a class=mnu href="readmail.php"><? echo $l_read_msg ?></A>&nbsp;<br>
 &nbsp;<a class=mnu href="mailto2.php"><? echo $l_send_msg ?></a>&nbsp;<br>
-&nbsp;<a class=mnu href="ranking.php"><? echo $l_rankings ?></a>&nbsp;<br>
-&nbsp;<a class=mnu href="settings.php">Settings</a>&nbsp;<br>
 &nbsp;<a class=mnu href="teams.php"><? echo $l_teams ?></a>&nbsp;<br>
 &nbsp;<a class=mnu href="self_destruct.php"><? echo $l_ohno ?></a>&nbsp;<br>
 &nbsp;<a class=mnu href="options.php"><? echo $l_options ?></a>&nbsp;<br>
@@ -216,14 +214,7 @@ echo "&nbsp;<a class=mnu href=\"galaxy.php\">$l_map</a>&nbsp;<br>";
 <tr><td nowrap>
 <div class=mnu>
 <? //&nbsp;<a class=mnu href="help.php">$l_help</a>&nbsp;<br> ?>
-&nbsp;<a class=mnu href="faq.html"><? echo $l_faq ?></a>&nbsp;<br>
 &nbsp;<a class=mnu href="feedback.php"><? echo $l_feedback ?></a>&nbsp;<br>
-<?
-if(!empty($link_forums))
-{
-    echo "&nbsp;<a class=\"mnu\" href=\"$link_forums\" TARGET=\"_blank\">$l_forums</a>&nbsp;<br>";
-}
-?>
 </div>
 </td></tr>
 <tr><td nowrap>

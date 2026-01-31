@@ -46,7 +46,7 @@ function sqlUpdateLogin($ship_id, $token)
 function sqlRestoreShipEscapepod($ship_id)
 {
     global $dbtables;
-    
+
     $sql = "
     UPDATE 
         ships 
@@ -93,7 +93,7 @@ function sqlRestoreShipEscapepod($ship_id)
 function sqlCheckNewbieShip($ship_id, $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak)
 {
     global $dbtables;
-    
+
     $sql = "
     SELECT 
         COUNT(id)
@@ -171,6 +171,7 @@ function sqlRestoreNewbieShip($ship_id)
 
     return $stmt->Execute();
 }
+
 /**
  * Получить максимальное количество ходов среди всех игроков
  * @return int Максимальное количество ходов
@@ -291,4 +292,14 @@ function sqlCreateBankAccount($shipId)
     $stmt->InParameter(0, ':loan');
 
     return $stmt->Execute();
+}
+
+function sqlGetOnlinePlayersCount()
+{
+    return (int) db()->Execute("SELECT COUNT(*) as loggedin FROM ships WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(ships.last_login)) / 60 <= 5 AND email NOT LIKE '%@xenobe'")->fields['loggedin'];
+}
+
+function sqlGetSchedulerLastRun()
+{
+    return db()->Execute("SELECT last_run FROM scheduler LIMIT 1")->fields;
 }

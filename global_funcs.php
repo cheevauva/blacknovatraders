@@ -163,13 +163,11 @@ function mypw($one,$two)
 function bigtitle()
 {
   global $title;
-  echo "<H1>$title</H1>\n";
+  echo "<h1>$title</h1>";
 }
 
 function TEXT_GOTOMAIN()
 {
-  global $l_global_mmenu;
-  echo $l_global_mmenu;
 }
 
 function TEXT_GOTOLOGIN()
