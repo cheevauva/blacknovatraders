@@ -66,19 +66,19 @@ function fromPost($name, $default = null)
 
 // Ensure lang is set
 $found = 0;
-$lang = $default_lang;
+$language = $default_lang;
 if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
     switch (mb_strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2))) {
         case 'ru': 
-            $lang = 'russian';
+            $language = 'russian';
             break;
         case 'en': 
-            $lang = 'english';
+            $language = 'english';
             break;
     }
 }
 
-$lang = $lang . ".inc";
+$lang = $language . ".inc";
 //Log constants
 
 define('LOG_LOGIN', 1);

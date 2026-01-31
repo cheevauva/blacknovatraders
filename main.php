@@ -213,7 +213,6 @@ echo "&nbsp;<a class=mnu href=\"galaxy.php\">$l_map</a>&nbsp;<br>";
 </td></tr>
 <tr><td nowrap>
 <div class=mnu>
-<? //&nbsp;<a class=mnu href="help.php">$l_help</a>&nbsp;<br> ?>
 &nbsp;<a class=mnu href="feedback.php"><? echo $l_feedback ?></a>&nbsp;<br>
 </div>
 </td></tr>

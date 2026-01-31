@@ -2,7 +2,7 @@
 <html data-bs-theme="dark">
     <head>
         <title><?php echo $title; ?></title>
-        <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/slate/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
@@ -18,6 +18,7 @@
                             <a class="nav-link" href="news.php"><?php echo $l_news_title; ?></a>
                             <a class="nav-link" href="ranking.php"><?php echo $l_rankings; ?></a>
                             <a class="nav-link" href="settings.php"><?php echo $l_login_settings; ?></A>
+                            <a class="nav-link" href="help.php"><?php echo $l_help;?></a>
                             <a class="nav-link" href="faq.html"><? echo "$l_faq"; ?></a>
                             <a class="nav-link" href="mailto:<? echo $admin_mail; ?>"><?php echo $l_login_emailus; ?></a>
                             
