@@ -303,3 +303,25 @@ function sqlGetSchedulerLastRun()
 {
     return db()->Execute("SELECT last_run FROM scheduler LIMIT 1")->fields;
 }
+
+function sqlGetNewsByDate($date)
+{
+    $stmt = db()->PrepareStmt("SELECT * FROM news WHERE date = ? ORDER BY news_id DESC");
+    $stmt->InParameter($date, 'date');
+
+    $res = $stmt->Execute();
+    
+    if (!$res) {
+        return [];
+    }
+    
+    $rows = [];
+
+    while (!$res->EOF) {
+        $rows[] = $res->fields;
+        
+        $res->MoveNext();
+    }
+    
+    return $rows;
+}
