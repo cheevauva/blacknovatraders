@@ -61,10 +61,8 @@ try {
         throw new \Exception($youHaveDied . "<BR><BR>$l_login_newbie<BR><BR>" . $l_login_newlife);
     }
 } catch (\Exception $ex) {
-    include("header.php");
-
-    bigtitle();
-
-    echo "<B>{$ex->getMessage()}</B><BR>";
-    include("footer.php");
+    echo json_encode([
+        'error' => $ex->getMessage(),
+        'code' => $ex->getCode(),
+    ], JSON_UNESCAPED_UNICODE);
 }

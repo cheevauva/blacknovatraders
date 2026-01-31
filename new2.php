@@ -17,6 +17,10 @@ try {
     $shipname = fromPost('shipname', new \Exception($l_new_blank));
     $password = fromPost('password', new \Exception($l_login_pw . ' ' . $l_none));
 
+    if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+        throw new \Exception($l_new_inuse);
+    }
+
     //ADDDED these variables for future reference- we'll move em to config values
     //*eventually* - the goal will be to move "start up" config values to some other location
     //where we will only include them where needed- why include em every page load, when they are used maybe 1% of the time?
@@ -92,11 +96,8 @@ try {
     header('Location:' . "main.php?id=" . $playerinfo['ship_id']);
     die;
 } catch (\Exception $ex) {
-    include("header.php");
-
-    bigtitle();
-
-    echo $ex->getMessage() . '<br>' . $l_new_err;
-
-    include("footer.php");
+    echo json_encode([
+        'error' => $ex->getMessage(),
+        'code' => $ex->getCode(),
+    ], JSON_UNESCAPED_UNICODE);
 }
