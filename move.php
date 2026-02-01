@@ -11,10 +11,9 @@ if (checklogin()) {
 
 $title = $l_move_title;
 
-
 try {
-    $sector = fromGet('sector',  new \Exception('sector'));
-    
+    $sector = fromGet('sector', new \Exception('sector'));
+
     if ($playerinfo['turns'] < 1) {
         throw new \Exception($l_move_turn);
     }
@@ -35,31 +34,29 @@ try {
         throw new \Exception($l_move_failed);
     }
 
-    ob_start();
     $ok = 1;
     $calledfrom = "move.php";
-    
-    include("check_fighters.php");
 
-    if ($ok > 0) {
-        shipMoveToSector($playerinfo['ship_id'], $sector);
-        log_move($playerinfo['ship_id'], $sector);
+    try {
+        include 'check_fighters.php';
+    } catch (SectorFightException $ex) {
+        include 'sector_fighters.php';
     }
-    
-    include("check_mines.php");
-    
-    if ($ok == 1) {
-        ob_clean();
-        header('Location: index.php');
-        die;
-    } else {
-        TEXT_GOTOMAIN();
-    }
+
+    shipMoveToSector($playerinfo['ship_id'], $sector);
+    log_move($playerinfo['ship_id'], $sector);
+
+    include "check_mines.php";
+
+    header('Location: index.php');
+} catch (SectorChooseMoveException $ex) {
+    include "header.php";
+    include 'move_form.tpl.php';
+    include 'footer.php';
 } catch (\Exception $ex) {
-    include("header.php");
+    include "header.php";
     echo $ex->getMessage();
-    include("footer.php");
-    die;
+    include 'footer.php';
 }
 
 

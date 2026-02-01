@@ -1106,10 +1106,10 @@ $l_chf_youpaidsometoll  = "Вы заплатили [chf_tollstring] кредит
 $l_chf_thefightersdetectyou     = "Истребители обнаруживают вас!";
 $l_chf_therearetotalfightersindest      = "В вашем целевом секторе находится [chf_total_sector_fighters] истребителей.";
 $l_chf_creditsdemanded  = "Они требуют [chf_number_fighterstoll] кредитов за вход в этот сектор.";
-$l_chf_youcanretreat    = "Вы можете <BR><INPUT TYPE=RADIO NAME=response VALUE=retreat><B>Отступить</B> - Будет стоить дополнительный ход.<BR></INPUT>";
-$l_chf_inputpay = "<INPUT TYPE=RADIO NAME=response CHECKED VALUE=pay><B>Заплатить</B> пошлину и войти без вреда от истребителей.<BR></INPUT>";
-$l_chf_inputfight       = "<INPUT TYPE=RADIO NAME=response CHECKED VALUE=fight><B>Сражаться</B> - вы должны победить всех истребителей, чтобы войти в сектор.<BR></INPUT>";
-$l_chf_inputcloak       = "<INPUT TYPE=RADIO NAME=response CHECKED VALUE=sneak><B>Замаскироваться</B> - Использовать устройство маскировки и попытаться избежать истребителей.<BR></INPUT>";
+$l_chf_youcanretreat    = "Вы можете Отступить - Будет стоить дополнительный ход.";
+$l_chf_inputpay = "Заплатить пошлину и войти без вреда от истребителей.";
+$l_chf_inputfight       = "Сражаться - вы должны победить всех истребителей, чтобы войти в сектор.";
+$l_chf_inputcloak       = "Замаскироваться - Использовать устройство маскировки и попытаться избежать истребителей.";
 $l_chf_go       = "Вперед";
 
 // mines.php

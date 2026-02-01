@@ -153,7 +153,7 @@ function shipRestoreNewbie($ship_id)
 function mturnsMax()
 {
     global $max_turns;
-    
+
     $mturns = db()->column("SELECT MAX(turns_used + turns) AS mturns FROM ships");
 
     if ($mturns > $max_turns) {
@@ -326,6 +326,13 @@ function shipByEmail($email)
     ]);
 }
 
+function shipById($id)
+{
+    return db()->fetch("SELECT * FROM ships WHERE ship_id = :id LIMIT 1", [
+        'id' => $id,
+    ]);
+}
+
 function sectoryById($sectorId)
 {
     return db()->fetch('SELECT * FROM universe WHERE sector_id = :sectorId LIMIT 1', [
@@ -453,14 +460,54 @@ function traderoutesBySectorAndShip($sector, $shipId)
 
 function shipResetClearedDefences($shipId)
 {
-    db()->exec("UPDATE ships SET cleared_defences = '' where ship_id= :shipId", [
+    db()->exec("UPDATE ships SET last_login = NOW(), cleared_defences = '' WHERE ship_id= :shipId", [
         'shipId' => $shipId,
+    ]);
+}
+
+function shipSetClearedDefences($shipId, $cleared_defences)
+{
+    db()->exec("UPDATE ships SET last_login = NOW(), cleared_defences = :cleared_defences WHERE ship_id= :shipId", [
+        'shipId' => $shipId,
+        'cleared_defences' => $cleared_defences,
     ]);
 }
 
 function shipMoveToSector($shipId, $sector)
 {
-    db()->exec("UPDATE ships SET last_login=NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector where ship_id = :shipId", [
+    db()->exec("UPDATE ships SET last_login = NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector WHERE ship_id = :shipId", [
+        'sector' => $sector,
+        'shipId' => $shipId,
+    ]);
+}
+
+function shipCreditsAdd($shipId, $credits)
+{
+    db()->exec("UPDATE ships SET last_login = NOW(), credits = credits + :credits WHERE ship_id = :shipId", [
+        'credits' => $credits,
+        'shipId' => $shipId,
+    ]);
+}
+
+function shipCreditsSub($shipId, $credits)
+{
+    db()->exec("UPDATE ships SET last_login = NOW(), credits = credits - :credits WHERE ship_id = :shipId", [
+        'credits' => $credits,
+        'shipId' => $shipId,
+    ]);
+}
+
+function shipToSector($shipId, $sector)
+{
+    db()->exec("UPDATE ships SET last_login=NOW(), sector=:sector WHERE ship_id = :shipId", [
+        'sector' => $sector,
+        'shipId' => $shipId,
+    ]);
+}
+
+function shipRetreatToSector($shipId, $sector)
+{
+    db()->exec("UPDATE ships SET last_login=NOW(), turns=turns - 2, turns_used = turns_used + 2, sector=:sector where ship_id = :shipId", [
         'sector' => $sector,
         'shipId' => $shipId,
     ]);
@@ -471,4 +518,9 @@ function defencesBySectorAndFighters($sectorId)
     return db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id=:sectorId and defence_type ='F' ORDER BY quantity DESC", [
         'sectorId' => $sectorId,
     ]);
+}
+
+function defencesCleanUp()
+{
+    return db()->exec("delete from sector_defence where quantity <= 0 ");
 }

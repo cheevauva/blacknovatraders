@@ -71,15 +71,7 @@ if (!empty($_GET['demo'])) {
 }
 
 foreach ($shipsInSector as $idx => $shipInSector) {
-    $success = SCAN_SUCCESS($playerinfo['sensors'], $shipInSector['cloak']);
-
-    if ($success < 5):
-        $success = 5;
-    endif;
-    if ($success > 95):
-        $success = 95;
-    endif;
-
+    $success = sensorsCloakSuccess($playerinfo['sensors'], $shipInSector['cloak']);
     $roll = rand(1, 100);
 
     if ($roll >= $success) {

@@ -297,12 +297,15 @@ function updatecookie()
 
 function playerlog($sid, $log_type, $data = "")
 {
-  global $db, $dbtables;
-  /* write log_entry to the player's log - identified by player's ship_id - sid. */
-  if ($sid != "" && !empty($log_type))
-  {
-    $db->Execute("INSERT INTO $dbtables[logs] VALUES(NULL, $sid, $log_type, NOW(), '$data')");
-  }
+    if (empty($sid) || empty($log_type)) {
+        return;
+    }
+    
+    db()->exec("INSERT INTO logs VALUES(NULL, :sid, :log_type, NOW(), :data)", [
+        'sid' => $sid,
+        'log_type' => $log_type,
+        'data' => $data,
+    ]);
 }
 
 function adminlog($log_type, $data = "")
@@ -602,23 +605,12 @@ function message_defence_owner($sector, $message)
 
 function distribute_toll($sector, $toll, $total_fighters)
 {
-    global $db, $dbtables;
-
-    $result3 = $db->Execute ("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$sector' AND defence_type ='F' ");
-    echo $db->ErrorMsg();
     //Put the defence information into the array "defenceinfo"
-    if($result3 > 0)
-    {
-       while(!$result3->EOF)
-       {
-          $row = $result3->fields;
-          $toll_amount = ROUND(($row['quantity'] / $total_fighters) * $toll);
-          $db->Execute("UPDATE ships set credits=credits + $toll_amount WHERE ship_id = $row[ship_id]");
-          playerlog($row[ship_id], LOG_TOLL_RECV, "$toll_amount|$sector");
-          $result3->MoveNext();
-       }
+    foreach (defencesBySectorAndFighters($sector) as $defence) {
+          $toll_amount = ROUND(($defence['quantity'] / $total_fighters) * $toll);
+          shipCreditsAdd($defence['ship_id'], $toll_amount);
+          playerlog($defence['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
     }
-
 }
 
 function defence_vs_defence($ship_id)
@@ -1075,3 +1067,37 @@ function isLoanPending($ship_id)
 
 }
 
+function sensorsCloakSuccess($sensors, $cloak)
+{
+    $success = SCAN_SUCCESS($sensors, $cloak);
+
+    if ($success < 5) {
+        $success = 5;
+    }
+    if ($success > 95) {
+        $success = 95;
+    }
+
+    return $success;
+}
+
+
+class SectorFightException extends \Exception 
+{
+    
+}
+
+class SectorRetreatException extends \Exception 
+{
+    
+}
+
+class SectorChooseMoveException extends \Exception 
+{
+    
+}
+
+class SectorNotEnoghtCreditsTollException extends \Exception 
+{
+    
+}
