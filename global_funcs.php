@@ -51,6 +51,18 @@ if (!empty($_COOKIE['token'])) {
     $token = $_COOKIE['token'];
 }
 
+function fromRequest($name, $default = null)
+{
+    $fromGet = fromGET($name);
+    
+    if ($fromGet) {
+        return $fromGet;
+    }
+    
+    return fromPost($name, $default);
+}
+
+
 function fromPost($name, $default = null)
 {
     if (empty($_POST[$name]) && $default instanceof \Exception) {
@@ -1083,6 +1095,11 @@ function sensorsCloakSuccess($sensors, $cloak)
 
 
 class SectorFightException extends \Exception 
+{
+    
+}
+
+class SectorFightShipDestroyedException extends \Exception 
 {
     
 }

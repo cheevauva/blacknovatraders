@@ -12,7 +12,7 @@ if (checklogin()) {
 $title = $l_move_title;
 
 try {
-    $sector = fromGet('sector', new \Exception('sector'));
+    $sector = fromRequest('sector', new \Exception('sector'));
 
     if ($playerinfo['turns'] < 1) {
         throw new \Exception($l_move_turn);
@@ -46,9 +46,15 @@ try {
     shipMoveToSector($playerinfo['ship_id'], $sector);
     log_move($playerinfo['ship_id'], $sector);
 
-    include "check_mines.php";
+    include 'check_mines.php';
 
-    header('Location: index.php');
+    if (empty($messages)) {
+        header('Location: index.php');
+    } else {
+        include "header.php";
+        echo implode('<br/>', $messages);
+        include 'footer.php';
+    }
 } catch (SectorChooseMoveException $ex) {
     include "header.php";
     include 'move_form.tpl.php';
