@@ -14,6 +14,9 @@
         fetch('status.php').then(response => response.json()).then(data => {
             document.getElementById('footer_metrics').getElementsByClassName('counter_online')[0].innerHTML = data.online;
             document.getElementById('footer_metrics').getElementsByClassName('myx')[0].innerHTML = data.myx;
+            if (data.unreadMessages) {
+                alert(data.unreadMessages);
+            }
         });
         setTimeout("rmyx();", 30000);
     }

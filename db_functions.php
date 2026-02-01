@@ -369,3 +369,228 @@ function sqlGetRankingData($sort, $max_rank)
 
     return $rows;
 }
+
+function sqlCheckUnreadMessages($playerinfo)
+{
+    if (!isset($playerinfo['ship_id'])) {
+        return 0;
+    }
+
+    $stmt = db()->PrepareStmt("SELECT * FROM messages WHERE recp_id = :ship_id AND notified = 'N'");
+    $stmt->InParameter($playerinfo['ship_id'], ':ship_id');
+    $result = $stmt->Execute();
+
+    $recordCount = $result->RecordCount();
+
+    if ($recordCount > 0) {
+        $updateStmt = db()->PrepareStmt("UPDATE messages SET notified = 'Y' WHERE recp_id = :ship_id AND notified = 'N'");
+        $updateStmt->InParameter($playerinfo['ship_id'], ':ship_id');
+        $updateStmt->Execute();
+    }
+
+    return $recordCount;
+}
+
+function getPlayerInfo($username)
+{
+    global $db;
+    $res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+    return $res->fields;
+}
+
+function getSectorInfo($sectorId)
+{
+    $stmt = db()->PrepareStmt('SELECT * FROM universe WHERE sector_id = :sectorId');
+    $stmt->InParameter($sectorId, ':sectorId');
+
+    return $stmt->Execute()->fields;
+}
+
+function getZoneInfo($zoneId)
+{
+    $stmt = db()->PrepareStmt('SELECT zone_id, zone_name FROM zones WHERE zone_id = :zoneId');
+    $stmt->InParameter($zoneId, ':zoneId');
+
+    return $stmt->Execute()->fields;
+}
+
+function getLinks($sectorId)
+{
+    $stmt = db()->PrepareStmt("SELECT * FROM links WHERE link_start= :sectorId ORDER BY link_dest ASC");
+    $stmt->InParameter($sectorId, ':sectorId');
+
+    $res = $stmt->Execute();
+
+    if (empty($res)) {
+        return [];
+    }
+
+    $links = [];
+
+    while (!$res->EOF) {
+        $links[] = $res->fields;
+        $res->MoveNext();
+    }
+
+    return $links;
+}
+
+function getPlanets($sector_id)
+{
+    $sql = "
+    SELECT 
+        p.*,
+        (owner.hull + owner.engines + owner.computer + owner.beams + owner.torp_launchers + owner.shields + owner.armor) / 7 AS owner_score,
+        owner.character_name AS owner_character_name
+    FROM 
+        planets AS p
+    LEFT JOIN
+        ships AS owner
+    ON
+        ships.id = owner.owner
+    WHERE 
+        p.sector_id = :sectorId
+    ";
+
+    $stmt = db()->PrepareStmt($sql);
+    $stmt->InParameter($sector_id, ':sectorId');
+
+    $res = $stmt->Execute();
+
+    if (empty($res)) {
+        return [];
+    }
+
+    $planets = [];
+
+    while (!$res->EOF) {
+        $planets[] = $res->fields;
+        $res->MoveNext();
+    }
+
+    return $planets;
+}
+
+function getDefences($sector_id)
+{
+    $sql = "
+    SELECT 
+        sd.*,
+        s.character_name
+    FROM
+        sector_defence AS sd,
+        ships AS s
+    WHERE 
+        sd.sector_id = :sectorId  AND 
+        ships.ship_id = sd.ship_id 
+    ";
+
+    $stmt = db()->PrepareStmt($sql);
+    $stmt->InParameter($sector_id, ':sectorId');
+
+    $res = $stmt->Execute();
+
+    if (empty($res)) {
+        return [];
+    }
+
+    $defences = [];
+
+    while (!$res->EOF) {
+        $defences[] = $res->fields;
+        $res->MoveNext();
+    }
+
+    return $defences;
+}
+
+function getShipsInSector($sectorId, $playerShipId)
+{
+    if (empty($sectorId)) {
+        return [];
+    }
+
+    $sql = " 
+    SELECT
+        ships.*,
+        (ships.hull + ships.engines + ships.power + ships.computer + ships.sensors + ships.armor + ships.shields + ships.beams + ships.torp_launchers + ships.cloak) / 10 AS score,
+        teams.team_name,
+        teams.id
+    FROM 
+        ships
+    LEFT JOIN
+        teams
+    ON 
+        ships.team = teams.id
+    WHERE 
+        ships.ship_id != :playerShipId AND
+        ships.sector = :sector AND
+        ships.on_planet = 'N'
+    ";
+
+    $stmt = db()->PrepareStmt($sql);
+    $stmt->InParameter($playerShipId, ':playerShipId');
+    $stmt->InParameter($sectorId, ':sector');
+
+    $query = $stmt->Execute();
+
+    if (empty($query)) {
+        return [];
+    }
+
+    $ships = [];
+
+    while (!$query->EOF) {
+        $ships[] = $query->fields;
+        $query->MoveNext();
+    }
+
+    return $ships;
+}
+
+function getTraderoutes($sector, $shipId)
+{
+    $sql = "
+    SELECT
+        traderoutes.*,
+        planet_src.name AS planet_source,
+        planet_dst.name AS planet_dest
+    FROM
+        (
+            SELECT traderoutes.* FROM traderoutes WHERE source_type = 'P' AND source_id = :sector AND owner = :shipId 
+            UNION
+            SELECT traderoutes.* FROM traderoutes WHERE source_type = 'D' AND source_id = :sector AND owner = :shipId 
+            UNION
+            SELECT traderoutes.* FROM planets, traderoutes WHERE traderoutes.source_type = 'L' AND traderoutes.source_id = planets.planet_id AND planets.sector_id = :sector AND traderoutes.owner = :shipId
+            UNION
+            SELECT traderoutes.* FROM planets, traderoutes WHERE traderoutes.source_type = 'C' AND traderoutes.source_id = planets.planet_id AND planets.sector_id = :sector AND traderoutes.owner = :shipId
+        ) AS traderoutes
+    LEFT JOIN
+        planets AS planet_src
+    ON
+        planet_src.planet_id = traderoutes.source_id
+    LEFT JOIN
+        planets AS planet_dst
+    ON
+        planet_dst.planet_id = traderoutes.dest_id
+    ";
+
+    $stmt = db()->PrepareStmt($sql);
+    $stmt->InParameter($sector, ':sector');
+    $stmt->InParameter($shipId, ':shipId');
+
+    $res = $stmt->Execute();
+
+    if (empty($res)) {
+        return [];
+    }
+
+    $traderoutes = [];
+
+    while (!$res->EOF) {
+        $traderoutes[] = $res->fields;
+        $res->MoveNext();
+    }
+
+    return $traderoutes;
+}
