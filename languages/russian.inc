@@ -460,7 +460,7 @@ $l_log_title[LOG_ATTACK_EWDFAIL] = "Аварийный варп <font color=red>
 $l_log_text[LOG_ATTACK_LOSE] = "Ваш корабль атакует [player]. Как вы ни старались, вы не можете защититься от превосходного вооружения [player]. Ваш корабль уничтожен. ";
 $l_log_title[LOG_ATTACK_LOSE] = "<font color=red>Бой проигран!</font>";
 $l_log_text[LOG_ATTACKED_WIN] = "Ваш корабль был атакован [player]. Вы сражаетесь некоторое время, затем бой затихает. В стычке вы потеряли [armor] очков брони и [fighters] истребителей.";
-$l_log_title[LOG_ATTACKED_WIN] = "<font color=yellow>Стычка!</font>";
+$l_log_title[LOG_ATTACKED_WIN] = "Стычка!";
 $l_log_text[LOG_TOLL_PAID] = "Вам пришлось заплатить [toll] кредитов за вход в сектор [sector]. Вы обещаете себе, что найдете способ вернуть свои деньги.";
 $l_log_title[LOG_TOLL_PAID] = "Вымогательство";
 $l_log_text[LOG_HIT_MINES] = "Вы задели [mines] мин при перемещении в секторе [sector].";
