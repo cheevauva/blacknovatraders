@@ -10,9 +10,11 @@ if (checklogin()) {
 }
 
 $title = $l_move_title;
-$sector = $_GET['sector'];
+
 
 try {
+    $sector = fromGet('sector',  new \Exception('sector'));
+    
     if ($playerinfo['turns'] < 1) {
         throw new \Exception($l_move_turn);
     }
@@ -29,26 +31,23 @@ try {
     }
 
     if (empty($flag)) {
-        db()->Execute("UPDATE ships SET cleared_defences = '' where ship_id={$playerinfo['ship_id']}");
+        shipResetClearedDefences($playerinfo['ship_id']);
         throw new \Exception($l_move_failed);
     }
 
     ob_start();
     $ok = 1;
     $calledfrom = "move.php";
-    include("check_fighters.php"); 
+    
+    include("check_fighters.php");
+
     if ($ok > 0) {
-        $stamp = date("Y-m-d H-i-s");
-        $query = "UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, sector=$sector where ship_id=$playerinfo[ship_id]";
-        log_move($playerinfo[ship_id], $sector);
-        $move_result = $db->Execute("$query");
-        if (!$move_result) {
-            // is this really STILL needed?
-            $error = $db->ErrorMsg();
-            mail($admin_mail, "Move Error", "Start Sector: $sectorinfo[sector_id]\nEnd Sector: $sector\nPlayer: $playerinfo[character_name] - $playerinfo[ship_id]\n\nQuery:  $query\n\nSQL error: $error");
-        }
+        shipMoveToSector($playerinfo['ship_id'], $sector);
+        log_move($playerinfo['ship_id'], $sector);
     }
+    
     include("check_mines.php");
+    
     if ($ok == 1) {
         ob_clean();
         header('Location: index.php');

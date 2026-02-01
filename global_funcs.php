@@ -64,6 +64,19 @@ function fromPost($name, $default = null)
     return $_POST[$name];
 }
 
+function fromGET($name, $default = null)
+{
+    if (empty($_GET[$name]) && $default instanceof \Exception) {
+        throw $default;
+    }
+
+    if (empty($_GET[$name])) {
+        return $default;
+    }
+    
+    return $_GET[$name];
+}
+
 // Ensure lang is set
 $found = 0;
 $language = $default_lang;
@@ -1029,10 +1042,12 @@ function get_player($ship_id)
    }
 }
 
-function log_move($ship_id,$sector_id)
+function log_move($ship_id, $sector_id)
 {
-   global $db,$dbtables;
-   $res = $db->Execute("INSERT INTO $dbtables[movement_log] (ship_id,sector_id,time) VALUES ($ship_id,$sector_id,NOW())");
+    $stmt = db()->PrepareStmt("INSERT INTO movement_log (ship_id,sector_id,time) VALUES (:ship_id,:sector_id,NOW())");
+    $stmt->InParameter($ship_id, ':ship_id');
+    $stmt->InParameter($sector_id, ':sector_id');
+    $stmt->Execute();
 }
 
 function isLoanPending($ship_id)

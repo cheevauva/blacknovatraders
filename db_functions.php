@@ -594,3 +594,20 @@ function getTraderoutes($sector, $shipId)
 
     return $traderoutes;
 }
+
+function shipResetClearedDefences($shipId)
+{
+    $stmt = db()->PrepareStmt("UPDATE ships SET cleared_defences = '' where ship_id= :shipId");
+    $stmt->InParameter($shipId, ':shipId');
+
+    return $stmt->Execute();
+}
+
+function shipMoveToSector($shipId, $sector)
+{
+    $stmt = db()->PrepareStmt("UPDATE ships SET last_login=NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector where ship_id = :shipId");
+    $stmt->InParameter($sector, ':sector');
+    $stmt->InParameter($shipId, ':shipId');
+
+    return $stmt->Execute();
+}
