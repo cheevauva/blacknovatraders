@@ -69,8 +69,9 @@ function shipRestoreEscapepod($ship_id)
     ]);
 }
 
-function shipCheckNewbie($ship_id, $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak)
+function shipCheckNewbie($ship_id)
 {
+    global $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak;
     $sql = "
     SELECT 
         COUNT(id)

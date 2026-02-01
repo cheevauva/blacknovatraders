@@ -52,7 +52,7 @@ try {
         header('Location: index.php');
     } else {
         include "header.php";
-        echo implode('<br/>', $messages);
+        echo '<pre>' . implode('<br/>', $messages) . '</pre>';
         include 'footer.php';
     }
 } catch (SectorChooseMoveException $ex) {
