@@ -19,8 +19,8 @@ try {
         throw new \Exception($l_move_turn);
     }
 
-    $sectorinfo = getSectorInfo($playerinfo['sector']);
-    $links = getLinks($playerinfo['sector']);
+    $sectorinfo = sectoryById($playerinfo['sector']);
+    $links = linksBySector($playerinfo['sector']);
 
     $flag = false;
 

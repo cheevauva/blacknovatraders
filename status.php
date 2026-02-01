@@ -6,20 +6,27 @@ include("languages/$lang");
 connectdb();
 checklogin(false);
 
-$online = sqlGetOnlinePlayersCount();
+$online = shipsGetOnlinePlayersCount();
 $mySEC = 0;
 
-$schedulerData = sqlGetSchedulerLastRun();
+$schedulerLastRun = schedulerGetLastRun();
 
-if ($schedulerData) {
-    $mySEC = ($sched_ticks * 60) - (TIME() - $schedulerData['last_run']);
+if ($schedulerLastRun) {
+    $mySEC = ($sched_ticks * 60) - (TIME() - $schedulerLastRun);
 }
 if ($mySEC < 0) {
     $mySEC = ($sched_ticks * 60);
 }
 
+$unreadMessages = 0;
 
-$unreadMessages = sqlCheckUnreadMessages($playerinfo);
+if ($playerinfo) {
+    $unreadMessages = messagesCountByShip($playerinfo['ship_id']);
+
+    if ($unreadMessages > 0) {
+        messagesNotifiedByShip($playerinfo['ship_id']);
+    }
+}
 
 echo json_encode([
     'online' => $online,

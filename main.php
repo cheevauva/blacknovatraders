@@ -26,12 +26,12 @@ if ($playerinfo['on_planet'] == "Y") {
     }
 }
 
-$sectorinfo = getSectorInfo($playerinfo['sector']);
-$links = getLinks($playerinfo['sector']);
-$planets = getPlanets($playerinfo['sector']);
-$defences = getDefences($playerinfo['sector']);
-$zoneinfo = getZoneInfo($sectorinfo['zone_id']);
-$traderoutes = getTraderoutes($playerinfo['sector'], $playerinfo['ship_id']);
+$sectorinfo = sectoryById($playerinfo['sector']);
+$links = linksBySector($playerinfo['sector']);
+$planets = planetsBySector($playerinfo['sector']);
+$defences = defencesBySector($playerinfo['sector']);
+$zoneinfo = zoneById($sectorinfo['zone_id']);
+$traderoutes = traderoutesBySectorAndShip($playerinfo['sector'], $playerinfo['ship_id']);
 $shipsInSector = getShipsInSector($playerinfo['sector'], $playerinfo['ship_id']);
 
 if (!empty($_GET['demo'])) {

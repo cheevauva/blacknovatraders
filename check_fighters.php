@@ -8,9 +8,8 @@
 
     include("languages/$lang");
 
-    $result2 = $db->Execute ("SELECT * FROM $dbtables[universe] WHERE sector_id='$sector'");
-    //Put the sector information into the array "sectorinfo"
-    $sectorinfo=$result2->fields;
+    $sectorinfo = sectoryById($sector);
+    
     $result3 = $db->Execute ("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$sector' and defence_type ='F' ORDER BY quantity DESC");
     //Put the defence information into the array "defenceinfo"
     $i = 0;

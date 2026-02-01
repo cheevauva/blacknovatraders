@@ -34,13 +34,13 @@ try {
     $escape = 'N';  //start game equip[[ped with escape pod?]]
     $scoop = 'N';  //start game equipped with fuel scoop?
 
-    if (sqlGetPlayerByEmail($username)) {
+    if (shipByEmail($username)) {
         throw new \Exception("$l_new_inuse  $l_new_4gotpw1 <a href=mail.php?mail=$username>$l_clickme</a> $l_new_4gotpw2<BR>");
     }
 
     $stamp = date("Y-m-d H:i:s");
 
-    $mturns = sqlGetMaxTurns();
+    $mturns = mturnsMax();
     $token = uuidv7();
 
     $playerData = [
@@ -75,11 +75,11 @@ try {
         'dev_lssd' => (int) $start_lssd
     ];
 
-    if (!sqlCreatePlayer($playerData)) {
+    if (!shipCreate($playerData)) {
         throw new \Exception($db->ErrorMsg());
     }
 
-    $playerinfo = sqlGetPlayerByEmail($username);
+    $playerinfo = shipByEmail($username);
 
     $l_new_message = str_replace("[pass]", $password, $l_new_message);
     $link_to_game = "http://";
@@ -87,16 +87,17 @@ try {
     $link_to_game .= str_replace($_SERVER['DOCUMENT_ROOT'], "", dirname(__FILE__));
     mail("$username", "$l_new_topic", "$l_new_message\r\n\r\n$link_to_game", "From: $admin_mail\r\nReply-To: $admin_mail\r\nX-Mailer: PHP/" . phpversion());
 
-    sqlCreateZone($playerinfo['ship_id'], $character . "'s Territory");
-    sqlCreateBankAccount($playerinfo['ship_id']);
+    zoneCreate($playerinfo['ship_id'], $character . "'s Territory");
+    bankAccountCreate($playerinfo['ship_id']);
 
     setcookie('token', $token, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
     playerlog($playerinfo['ship_id'], LOG_LOGIN, $ip);
-    sqlUpdateLogin($playerinfo['ship_id'], $token);
+    shipSetToken($playerinfo['ship_id'], $token);
     header('Location:' . "main.php?id=" . $playerinfo['ship_id']);
     die;
 } catch (\Exception $ex) {
     echo json_encode([
+        'ex' => get_class($ex) . $ex->getFile() . $ex->getLine(),
         'error' => $ex->getMessage(),
         'code' => $ex->getCode(),
     ], JSON_UNESCAPED_UNICODE);

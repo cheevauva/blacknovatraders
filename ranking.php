@@ -4,9 +4,8 @@ include("config.php");
 include("languages/$lang");
 connectdb();
 
-$rows = sqlGetRankingData($sort, $max_rank);
-$num_players = sqlGetNumPlayers();
-
+$rows = shipsGetRankingData($sort, $max_rank);
+$num_players = shipsGetNotDestroyedExcludeXenobeCount();
 $current_sort = $rankingData['sort'];
 
 include 'ranking.tpl.php';

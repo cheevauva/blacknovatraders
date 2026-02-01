@@ -14,6 +14,6 @@ if (empty($_GET['startdate'])) {
 $title = $l_news_title;
 $previousday = date('Y/m/d', strtotime($startdate . ' -1 day'));
 $nextday = date('Y/m/d', strtotime($startdate . ' +1 day'));
-$rows = sqlGetNewsByDate($startdate);
+$rows = newsByDate($startdate);
 
 include 'news.tpl.php';

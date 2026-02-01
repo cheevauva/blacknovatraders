@@ -317,7 +317,39 @@ class ADODB_pdo extends ADOConnection {
 		
 		return false;
 	}
-	
+        
+	function fetchAll($sql, $params = [])
+	{
+		$stmt = $this->_connectionID->prepare($sql);
+                $stmt->execute($params);
+
+		return $stmt->fetchAll();
+	}
+        
+        function exec($sql, $params = [])
+	{
+		$stmt = $this->_connectionID->prepare($sql);
+                $stmt->execute($params);
+
+		return $stmt;
+	}
+        
+        
+	function fetch($sql, $params = [])
+	{
+		$stmt = $this->_connectionID->prepare($sql);
+                $stmt->execute($params);
+
+		return $stmt->fetch();
+	}
+        
+	function column($sql, $params = [])
+	{
+		$stmt = $this->_connectionID->prepare($sql);
+                $stmt->execute($params);
+
+		return $stmt->fetchColumn();
+	}
         /**
          * @param string $sql
          * @return bool|\ADOPDOStatement
@@ -415,8 +447,26 @@ class ADOPDOStatement {
 		$this->_connectionID->_stmt = $savestmt;
 		return $rs;
 	}
-	
-	function InParameter($var,$name,$maxLen=4000,$type=false)
+        
+    function bindParam($param, $var, $type = null, $maxLength = null)
+    {
+        $this->_stmt->bindParam($param, $var, $type, $maxLen);
+    }
+    
+    function fetch()
+    {
+        $this->_stmt->execute();
+        return $this->_stmt->fetch();
+    }
+
+
+    function fetchAll()
+    {
+        $this->_stmt->execute();
+        return $this->_stmt->fetchAll();
+    }
+
+    function InParameter($var,$name,$maxLen=4000,$type=false)
 	{
 
 		if ($type) $this->_stmt->bindParam($name,$var,$type,$maxLen);

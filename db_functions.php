@@ -10,43 +10,23 @@ function db()
     return $db;
 }
 
-function sqlGetPlayerByEmail($email)
+function ipBansCheck($ip)
 {
-    global $dbtables;
-
-    $stmt = db()->PrepareStmt("SELECT * FROM ships WHERE email= :email");
-    $stmt->InParameter($email, ':email');
-
-    return $stmt->Execute()->fields;
+    return db()->column("SELECT * FROM ip_bans WHERE :ip LIKE ban_mask", [
+        'ip' => $ip,
+    ]);
 }
 
-function sqlCheckIpBan($ip)
+function shipSetToken($shipId, $token)
 {
-    global $dbtables;
-
-    $stmt = db()->PrepareStmt("SELECT * FROM {$dbtables['ip_bans']} WHERE :ip LIKE ban_mask");
-    $stmt->InParameter($ip, ':ip');
-
-    return $stmt->Execute()->RecordCount();
+    db()->exec("UPDATE ships SET last_login = NOW(), token = :token WHERE ship_id = :ship_id", [
+        'token' => $token,
+        'ship_id' => $shipId,
+    ]);
 }
 
-function sqlUpdateLogin($ship_id, $token)
+function shipRestoreEscapepod($ship_id)
 {
-    global $dbtables;
-
-    $stamp = date("Y-m-d H-i-s");
-    $stmt = db()->PrepareStmt("UPDATE ships SET last_login = :last_login, token = :token WHERE ship_id = :ship_id");
-    $stmt->InParameter($stamp, ':last_login');
-    $stmt->InParameter($token, ':token');
-    $stmt->InParameter($ship_id, ':ship_id');
-
-    return $stmt->Execute();
-}
-
-function sqlRestoreShipEscapepod($ship_id)
-{
-    global $dbtables;
-
     $sql = "
     UPDATE 
         ships 
@@ -83,17 +63,14 @@ function sqlRestoreShipEscapepod($ship_id)
         dev_lssd = 'N' 
         WHERE ship_id = :ship_id
     ";
-    $stmt = db()->PrepareStmt($sql);
 
-    $stmt->InParameter($ship_id, ':ship_id');
-
-    return $stmt->Execute();
+    db()->exec($sql, [
+        'ship_id' => $ship_id,
+    ]);
 }
 
-function sqlCheckNewbieShip($ship_id, $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak)
+function shipCheckNewbie($ship_id, $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak)
 {
-    global $dbtables;
-
     $sql = "
     SELECT 
         COUNT(id)
@@ -113,27 +90,27 @@ function sqlCheckNewbieShip($ship_id, $newbie_hull, $newbie_engines, $newbie_pow
         AND cloak <= :newbie_cloak
     ";
 
-    $stmt = db()->PrepareStmt($sql);
-    $stmt->InParameter($ship_id, ':ship_id');
-    $stmt->InParameter($newbie_hull, ':newbie_hull');
-    $stmt->InParameter($newbie_engines, ':newbie_engines');
-    $stmt->InParameter($newbie_power, ':newbie_power');
-    $stmt->InParameter($newbie_computer, ':newbie_computer');
-    $stmt->InParameter($newbie_sensors, ':newbie_sensors');
-    $stmt->InParameter($newbie_armor, ':newbie_armor');
-    $stmt->InParameter($newbie_shields, ':newbie_shields');
-    $stmt->InParameter($newbie_beams, ':newbie_beams');
-    $stmt->InParameter($newbie_torp_launchers, ':newbie_torp_launchers');
-    $stmt->InParameter($newbie_cloak, ':newbie_cloak');
-
-    return $stmt->Execute()->RecordCount();
+    return db()->column($sql, [
+        ':ship_id' => $ship_id,
+        ':newbie_hull' => $newbie_hull,
+        ':newbie_engines' => $newbie_engines,
+        ':newbie_power' => $newbie_power,
+        ':newbie_computer' => $newbie_computer,
+        ':newbie_sensors' => $newbie_sensors,
+        ':newbie_armor' => $newbie_armor,
+        ':newbie_shields' => $newbie_shields,
+        ':newbie_beams' => $newbie_beams,
+        ':newbie_torp_launchers' => $newbie_torp_launchers,
+        ':newbie_cloak' => $newbie_cloak,
+    ]);
 }
 
-function sqlRestoreNewbieShip($ship_id)
+function shipRestoreNewbie($ship_id)
 {
-    global $dbtables;
-
-    $stmt = db()->PrepareStmt("UPDATE ships SET 
+    $sql = "
+    UPDATE 
+        ships 
+    SET 
         hull = 0,
         engines = 0,
         power = 0,
@@ -165,23 +142,19 @@ function sqlRestoreNewbieShip($ship_id)
         dev_minedeflector = 0,
         ship_destroyed = 'N',
         dev_lssd = 'N' 
-        WHERE ship_id = :ship_id");
+        WHERE ship_id = :ship_id
+    ";
 
-    $stmt->InParameter($ship_id, ':ship_id');
-
-    return $stmt->Execute();
+    db()->exec($sql, [
+        'ship_id' => $ship_id,
+    ]);
 }
 
-/**
- * Получить максимальное количество ходов среди всех игроков
- * @return int Максимальное количество ходов
- */
-function sqlGetMaxTurns()
+function mturnsMax()
 {
-    global $db, $max_turns;
-    $query = $db->Execute("SELECT MAX(turns_used + turns) AS mturns FROM ships");
-    $res = $query->fields;
-    $mturns = $res['mturns'];
+    global $max_turns;
+    
+    $mturns = db()->column("SELECT MAX(turns_used + turns) AS mturns FROM ships");
 
     if ($mturns > $max_turns) {
         $mturns = $max_turns;
@@ -190,10 +163,8 @@ function sqlGetMaxTurns()
     return $mturns;
 }
 
-function sqlCreatePlayer($playerData)
+function shipCreate($playerData)
 {
-    global $db, $default_lang;
-
     $sql = "
     INSERT INTO ships (
         ship_name, ship_destroyed, character_name, password, email, 
@@ -212,46 +183,17 @@ function sqlCreatePlayer($playerData)
     )
     ";
 
-    $stmt = db()->PrepareStmt($sql);
-    $stmt->InParameter($playerData['ship_name'], ':ship_name');
-    $stmt->InParameter($playerData['ship_destroyed'], ':ship_destroyed');
-    $stmt->InParameter($playerData['character_name'], ':character_name');
-    $stmt->InParameter($playerData['password'], ':password');
-    $stmt->InParameter($playerData['email'], ':email');
-    $stmt->InParameter($playerData['on_planet'], ':on_planet');
-    $stmt->InParameter($playerData['dev_escapepod'], ':dev_escapepod');
-    $stmt->InParameter($playerData['dev_fuelscoop'], ':dev_fuelscoop');
-    $stmt->InParameter($playerData['last_login'], ':last_login');
-    $stmt->InParameter($playerData['interface'], ':interface');
-    $stmt->InParameter($playerData['token'], ':token');
-    $stmt->InParameter($playerData['trade_colonists'], ':trade_colonists');
-    $stmt->InParameter($playerData['trade_fighters'], ':trade_fighters');
-    $stmt->InParameter($playerData['trade_torps'], ':trade_torps');
-    $stmt->InParameter($playerData['trade_energy'], ':trade_energy');
-    $stmt->InParameter($playerData['cleared_defences'], ':cleared_defences');
-    $stmt->InParameter($playerData['lang'], ':lang');
-    $stmt->InParameter($playerData['dhtml'], ':dhtml');
-    $stmt->InParameter($playerData['armor_pts'], ':armor_pts');
-    $stmt->InParameter($playerData['credits'], ':credits');
-    $stmt->InParameter($playerData['ship_energy'], ':ship_energy');
-    $stmt->InParameter($playerData['ship_fighters'], ':ship_fighters');
-    $stmt->InParameter($playerData['turns'], ':turns');
-    $stmt->InParameter($playerData['dev_warpedit'], ':dev_warpedit');
-    $stmt->InParameter($playerData['dev_genesis'], ':dev_genesis');
-    $stmt->InParameter($playerData['dev_beacon'], ':dev_beacon');
-    $stmt->InParameter($playerData['dev_emerwarp'], ':dev_emerwarp');
-    $stmt->InParameter($playerData['dev_minedeflector'], ':dev_minedeflector');
-    $stmt->InParameter($playerData['dev_lssd'], ':dev_lssd');
-
-    return $stmt->Execute();
+    return db()->exec($sql, $playerData);
 }
 
-function sqlCreateZone($shipId, $zoneName)
+function zoneCreate($shipId, $zoneName)
 {
     global $db;
 
     $sql = "
-    INSERT INTO zones VALUES(
+    INSERT INTO
+        zones 
+    VALUES(
         NULL, 
         :zone_name, 
         :ship_id, 
@@ -267,71 +209,52 @@ function sqlCreateZone($shipId, $zoneName)
     )
     ";
 
-    $stmt = $db->PrepareStmt($sql);
-    $stmt->InParameter($zoneName, ':zone_name');
-    $stmt->InParameter((int) $shipId, ':ship_id');
-    $stmt->InParameter('N', ':allow_attack');
-    $stmt->InParameter('Y', ':allow_planetattack');
-    $stmt->InParameter('Y', ':allow_trade');
-    $stmt->InParameter('Y', ':allow_defenses');
-    $stmt->InParameter('Y', ':allow_shipyard');
-    $stmt->InParameter('Y', ':allow_build');
-    $stmt->InParameter('Y', ':allow_energy');
-    $stmt->InParameter('Y', ':allow_warpedit');
-
-    return $stmt->Execute();
+    $db->exec($sql, [
+        ':zone_name' => $zoneName,
+        ':ship_id' => (int) $shipId,
+        ':allow_attack' => 'N',
+        ':allow_planetattack' => 'Y',
+        ':allow_trade' => 'Y',
+        ':allow_defenses' => 'Y',
+        ':allow_shipyard' => 'Y',
+        ':allow_build' => 'Y',
+        ':allow_energy' => 'Y',
+        ':allow_warpedit' => 'Y',
+    ]);
 }
 
-function sqlCreateBankAccount($shipId)
+function bankAccountCreate($shipId)
 {
-    global $db;
-
-    $stmt = $db->PrepareStmt("INSERT INTO ibank_accounts (ship_id, balance, loan) VALUES(:ship_id, :balance, :loan)");
-    $stmt->InParameter((int) $shipId, ':ship_id');
-    $stmt->InParameter(0, ':balance');
-    $stmt->InParameter(0, ':loan');
-
-    return $stmt->Execute();
+    db()->exec("INSERT INTO ibank_accounts (ship_id, balance, loan) VALUES(:ship_id, :balance, :loan)", [
+        ':ship_id' => (int) $shipId,
+        ':balance' => 0,
+        ':loan' => 0,
+    ]);
 }
 
-function sqlGetOnlinePlayersCount()
+function shipsGetOnlinePlayersCount()
 {
-    return (int) db()->Execute("SELECT COUNT(*) as loggedin FROM ships WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(ships.last_login)) / 60 <= 5 AND email NOT LIKE '%@xenobe'")->fields['loggedin'];
+    return (int) db()->column("SELECT COUNT(*) as loggedin FROM ships WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(ships.last_login)) / 60 <= 5 AND email NOT LIKE '%@xenobe'");
 }
 
-function sqlGetSchedulerLastRun()
+function schedulerGetLastRun()
 {
-    return db()->Execute("SELECT last_run FROM scheduler LIMIT 1")->fields;
+    return db()->column("SELECT last_run FROM scheduler LIMIT 1");
 }
 
-function sqlGetNewsByDate($date)
+function newsByDate($date)
 {
-    $stmt = db()->PrepareStmt("SELECT * FROM news WHERE date = ? ORDER BY news_id DESC");
-    $stmt->InParameter($date, 'date');
-
-    $res = $stmt->Execute();
-
-    if (!$res) {
-        return [];
-    }
-
-    $rows = [];
-
-    while (!$res->EOF) {
-        $rows[] = $res->fields;
-
-        $res->MoveNext();
-    }
-
-    return $rows;
+    return db()->fetchAll("SELECT * FROM news WHERE date = :date ORDER BY news_id DESC", [
+        'date' => $date,
+    ]);
 }
 
-function sqlGetNumPlayers()
+function shipsGetNotDestroyedExcludeXenobeCount()
 {
-    return db()->Execute("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe'")->fields['num_players'];
+    return db()->column("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe'");
 }
 
-function sqlGetRankingData($sort, $max_rank)
+function shipsGetRankingData($sort, $max_rank)
 {
     if ($sort == "turns") {
         $by = "turns_used DESC,character_name ASC";
@@ -351,91 +274,80 @@ function sqlGetRankingData($sort, $max_rank)
         $by = "score DESC,character_name ASC";
     }
 
-    $query = "SELECT ships.email,ships.score,ships.character_name,ships.turns_used,ships.last_login,UNIX_TIMESTAMP(ships.last_login) as online,ships.rating, teams.team_name, IF(ships.turns_used<150,0,ROUND(ships.score/ships.turns_used)) AS efficiency FROM ships LEFT JOIN teams ON ships.team = teams.id  WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' ORDER BY $by LIMIT $max_rank";
+    $query = "
+    SELECT 
+        ships.email,
+        ships.score,
+        ships.character_name,
+        ships.turns_used,
+        ships.last_login,
+        UNIX_TIMESTAMP(ships.last_login) as online,
+        ships.rating, 
+        teams.team_name, 
+        IF(ships.turns_used<150,0,ROUND(ships.score/ships.turns_used)) AS efficiency 
+    FROM 
+        ships 
+    LEFT JOIN 
+        teams 
+    ON 
+        ships.team = teams.id  
+    WHERE 
+        ship_destroyed='N' AND 
+        email NOT LIKE '%@xenobe' 
+    ORDER BY $by 
+    LIMIT :limit
+    ";
 
-    $res = db()->Execute($query);
+    $stmt = db()->PrepareStmt($query);
+    $stmt->bindParam('limit', $max_rank, PDO::PARAM_INT);
 
-    if (!$res) {
-        return [];
-    }
-
-    $rows = [];
-
-    while (!$res->EOF) {
-        $rows[] = $res->fields;
-
-        $res->MoveNext();
-    }
-
-    return $rows;
+    return $stmt->fetchAll();
 }
 
-function sqlCheckUnreadMessages($playerinfo)
+function messagesCountByShip($shipId)
 {
-    if (!isset($playerinfo['ship_id'])) {
-        return 0;
-    }
 
-    $stmt = db()->PrepareStmt("SELECT * FROM messages WHERE recp_id = :ship_id AND notified = 'N'");
-    $stmt->InParameter($playerinfo['ship_id'], ':ship_id');
-    $result = $stmt->Execute();
-
-    $recordCount = $result->RecordCount();
-
-    if ($recordCount > 0) {
-        $updateStmt = db()->PrepareStmt("UPDATE messages SET notified = 'Y' WHERE recp_id = :ship_id AND notified = 'N'");
-        $updateStmt->InParameter($playerinfo['ship_id'], ':ship_id');
-        $updateStmt->Execute();
-    }
-
-    return $recordCount;
+    return db()->column("SELECT COUNT(*) FROM messages WHERE recp_id = :shipId AND notified = 'N'", [
+        'shipId' => $shipId,
+    ]);
 }
 
-function getPlayerInfo($username)
+function messagesNotifiedByShip($shipId)
 {
-    global $db;
-    $res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
-    return $res->fields;
+    db()->exec("UPDATE messages SET notified = 'Y' WHERE recp_id = :shipId AND notified = 'N'", [
+        'shipId' => $shipId,
+    ]);
 }
 
-function getSectorInfo($sectorId)
+function shipByEmail($email)
 {
-    $stmt = db()->PrepareStmt('SELECT * FROM universe WHERE sector_id = :sectorId');
-    $stmt->InParameter($sectorId, ':sectorId');
-
-    return $stmt->Execute()->fields;
+    return db()->fetch("SELECT * FROM ships WHERE email = :username LIMIT 1", [
+        'username' => $email,
+    ]);
 }
 
-function getZoneInfo($zoneId)
+function sectoryById($sectorId)
 {
-    $stmt = db()->PrepareStmt('SELECT zone_id, zone_name FROM zones WHERE zone_id = :zoneId');
-    $stmt->InParameter($zoneId, ':zoneId');
-
-    return $stmt->Execute()->fields;
+    return db()->fetch('SELECT * FROM universe WHERE sector_id = :sectorId LIMIT 1', [
+        'sectorId' => $sectorId,
+    ]);
 }
 
-function getLinks($sectorId)
+function zoneById($zoneId)
 {
-    $stmt = db()->PrepareStmt("SELECT * FROM links WHERE link_start= :sectorId ORDER BY link_dest ASC");
-    $stmt->InParameter($sectorId, ':sectorId');
-
-    $res = $stmt->Execute();
-
-    if (empty($res)) {
-        return [];
-    }
-
-    $links = [];
-
-    while (!$res->EOF) {
-        $links[] = $res->fields;
-        $res->MoveNext();
-    }
-
-    return $links;
+    return db()->fetch('SELECT * FROM zones WHERE zone_id = :zoneId', [
+        'zoneId' => $zoneId,
+    ]);
 }
 
-function getPlanets($sector_id)
+function linksBySector($sectorId)
+{
+    return db()->fetchAll("SELECT * FROM links WHERE link_start= :sectorId ORDER BY link_dest ASC", [
+        'sectorId' => $sectorId,
+    ]);
+}
+
+function planetsBySector($sectorId)
 {
     $sql = "
     SELECT 
@@ -452,26 +364,12 @@ function getPlanets($sector_id)
         p.sector_id = :sectorId
     ";
 
-    $stmt = db()->PrepareStmt($sql);
-    $stmt->InParameter($sector_id, ':sectorId');
-
-    $res = $stmt->Execute();
-
-    if (empty($res)) {
-        return [];
-    }
-
-    $planets = [];
-
-    while (!$res->EOF) {
-        $planets[] = $res->fields;
-        $res->MoveNext();
-    }
-
-    return $planets;
+    return db()->fetchAll($sql, [
+        'sectorId' => $sectorId,
+    ]);
 }
 
-function getDefences($sector_id)
+function defencesBySector($sectorId)
 {
     $sql = "
     SELECT 
@@ -485,23 +383,9 @@ function getDefences($sector_id)
         ships.ship_id = sd.ship_id 
     ";
 
-    $stmt = db()->PrepareStmt($sql);
-    $stmt->InParameter($sector_id, ':sectorId');
-
-    $res = $stmt->Execute();
-
-    if (empty($res)) {
-        return [];
-    }
-
-    $defences = [];
-
-    while (!$res->EOF) {
-        $defences[] = $res->fields;
-        $res->MoveNext();
-    }
-
-    return $defences;
+    return db()->fetchAll($sql, [
+        'sectorId' => $sectorId,
+    ]);
 }
 
 function getShipsInSector($sectorId, $playerShipId)
@@ -528,27 +412,13 @@ function getShipsInSector($sectorId, $playerShipId)
         ships.on_planet = 'N'
     ";
 
-    $stmt = db()->PrepareStmt($sql);
-    $stmt->InParameter($playerShipId, ':playerShipId');
-    $stmt->InParameter($sectorId, ':sector');
-
-    $query = $stmt->Execute();
-
-    if (empty($query)) {
-        return [];
-    }
-
-    $ships = [];
-
-    while (!$query->EOF) {
-        $ships[] = $query->fields;
-        $query->MoveNext();
-    }
-
-    return $ships;
+    return db()->fetchAll($sql, [
+        'sector' => $sectorId,
+        'playerShipId' => $playerShipId,
+    ]);
 }
 
-function getTraderoutes($sector, $shipId)
+function traderoutesBySectorAndShip($sector, $shipId)
 {
     $sql = "
     SELECT
@@ -575,39 +445,30 @@ function getTraderoutes($sector, $shipId)
         planet_dst.planet_id = traderoutes.dest_id
     ";
 
-    $stmt = db()->PrepareStmt($sql);
-    $stmt->InParameter($sector, ':sector');
-    $stmt->InParameter($shipId, ':shipId');
-
-    $res = $stmt->Execute();
-
-    if (empty($res)) {
-        return [];
-    }
-
-    $traderoutes = [];
-
-    while (!$res->EOF) {
-        $traderoutes[] = $res->fields;
-        $res->MoveNext();
-    }
-
-    return $traderoutes;
+    return db()->fetchAll($sql, [
+        'sector' => $sector,
+        'shipId' => $shipId,
+    ]);
 }
 
 function shipResetClearedDefences($shipId)
 {
-    $stmt = db()->PrepareStmt("UPDATE ships SET cleared_defences = '' where ship_id= :shipId");
-    $stmt->InParameter($shipId, ':shipId');
-
-    return $stmt->Execute();
+    db()->exec("UPDATE ships SET cleared_defences = '' where ship_id= :shipId", [
+        'shipId' => $shipId,
+    ]);
 }
 
 function shipMoveToSector($shipId, $sector)
 {
-    $stmt = db()->PrepareStmt("UPDATE ships SET last_login=NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector where ship_id = :shipId");
-    $stmt->InParameter($sector, ':sector');
-    $stmt->InParameter($shipId, ':shipId');
+    db()->exec("UPDATE ships SET last_login=NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector where ship_id = :shipId", [
+        'sector' => $sector,
+        'shipId' => $shipId,
+    ]);
+}
 
-    return $stmt->Execute();
+function defencesBySectorAndFighters($sectorId)
+{
+    return db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id=:sectorId and defence_type ='F' ORDER BY quantity DESC", [
+        'sectorId' => $sectorId,
+    ]);
 }

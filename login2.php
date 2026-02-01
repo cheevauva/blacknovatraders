@@ -16,10 +16,10 @@ try {
     $email = fromPost('email', new \Exception($l_login_email . ' ' . $l_none));
     $pass = fromPost('pass', new \Exception($l_login_pw . ' ' . $l_none));
 
-    $playerinfo = sqlGetPlayerByEmail($email);
+    $playerinfo = shipByEmail($email);
     $playerfound = !empty($playerinfo);
 
-    if (sqlCheckIpBan($ip)) {
+    if (ipBansCheck($ip)) {
         throw new \Exception($l_login_banned);
     }
 
@@ -38,13 +38,13 @@ try {
         $token = uuidv7();
         setcookie('token', $token, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
         playerlog($playerinfo['ship_id'], LOG_LOGIN, $ip);
-        sqlUpdateLogin($playerinfo['ship_id'], $token);
+        shipSetToken($playerinfo['ship_id'], $token);
         header('Location:' . "main.php?id=" . $playerinfo['ship_id']);
         die;
     }
 
     if ($playerinfo['ship_destroyed'] == 'Y' && $playerinfo['dev_escapepod'] == 'Y') {
-        sqlRestoreShipEscapepod($playerinfo['ship_id']);
+        shipRestoreEscapepod($playerinfo['ship_id']);
         throw new \Exception($l_login_died);
     }
 
@@ -53,11 +53,11 @@ try {
     }
 
     if ($playerinfo['ship_destroyed'] == 'Y' && $newbie_nice == 'YES') {
-        if (!sqlCheckNewbieShip($playerinfo['ship_id'])) {
+        if (!shipCheckNewbie($playerinfo['ship_id'])) {
             throw new \Exception($youHaveDied . $l_login_looser);
         }
 
-        sqlRestoreNewbieShip($playerinfo['ship_id']);
+        shipRestoreNewbie($playerinfo['ship_id']);
         throw new \Exception($youHaveDied . "<BR><BR>$l_login_newbie<BR><BR>" . $l_login_newlife);
     }
 } catch (\Exception $ex) {
