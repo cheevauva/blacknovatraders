@@ -187,6 +187,25 @@ function shipCreate($playerData)
     return db()->exec($sql, $playerData);
 }
 
+function zoneUpdate($data)
+{
+    $sql = "
+    UPDATE 
+        zones   
+    SET 
+        zone_name = :zone_name, 
+        allow_beacon = :allow_beacon, 
+        allow_attack = :allow_attack, 
+        allow_warpedit = :allow_warpedit, 
+        allow_planet = :allow_planet, 
+        allow_trade = :allow_trade,
+        allow_defenses = :allow_defenses 
+    WHERE 
+        zone_id = :zone_id
+    ";
+    db()->exec($sql, $data);
+}
+
 function zoneCreate($shipId, $zoneName)
 {
     global $db;

@@ -30,26 +30,8 @@
     <input type="submit" class="btn btn-primary" value="<? echo $l_submit; ?>">
     <input type="reset"  class="btn btn-primary" value="<? echo $l_reset; ?>">
 </form>
+
 <script type="text/javascript">
-    document.getElementById('bntNewForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-
-        const response = await fetch('new2.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.redirected) {
-            window.location.href = response.url;
-            return;
-        }
-
-        const result = await response.json();
-
-        document.getElementById('bntNewForm').getElementsByClassName('bntNewError')[0].classList.remove('d-none');
-        document.getElementById('bntNewForm').getElementsByClassName('bntNewError')[0].getElementsByClassName('error')[0].innerHTML = result.error;
-    });
+    bntForm('bntNewForm');
 </script>
 <? include("footer.php"); ?>
