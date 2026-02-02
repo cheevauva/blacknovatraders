@@ -525,3 +525,11 @@ function defencesCleanUp()
 {
     return db()->exec("delete from sector_defence where quantity <= 0 ");
 }
+
+function logsByShipAndDate($ship, $date)
+{
+    return db()->fetchAll('SELECT * FROM logs WHERE ship_id = :ship AND time LIKE :date ORDER BY time DESC, type DESC', [
+        'ship' => $ship,
+        'date' => $date . '%',
+    ]);
+}

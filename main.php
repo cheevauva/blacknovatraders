@@ -79,4 +79,4 @@ foreach ($shipsInSector as $idx => $shipInSector) {
     }
 }
 
-include 'main.tpl.php';
+include 'tpls/main.tpl.php';

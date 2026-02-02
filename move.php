@@ -56,9 +56,7 @@ try {
         include 'footer.php';
     }
 } catch (SectorChooseMoveException $ex) {
-    include "header.php";
-    include 'move_form.tpl.php';
-    include 'footer.php';
+    include 'tpls/move_form.tpl.php';
 } catch (\Exception $ex) {
     include "header.php";
     echo $ex->getMessage();

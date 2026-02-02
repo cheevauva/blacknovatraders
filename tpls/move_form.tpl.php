@@ -1,4 +1,5 @@
-<?php 
+<?php include "header.php"; ?>
+<?php
 if (fromGET('debug')) {
     $debug = true;
     $total_sector_fighters = 999;
@@ -46,3 +47,4 @@ if (fromGET('debug')) {
     <input type=hidden name=engage value=1>
     <input type=hidden name=destination value="<?php echo $destination; ?>">
 </FORM>
+<?php include 'footer.php'; ?>

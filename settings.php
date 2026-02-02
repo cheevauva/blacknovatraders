@@ -3,4 +3,4 @@
 include("config.php");
 include("languages/$lang");
 
-include 'settings.tpl.php';
+include 'tpls/settings.tpl.php';

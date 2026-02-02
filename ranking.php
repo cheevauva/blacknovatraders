@@ -8,4 +8,4 @@ $rows = shipsGetRankingData($sort, $max_rank);
 $num_players = shipsGetNotDestroyedExcludeXenobeCount();
 $current_sort = $rankingData['sort'];
 
-include 'ranking.tpl.php';
+include 'tpls/ranking.tpl.php';

@@ -30,4 +30,4 @@ $template_data = [
     'gamedomain' => isset($gamedomain) ? $gamedomain : ''
 ];
 
-include("login.tpl.php");
+include("tpls/login.tpl.php");

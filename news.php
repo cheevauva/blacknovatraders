@@ -16,4 +16,4 @@ $previousday = date('Y/m/d', strtotime($startdate . ' -1 day'));
 $nextday = date('Y/m/d', strtotime($startdate . ' +1 day'));
 $rows = newsByDate($startdate);
 
-include 'news.tpl.php';
+include 'tpls/news.tpl.php';

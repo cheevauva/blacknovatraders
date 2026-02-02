@@ -10,5 +10,5 @@ if (!checklogin(false)) {
     die;
 }
 
-include 'new.tpl.php';
+include 'tpls/new.tpl.php';
 
