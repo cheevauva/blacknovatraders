@@ -1,49 +1,5 @@
 <?php $title = $l_main_title; ?>
 <?php
-$shiptypes = [];
-$shiptypes[0] = "tinyship.gif";
-$shiptypes[1] = "smallship.gif";
-$shiptypes[2] = "mediumship.gif";
-$shiptypes[3] = "largeship.gif";
-$shiptypes[4] = "hugeship.gif";
-
-$planettypes = [];
-$planettypes[0] = "tinyplanet.gif";
-$planettypes[1] = "smallplanet.gif";
-$planettypes[2] = "mediumplanet.gif";
-$planettypes[3] = "largeplanet.gif";
-$planettypes[4] = "hugeplanet.gif";
-
-function planetLevel($score)
-{
-    if ($score < 8):
-        return 0;
-    elseif ($score < 12):
-        return 1;
-    elseif ($score < 16):
-        return 2;
-    elseif ($score < 20):
-        return 3;
-    else:
-        return 4;
-    endif;
-}
-
-function shipLevel($score)
-{
-    if ($score < 8):
-        return 0;
-    elseif ($score < 12):
-        return 1;
-    elseif ($score < 16):
-        return 2;
-    elseif ($score < 20):
-        return 3;
-    else:
-        return 4;
-    endif;
-}
-
 $picsperrow = 7;
 ?>
 <?php include("header.php"); ?>

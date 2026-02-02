@@ -1,3 +1,18 @@
+<?php
+$shiptypes = [];
+$shiptypes[0] = "tinyship.gif";
+$shiptypes[1] = "smallship.gif";
+$shiptypes[2] = "mediumship.gif";
+$shiptypes[3] = "largeship.gif";
+$shiptypes[4] = "hugeship.gif";
+
+$planettypes = [];
+$planettypes[0] = "tinyplanet.gif";
+$planettypes[1] = "smallplanet.gif";
+$planettypes[2] = "mediumplanet.gif";
+$planettypes[3] = "largeplanet.gif";
+$planettypes[4] = "hugeplanet.gif";
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html data-bs-theme="">
     <head>

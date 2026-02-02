@@ -1093,6 +1093,55 @@ function sensorsCloakSuccess($sensors, $cloak)
     return $success;
 }
 
+function shipScore($ship)
+{
+    return array_sum([
+        $ship['hull'],
+        $ship['engines'],
+        $ship['power'],
+        $ship['computer'],
+        $ship['sensors'],
+        $ship['armor'],
+        $ship['shields'],
+        $ship['beams'],
+        $ship['torp_launchers'],
+        $ship['cloak']
+    ]) / 10;
+}
+
+function planetLevel($score)
+{
+    if ($score < 8):
+        return 0;
+    elseif ($score < 12):
+        return 1;
+    elseif ($score < 16):
+        return 2;
+    elseif ($score < 20):
+        return 3;
+    else:
+        return 4;
+    endif;
+}
+
+function shipLevel($score)
+{
+    if (is_array($score)) {
+        $score = shipScore($score);
+    }
+        
+    if ($score < 8):
+        return 0;
+    elseif ($score < 12):
+        return 1;
+    elseif ($score < 16):
+        return 2;
+    elseif ($score < 20):
+        return 3;
+    else:
+        return 4;
+    endif;
+}
 
 class SectorFightException extends \Exception 
 {
