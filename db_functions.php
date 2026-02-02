@@ -533,3 +533,10 @@ function logsByShipAndDate($ship, $date)
         'date' => $date . '%',
     ]);
 }
+
+function teamById($team)
+{
+    return db()->fetchAll('SELECT team_name, creator, id FROM teams WHERE id=:team LIMIT 1', [
+        'team' => $team,
+    ]);
+}
