@@ -582,3 +582,19 @@ function shipUpdateLang($ship, $lang)
         'lang' => $lang,
     ]);
 }
+
+function shipDevBeaconSub($ship, $beacon = 1)
+{
+    return db()->exec('UPDATE ships SET dev_beacon = dev_beacon - :beacon WHERE ship_id= :ship', [
+        'ship' => $ship,
+        'beacon' => $beacon,
+    ]);
+}
+
+function sectorUpdateBeacon($sector, $beaconText)
+{
+    return db()->exec('UPDATE universe SET beacon = :beaconText WHERE sector_id= :sector', [
+        'sector' => $sector,
+        'beaconText' => $beaconText,
+    ]);
+}
