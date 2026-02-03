@@ -583,7 +583,7 @@ function shipUpdateLang($ship, $lang)
     ]);
 }
 
-function shipDevBeaconSub($ship, $beacon = 1)
+function shipDevBeaconSub($ship, $beacon)
 {
     return db()->exec('UPDATE ships SET dev_beacon = dev_beacon - :beacon WHERE ship_id= :ship', [
         'ship' => $ship,

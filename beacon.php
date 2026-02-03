@@ -36,7 +36,7 @@ try {
             break;
         case 'POST':
             sectorUpdateBeacon($playerinfo['sector'], fromPost('beacon_text', new \Exception('beacon_text')));
-            shipDevBeaconSub(1);
+            shipDevBeaconSub($playerinfo['ship_id'], 1);
             redirectTo('beacon.php');
             break;
     }
