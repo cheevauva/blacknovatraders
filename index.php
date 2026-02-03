@@ -1,12 +1,12 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
 
-connectdb();
+
+
 
 if (checklogin(false)) {
-    header('Location: login.php');
+    redirectTo('login.php');
 } else {
-    header('Location: main.php');
+    redirectTo('main.php');
 }

@@ -1,9 +1,6 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
-
-connectdb();
+include 'config.php';
 
 if (checklogin()) {
     die();

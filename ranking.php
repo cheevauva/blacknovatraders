@@ -1,8 +1,8 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
-connectdb();
+include 'config.php';
+
+
 
 $rows = shipsGetRankingData($sort, $max_rank);
 $num_players = shipsGetNotDestroyedExcludeXenobeCount();

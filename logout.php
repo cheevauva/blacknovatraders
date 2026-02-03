@@ -1,9 +1,9 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
 
-connectdb();
+
+
 
 if (checklogin()) {
     die;
@@ -16,4 +16,4 @@ setcookie("res", "", 0);
 $current_score = gen_score($playerinfo['ship_id']);
 playerlog($playerinfo['ship_id'], LOG_LOGOUT, $ip);
 
-header('Location: index.php');
+redirectTo('index.php');

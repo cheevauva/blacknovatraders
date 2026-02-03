@@ -1,9 +1,9 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
 
-connectdb();
+
+
 
 $title = $l_new_title2;
 
@@ -93,12 +93,8 @@ try {
     setcookie('token', $token, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
     playerlog($playerinfo['ship_id'], LOG_LOGIN, $ip);
     shipSetToken($playerinfo['ship_id'], $token);
-    header('Location:' . "main.php?id=" . $playerinfo['ship_id']);
+    redirectTo('main.php?id=' . $playerinfo['ship_id']);
     die;
 } catch (\Exception $ex) {
-    echo json_encode([
-        'ex' => get_class($ex) . $ex->getFile() . $ex->getLine(),
-        'error' => $ex->getMessage(),
-        'code' => $ex->getCode(),
-    ], JSON_UNESCAPED_UNICODE);
+    echo responseJsonByException($ex);
 }

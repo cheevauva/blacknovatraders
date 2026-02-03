@@ -1,14 +1,14 @@
 <?php
 //$Id$
 
-include("config.php");
-include("languages/$lang");
-updatecookie();
+include 'config.php';
+
+
 
 $title="Administration";
 include("header.php");
 
-connectdb();
+
 bigtitle();
 
 function CHECKED($yesno)

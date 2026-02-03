@@ -1,4 +1,5 @@
 <?php
+connectdb();
 include_once 'db_functions.php';
 $PHP_SELF = $_SERVER['PHP_SELF'];
 //$Id$
@@ -51,6 +52,43 @@ if (!empty($_COOKIE['token'])) {
     $token = $_COOKIE['token'];
 }
 
+$playerinfo = null;
+
+if ($token) {
+    $playerinfo = shipByToken($token);
+}
+
+function redirectTo($location)
+{
+    header('Location: ' . $location, true, 302);
+}
+
+function responseJsonByException(\Exception $ex)
+{
+    return json_encode([
+        'error' => $ex->getMessage(),
+        'code' => $ex->getCode(),
+    ], JSON_UNESCAPED_UNICODE);
+}
+
+function requestMethod()
+{
+    return $_SERVER['REQUEST_METHOD'];
+}
+
+function languages()
+{
+    global $avail_lang;
+    
+    $languages = [];
+
+    foreach ($avail_lang as $curlang) {
+        $languages[$curlang['file']] = $curlang['name'];
+    }
+
+    return $languages;
+}
+
 function fromRequest($name, $default = null)
 {
     $fromGet = fromGET($name);
@@ -88,23 +126,6 @@ function fromGET($name, $default = null)
     
     return $_GET[$name];
 }
-
-// Ensure lang is set
-$found = 0;
-$language = $default_lang;
-if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-    switch (mb_strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2))) {
-        case 'ru': 
-            $language = 'russian';
-            break;
-        case 'en': 
-            $language = 'english';
-            break;
-    }
-}
-
-$lang = $language . ".inc";
-//Log constants
 
 define('LOG_LOGIN', 1);
 define('LOG_LOGOUT', 2);
@@ -215,19 +236,14 @@ function TEXT_JAVASCRIPT_END()
 
 function checklogin($return = true)
 {
-    global $username, $playerinfo, $token, $l_global_needlogin, $l_global_died;
+    global $username, $playerinfo, $l_global_needlogin, $l_global_died;
     global $l_login_died, $l_die_please;
-    global $dbtables, $server_closed, $l_login_closed_message;
+    global $server_closed, $l_login_closed_message;
     
     if ($server_closed) {
         echo $return ? $l_login_closed_message : '';
         return true;
     }
-    
-    $stmt = db()->PrepareStmt("SELECT * FROM ships WHERE token=:token LIMIT 1");
-    $stmt->InParameter($token, ':token');
-
-    $playerinfo = $stmt->Execute()->fields;
     
     /* Check the cookie to see if username/password are empty - check password against database */
     if (empty($playerinfo)) {
@@ -1167,3 +1183,26 @@ class SectorNotEnoghtCreditsTollException extends \Exception
 {
     
 }
+
+$language = $default_lang;
+
+if (!empty($playerinfo['lang'])) {
+    $language = $playerinfo['lang'];
+} else {
+    if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        switch (mb_strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2))) {
+            case 'ru': 
+                $language = 'russian';
+                break;
+            case 'en': 
+                $language = 'english';
+                break;
+        }
+    }
+}
+
+$lang = $language . ".inc";
+
+include("languages/$lang");
+
+updatecookie();

@@ -1,17 +1,14 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
-
-connectdb();
+include 'config.php';
 
 if (checklogin()) {
     die();
 }
 
 if (!empty(trim($playerinfo['cleared_defences']))) {
-    header('Location: ' . $playerinfo['cleared_defences']);
-    die;
+    redirectTo($playerinfo['cleared_defences']);
+    return;
 }
 
 if ($playerinfo['on_planet'] == "Y") {
@@ -75,7 +72,7 @@ foreach ($shipsInSector as $idx => $shipInSector) {
     $roll = rand(1, 100);
 
     if ($roll >= $success) {
-        //unset($shipsInSector[$idx]);
+        unset($shipsInSector[$idx]);
     }
 }
 

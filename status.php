@@ -1,9 +1,9 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
 
-connectdb();
+
+
 checklogin(false);
 
 $online = shipsGetOnlinePlayersCount();

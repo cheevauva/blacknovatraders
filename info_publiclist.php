@@ -1,7 +1,7 @@
 <? 
-include("config.php");
-//include("languages/$lang");
-connectDB();
+include 'config.php';
+//
+
 
 $info = array();
 

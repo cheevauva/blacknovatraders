@@ -2,15 +2,15 @@
 //$Id$
 
 
-include("config.php");
-updatecookie();
+include 'config.php';
 
-include("languages/$lang");
+
+
 
 $title="Xenobe Control";
 include("header.php");
 
-connectdb();
+
 bigtitle();
 
 function CHECKED($yesno)

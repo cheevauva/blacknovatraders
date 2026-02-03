@@ -1,7 +1,7 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
+
 
 switch ($language) {
     case 'russian':

@@ -1,11 +1,11 @@
 <?
-	include("config.php");
-  include("languages/$lang");
+	include 'config.php';
+  
 
 	$title=$l_mail_title;
 	include("header.php");
 
-  connectdb();
+  
 
 	bigtitle();
 

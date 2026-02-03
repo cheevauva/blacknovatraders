@@ -1,6 +1,6 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
+
 
 include 'tpls/settings.tpl.php';

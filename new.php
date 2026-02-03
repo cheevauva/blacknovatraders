@@ -1,13 +1,13 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
 
-connectdb();
+
+
 
 if (!checklogin(false)) {
-    header('Location: index.php');
-    die;
+    redirectTo('index.php');
+    return;
 }
 
 include 'tpls/new.tpl.php';

@@ -1,9 +1,6 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
-
-connectdb();
+include 'config.php';
 
 if (checklogin()) {
     die();
@@ -49,7 +46,7 @@ try {
     include 'check_mines.php';
 
     if (empty($messages)) {
-        header('Location: index.php');
+        redirectTo('index.php');
     } else {
         include "header.php";
         echo '<pre>' . implode('<br/>', $messages) . '</pre>';

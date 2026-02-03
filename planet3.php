@@ -1,10 +1,10 @@
 <?
-	include("config.php");
-	updatecookie();
+	include 'config.php';
+	
 
 	$title=$l_planet3_title;
 	include("header.php");
-	connectdb();
+	
 
 	if (checklogin()) {die();}
 

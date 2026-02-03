@@ -1,10 +1,10 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
+
 
 try {
-    connectdb();
+    
 
     if ($server_closed) {
         $title = $l_login_sclosed;
@@ -39,7 +39,7 @@ try {
         setcookie('token', $token, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
         playerlog($playerinfo['ship_id'], LOG_LOGIN, $ip);
         shipSetToken($playerinfo['ship_id'], $token);
-        header('Location:' . "main.php?id=" . $playerinfo['ship_id']);
+        redirectTo('main.php?id=' . $playerinfo['ship_id']);
         die;
     }
 
@@ -61,8 +61,5 @@ try {
         throw new \Exception($youHaveDied . "<BR><BR>$l_login_newbie<BR><BR>" . $l_login_newlife);
     }
 } catch (\Exception $ex) {
-    echo json_encode([
-        'error' => $ex->getMessage(),
-        'code' => $ex->getCode(),
-    ], JSON_UNESCAPED_UNICODE);
+    echo responseJsonByException($ex);
 }

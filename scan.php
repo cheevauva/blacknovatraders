@@ -1,14 +1,14 @@
 <?
 
-include("config.php");
+include 'config.php';
 
-updatecookie();
 
-include("languages/$lang");
+
+
 $title=$l_scan_title;
 include("header.php");
 
-connectdb();
+
 if(checklogin())
 {
   die();

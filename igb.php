@@ -1,16 +1,16 @@
 <?php
 //$Id$
 
-include("config.php");
-updatecookie();
+include 'config.php';
 
-include("languages/$lang");
+
+
 
 $title=$l_igb_title;
 $no_body = 1;
 include("header.php");
 
-connectdb();
+
 if (checklogin()) {die();}
 
 $result = $db->Execute("SELECT * FROM ships WHERE email='$username'");

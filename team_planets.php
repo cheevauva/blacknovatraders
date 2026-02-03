@@ -1,10 +1,10 @@
 <?
-include("config.php");
-updatecookie();
-include("languages/$lang");
+include 'config.php';
 
 
-connectdb();
+
+
+
 
 
 

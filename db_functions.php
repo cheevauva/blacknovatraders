@@ -353,6 +353,13 @@ function shipById($id)
     ]);
 }
 
+function shipByToken($token)
+{
+    return db()->fetch("SELECT * FROM ships WHERE token = :token LIMIT 1", [
+        'token' => $token,
+    ]);
+}
+
 function sectoryById($sectorId)
 {
     return db()->fetch('SELECT * FROM universe WHERE sector_id = :sectorId LIMIT 1', [
@@ -557,5 +564,21 @@ function teamById($team)
 {
     return db()->fetchAll('SELECT team_name, creator, id FROM teams WHERE id=:team LIMIT 1', [
         'team' => $team,
+    ]);
+}
+
+function shipUpdatePassword($ship, $password)
+{
+    return db()->exec('UPDATE ships SET password = :password WHERE ship_id = :ship', [
+        'ship' => $ship,
+        'password' => $password,
+    ]);
+}
+
+function shipUpdateLang($ship, $lang)
+{
+    return db()->exec('UPDATE ships SET lang = :lang WHERE ship_id = :ship', [
+        'ship' => $ship,
+        'lang' => $lang,
     ]);
 }

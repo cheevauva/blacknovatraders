@@ -1,11 +1,11 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
+
 
 $title = $l_log_titlet;
 
-connectdb();
+
 
 if (checklogin()) {
     die();

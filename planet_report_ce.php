@@ -1,14 +1,14 @@
 <?
 
-include("config.php");
-updatecookie();
-include("languages/$lang");
+include 'config.php';
+
+
 
 $title=$l_pr_title;
 
 include("header.php");
 
-connectdb();
+
 
 if(checklogin())
 {

@@ -50,7 +50,7 @@ require_once("config.php");
 $title="System Update";
 
 include("header.php");
-connectdb();
+
 
 bigtitle();
 

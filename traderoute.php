@@ -1,14 +1,14 @@
 <?php
 //$Id$
-include("config.php");
-updatecookie();
+include 'config.php';
 
-include("languages/$lang");
+
+
 
 $title=$l_tdr_title;
 include("header.php");
 
-connectdb();
+
 
 if(checklogin())
 {

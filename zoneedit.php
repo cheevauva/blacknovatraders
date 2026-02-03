@@ -1,9 +1,9 @@
 <?php
 
-include("config.php");
-include("languages/$lang");
+include 'config.php';
 
-connectdb();
+
+
 
 if (checklogin()) {
     die();
@@ -26,7 +26,7 @@ try {
         throw new \Exception($l_ze_notowner);
     }
 
-    switch ($_SERVER['REQUEST_METHOD']) {
+    switch (requestMethod()) {
         case 'GET':
             include 'tpls/zoneedit.tpl.php';
             break;
@@ -41,21 +41,18 @@ try {
                 'allow_trade' => fromPost('trades', new \Exception('trades')),
                 'allow_defenses' => fromPost('defenses', new \Exception('defenses')),
             ]);
-            header('Location: zoneinfo.php?zone=' . $zone);
+            redirectTo('zoneinfo.php?zone=' . $zone);
             break;
     }
 } catch (\Exception $ex) {
-    switch ($_SERVER['REQUEST_METHOD']) {
+    switch (requestMethod()) {
         case 'GET':
             include("header.php");
             echo $ex->getMessage();
             include("footer.php");
             break;
         case 'POST':
-            echo json_encode([
-                'error' => $ex->getMessage(),
-                'code' => $ex->getCode(),
-            ], JSON_UNESCAPED_UNICODE);
+            echo responseJsonByException($ex);
             break;
     }
 }

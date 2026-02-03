@@ -1,12 +1,12 @@
 <?
-include("config.php");
-updatecookie();
+include 'config.php';
 
-include("languages/$lang");
+
+
 $title=$l_by_title;
 include("header.php");
 
-connectdb();
+
 
 if(checklogin())
 {
