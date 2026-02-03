@@ -46,17 +46,6 @@ $reg_globals_on = (bool) ini_get('register_globals');
   }
 //------ End register_globals fix
 
-$token = uuidv7();
-
-if (!empty($_COOKIE['token'])) {
-    $token = $_COOKIE['token'];
-}
-
-$playerinfo = null;
-
-if ($token) {
-    $playerinfo = shipByToken($token);
-}
 
 function redirectTo($location)
 {
@@ -1182,6 +1171,17 @@ class SectorChooseMoveException extends \Exception
 class SectorNotEnoghtCreditsTollException extends \Exception 
 {
     
+}
+$token = uuidv7();
+
+if (!empty($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+}
+
+$playerinfo = null;
+
+if ($token) {
+    $playerinfo = shipByToken($token);
 }
 
 $language = $default_lang;

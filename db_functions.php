@@ -417,7 +417,7 @@ function planetsBySector($sectorId)
     LEFT JOIN
         ships AS owner
     ON
-        ships.id = owner.owner
+        p.owner = owner.ship_id
     WHERE 
         p.sector_id = :sectorId
     ";
