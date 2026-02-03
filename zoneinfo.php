@@ -2,9 +2,6 @@
 
 include 'config.php';
 
-
-
-
 if (checklogin()) {
     die();
 }
