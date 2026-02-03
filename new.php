@@ -74,7 +74,7 @@ try {
                 'trade_torps' => 'N',
                 'trade_energy' => 'Y',
                 'cleared_defences' => NULL,
-                'lang' => $default_lang,
+                'lang' => $language,
                 'dhtml' => 'Y',
                 'dev_lssd' => (int) $start_lssd
             ];
