@@ -2,10 +2,7 @@
 
 include 'config.php';
 
-
 $title = $l_log_titlet;
-
-
 
 if (checklogin()) {
     die();

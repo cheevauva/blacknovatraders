@@ -2,9 +2,6 @@
 
 include 'config.php';
 
-
-
-
 if (!checklogin(false)) {
     redirectTo('index.php');
     return;

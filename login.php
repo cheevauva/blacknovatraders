@@ -2,32 +2,72 @@
 
 include 'config.php';
 
+try {
+    switch (requestMethod()) {
+        case 'POST':
+            if ($server_closed) {
+                $title = $l_login_sclosed;
+                throw new \Exception($l_login_closed_message);
+            }
 
-$found = 0;
+            $email = fromPost('email', new \Exception($l_login_email . ' ' . $l_none));
+            $pass = fromPost('pass', new \Exception($l_login_pw . ' ' . $l_none));
 
-$title = $l_login_title;
+            $ship = shipByEmail($email);
 
-$template_data = [
-    'title' => $title,
-    'l_login_email' => $l_login_email,
-    'l_login_pw' => $l_login_pw,
-    'l_login_title' => $l_login_title,
-    'l_login_newp' => $l_login_newp,
-    'l_login_prbs' => $l_login_prbs,
-    'l_login_emailus' => $l_login_emailus,
-    'l_forums' => $l_forums,
-    'l_rankings' => $l_rankings,
-    'l_login_settings' => $l_login_settings,
-    'l_login_lang' => $l_login_lang,
-    'l_login_change' => $l_login_change,
-    'username' => isset($username) ? $username : '',
-    'password' => isset($password) ? $password : '',
-    'admin_mail' => isset($admin_mail) ? $admin_mail : '',
-    'link_forums' => isset($link_forums) ? $link_forums : '',
-    'avail_lang' => $avail_lang,
-    'lang' => $lang,
-    'gamepath' => isset($gamepath) ? $gamepath : '',
-    'gamedomain' => isset($gamedomain) ? $gamedomain : ''
-];
+            if (ipBansCheck($ip)) {
+                throw new \Exception($l_login_banned);
+            }
 
-include("tpls/login.tpl.php");
+            if (empty($ship)) {
+                throw new \Exception($l_login_noone);
+            }
+
+            if ($ship['password'] !== md5($pass)) {
+                playerlog($ship['ship_id'], LOG_BADLOGIN, $ip);
+                throw new \Exception("$l_login_4gotpw1 <A HREF=mail.php?mail=$email>$l_clickme</A> $l_login_4gotpw2 <a href=login.php>$l_clickme</a> $l_login_4gotpw3 $ip");
+            }
+
+            if ($ship['ship_destroyed'] == 'N') {
+                $token = uuidv7();
+                setcookie('token', $token, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
+                playerlog($ship['ship_id'], LOG_LOGIN, $ip);
+                shipSetToken($ship['ship_id'], $token);
+                redirectTo('main.php?id=' . $ship['ship_id']);
+                die;
+            }
+
+            if ($ship['ship_destroyed'] == 'Y' && $ship['dev_escapepod'] == 'Y') {
+                shipRestoreEscapepod($ship['ship_id']);
+                throw new \Exception($l_login_died);
+            }
+
+            $youHaveDied = "You have died in a horrible incident, <a href=log.php>here</a> is the blackbox information that was retrieved from your ships wreckage.";
+
+            if ($ship['ship_destroyed'] == 'Y' && $newbie_nice !== 'YES') {
+                throw new \Exception($youHaveDied . ' ' . $l_login_looser);
+            }
+
+            if ($ship['ship_destroyed'] == 'Y' && $newbie_nice == 'YES') {
+                if (!shipCheckNewbie($ship['ship_id'])) {
+                    throw new \Exception($youHaveDied . ' ' . $l_login_looser);
+                }
+
+                shipRestoreNewbie($ship['ship_id']);
+                throw new \Exception($youHaveDied . ' ' . $l_login_newbie . ' ' . $l_login_newlife);
+            }
+            break;
+        case 'GET':
+            include 'tpls/login.tpl.php';
+            break;
+    }
+} catch (\Exception $ex) {
+    switch (requestMethod()) {
+        case 'POST':
+            echo responseJsonByException($ex);
+            break;
+        case 'GET':
+            include 'tpls/login.tpl.php';
+            break;
+    }
+}
