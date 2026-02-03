@@ -374,10 +374,34 @@ function zoneById($zoneId)
     ]);
 }
 
-function linksBySector($sectorId)
+function linksByStartAndDest($link_start, $link_dest)
+{
+    return db()->fetchAll("SELECT * FROM links WHERE link_start = :link_start AND link_dest = :link_dest", [
+        'link_start' => $link_start,
+        'link_dest' => $link_dest,
+    ]);
+}
+
+function linksByStart($sectorId)
 {
     return db()->fetchAll("SELECT * FROM links WHERE link_start= :sectorId ORDER BY link_dest ASC", [
         'sectorId' => $sectorId,
+    ]);
+}
+
+function linksDeleteByStartAndDest($link_start, $link_dest)
+{
+    return db()->exec('DELETE FROM links WHERE link_start= :link_start AND link_dest= :link_dest', [
+        'link_start' => $link_start,
+        'link_dest' => $link_dest,
+    ]);
+}
+
+function linkCreate($link_start, $link_dest)
+{
+    return db()->exec("INSERT INTO links SET link_start= :link_start, link_dest= :link_dest", [
+        'link_start' => $link_start,
+        'link_dest' => $link_dest,
     ]);
 }
 
@@ -583,6 +607,14 @@ function shipUpdateLang($ship, $lang)
     ]);
 }
 
+function shipDevWarpeditSub($ship, $devWarpedit)
+{
+    return db()->exec('UPDATE ships SET dev_warpedit = dev_warpedit - :dev_warpedit WHERE ship_id= :ship', [
+        'ship' => $ship,
+        'dev_warpedit' => $devWarpedit,
+    ]);
+}
+
 function shipDevBeaconSub($ship, $beacon)
 {
     return db()->exec('UPDATE ships SET dev_beacon = dev_beacon - :beacon WHERE ship_id= :ship', [
@@ -596,5 +628,13 @@ function sectorUpdateBeacon($sector, $beaconText)
     return db()->exec('UPDATE universe SET beacon = :beaconText WHERE sector_id= :sector', [
         'sector' => $sector,
         'beaconText' => $beaconText,
+    ]);
+}
+
+function shipTurn($shipId, $turns)
+{
+    return db()->exec('UPDATE ships SET last_login = NOW(), turns = turns - :turns, turns_used = turns_used + :turns WHERE ship_id = :shipId', [
+        'turns' => $turns,
+        'shipId' => $shipId,
     ]);
 }

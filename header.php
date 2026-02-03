@@ -43,9 +43,9 @@ function options($options, $selected)
                 e.preventDefault();
 
                 const formData = new FormData(e.target);
-
-                const response = await fetch(e.target.action, {
-                    method: e.target.method,
+                
+                const response = await fetch(e.target.getAttribute('action'), {
+                    method: e.target.getAttribute('method'),
                     body: formData
                 });
 

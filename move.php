@@ -16,7 +16,7 @@ try {
     }
 
     $sectorinfo = sectoryById($playerinfo['sector']);
-    $links = linksBySector($playerinfo['sector']);
+    $links = linksByStart($playerinfo['sector']);
 
     $flag = false;
 

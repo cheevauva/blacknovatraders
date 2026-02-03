@@ -24,7 +24,7 @@ if ($playerinfo['on_planet'] == "Y") {
 }
 
 $sectorinfo = sectoryById($playerinfo['sector']);
-$links = linksBySector($playerinfo['sector']);
+$links = linksByStart($playerinfo['sector']);
 $planets = planetsBySector($playerinfo['sector']);
 $defences = defencesBySector($playerinfo['sector']);
 $zoneinfo = zoneById($sectorinfo['zone_id']);
