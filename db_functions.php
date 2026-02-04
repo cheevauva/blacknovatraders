@@ -25,6 +25,13 @@ function shipSetToken($shipId, $token)
     ]);
 }
 
+function planetById($id)
+{
+    return db()->fetch('SELECT * FROM planets WHERE planet_id = :id', [
+        'id' => $id,
+    ]);
+}
+
 function shipRestoreEscapepod($ship_id)
 {
     $sql = "

@@ -22,7 +22,7 @@ function options($options, $selected)
             $selectedAttr = 'selected';
         }
 
-        if ($selected === $value) {
+        if ($selected == $value) {
             $selectedAttr = 'selected';
         }
 

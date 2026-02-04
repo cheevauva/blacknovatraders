@@ -326,6 +326,14 @@ class ADODB_pdo extends ADOConnection {
 		return $stmt->fetchAll();
 	}
         
+        function fetchAllKeyValue($sql, $params = [])
+	{
+		$stmt = $this->_connectionID->prepare($sql);
+                $stmt->execute($params);
+
+		return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+	}
+        
         function exec($sql, $params = [])
 	{
 		$stmt = $this->_connectionID->prepare($sql);
