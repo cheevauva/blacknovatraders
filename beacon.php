@@ -35,7 +35,9 @@ try {
             include 'tpls/beacon.tpl.php';
             break;
         case 'POST':
-            sectorUpdateBeacon($playerinfo['sector'], fromPost('beacon_text', new \Exception('beacon_text')));
+            sectorUpdate($playerinfo['sector'], [
+                'beacon' => fromPost('beacon_text', new \Exception('beacon_text')),
+            ]);
             shipDevBeaconSub($playerinfo['ship_id'], 1);
             redirectTo('beacon.php');
             break;
