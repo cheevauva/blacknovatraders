@@ -2,154 +2,183 @@
 
 include 'config.php';
 
-$title = "Administration";
-include("header.php");
-
-bigtitle();
-
-function CHECKED($yesno) {
-    return(($yesno == "Y") ? "CHECKED" : "");
+function CHECKED($yesno)
+{
+    return(($yesno == 'Y') ? "CHECKED" : "");
 }
 
-function YESNO($onoff) {
-    return(($onoff == "ON") ? "Y" : "N");
+function YESNO($onoff)
+{
+    return(($onoff == "ON") ? 'Y' : 'N');
 }
 
-$swordfish = fromPost('swordfish');
-$module = fromPost('menu', fromPost('module'));
+try {
+    $module = fromGet('module');
+    $operation = fromGet('operation');
 
-if ($swordfish != $adminpass) {
-    include 'tpls/admin/admin_login.tpl.php';
-    return;
-}
-
-if (empty($module)) {
-    $ships = db()->fetchAllKeyValue("SELECT ship_id,character_name FROM ships ORDER BY character_name");
-    $sectors = db()->fetchAllKeyValue("SELECT sector_id, sector_id  AS value FROM universe ORDER BY sector_id");
-    $planets = db()->fetchAllKeyValue("SELECT planet_id, CONCAT_WS(' in ', name, sector_id) FROM planets ORDER BY sector_id");
-    $zones = db()->fetchAllKeyValue('SELECT zone_id,zone_name FROM zones ORDER BY zone_name');
-    include 'tpls/admin/welcome.tpl.php';
-    return;
-}
-
-
-$button_main = true;
-
-if ($module == "useredit") {
-    if (empty($user)) {
-        $ships = db()->fetchAllKeyValue("SELECT ship_id,character_name FROM ships ORDER BY character_name");
-        include 'tpls/admin/userlist.tpl.php';
-    } else {
-        if (empty($operation)) {
-            $row = shipById($user);
-            include 'tpls/admin/useredit.tpl.php';
-        } elseif ($operation == "save") {
-            // update database
-            $_ship_destroyed = empty($ship_destroyed) ? "N" : "Y";
-            $_dev_escapepod = empty($dev_escapepod) ? "N" : "Y";
-            $_dev_fuelscoop = empty($dev_fuelscoop) ? "N" : "Y";
-            $db->Execute("UPDATE ships SET character_name='$character_name',password='$password2',email='$email',ship_name='$ship_name',ship_destroyed='$_ship_destroyed',hull='$hull',engines='$engines',power='$power',computer='$computer',sensors='$sensors',armor='$armor',shields='$shields',beams='$beams',torp_launchers='$torp_launchers',cloak='$cloak',credits='$credits',turns='$turns',dev_warpedit='$dev_warpedit',dev_genesis='$dev_genesis',dev_beacon='$dev_beacon',dev_emerwarp='$dev_emerwarp',dev_escapepod='$_dev_escapepod',dev_fuelscoop='$_dev_fuelscoop',dev_minedeflector='$dev_minedeflector',sector='$sector',ship_ore='$ship_ore',ship_organics='$ship_organics',ship_goods='$ship_goods',ship_energy='$ship_energy',ship_colonists='$ship_colonists',ship_fighters='$ship_fighters',torps='$torps',armor_pts='$armor_pts' WHERE ship_id=$user");
-            echo "Changes saved<BR><BR>";
-            $button_main = true;
-        } else {
-            echo "Invalid operation";
-        }
+    if ($playerinfo['role'] !== 'admin') {
+        throw new \Exception('You not admin');
     }
-} elseif ($module == "univedit") {
-    if (empty($action)) {
-        include 'tpls/admin/expand_universe.tpl.php';
-    } elseif ($action == "doexpand") {
-        echo "<BR><FONT SIZE='+2'>Be sure to update your config.php file with the new universe_size value</FONT><BR>";
-        srand((double) microtime() * 1000000);
-        $result = $db->Execute("SELECT sector_id FROM $dbtables[universe] ORDER BY sector_id ASC");
-        while (!$result->EOF) {
-            $row = $result->fields;
-            $distance = rand(1, $radius);
-            $db->Execute("UPDATE $dbtables[universe] SET distance=$distance WHERE sector_id=$row[sector_id]");
-            echo "Updated sector $row[sector_id] set to $distance<BR>";
-            $result->MoveNext();
-        }
-    }
-} elseif ($module == "sectedit") {
-    if (empty($sector)) {
-        $sectors = db()->fetchAllKeyValue("SELECT sector_id, sector_id  AS value FROM universe ORDER BY sector_id");
-        include 'tpls/admin/sectorlist.tpl.php';
-    } else {
-        if (empty($operation)) {
-            $row = sectoryById($sector);
-            $zones = db()->fetchAllKeyValue('SELECT zone_id, zone_name FROM zones ORDER BY zone_name');
-            include 'tpls/admin/sectoredit.tpl.php';
-        } elseif ($operation == "save") {
-            // update database
-            $secupdate = $db->Execute("UPDATE $dbtables[universe] SET sector_name='$sector_name',zone_id='$zone_id',beacon='$beacon',port_type='$port_type',port_organics='$port_organics',port_ore='$port_ore',port_goods='$port_goods',port_energy='$port_energy',distance='$distance',angle1='$angle1',angle2='$angle2' WHERE sector_id=$sector");
-            if (!$secupdate) {
-                echo "Changes to Sector record have FAILED Due to the following Error:<BR><BR>";
-                echo $db->ErrorMsg() . "<br>";
-            } else {
-                echo "Changes to Sector record have been saved.<BR><BR>";
+
+    switch (requestMethod()) {
+        case 'POST':
+            if ($module === 'sectoredit' && $operation === 'save') {
+                $sector = (int) fromGET('sector', new \Exception('sector'));
+
+                sectorUpdate($sector, [
+                    'sector_name' => (string) fromPost('sector_name'),
+                    'zone_id' => (int) fromPost('zone_id'),
+                    'beacon' => (string) fromPost('beacon'),
+                    'port_type' => (string) fromPost('port_type'),
+                    'port_organics' => (int) fromPost('port_organics'),
+                    'port_ore' => (int) fromPost('port_ore'),
+                    'port_goods' => (int) fromPost('port_goods'),
+                    'port_energy' => (int) fromPost('port_energy'),
+                    'distance' => (int) fromPost('distance'),
+                    'angle1' => (float) fromPost('angle1'),
+                    'angle2' => (float) fromPost('angle2'),
+                ]);
             }
-            echo "<INPUT TYPE=SUBMIT VALUE=\"Return to Sector editor\">";
-            $button_main = true;
-        } else {
-            echo "Invalid operation";
-        }
-    }
-} elseif ($module == "planedit") {
-    if (empty($planet)) {
-        $planets = db()->fetchAllKeyValue("SELECT planet_id, CONCAT_WS(' in ', name, sector_id) FROM planets ORDER BY sector_id");
-        include 'tpls/admin/planetlist.tpl.php';
-    } else {
-        if (empty($operation)) {
-            $row = planetById($planet);
-            $owners = db()->fetchAllKeyValue("SELECT ship_id,character_name FROM ships ORDER BY character_name");
-            include 'tpls/admin/planetedit.tpl.php';
-        } elseif ($operation == "save") {
-            // update database
-            $_defeated = empty($defeated) ? "N" : "Y";
-            $_base = empty($base) ? "N" : "Y";
-            $sells = empty($sells) ? "N" : "Y";
-            $planupdate = $db->Execute("UPDATE $dbtables[planets] SET sector_id='$sector_id',defeated='$_defeated',name='$name',base='$_base',sells='$_sells',owner='$owner',organics='$organics',ore='$ore',goods='$goods',energy='$energy',corp='$corp',colonists='$colonists',credits='$credits',fighters='$fighters',torps='$torps',prod_organics='$prod_organics',prod_ore='$prod_ore',prod_goods='$prod_goods',prod_energy='$prod_energy',prod_fighters='$prod_fighters',prod_torp='$prod_torp' WHERE planet_id=$planet");
-            if (!$planupdate) {
-                echo "Changes to Planet record have FAILED Due to the following Error:<BR><BR>";
-                echo $db->ErrorMsg() . "<br>";
-            } else {
-                echo "Changes to Planet record have been saved.<BR><BR>";
+
+            if ($module === 'univedit' && $operation === 'doexpand') {
+                $radius = (int) fromPost('radius', new \Exception('radius'));
+
+                db()->exec('UPDATE universe SET distance = FLOOR(RAND() * :radius) WHERE 1 = 1', [
+                    'radius' => $radius + 1,
+                ]);
             }
-            $button_main = true;
-        } else {
-            echo "Invalid operation";
-        }
+
+            if ($module === 'useredit' && $operation === 'save') {
+                $user = (int) fromGet('user', new \Exception('user'));
+                $row = shipById($user);
+
+                shipUpdate($user, [
+                    'character_name' => (string) fromPost('character_name', new \Exception('character_name')),
+                    'password' => fromPost('password2') ? md5((string) fromPost('password2')) : $row['password'],
+                    'email' => (string) fromPost('email', new \Exception('email')),
+                    'ship_name' => (string) fromPost('ship_name', new \Exception('ship_name')),
+                    'ship_destroyed' => !fromPost('ship_destroyed') ? 'N' : 'Y',
+                    'hull' => (int) fromPost('hull', 0),
+                    'engines' => (int) fromPost('engines', 0),
+                    'power' => (int) fromPost('power', 0),
+                    'computer' => (int) fromPost('computer', 0),
+                    'sensors' => (int) fromPost('sensors', 0),
+                    'armor' => (int) fromPost('armor', 0),
+                    'shields' => (int) fromPost('shields', 0),
+                    'beams' => (int) fromPost('beams', 0),
+                    'torp_launchers' => (int) fromPost('torp_launchers', 0),
+                    'cloak' => (int) fromPost('cloak', 0),
+                    'credits' => (int) fromPost('credits', 0),
+                    'turns' => (int) fromPost('turns', 0),
+                    'dev_warpedit' => (int) fromPost('dev_warpedit'),
+                    'dev_genesis' => (int) fromPost('dev_genesis'),
+                    'dev_beacon' => (int) fromPost('dev_beacon'),
+                    'dev_emerwarp' => (int) fromPost('dev_emerwarp'),
+                    'dev_escapepod' => !fromPost('dev_escapepod') ? 'N' : 'Y',
+                    'dev_fuelscoop' => !fromPost('dev_fuelscoop') ? 'N' : 'Y',
+                    'dev_minedeflector' => (int) fromPost('dev_minedeflector'),
+                    'sector' => (int) fromPost('sector'),
+                    'ship_ore' => (int) fromPost('ship_ore'),
+                    'ship_organics' => (int) fromPost('ship_organics'),
+                    'ship_goods' => (int) fromPost('ship_goods'),
+                    'ship_energy' => (int) fromPost('ship_energy'),
+                    'ship_colonists' => (int) fromPost('ship_colonists'),
+                    'ship_fighters' => (int) fromPost('ship_fighters'),
+                    'torps' => (int) fromPost('torps'),
+                    'armor_pts' => (int) fromPost('armor_pts'),
+                ]);
+            }
+
+            if ($module === 'planedit' && $operation === 'save') {
+                $planet = (int) fromGet('planet', new \Exception('planet'));
+
+                planetUpdate($planet, [
+                    'sector_id' => (int) fromPost('sector_id'),
+                    'defeated' => !fromPost('defeated') ? 'N' : 'Y',
+                    'name' => (string) fromPost('name'),
+                    'base' => !fromPost('base') ? 'N' : 'Y',
+                    'sells' => !fromPost('sells') ? 'N' : 'Y',
+                    'owner' => (string) fromPost('owner'),
+                    'organics' => (int) fromPost('organics', 0),
+                    'ore' => (int) fromPost('ore', 0),
+                    'goods' => (int) fromPost('goods', 0),
+                    'energy' => (int) fromPost('energy', 0),
+                    'corp' => (string) fromPost('corp'),
+                    'colonists' => (int) fromPost('colonists', 0),
+                    'credits' => (int) fromPost('credits', 0),
+                    'fighters' => (int) fromPost('fighters', 0),
+                    'torps' => (int) fromPost('torps', 0),
+                    'prod_organics' => (int) fromPost('prod_organics', 0),
+                    'prod_ore' => (int) fromPost('prod_ore', 0),
+                    'prod_goods' => (int) fromPost('prod_goods', 0),
+                    'prod_energy' => (int) fromPost('prod_energy', 0),
+                    'prod_fighters' => (int) fromPost('prod_fighters', 0),
+                    'prod_torp' => (int) fromPost('prod_torp', 0)
+                ]);
+            }
+
+            if ($module === 'zoneedit' && $operation === 'save') {
+                $zone = (int) fromGet('zone', new \Exception('zone'));
+
+                zoneUpdate($zone, [
+                    'zone_name' => (string) fromPost('zone_name'),
+                    'allow_beacon' => !fromPost('zone_beacon') ? 'N' : 'Y',
+                    'allow_attack' => !fromPost('zone_attack') ? 'N' : 'Y',
+                    'allow_warpedit' => !fromPost('zone_warpedit') ? 'N' : 'Y',
+                    'allow_planet' => !fromPost('zone_planet') ? 'N' : 'Y',
+                    'max_hull' => (int) fromPost('zone_hull', 0)
+                ]);
+            }
+
+            redirectTo('admin.php');
+            break;
+        case 'GET':
+            if ($module === 'sectoredit' && $operation === 'edit') {
+                $sector = (int) fromGet('sector', new \Exception('sector'));
+
+                $row = sectoryById($sector);
+                $zones = db()->fetchAllKeyValue('SELECT zone_id, zone_name FROM zones ORDER BY zone_name');
+                include 'tpls/admin/sectoredit.tpl.php';
+            }
+
+            if ($module === 'useredit' && $operation === 'edit') {
+                $user = (int) fromGet('user', new \Exception('user'));
+
+                $row = shipById($user);
+                include 'tpls/admin/useredit.tpl.php';
+            }
+
+            if ($module === 'planedit' && $operation === 'edit') {
+                $planet = (int) fromGet('planet', new \Exception('planet'));
+                $row = planetById($planet);
+                $owners = db()->fetchAllKeyValue("SELECT ship_id,character_name FROM ships ORDER BY character_name");
+                include 'tpls/admin/planetedit.tpl.php';
+            }
+
+            if ($module === 'zoneedit' && $operation === 'edit') {
+                $zone = (int) fromGet('zone', new \Exception('zone'));
+                $row = zoneById($zone);
+                $zones = db()->fetchAllKeyValue('SELECT zone_id,zone_name FROM zones ORDER BY zone_name');
+                include 'tpls/admin/zoneedit.tpl.php';
+            }
+
+            if (empty($module)) {
+                $ships = db()->fetchAllKeyValue("SELECT ship_id,character_name FROM ships ORDER BY character_name");
+                $sectors = db()->fetchAllKeyValue("SELECT sector_id, sector_id  AS value FROM universe ORDER BY sector_id");
+                $planets = db()->fetchAllKeyValue("SELECT planet_id, CONCAT_WS(' in ', name, sector_id) FROM planets ORDER BY sector_id");
+                $zones = db()->fetchAllKeyValue('SELECT zone_id,zone_name FROM zones ORDER BY zone_name');
+                include 'tpls/admin/welcome.tpl.php';
+            }
+
+            break;
     }
-} elseif ($module == "linkedit") {
-    echo "<B>Link editor</B>";
-} elseif ($module == "zoneedit") {
-    if (empty($zone)) {
-        $zones = db()->fetchAllKeyValue('SELECT zone_id,zone_name FROM zones ORDER BY zone_name');
-        include 'tpls/admin/zonelist.tpl.php';
-    } else {
-        if ($operation == "editzone") {
-            $row = zoneById($zone);
-            include 'tpls/admin/zoneedit.tpl.php';
-        } elseif ($operation == "savezone") {
-            // update database
-            $_zone_beacon = empty($zone_beacon) ? "N" : "Y";
-            $_zone_attack = empty($zone_attack) ? "N" : "Y";
-            $_zone_warpedit = empty($zone_warpedit) ? "N" : "Y";
-            $_zone_planet = empty($zone_planet) ? "N" : "Y";
-            $db->Execute("UPDATE $dbtables[zones] SET zone_name='$zone_name',allow_beacon='$_zone_beacon' ,allow_attack='$_zone_attack' ,allow_warpedit='$_zone_warpedit' ,allow_planet='$_zone_planet', max_hull='$zone_hull' WHERE zone_id=$zone");
-            echo "Changes saved<BR><BR>";
-            $button_main = true;
-        } else {
-            echo "Invalid operation";
-        }
+} catch (Exception $ex) {
+    switch (requestMethod()) {
+        case 'GET':
+            include 'tpls/admin/error.tpl.php';
+            break;
+        case 'POST':
+            echo responseJsonByException($ex);
+            break;
     }
-} elseif ($module == "logview") {
-    $ships = db()->fetchAllKeyValue("SELECT ship_id,character_name FROM ships ORDER BY character_name");
-    include 'tpls/admin/logview.tpl.php';
-} else {
-    echo "Unknown function";
 }
-
-include 'tpls/admin/button_main.tpl.php';
-
-include("footer.php");

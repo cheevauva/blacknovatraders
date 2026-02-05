@@ -56,7 +56,7 @@ try {
     include 'tpls/move_form.tpl.php';
 } catch (\Exception $ex) {
     include "header.php";
-    echo $ex->getMessage();
+    echo $ex->getMessage() . '<pre>' . $ex->getTraceAsString() . '</pre>';
     include 'footer.php';
 }
 

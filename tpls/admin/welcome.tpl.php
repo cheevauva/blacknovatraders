@@ -1,3 +1,6 @@
+<?php $title = "Administration"; ?>
+<?php include 'header.php'; ?>
+
 <div class="container mt-5">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
@@ -47,3 +50,4 @@
         </div>
     </div>
 </div>
+<?php include 'footer.php'; ?>

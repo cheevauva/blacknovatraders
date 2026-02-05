@@ -14,27 +14,12 @@
         </tr>
     <?php endforeach; ?>
 </table>
-<?php
-$postlink = '';
-if (fromRequest('swordfish') == $adminpass) :
-    $postlink = "&swordfish=" . urlencode(fromRequest('swordfish')) . "&player=" . fromRequest('player'); // // @todo secure!!!
-endif;
-?>
-
+<?php $postlink = $isAdmin ? '&player=' . fromGet('player') : ''; ?>
 <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($startdate . ' -3 day')) . $postlink; ?>" class="btn btn-primary"><<<</a>
 <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($startdate . ' -2 day')) . $postlink; ?>" class="btn btn-primary"><?php echo date('Y-m-d', strtotime($startdate . ' -2 day')); ?></a>
 <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($startdate . ' -1 day')) . $postlink; ?>" class="btn btn-primary"><?php echo date('Y-m-d', strtotime($startdate . ' -1 day')); ?></a>
 <a href="log.php?startdate=<?php echo $startdate . $postlink; ?>" class="btn btn-primary"><?php echo $startdate; ?></a>
 <?php if (strtotime($startdate) < strtotime('today')): ?>
     <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($startdate . ' + 1 day')) . $postlink; ?>" class="btn btn-primary">>>></a>
-<?php endif; ?>
-<?php if (fromRequest('swordfish') == $adminpass) : ?>
-    <br/><br/>
-    <FORM action=admin.php method=POST>
-        <input type=hidden name=swordfish value="<?php echo fromRequest('swordfish'); ?>">
-        <input type=hidden name=menu value=logview>
-
-        <input type="submit" class="btn btn-primary d-inline" value="Return to Admin">
-    </form>
 <?php endif; ?>
 <?php include "footer.php"; ?>

@@ -5,7 +5,7 @@
         </h3>
     </div>
     <div class="card-body">
-        <form action="admin.php" method="POST">
+        <form action="admin.php" method="GET">
             <div class="row align-items-start">
                 <div class="col-md-8 mb-3">
                     <label class="form-label fw-bold mb-2">Select Zone:</label>
@@ -22,9 +22,8 @@
                 </div>
             </div>
 
-            <input type="hidden" name="operation" value="editzone">
-            <input type="hidden" name="menu" value="zoneedit">
-            <input type="hidden" name="swordfish" value="<?php echo isset($swordfish) ? htmlspecialchars($swordfish, ENT_QUOTES) : ''; ?>">
+            <input type="hidden" name="operation" value="edit">
+            <input type="hidden" name="module" value="zoneedit">
         </form>
     </div>
     <div class="card-footer bg-light">

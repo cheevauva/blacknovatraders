@@ -1,4 +1,5 @@
 <?php
+
 include 'config.php';
 
 if (checklogin()) {
@@ -14,7 +15,9 @@ switch (requestMethod()) {
             $newlang = fromPost('newlang', $language);
 
             if (in_array($newlang, array_keys(languages()), true)) {
-                shipUpdateLang($playerinfo['ship_id'], $newlang);
+                shipUpdate($playerinfo['ship_id'], [
+                    'lang' => $newlang
+                ]);
             }
 
             if (!empty($newpass1) || !empty($newpass2)) {
@@ -27,7 +30,11 @@ switch (requestMethod()) {
                         throw new \Exception($l_opt2_srcpassfalse);
                     }
 
-                    if (!shipUpdatePassword($playerinfo['ship_id'], md5($newpass1))) {
+                    $shipUpdated = shipUpdate($playerinfo['ship_id'], [
+                        'password' => md5($newpass1)
+                    ]);
+                    
+                    if (!$shipUpdated) {
                         throw new \Exception($l_opt2_passchangeerr);
                     }
                 }

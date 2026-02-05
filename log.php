@@ -7,8 +7,11 @@ $title = $l_log_titlet;
 if (checklogin()) {
     die();
 }
-if (fromRequest('swordfish') == $adminpass) { //check if called by admin script
-    $player = fromRequest('player', 0);
+
+$isAdmin = $playerinfo['role'] === 'admin';
+
+if ($isAdmin) {
+    $player = fromGet('player', 0);
 
     if ($player) {
         $playerinfo = shipById($player);
@@ -19,9 +22,7 @@ $startdate = fromRequest('startdate', date('Y-m-d'));
 $yesterday = date('Y-m-d', strtotime($startdate . ' -1 day'));
 $yesterday2 = date('Y-m-d', strtotime($startdate . ' -2 day'));
 
-$logs = logsByShipAndDate($playerinfo['ship_id'], $yesterday2);
-$logs += logsByShipAndDate($playerinfo['ship_id'], $yesterday);
-$logs += logsByShipAndDate($playerinfo['ship_id'], $startdate);
+$logs = logsByShipAndDate($playerinfo['ship_id'], $startdate);
 
 foreach ($logs as $index => $log) {
     $logs[$index] = logParse($log);

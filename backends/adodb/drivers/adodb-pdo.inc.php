@@ -175,7 +175,7 @@ class ADODB_pdo extends ADOConnection {
 			case 2: $m = PDO::CASE_NATURAL; break;
 			}
 			
-			//$this->_connectionID->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_SILENT );
+			$this->_connectionID->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			$this->_connectionID->setAttribute(PDO::ATTR_CASE,$m);
 			
 			$class = 'ADODB_pdo_'.$this->dsnType;
@@ -323,7 +323,7 @@ class ADODB_pdo extends ADOConnection {
 		$stmt = $this->_connectionID->prepare($sql);
                 $stmt->execute($params);
 
-		return $stmt->fetchAll();
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
         
         function fetchAllKeyValue($sql, $params = [])
@@ -348,7 +348,7 @@ class ADODB_pdo extends ADOConnection {
 		$stmt = $this->_connectionID->prepare($sql);
                 $stmt->execute($params);
 
-		return $stmt->fetch();
+		return $stmt->fetch(PDO::FETCH_ASSOC);
 	}
         
 	function column($sql, $params = [])

@@ -239,6 +239,7 @@ CREATE TABLE ships (
     lang varchar(30) DEFAULT 'english.inc' NOT NULL,
     dhtml enum('Y', 'N') DEFAULT 'Y' NOT NULL,
     dev_lssd enum('Y','N') DEFAULT 'Y' NOT NULL,
+    role varchar(15) DEFAULT 'user' NOT NULL,
     PRIMARY KEY (email),
     KEY email (email),
     KEY sector (sector),

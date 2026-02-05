@@ -247,9 +247,36 @@ function checklogin($return = true)
     }
     /* if the player has an escapepod, set the player up with a new ship */
     if ($playerinfo['dev_escapepod'] == "Y") {
-        $stmt = db()->Prepare("UPDATE ships SET token=NULL,hull=0, engines=0, power=0, computer=0,sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N',dev_lssd='N' where email=:email");
-        $stmt->InParameter('email', $playerinfo['email']);
-        $stmt->Execute();
+        shipUpdate($playerinfo['ship_id'], [
+            'power' => '0',
+            'computer' => '0',
+            'sensors' => '0',
+            'beams' => '0',
+            'torp_launchers' => '0',
+            'torps' => '0',
+            'armor' => '0',
+            'armor_pts' => '100',
+            'cloak' => '0',
+            'shields' => '0',
+            'sector' => '0',
+            'ship_ore' => '0',
+            'ship_organics' => '0',
+            'ship_energy' => '1000',
+            'ship_colonists' => '0',
+            'ship_goods' => '0',
+            'ship_fighters' => '100',
+            'ship_damage' => '0',
+            'on_planet' => "'N'",
+            'dev_warpedit' => '0',
+            'dev_genesis' => '0',
+            'dev_beacon' => '0',
+            'dev_emerwarp' => '0',
+            'dev_escapepod' => 'N',
+            'dev_fuelscoop' => 'N',
+            'dev_minedeflector' => '0',
+            'ship_destroyed' => 'N',
+            'dev_lssd' => 'N'
+        ]);
         echo $return ? $l_login_died : '';
         return true;
     } 
@@ -1053,10 +1080,10 @@ function get_player($ship_id)
 
 function log_move($ship_id, $sector_id)
 {
-    $stmt = db()->PrepareStmt("INSERT INTO movement_log (ship_id,sector_id,time) VALUES (:ship_id,:sector_id,NOW())");
-    $stmt->InParameter($ship_id, ':ship_id');
-    $stmt->InParameter($sector_id, ':sector_id');
-    $stmt->Execute();
+    db()->exec('INSERT INTO movement_log (ship_id,sector_id,time) VALUES (:ship_id,:sector_id,NOW())', [
+        'ship_id' => $ship_id,
+        'sector_id' => $sector_id,
+    ]);
 }
 
 function isLoanPending($ship_id)

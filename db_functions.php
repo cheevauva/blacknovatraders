@@ -171,47 +171,22 @@ function mturnsMax()
     return $mturns;
 }
 
-function shipCreate($playerData)
+function shipCreate($data)
 {
-    $sql = "
-    INSERT INTO ships (
-        ship_name, ship_destroyed, character_name, password, email, 
-        armor_pts, credits, ship_energy, ship_fighters, turns, 
-        on_planet, dev_warpedit, dev_genesis, dev_beacon, dev_emerwarp, 
-        dev_escapepod, dev_fuelscoop, dev_minedeflector, last_login, 
-        interface, token, trade_colonists, trade_fighters, trade_torps, 
-        trade_energy, cleared_defences, lang, dhtml, dev_lssd
-    ) VALUES (
-        :ship_name, :ship_destroyed, :character_name, :password, :email,
-        :armor_pts, :credits, :ship_energy, :ship_fighters, :turns,
-        :on_planet, :dev_warpedit, :dev_genesis, :dev_beacon, :dev_emerwarp,
-        :dev_escapepod, :dev_fuelscoop, :dev_minedeflector, :last_login,
-        :interface, :token, :trade_colonists, :trade_fighters, :trade_torps,
-        :trade_energy, :cleared_defences, :lang, :dhtml, :dev_lssd
-    )
-    ";
+    $columns = [];
+    $parameters = [];
+    $values = [];
 
-    return db()->exec($sql, $playerData);
+    foreach ($data as $key => $value) {
+        $columns[] =  $key;
+        $values[] = sprintf(':%s', $key);
+        $parameters[$key] = $value;
+    }
+
+    return db()->exec(sprintf('INSERT INTO ships (%s) VALUES (%s)', implode(', ', $columns), implode(', ', $values)), $parameters);
 }
 
-function zoneUpdate($data)
-{
-    $sql = "
-    UPDATE 
-        zones   
-    SET 
-        zone_name = :zone_name, 
-        allow_beacon = :allow_beacon, 
-        allow_attack = :allow_attack, 
-        allow_warpedit = :allow_warpedit, 
-        allow_planet = :allow_planet, 
-        allow_trade = :allow_trade,
-        allow_defenses = :allow_defenses 
-    WHERE 
-        zone_id = :zone_id
-    ";
-    db()->exec($sql, $data);
-}
+
 
 function zoneCreate($shipId, $zoneName)
 {
@@ -438,14 +413,14 @@ function defencesBySector($sectorId)
 {
     $sql = "
     SELECT 
-        sd.*,
-        s.character_name
+        sector_defence.*,
+        ships.character_name
     FROM
-        sector_defence AS sd,
-        ships AS s
+        sector_defence,
+        ships
     WHERE 
-        sd.sector_id = :sectorId  AND 
-        ships.ship_id = sd.ship_id 
+        sector_defence.sector_id = :sectorId AND 
+        ships.ship_id = sector_defence.ship_id 
     ";
 
     return db()->fetchAll($sql, [
@@ -597,21 +572,64 @@ function teamById($team)
         'team' => $team,
     ]);
 }
-
-function shipUpdatePassword($ship, $password)
+function zoneUpdate($zone, $data)
 {
-    return db()->exec('UPDATE ships SET password = :password WHERE ship_id = :ship', [
-        'ship' => $ship,
-        'password' => $password,
-    ]);
+    $parameters = [];
+    $values = [];
+
+    foreach ($data as $key => $value) {
+        $values[] = sprintf('%s = :%s', $key, $key);
+        $parameters[$key] = $value;
+    }
+
+    $parameters['zone_id'] = $zone;
+
+    return db()->exec(sprintf('UPDATE zones SET %s WHERE zone_id = :zone_id', implode(', ', $values)), $parameters);
 }
 
-function shipUpdateLang($ship, $lang)
+function planetUpdate($planet, $data)
 {
-    return db()->exec('UPDATE ships SET lang = :lang WHERE ship_id = :ship', [
-        'ship' => $ship,
-        'lang' => $lang,
-    ]);
+    $parameters = [];
+    $values = [];
+
+    foreach ($data as $key => $value) {
+        $values[] = sprintf('%s = :%s', $key, $key);
+        $parameters[$key] = $value;
+    }
+
+    $parameters['planet_id'] = $planet;
+
+    return db()->exec(sprintf('UPDATE planets SET %s WHERE planet_id = :planet_id', implode(', ', $values)), $parameters);
+}
+
+function shipUpdate($ship, $data)
+{
+    $parameters = [];
+    $values = [];
+
+    foreach ($data as $key => $value) {
+        $values[] = sprintf('%s = :%s', $key, $key);
+        $parameters[$key] = $value;
+    }
+
+    $parameters['ship_id'] = $ship;
+
+    return db()->exec(sprintf('UPDATE ships SET %s WHERE ship_id = :ship_id', implode(', ', $values)), $parameters);
+}
+
+function sectorUpdate($sector, $data)
+{
+    $parameters = [];
+    $values = [];
+
+    foreach ($data as $key => $value) {
+        $values[] = sprintf('%s = :%s', $key, $key);
+        $parameters[$key] = $value;
+    }
+
+    $parameters['sector_id'] = $sector;
+
+    return db()->exec(sprintf('UPDATE universe SET %s WHERE sector_id = :sector_id', implode(', ', $values)), $parameters);
 }
 
 function shipDevWarpeditSub($ship, $devWarpedit)

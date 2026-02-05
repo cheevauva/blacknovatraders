@@ -886,11 +886,22 @@ Table_Footer("Completed successfully.");
       $update = $db->Execute("INSERT INTO $dbtables[ibank_accounts] (ship_id,balance,loan) VALUES (1,0,0)");
     Table_Row("Inserting Admins ibank Information","Failed","Inserted");
 
-      $password = md5($admin_pass);
-      $stamp=date("Y-m-d H:i:s");
-      $db->Execute("INSERT INTO ships VALUES(NULL,'WebMaster','N','WebMaster','$password','$admin_mail',0,0,0,0,0,0,0,0,0,0,$start_armor,0,$start_credits,0,0,0,0,$start_energy,0,$start_fighters,0,$start_turns,'N',0,1,0,0,'N','N',0,0, '$stamp',0,0,0,0,'N',NULL,0,0,0,0,'Y','N','N','Y',' ','$default_lang', 'Y','N')");
+      shipCreate([
+            'ship_name' => 'WebMaster',
+            'character_name' => 'WebMaster',
+            'password' => md5($admin_pass),
+            'email' => $admin_mail,
+            'armor_pts' => $start_armor,
+            'credits' => $start_credits,
+            'ship_energy' => $start_energy,
+            'ship_fighters' => $start_fighters,
+            'turns' => $start_turns,
+            'last_login' => date('Y-m-d H:i:s'),
+            'lang' => $language,
+            'role' => 'admin'
+        ]);
 
-    Table_1Col("Admins login Information:<br>Username: '$admin_mail'<br>Password: '$admin_pass'");
+        Table_1Col("Admins login Information:<br>Username: '$admin_mail'<br>Password: '$admin_pass'");
     Table_Row("Inserting Admins Ship Information","Failed","Inserted");
 
       $db->Execute("INSERT INTO $dbtables[zones] VALUES(NULL,'WebMaster\'s Territory', 1, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0)");
