@@ -341,6 +341,9 @@ function updatecookie()
 
 function playerlog($sid, $log_type, $data = "")
 {
+    if (is_array($data)) {
+        $data = implode('|', $data);
+    }
     if (empty($sid) || empty($log_type)) {
         return;
     }
