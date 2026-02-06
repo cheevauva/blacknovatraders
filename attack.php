@@ -9,29 +9,37 @@ if (checklogin()) {
     die();
 }
 
-$ship_id = intval($ship_id);
+$ship_id = intval(fromPost('ship_id', new \Exception('ship_id')));
 $targetinfo = shipById($ship_id);
 
 bigtitle();
 
-srand((double) microtime() * 1000000);
 $playerscore = gen_score($playerinfo['ship_id']);
 $targetscore = gen_score($targetinfo['ship_id']);
 $playerscore = $playerscore * $playerscore;
 $targetscore = $targetscore * $targetscore;
 
-if ($targetinfo['sector'] != $playerinfo['sector'] || $targetinfo['on_planet'] == "Y") {
+if ($targetinfo['sector'] != $playerinfo['sector']) {
     throw new \Exception($l_att_notarg);
-} elseif ($playerinfo['turns'] < 1) {
+}
+
+if ($targetinfo['on_planet'] == 'Y') {
+    throw new \Exception($l_att_notarg);
+} 
+
+if ($playerinfo['turns'] < 1) {
     throw new \Exception($l_att_noturn);
 }
+
 $success = (10 - $targetinfo['cloak'] + $playerinfo['sensors']) * 5;
+
 if ($success < 5) {
     $success = 5;
 }
 if ($success > 95) {
     $success = 95;
 }
+
 $flee = (10 - $targetinfo['engines'] + $playerinfo['engines']) * 5;
 $roll = rand(1, 100);
 $roll2 = rand(1, 100);
@@ -40,6 +48,7 @@ $targetSector = sectoryById($targetinfo['sector']);
 $targetZone = zoneById($targetSector['zone_id']);
 
 $zoneinfo = $targetZone;
+
 if ($zoneinfo['allow_attack'] == 'N') {
     throw new \Exception($l_att_noatt);
 }
@@ -50,13 +59,16 @@ if ($flee < $roll2) {
     playerlog($targetinfo['ship_id'], LOG_ATTACK_OUTMAN, $playerinfo['character_name']);
     goto attackEnd;
 }
+
 if ($roll > $success) {
     $messages[] = $l_planet_noscan;
     shipTurn($playerinfo['ship_id'], 1);
     playerlog($targetinfo['ship_id'], LOG_ATTACK_OUTSCAN, $playerinfo['character_name']);
     goto attackEnd;
 }
+
 $shipavg = shipScore($targetship);
+
 if ($shipavg > $ewd_maxhullsize) {
     $chance = ($shipavg - $ewd_maxhullsize) * 10;
 } else {
@@ -106,43 +118,54 @@ if (($targetscore / $playerscore < $bounty_ratio || $targetinfo['turns_used'] < 
         $messages[] = $l_by_fedbounty2;
     }
 }
+
 if ($targetinfo['dev_emerwarp'] > 0) {
     playerlog($targetinfo['ship_id'], LOG_ATTACK_EWDFAIL, $playerinfo['character_name']);
 }
+
 $targetenergy = $targetinfo['ship_energy'];
 $playerenergy = $playerinfo['ship_energy'];
-//I added these two so we can have a value for debugging and reporting totals
-//if we use the variables in calcs below, change the display of stats too
 $targetbeams = NUM_BEAMS($targetinfo['beams']);
+
 if ($targetbeams > $targetinfo['ship_energy']) {
     $targetbeams = $targetinfo['ship_energy'];
 }
+
 $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetbeams;
-//why dont we set targetinfo[ship_energy] to a variable instead?
 $playerbeams = NUM_BEAMS($playerinfo['beams']);
+
 if ($playerbeams > $playerinfo['ship_energy']) {
     $playerbeams = $playerinfo['ship_energy'];
 }
+
 $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playerbeams;
 $playershields = NUM_SHIELDS($playerinfo['shields']);
+
 if ($playershields > $playerinfo['ship_energy']) {
     $playershields = $playerinfo['ship_energy'];
 }
+
 $playerinfo['ship_energy'] = $playerinfo['ship_energy'] - $playershields;
 $targetshields = NUM_SHIELDS($targetinfo['shields']);
+
 if ($targetshields > $targetinfo['ship_energy']) {
     $targetshields = $targetinfo['ship_energy'];
 }
+
 $targetinfo['ship_energy'] = $targetinfo['ship_energy'] - $targetshields;
 
 $playertorpnum = round(mypw($level_factor, $playerinfo['torp_launchers'])) * 10;
+
 if ($playertorpnum > $playerinfo['torps']) {
     $playertorpnum = $playerinfo['torps'];
 }
+
 $targettorpnum = round(mypw($level_factor, $targetinfo['torp_launchers'])) * 10;
+
 if ($targettorpnum > $targetinfo['torps']) {
     $targettorpnum = $targetinfo['torps'];
 }
+
 $playertorpdmg = $torp_dmg_rate * $playertorpnum;
 $targettorpdmg = $torp_dmg_rate * $targettorpnum;
 $playerarmor = $playerinfo['armor_pts'];
@@ -345,41 +368,11 @@ if ($targetarmor < 1) {
     $messages[] = implode(' ', [$targetinfo['character_name'], $l_att_sdest]);
 
     if ($targetinfo['dev_escapepod'] == "Y") {
-        $rating = round($targetinfo['rating'] / 2);
         $messages[] = $l_att_espod;
+        
+        $targetinfo['rating'] /= 2;
+        $targetinfo = shipEscapePod($playerinfo);
 
-        $targetinfo['hull'] = 0;
-        $targetinfo['engines'] = 0;
-        $targetinfo['power'] = 0;
-        $targetinfo['sensors'] = 0;
-        $targetinfo['computer'] = 0;
-        $targetinfo['beams'] = 0;
-        $targetinfo['torp_launchers'] = 0;
-        $targetinfo['torps'] = 0;
-        $targetinfo['armor'] = 0;
-        $targetinfo['armor_pts'] = 100;
-        $targetinfo['cloak'] = 0;
-        $targetinfo['shields'] = 0;
-        $targetinfo['sector'] = 0;
-        $targetinfo['ship_organics'] = 0;
-        $targetinfo['ship_ore'] = 0;
-        $targetinfo['ship_goods'] = 0;
-        $targetinfo['ship_energy'] = $start_energy;
-        $targetinfo['ship_colonists'] = 0;
-        $targetinfo['ship_fighters'] = 100;
-        $targetinfo['dev_warpedit'] = 0;
-        $targetinfo['dev_genesis'] = 0;
-        $targetinfo['dev_beacon'] = 0;
-        $targetinfo['dev_emerwarp'] = 0;
-        $targetinfo['dev_escapepod'] = 'N';
-        $targetinfo['dev_fuelscoop'] = 'N';
-        $targetinfo['dev_minedeflector'] = 0;
-        $targetinfo['on_planet'] = 'N';
-        $targetinfo['rating'] = $rating;
-        $targetinfo['cleared_defences'] = '';
-        $targetinfo['dev_lssd'] = 'N';
-
-        shipUpdate($targetinfo['ship_id'], $targetinfo);
         playerlog($targetinfo['ship_id'], LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'Y']);
         collect_bounty($playerinfo['ship_id'], $targetinfo['ship_id']);
     } else {
@@ -509,41 +502,11 @@ if ($playerarmor < 1) {
     $messages[] = $l_att_yshiplost;
     
     if ($playerinfo['dev_escapepod'] == "Y") {
-        $rating = round($playerinfo['rating'] / 2);
         $messages[] = $l_att_loosepod;
         
-        $playerinfo['hull'] = 0;
-        $playerinfo['engines'] = 0;
-        $playerinfo['power'] = 0;
-        $playerinfo['sensors'] = 0;
-        $playerinfo['computer'] = 0;
-        $playerinfo['beams'] = 0;
-        $playerinfo['torp_launchers'] = 0;
-        $playerinfo['torps'] = 0;
-        $playerinfo['armor'] = 0;
-        $playerinfo['armor_pts'] = 100;
-        $playerinfo['cloak'] = 0;
-        $playerinfo['shields'] = 0;
-        $playerinfo['sector'] = 0;
-        $playerinfo['ship_organics'] = 0;
-        $playerinfo['ship_ore'] = 0;
-        $playerinfo['ship_goods'] = 0;
-        $playerinfo['ship_energy'] = $start_energy;
-        $playerinfo['ship_colonists'] = 0;
-        $playerinfo['ship_fighters'] = 100;
-        $playerinfo['dev_warpedit'] = 0;
-        $playerinfo['dev_genesis'] = 0;
-        $playerinfo['dev_beacon'] = 0;
-        $playerinfo['dev_emerwarp'] = 0;
-        $playerinfo['dev_escapepod'] = 'N';
-        $playerinfo['dev_fuelscoop'] = 'N';
-        $playerinfo['dev_minedeflector'] = 0;
-        $playerinfo['on_planet'] = 'N';
-        $playerinfo['rating'] = $rating;
-        $playerinfo['cleared_defences'] = '';
-        $playerinfo['dev_lssd'] = 'N';
+        $playerinfo['rating'] /= 2;
+        $playerinfo = shipEscapePod($playerinfo);
         
-        shipUpdate($playerinfo['ship_id'], $playerinfo);
         collect_bounty($targetinfo['ship_id'], $playerinfo['ship_id']);
     } else {
         $messages[] = 'Didnt have pod?! ' . $playerinfo['dev_escapepod'];
