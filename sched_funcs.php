@@ -21,7 +21,7 @@ function get_player_name($userid)
 {
   global $db, $dbtables;
 
-  $query = $db->Execute("select character_name from ships where ship_id='$userid'");
+  $query = $db->adoExecute("select character_name from ships where ship_id='$userid'");
   $name = $query->fields;
 
   return $name[character_name];

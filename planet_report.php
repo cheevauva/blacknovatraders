@@ -15,7 +15,7 @@ if(checklogin())
 }
 
 // Get data about planets
-$res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 
 
@@ -123,7 +123,7 @@ function standard_report()
      $query .= " ORDER BY sector_id ASC";
   }
 
-  $res = $db->Execute($query);
+  $res = $db->adoExecute($query);
 
   $i = 0;
   if($res)
@@ -320,7 +320,7 @@ function planet_production_change()
      $query .= " ORDER BY sector_id ASC";
   }
 
-  $res = $db->Execute($query);
+  $res = $db->adoExecute($query);
 
   $i = 0;
   if($res)

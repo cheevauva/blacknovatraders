@@ -2,7 +2,7 @@
 
 preg_match("/check_fighters.php/i", $_SERVER['PHP_SELF']) ? die('You can not access this file directly!') : null;
 
-if (empty($sector)) {
+if (!isset($sector)) {
     throw new \Exception('sector is required');
 }
 

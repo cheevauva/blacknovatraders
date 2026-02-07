@@ -25,12 +25,12 @@
     die();
   }
 
-	$result = $db->Execute ("SELECT * FROM ships WHERE email='$username'");
+	$result = $db->adoExecute ("SELECT * FROM ships WHERE email='$username'");
 	$playerinfo=$result->fields;
 	$current_sector = $playerinfo['sector'];
 	$computer_tech  = $playerinfo['computer'];
 
-	$result2 = $db->Execute ("SELECT * FROM $dbtables[universe] WHERE sector_id='$current_sector'");
+	$result2 = $db->adoExecute ("SELECT * FROM $dbtables[universe] WHERE sector_id='$current_sector'");
 	$sectorinfo=$result2->fields;
 
 	if ($state == 0)
@@ -102,7 +102,7 @@
 			$search_query = $search_query . " \nLIMIT 1";
 			//echo "$search_query\n\n";
 			$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-			$search_result = $db->Execute ($search_query) or die ("Invalid Query");
+			$search_result = $db->adoExecute ($search_query) or die ("Invalid Query");
 			$found = $search_result->RecordCount();
 			if ($found > 0)
 			{

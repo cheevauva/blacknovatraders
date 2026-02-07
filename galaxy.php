@@ -14,9 +14,9 @@
     die();
   }
 
-  $res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+  $res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
   $playerinfo = $res->fields;
-        $result3 = $db->Execute("SELECT distinct $dbtables[movement_log].sector_id,port_type FROM $dbtables[movement_log],$dbtables[universe] WHERE ship_id = $playerinfo[ship_id] AND $dbtables[movement_log].sector_id=$dbtables[universe].sector_id order by sector_id ASC ");
+        $result3 = $db->adoExecute("SELECT distinct $dbtables[movement_log].sector_id,port_type FROM $dbtables[movement_log],$dbtables[universe] WHERE ship_id = $playerinfo[ship_id] AND $dbtables[movement_log].sector_id=$dbtables[universe].sector_id order by sector_id ASC ");
         bigtitle();
 	$tile[special]="space261_md_blk.gif";
 	$tile[ore]="space262_md_blk.gif";

@@ -14,16 +14,16 @@ if(checklogin())
   die();
 }
 //adding db lock to prevent more than 5 planets in a sector - rjordan
-$db->Execute("LOCK TABLES ships WRITE, $dbtables[planets] WRITE, $dbtables[universe] READ, $dbtables[zones] READ");
+$db->adoExecute("LOCK TABLES ships WRITE, $dbtables[planets] WRITE, $dbtables[universe] READ, $dbtables[zones] READ");
 
 //-------------------------------------------------------------------------------------------------
-$result = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $result->fields;
 
-$result2 = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
+$result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
 $sectorinfo = $result2->fields;
 
-$result3 = $db->Execute("SELECT planet_id FROM $dbtables[planets] WHERE sector_id='$playerinfo[sector]'");
+$result3 = $db->adoExecute("SELECT planet_id FROM $dbtables[planets] WHERE sector_id='$playerinfo[sector]'");
 $num_planets = $result3->RecordCount();
 
 // Generate Planetname
@@ -102,7 +102,7 @@ elseif($playerinfo[dev_genesis] < 1)
 }
 else
 {
-  $res = $db->Execute("SELECT allow_planet, corp_zone, owner FROM $dbtables[zones] WHERE zone_id='$sectorinfo[zone_id]'");
+  $res = $db->adoExecute("SELECT allow_planet, corp_zone, owner FROM $dbtables[zones] WHERE zone_id='$sectorinfo[zone_id]'");
   $zoneinfo = $res->fields;
   if($zoneinfo[allow_planet] == 'N')
   {
@@ -118,7 +118,7 @@ else
       }
       else
       {
-        $res = $db->Execute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
+        $res = $db->adoExecute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
         $ownerinfo = $res->fields;
         if($ownerinfo[team] != $playerinfo[team])
         {
@@ -127,9 +127,9 @@ else
         else
         {
           $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
-          $update1 = $db->Execute($query1);
+          $update1 = $db->adoExecute($query1);
           $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
-          $update2 = $db->Execute($query2);
+          $update2 = $db->adoExecute($query2);
           echo $l_gns_pcreate;
         }
       }
@@ -141,24 +141,24 @@ else
     else
     {
       $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
-      $update1 = $db->Execute($query1);
+      $update1 = $db->adoExecute($query1);
       $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
-      $update2 = $db->Execute($query2);
+      $update2 = $db->adoExecute($query2);
       echo $l_gns_pcreate;
     }
   }
   else
   {
     $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
-    $update1 = $db->Execute($query1);
+    $update1 = $db->adoExecute($query1);
     $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
-    $update2 = $db->Execute($query2);
+    $update2 = $db->adoExecute($query2);
     echo $l_gns_pcreate;
   }
 }
 
 //-------------------------------------------------------------------------------------------------
-$db->Execute("UNLOCK TABLES");
+$db->adoExecute("UNLOCK TABLES");
 
 echo "<BR><BR>";
 TEXT_GOTOMAIN();

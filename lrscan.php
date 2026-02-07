@@ -20,7 +20,7 @@ srand((double)microtime() * 1000000);
 
 
 // get user info
-$result = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $result->fields;
 
 if($sector == "*")
@@ -43,14 +43,14 @@ if($sector == "*")
   echo "$l_lrs_used " . NUMBER($fullscan_cost) . " $l_lrs_turns. " . NUMBER($playerinfo[turns] - $fullscan_cost) . " $l_lrs_left.<BR><BR>";
 
   // deduct the appropriate number of turns
-  $db->Execute("UPDATE ships SET turns=turns-$fullscan_cost, turns_used=turns_used+$fullscan_cost where ship_id='$playerinfo[ship_id]'");
+  $db->adoExecute("UPDATE ships SET turns=turns-$fullscan_cost, turns_used=turns_used+$fullscan_cost where ship_id='$playerinfo[ship_id]'");
 
   // user requested a full long range scan
   $l_lrs_reach=str_replace("[sector]",$playerinfo[sector],$l_lrs_reach);
   echo "$l_lrs_reach<BR><BR>";
 
   // get sectors which can be reached from the player's current sector
-  $result = $db->Execute("SELECT * FROM $dbtables[links] WHERE link_start='$playerinfo[sector]' ORDER BY link_dest");
+  $result = $db->adoExecute("SELECT * FROM $dbtables[links] WHERE link_start='$playerinfo[sector]' ORDER BY link_dest");
   echo "<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH=\"100%\">";
   echo "<TR BGCOLOR=\"$color_header\"><TD><B>$l_sector</B><TD></TD></TD><TD><B>$l_lrs_links</B></TD><TD><B>$l_lrs_ships</B></TD><TD colspan=2><B>$l_port</B></TD><TD><B>$l_planets</B></TD><TD><B>$l_mines</B></TD><TD><B>$l_fighters</B></TD>";
   if($playerinfo['dev_lssd'] == 'Y')
@@ -63,20 +63,20 @@ if($sector == "*")
   {
     $row = $result->fields;
     // get number of sectors which can be reached from scanned sector
-    $result2 = $db->Execute("SELECT COUNT(*) AS count FROM $dbtables[links] WHERE link_start='$row[link_dest]'");
+    $result2 = $db->adoExecute("SELECT COUNT(*) AS count FROM $dbtables[links] WHERE link_start='$row[link_dest]'");
     $row2 = $result2->fields;
     $num_links = $row2[count];
 
     // get number of ships in scanned sector
-    $result2 = $db->Execute("SELECT COUNT(*) AS count FROM ships WHERE sector='$row[link_dest]' AND on_planet='N' and ship_destroyed='N'");
+    $result2 = $db->adoExecute("SELECT COUNT(*) AS count FROM ships WHERE sector='$row[link_dest]' AND on_planet='N' and ship_destroyed='N'");
     $row2 = $result2->fields;
     $num_ships = $row2[count];
 
    // get port type and discover the presence of a planet in scanned sector
-    $result2 = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id='$row[link_dest]'");
-    $result3 = $db->Execute("SELECT planet_id FROM $dbtables[planets] WHERE sector_id='$row[link_dest]'");
-    $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from $dbtables[sector_defence] WHERE sector_id='$row[link_dest]' and defence_type='M'");
-    $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from $dbtables[sector_defence] WHERE sector_id='$row[link_dest]' and defence_type='F'");
+    $result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$row[link_dest]'");
+    $result3 = $db->adoExecute("SELECT planet_id FROM $dbtables[planets] WHERE sector_id='$row[link_dest]'");
+    $resultSDa = $db->adoExecute("SELECT SUM(quantity) as mines from $dbtables[sector_defence] WHERE sector_id='$row[link_dest]' and defence_type='M'");
+    $resultSDb = $db->adoExecute("SELECT SUM(quantity) as fighters from $dbtables[sector_defence] WHERE sector_id='$row[link_dest]' and defence_type='F'");
 
     $sectorinfo = $result2->fields;
     $defM = $resultSDa->fields;
@@ -99,7 +99,7 @@ if($sector == "*")
     if($playerinfo['dev_lssd'] == 'Y')
      {
        
-        $resx = $db->Execute("SELECT * from $dbtables[movement_log] WHERE ship_id <> $playerinfo[ship_id] AND sector_id = $row[link_dest] ORDER BY time DESC LIMIT 1");
+        $resx = $db->adoExecute("SELECT * from $dbtables[movement_log] WHERE ship_id <> $playerinfo[ship_id] AND sector_id = $row[link_dest] ORDER BY time DESC LIMIT 1");
         if(!$resx)
         {
            echo "<TD>None</TD>";
@@ -138,11 +138,11 @@ else
   // user requested a single sector (standard) long range scan
 
   // get scanned sector information
-  $result2 = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id='$sector'");
+  $result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$sector'");
   $sectorinfo = $result2->fields;
 
   // get sectors which can be reached through scanned sector
-  $result3 = $db->Execute("SELECT link_dest FROM $dbtables[links] WHERE link_start='$sector' ORDER BY link_dest ASC");
+  $result3 = $db->adoExecute("SELECT link_dest FROM $dbtables[links] WHERE link_start='$sector' ORDER BY link_dest ASC");
 
   $i=0;
 
@@ -158,7 +158,7 @@ else
   $num_links=$i;
 
   // get sectors which can be reached from the player's current sector
-  $result3a = $db->Execute("SELECT link_dest FROM $dbtables[links] WHERE link_start='$playerinfo[sector]'");
+  $result3a = $db->adoExecute("SELECT link_dest FROM $dbtables[links] WHERE link_start='$playerinfo[sector]'");
 
   $i=0;
 
@@ -221,7 +221,7 @@ else
   if($sector != 0)
   {
     // get ships located in the scanned sector
-    $result4 = $db->Execute("SELECT ship_id,ship_name,character_name,cloak FROM ships WHERE sector='$sector' AND on_planet='N'");
+    $result4 = $db->adoExecute("SELECT ship_id,ship_name,character_name,cloak FROM ships WHERE sector='$sector' AND on_planet='N'");
     if($result4->EOF)
     {
       echo "$l_none";
@@ -283,7 +283,7 @@ else
   echo "</TD></TR>";
   echo "<TR BGCOLOR=\"$color_line2\"><TD><B>$l_planets</B></TD></TR>";
   echo "<TR><TD>";
-  $query = $db->Execute("SELECT name, owner FROM $dbtables[planets] WHERE sector_id=$sectorinfo[sector_id]");
+  $query = $db->adoExecute("SELECT name, owner FROM $dbtables[planets] WHERE sector_id=$sectorinfo[sector_id]");
 
   if($query->EOF)
   {
@@ -305,14 +305,14 @@ else
     }
     else
     {
-      $result5 = $db->Execute("SELECT character_name FROM ships WHERE ship_id=$planet[owner]");
+      $result5 = $db->adoExecute("SELECT character_name FROM ships WHERE ship_id=$planet[owner]");
       $planet_owner_name = $result5->fields;
       echo " ($planet_owner_name[character_name])";
     }
     $query->MoveNext();
   }
-  $resultSDa = $db->Execute("SELECT SUM(quantity) as mines from $dbtables[sector_defence] WHERE sector_id='$sector' and defence_type='M'");
-  $resultSDb = $db->Execute("SELECT SUM(quantity) as fighters from $dbtables[sector_defence] WHERE sector_id='$sector' and defence_type='F'");
+  $resultSDa = $db->adoExecute("SELECT SUM(quantity) as mines from $dbtables[sector_defence] WHERE sector_id='$sector' and defence_type='M'");
+  $resultSDb = $db->adoExecute("SELECT SUM(quantity) as fighters from $dbtables[sector_defence] WHERE sector_id='$sector' and defence_type='F'");
   $defM = $resultSDa->fields;
   $defF = $resultSDb->fields;
 
@@ -329,7 +329,7 @@ else
   {
      echo "<TR BGCOLOR=\"$color_line2\"><TD><B>$l_lss</B></TD></TR>";
      echo "<TR><TD>";
-     $resx = $db->Execute("SELECT * from $dbtables[movement_log] WHERE ship_id <> $playerinfo[ship_id] AND sector_id = $sector ORDER BY time DESC LIMIT 1");
+     $resx = $db->adoExecute("SELECT * from $dbtables[movement_log] WHERE ship_id <> $playerinfo[ship_id] AND sector_id = $sector ORDER BY time DESC LIMIT 1");
      if(!$resx)
      {
         echo "None";

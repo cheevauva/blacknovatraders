@@ -17,7 +17,7 @@ if(checklogin())
 //-------------------------------------------------------------------------------------------------
 
 
-$res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 
 // fix negative quantities, i guess theres a better way to do but i'm in a hurry
@@ -25,59 +25,59 @@ $playerinfo = $res->fields;
 
 if ($playerinfo[ship_ore]<0)
 		{
-        $fixres = $db->Execute("UPDATE ships set ship_ore=0 WHERE email='$username'");
+        $fixres = $db->adoExecute("UPDATE ships set ship_ore=0 WHERE email='$username'");
         $playerinfo[ship_ore] = 0;
         }
 
 if ($playerinfo[ship_organics]<0)
 		{
-        $fixres = $db->Execute("UPDATE ships set ship_organics=0 WHERE email='$username'");
+        $fixres = $db->adoExecute("UPDATE ships set ship_organics=0 WHERE email='$username'");
         $playerinfo[ship_organics] = 0;
         }
 
 if ($playerinfo[ship_energy]<0)
 		{
-        $fixres = $db->Execute("UPDATE ships set ship_energy=0 WHERE email='$username'");
+        $fixres = $db->adoExecute("UPDATE ships set ship_energy=0 WHERE email='$username'");
         $playerinfo[ship_energy] = 0;
         }
 
 if ($playerinfo[ship_goods]<0)
 		{
-        $fixres = $db->Execute("UPDATE ships set ship_goods=0 WHERE email='$username'");
+        $fixres = $db->adoExecute("UPDATE ships set ship_goods=0 WHERE email='$username'");
         $playerinfo[ship_goods] = 0;
         }
 
 
 
-$res = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
+$res = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
 $sectorinfo = $res->fields;
 
 if ($sectorinfo[port_ore]<0)
 		{
-        $fixres = $db->Execute("UPDATE $dbtables[universe] set port_ore=0 WHERE sector_id=$playerinfo[sector]");
+        $fixres = $db->adoExecute("UPDATE $dbtables[universe] set port_ore=0 WHERE sector_id=$playerinfo[sector]");
         $sectorinfo[port_ore] = 0;
         }
 
 if ($sectorinfo[port_goods]<0)
 		{
-        $fixres = $db->Execute("UPDATE $dbtables[universe] set port_goods=0 WHERE sector_id=$playerinfo[sector]");
+        $fixres = $db->adoExecute("UPDATE $dbtables[universe] set port_goods=0 WHERE sector_id=$playerinfo[sector]");
         $sectorinfo[port_goods] = 0;
         }
 
 if ($sectorinfo[port_organics]<0)
 		{
-        $fixres = $db->Execute("UPDATE $dbtables[universe] set port_organics=0 WHERE sector_id=$playerinfo[sector]");
+        $fixres = $db->adoExecute("UPDATE $dbtables[universe] set port_organics=0 WHERE sector_id=$playerinfo[sector]");
         $sectorinfo[port_organics] = 0;
         }
 
 if ($sectorinfo[port_energy]<0)
 		{
-        $fixres = $db->Execute("UPDATE $dbtables[universe] set port_energy=0 WHERE sector_id=$playerinfo[sector]");
+        $fixres = $db->adoExecute("UPDATE $dbtables[universe] set port_energy=0 WHERE sector_id=$playerinfo[sector]");
         $sectorinfo[port_energy] = 0;
         }
 
 
-$res = $db->Execute("SELECT * FROM $dbtables[zones] WHERE zone_id=$sectorinfo[zone_id]");
+$res = $db->adoExecute("SELECT * FROM $dbtables[zones] WHERE zone_id=$sectorinfo[zone_id]");
 
 $zoneinfo = $res->fields;
 
@@ -104,7 +104,7 @@ elseif($zoneinfo[allow_trade] == 'L')
 {
   if($zoneinfo[corp_zone] == 'N')
   {
-    $res = $db->Execute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
+    $res = $db->adoExecute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
     $ownerinfo = $res->fields;
 
     if($playerinfo[ship_id] != $zoneinfo[owner] && $playerinfo[team] == 0 || $playerinfo[team] != $ownerinfo[team])
@@ -273,7 +273,7 @@ elseif($sectorinfo[port_type] == "special")
     die();
   }
 
-  $res2 = $db->Execute("SELECT SUM(amount) as total_bounty FROM $dbtables[bounty] WHERE placed_by = 0 AND bounty_on = $playerinfo[ship_id]");
+  $res2 = $db->adoExecute("SELECT SUM(amount) as total_bounty FROM $dbtables[bounty] WHERE placed_by = 0 AND bounty_on = $playerinfo[ship_id]");
   if($res2)
   {
      $bty = $res2->fields;
@@ -299,8 +299,8 @@ elseif($sectorinfo[port_type] == "special")
            }
            else
            {
-              $db->Execute("UPDATE ships SET credits=credits-$bty[total_bounty] WHERE ship_id = $playerinfo[ship_id]");
-              $db->Execute("DELETE from $dbtables[bounty] WHERE bounty_on = $playerinfo[ship_id] AND placed_by = 0");
+              $db->adoExecute("UPDATE ships SET credits=credits-$bty[total_bounty] WHERE ship_id = $playerinfo[ship_id]");
+              $db->adoExecute("DELETE from $dbtables[bounty] WHERE bounty_on = $playerinfo[ship_id] AND placed_by = 0");
               echo $l_port_bountypaid;
               die();
            }

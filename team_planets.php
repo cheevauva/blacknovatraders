@@ -17,7 +17,7 @@ if(checklogin())
 }
 
 
-$res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 
 if ($playerinfo[team]==0)
@@ -55,7 +55,7 @@ if(!empty($sort))
   }
 }
 
-$res = $db->Execute($query);
+$res = $db->adoExecute($query);
 
 bigtitle();
 
@@ -135,7 +135,7 @@ else
       $planet[$i][name] = "$l_unnamed";
     }
     $owner = $planet[$i][owner];
-    $res = $db->Execute("SELECT character_name FROM ships WHERE ship_id=$owner");
+    $res = $db->adoExecute("SELECT character_name FROM ships WHERE ship_id=$owner");
     $player = $res->fields[character_name];
 
     echo "<TR BGCOLOR=\"$color\">";

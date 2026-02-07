@@ -16,12 +16,12 @@ if (checklogin())
 }
 
 //------------------------------------
-$result = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo=$result->fields;
 
 $planet_id = stripnum($planet_id);
 
-$result2 = $db->Execute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
+$result2 = $db->adoExecute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
 if($result2)
 
   $planetinfo=$result2->fields;
@@ -35,7 +35,7 @@ bigtitle();
 	if ($action == "planetcorp")
 	{
 		echo ("$l_corpm_tocorp<BR>");
-		$result = $db->Execute("UPDATE $dbtables[planets] SET corp='$playerinfo[team]', owner=$playerinfo[ship_id] WHERE planet_id=$planet_id");
+		$result = $db->adoExecute("UPDATE $dbtables[planets] SET corp='$playerinfo[team]', owner=$playerinfo[ship_id] WHERE planet_id=$planet_id");
     $ownership = calc_ownership($playerinfo[sector]);
 
       if(!empty($ownership))
@@ -47,10 +47,10 @@ bigtitle();
 	if ($action == "planetpersonal")
 	{
 		echo ("$l_corpm_topersonal<BR>");
-		$result = $db->Execute("UPDATE $dbtables[planets] SET corp='0', owner=$playerinfo[ship_id] WHERE planet_id=$planet_id");
+		$result = $db->adoExecute("UPDATE $dbtables[planets] SET corp='0', owner=$playerinfo[ship_id] WHERE planet_id=$planet_id");
     $ownership = calc_ownership($playerinfo[sector]);
                 // Kick other players off the planet
-                $result = $db->Execute("UPDATE ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = $planet_id AND ship_id <> $playerinfo[ship_id]");
+                $result = $db->adoExecute("UPDATE ships SET on_planet='N' WHERE on_planet='Y' AND planet_id = $planet_id AND ship_id <> $playerinfo[ship_id]");
       if(!empty($ownership))
 
         echo "<p>$ownership<p>";

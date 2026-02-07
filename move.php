@@ -9,7 +9,7 @@ if (checklogin()) {
 $title = $l_move_title;
 
 try {
-    $sector = fromRequest('sector', new \Exception('sector'));
+    $sector = fromRequest('sector', 0);
 
     if ($playerinfo['turns'] < 1) {
         throw new \Exception($l_move_turn);

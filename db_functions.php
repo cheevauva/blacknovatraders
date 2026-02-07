@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @return ADODB_pdo_mysql
+ * @return ADOPDO
  */
-function db()
+function db() 
 {
     global $db;
 
@@ -19,7 +19,7 @@ function ipBansCheck($ip)
 
 function shipSetToken($shipId, $token)
 {
-    db()->exec("UPDATE ships SET last_login = NOW(), token = :token WHERE ship_id = :ship_id", [
+    db()->q("UPDATE ships SET last_login = NOW(), token = :token WHERE ship_id = :ship_id", [
         'token' => $token,
         'ship_id' => $shipId,
     ]);
@@ -71,7 +71,7 @@ function shipRestoreEscapepod($ship_id)
         WHERE ship_id = :ship_id
     ";
 
-    db()->exec($sql, [
+    db()->q($sql, [
         'ship_id' => $ship_id,
     ]);
 }
@@ -153,7 +153,7 @@ function shipRestoreNewbie($ship_id)
         WHERE ship_id = :ship_id
     ";
 
-    db()->exec($sql, [
+    db()->q($sql, [
         'ship_id' => $ship_id,
     ]);
 }
@@ -183,7 +183,7 @@ function shipCreate($data)
         $parameters[$key] = $value;
     }
 
-    return db()->exec(sprintf('INSERT INTO ships (%s) VALUES (%s)', implode(', ', $columns), implode(', ', $values)), $parameters);
+    return db()->q(sprintf('INSERT INTO ships (%s) VALUES (%s)', implode(', ', $columns), implode(', ', $values)), $parameters);
 }
 
 
@@ -211,7 +211,7 @@ function zoneCreate($shipId, $zoneName)
     )
     ";
 
-    $db->exec($sql, [
+    $db->q($sql, [
         ':zone_name' => $zoneName,
         ':ship_id' => (int) $shipId,
         ':allow_attack' => 'N',
@@ -227,7 +227,7 @@ function zoneCreate($shipId, $zoneName)
 
 function bankAccountCreate($shipId)
 {
-    db()->exec("INSERT INTO ibank_accounts (ship_id, balance, loan) VALUES(:ship_id, :balance, :loan)", [
+    db()->q("INSERT INTO ibank_accounts (ship_id, balance, loan) VALUES(:ship_id, :balance, :loan)", [
         ':ship_id' => (int) $shipId,
         ':balance' => 0,
         ':loan' => 0,
@@ -300,10 +300,11 @@ function shipsGetRankingData($sort, $max_rank)
     LIMIT :limit
     ";
 
-    $stmt = db()->PrepareStmt($query);
-    $stmt->bindParam('limit', $max_rank, PDO::PARAM_INT);
-
-    return $stmt->fetchAll();
+    return db()->fetchAll($query, [
+        'limit' => $max_rank,
+    ], [
+        'limit' => PDO::PARAM_INT,
+    ]);
 }
 
 function messagesCountByShip($shipId)
@@ -316,7 +317,7 @@ function messagesCountByShip($shipId)
 
 function messagesNotifiedByShip($shipId)
 {
-    db()->exec("UPDATE messages SET notified = 'Y' WHERE recp_id = :shipId AND notified = 'N'", [
+    db()->q("UPDATE messages SET notified = 'Y' WHERE recp_id = :shipId AND notified = 'N'", [
         'shipId' => $shipId,
     ]);
 }
@@ -373,7 +374,7 @@ function linksByStart($sectorId)
 
 function linksDeleteByStartAndDest($link_start, $link_dest)
 {
-    return db()->exec('DELETE FROM links WHERE link_start= :link_start AND link_dest= :link_dest', [
+    return db()->q('DELETE FROM links WHERE link_start= :link_start AND link_dest= :link_dest', [
         'link_start' => $link_start,
         'link_dest' => $link_dest,
     ]);
@@ -381,7 +382,7 @@ function linksDeleteByStartAndDest($link_start, $link_dest)
 
 function linkCreate($link_start, $link_dest)
 {
-    return db()->exec("INSERT INTO links SET link_start= :link_start, link_dest= :link_dest", [
+    return db()->q("INSERT INTO links SET link_start= :link_start, link_dest= :link_dest", [
         'link_start' => $link_start,
         'link_dest' => $link_dest,
     ]);
@@ -467,13 +468,13 @@ function traderoutesBySectorAndShip($sector, $shipId)
         planet_dst.name AS planet_dest
     FROM
         (
-            SELECT traderoutes.* FROM traderoutes WHERE source_type = 'P' AND source_id = :sector AND owner = :shipId 
+            SELECT traderoutes.* FROM traderoutes WHERE source_type = 'P' AND source_id = :sector_id AND owner = :ship_id 
             UNION
-            SELECT traderoutes.* FROM traderoutes WHERE source_type = 'D' AND source_id = :sector AND owner = :shipId 
+            SELECT traderoutes.* FROM traderoutes WHERE source_type = 'D' AND source_id = :sector_id AND owner = :ship_id 
             UNION
-            SELECT traderoutes.* FROM planets, traderoutes WHERE traderoutes.source_type = 'L' AND traderoutes.source_id = planets.planet_id AND planets.sector_id = :sector AND traderoutes.owner = :shipId
+            SELECT traderoutes.* FROM planets, traderoutes WHERE traderoutes.source_type = 'L' AND traderoutes.source_id = planets.planet_id AND planets.sector_id = :sector_id AND traderoutes.owner = :ship_id
             UNION
-            SELECT traderoutes.* FROM planets, traderoutes WHERE traderoutes.source_type = 'C' AND traderoutes.source_id = planets.planet_id AND planets.sector_id = :sector AND traderoutes.owner = :shipId
+            SELECT traderoutes.* FROM planets, traderoutes WHERE traderoutes.source_type = 'C' AND traderoutes.source_id = planets.planet_id AND planets.sector_id = :sector_id AND traderoutes.owner = :ship_id
         ) AS traderoutes
     LEFT JOIN
         planets AS planet_src
@@ -486,21 +487,21 @@ function traderoutesBySectorAndShip($sector, $shipId)
     ";
 
     return db()->fetchAll($sql, [
-        'sector' => $sector,
-        'shipId' => $shipId,
+        'sector_id' => $sector,
+        'ship_id' => $shipId,
     ]);
 }
 
 function shipResetClearedDefences($shipId)
 {
-    db()->exec("UPDATE ships SET last_login = NOW(), cleared_defences = '' WHERE ship_id= :shipId", [
+    db()->q("UPDATE ships SET last_login = NOW(), cleared_defences = '' WHERE ship_id= :shipId", [
         'shipId' => $shipId,
     ]);
 }
 
 function shipSetClearedDefences($shipId, $cleared_defences)
 {
-    db()->exec("UPDATE ships SET last_login = NOW(), cleared_defences = :cleared_defences WHERE ship_id= :shipId", [
+    db()->q("UPDATE ships SET last_login = NOW(), cleared_defences = :cleared_defences WHERE ship_id= :shipId", [
         'shipId' => $shipId,
         'cleared_defences' => $cleared_defences,
     ]);
@@ -508,7 +509,7 @@ function shipSetClearedDefences($shipId, $cleared_defences)
 
 function shipMoveToSector($shipId, $sector)
 {
-    db()->exec("UPDATE ships SET last_login = NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET last_login = NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector WHERE ship_id = :shipId", [
         'sector' => $sector,
         'shipId' => $shipId,
     ]);
@@ -516,7 +517,7 @@ function shipMoveToSector($shipId, $sector)
 
 function shipCreditsAdd($shipId, $credits)
 {
-    db()->exec("UPDATE ships SET last_login = NOW(), credits = credits + :credits WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET last_login = NOW(), credits = credits + :credits WHERE ship_id = :shipId", [
         'credits' => $credits,
         'shipId' => $shipId,
     ]);
@@ -524,7 +525,7 @@ function shipCreditsAdd($shipId, $credits)
 
 function shipCreditsSub($shipId, $credits)
 {
-    db()->exec("UPDATE ships SET last_login = NOW(), credits = credits - :credits WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET last_login = NOW(), credits = credits - :credits WHERE ship_id = :shipId", [
         'credits' => $credits,
         'shipId' => $shipId,
     ]);
@@ -532,7 +533,7 @@ function shipCreditsSub($shipId, $credits)
 
 function shipToSector($shipId, $sector)
 {
-    db()->exec("UPDATE ships SET last_login=NOW(), sector=:sector WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET last_login=NOW(), sector=:sector WHERE ship_id = :shipId", [
         'sector' => $sector,
         'shipId' => $shipId,
     ]);
@@ -540,7 +541,7 @@ function shipToSector($shipId, $sector)
 
 function shipRetreatToSector($shipId, $sector)
 {
-    db()->exec("UPDATE ships SET last_login=NOW(), turns=turns - 2, turns_used = turns_used + 2, sector=:sector where ship_id = :shipId", [
+    db()->q("UPDATE ships SET last_login=NOW(), turns=turns - 2, turns_used = turns_used + 2, sector=:sector where ship_id = :shipId", [
         'sector' => $sector,
         'shipId' => $shipId,
     ]);
@@ -555,7 +556,7 @@ function defencesBySectorAndFighters($sectorId)
 
 function defencesCleanUp()
 {
-    return db()->exec("delete from sector_defence where quantity <= 0 ");
+    return db()->q("delete from sector_defence where quantity <= 0 ");
 }
 
 function logsByShipAndDate($ship, $date)
@@ -584,7 +585,7 @@ function zoneUpdate($zone, $data)
 
     $parameters['zone_id'] = $zone;
 
-    return db()->exec(sprintf('UPDATE zones SET %s WHERE zone_id = :zone_id', implode(', ', $values)), $parameters);
+    return db()->q(sprintf('UPDATE zones SET %s WHERE zone_id = :zone_id', implode(', ', $values)), $parameters);
 }
 
 function planetUpdate($planet, $data)
@@ -599,7 +600,7 @@ function planetUpdate($planet, $data)
 
     $parameters['planet_id'] = $planet;
 
-    return db()->exec(sprintf('UPDATE planets SET %s WHERE planet_id = :planet_id', implode(', ', $values)), $parameters);
+    return db()->q(sprintf('UPDATE planets SET %s WHERE planet_id = :planet_id', implode(', ', $values)), $parameters);
 }
 
 function shipUpdate($ship, $data)
@@ -614,7 +615,7 @@ function shipUpdate($ship, $data)
 
     $parameters['ship_id'] = $ship;
 
-    return db()->exec(sprintf('UPDATE ships SET %s WHERE ship_id = :ship_id', implode(', ', $values)), $parameters);
+    return db()->q(sprintf('UPDATE ships SET %s WHERE ship_id = :ship_id', implode(', ', $values)), $parameters);
 }
 
 function sectorUpdate($sector, $data)
@@ -629,12 +630,28 @@ function sectorUpdate($sector, $data)
 
     $parameters['sector_id'] = $sector;
 
-    return db()->exec(sprintf('UPDATE universe SET %s WHERE sector_id = :sector_id', implode(', ', $values)), $parameters);
+    return db()->q(sprintf('UPDATE universe SET %s WHERE sector_id = :sector_id', implode(', ', $values)), $parameters);
+}
+
+
+function sectorCreate($data)
+{
+    $columns = [];
+    $parameters = [];
+    $values = [];
+
+    foreach ($data as $key => $value) {
+        $columns[] =  $key;
+        $values[] = sprintf(':%s', $key);
+        $parameters[$key] = $value;
+    }
+
+    return db()->q(sprintf('INSERT INTO universe (%s) VALUES (%s)', implode(', ', $columns), implode(', ', $values)), $parameters);
 }
 
 function shipDevWarpeditSub($ship, $devWarpedit)
 {
-    return db()->exec('UPDATE ships SET dev_warpedit = dev_warpedit - :dev_warpedit WHERE ship_id= :ship', [
+    return db()->q('UPDATE ships SET dev_warpedit = dev_warpedit - :dev_warpedit WHERE ship_id= :ship', [
         'ship' => $ship,
         'dev_warpedit' => $devWarpedit,
     ]);
@@ -642,7 +659,7 @@ function shipDevWarpeditSub($ship, $devWarpedit)
 
 function shipDevBeaconSub($ship, $beacon)
 {
-    return db()->exec('UPDATE ships SET dev_beacon = dev_beacon - :beacon WHERE ship_id= :ship', [
+    return db()->q('UPDATE ships SET dev_beacon = dev_beacon - :beacon WHERE ship_id= :ship', [
         'ship' => $ship,
         'beacon' => $beacon,
     ]);
@@ -650,7 +667,7 @@ function shipDevBeaconSub($ship, $beacon)
 
 function sectorUpdateBeacon($sector, $beaconText)
 {
-    return db()->exec('UPDATE universe SET beacon = :beaconText WHERE sector_id= :sector', [
+    return db()->q('UPDATE universe SET beacon = :beaconText WHERE sector_id= :sector', [
         'sector' => $sector,
         'beaconText' => $beaconText,
     ]);
@@ -658,7 +675,7 @@ function sectorUpdateBeacon($sector, $beaconText)
 
 function shipTurn($shipId, $turns)
 {
-    return db()->exec('UPDATE ships SET last_login = NOW(), turns = turns - :turns, turns_used = turns_used + :turns WHERE ship_id = :shipId', [
+    return db()->q('UPDATE ships SET last_login = NOW(), turns = turns - :turns, turns_used = turns_used + :turns WHERE ship_id = :shipId', [
         'turns' => $turns,
         'shipId' => $shipId,
     ]);

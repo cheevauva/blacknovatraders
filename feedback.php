@@ -11,7 +11,7 @@
 
 	if (checklogin()) {die();}
 
-	$result = $db->Execute ("SELECT * FROM ships WHERE email='$username'");
+	$result = $db->adoExecute ("SELECT * FROM ships WHERE email='$username'");
 	$playerinfo=$result->fields;
         bigtitle();
 	if (empty($content))

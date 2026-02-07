@@ -9,7 +9,7 @@
 
 	bigtitle();
 
-	$result = $db->Execute ("select email, password from ships where email='$mail'");
+	$result = $db->adoExecute ("select email, password from ships where email='$mail'");
 
 	if(!$result->EOF) {
 	$playerinfo=$result->fields;

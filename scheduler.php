@@ -69,7 +69,7 @@ else
 {
   $starttime=time();
   
-  $sched_res = $db->Execute("SELECT * FROM $dbtables[scheduler]");
+  $sched_res = $db->adoExecute("SELECT * FROM $dbtables[scheduler]");
   if($sched_res)
   {
      while (!$sched_res->EOF)
@@ -85,12 +85,12 @@ else
            $multiplier = $event[spawn];
       
          if($event[spawn] - $multiplier == 0)
-           $db->Execute("DELETE FROM $dbtables[scheduler] WHERE sched_id=$event[sched_id]");
+           $db->adoExecute("DELETE FROM $dbtables[scheduler] WHERE sched_id=$event[sched_id]");
          else
-           $db->Execute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left, spawn=spawn-$multiplier WHERE sched_id=$event[sched_id]");
+           $db->adoExecute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left, spawn=spawn-$multiplier WHERE sched_id=$event[sched_id]");
        }
        else
-         $db->Execute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left WHERE sched_id=$event[sched_id]");
+         $db->adoExecute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left WHERE sched_id=$event[sched_id]");
   
        $sched_var_id = $event[sched_id];
        $sched_var_extrainfo = $event[extra_info];
@@ -109,5 +109,5 @@ else
   echo "<p>The scheduler took $runtime seconds to execute.<p>";
 
   include("footer.php");
-  $db->Execute("UPDATE $dbtables[scheduler] SET last_run=". TIME());
+  $db->adoExecute("UPDATE $dbtables[scheduler] SET last_run=". TIME());
 }

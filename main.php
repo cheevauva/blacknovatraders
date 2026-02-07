@@ -12,13 +12,13 @@ if (!empty(trim($playerinfo['cleared_defences']))) {
 }
 
 if ($playerinfo['on_planet'] == "Y") {
-    $res2 = $db->Execute("SELECT planet_id, owner FROM planets WHERE planet_id=$playerinfo[planet_id]");
+    $res2 = $db->adoExecute("SELECT planet_id, owner FROM planets WHERE planet_id=$playerinfo[planet_id]");
     if ($res2->RecordCount() != 0) {
         echo "<A HREF=planet.php?planet_id=$playerinfo[planet_id]>$l_clickme</A> $l_toplanetmenu    <BR>";
         echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=planet.php?planet_id=$playerinfo[planet_id]&id=" . $playerinfo[ship_id] . "\">";
         die();
     } else {
-        $db->Execute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
+        $db->adoExecute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
         echo "<BR>$l_nonexistant_pl<BR><BR>";
     }
 }

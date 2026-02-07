@@ -46,7 +46,7 @@ try {
 
             $mturns = mturnsMax();
             $token = uuidv7();
-
+            
             $playerData = [
                 'ship_name' => $shipname,
                 'ship_destroyed' => 'N',
@@ -79,10 +79,8 @@ try {
                 'dev_lssd' => (int) $start_lssd
             ];
 
-            if (!shipCreate($playerData)) {
-                throw new \Exception($db->ErrorMsg());
-            }
-
+            shipCreate($playerData);
+            
             $playerinfo = shipByEmail($username);
 
             $l_new_message = str_replace("[pass]", $password, $l_new_message);

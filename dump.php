@@ -10,10 +10,10 @@
 
 	if (checklogin()) {die();}
 
-	$result = $db->Execute ("SELECT * FROM ships WHERE email='$username'");
+	$result = $db->adoExecute ("SELECT * FROM ships WHERE email='$username'");
 	$playerinfo=$result->fields;
 
-	$result2 = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+	$result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
 	$sectorinfo=$result2->fields;
         bigtitle();
 
@@ -28,7 +28,7 @@
 	{
 		echo "$l_dump_nocol<BR><BR>";
 	} elseif ($sectorinfo[port_type]=="special") {
-		$update = $db->Execute("UPDATE ships SET ship_colonists=0, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=$playerinfo[ship_id]");
+		$update = $db->adoExecute("UPDATE ships SET ship_colonists=0, turns=turns-1, turns_used=turns_used+1 WHERE ship_id=$playerinfo[ship_id]");
 		echo "$l_dump_dumped<BR><BR>";
 	} else {
 		echo "$l_dump_nono<BR><BR>";

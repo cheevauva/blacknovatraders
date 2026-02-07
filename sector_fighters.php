@@ -115,7 +115,7 @@ $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
 $energy = $playerinfo['ship_energy'];
 
-$update4b = $db->Execute("UPDATE ships SET ship_energy=$energy,ship_fighters=ship_fighters-$fighters_lost, armor_pts=armor_pts-$armor_lost, torps=torps-$playertorpnum WHERE ship_id=$playerinfo[ship_id]");
+$update4b = $db->adoExecute("UPDATE ships SET ship_energy=$energy,ship_fighters=ship_fighters-$fighters_lost, armor_pts=armor_pts-$armor_lost, torps=torps-$playertorpnum WHERE ship_id=$playerinfo[ship_id]");
 
 $messages[] = strtr($l_sf_lreport, [
     "[armor]" => $armor_lost,
@@ -133,7 +133,7 @@ if ($playerarmor < 1) {
     if ($playerinfo[dev_escapepod] == "Y") {
         $rating = round($playerinfo['rating'] / 2);
         $messages[] = $l_sf_escape;
-        $db->Execute("UPDATE ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=$start_energy,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating='$rating',cleared_defences=' ',dev_lssd='N' WHERE ship_id=$playerinfo[ship_id]");
+        $db->adoExecute("UPDATE ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=$start_energy,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating='$rating',cleared_defences=' ',dev_lssd='N' WHERE ship_id=$playerinfo[ship_id]");
         cancel_bounty($playerinfo['ship_id']);
     } else {
         cancel_bounty($playerinfo['ship_id']);

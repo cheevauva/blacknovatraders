@@ -25,7 +25,7 @@ if ($targetinfo['sector'] != $playerinfo['sector']) {
 
 if ($targetinfo['on_planet'] == 'Y') {
     throw new \Exception($l_att_notarg);
-} 
+}
 
 if ($playerinfo['turns'] < 1) {
     throw new \Exception($l_att_noturn);
@@ -369,7 +369,7 @@ if ($targetarmor < 1) {
 
     if ($targetinfo['dev_escapepod'] == "Y") {
         $messages[] = $l_att_espod;
-        
+
         $targetinfo['rating'] /= 2;
         $targetinfo = shipEscapePod($playerinfo);
 
@@ -434,7 +434,18 @@ if ($targetarmor < 1) {
             $salv_organics = 0;
         }
 
-        $ship_value = $upgrade_cost * (round(mypw($upgrade_factor, $targetinfo['hull'])) + round(mypw($upgrade_factor, $targetinfo['engines'])) + round(mypw($upgrade_factor, $targetinfo['power'])) + round(mypw($upgrade_factor, $targetinfo['computer'])) + round(mypw($upgrade_factor, $targetinfo['sensors'])) + round(mypw($upgrade_factor, $targetinfo['beams'])) + round(mypw($upgrade_factor, $targetinfo['torp_launchers'])) + round(mypw($upgrade_factor, $targetinfo['shields'])) + round(mypw($upgrade_factor, $targetinfo['armor'])) + round(mypw($upgrade_factor, $targetinfo['cloak'])));
+        $ship_value = $upgrade_cost * array_sum([
+            round(mypw($upgrade_factor, $targetinfo['hull'])),
+            round(mypw($upgrade_factor, $targetinfo['engines'])),
+            round(mypw($upgrade_factor, $targetinfo['power'])),
+            round(mypw($upgrade_factor, $targetinfo['computer'])),
+            round(mypw($upgrade_factor, $targetinfo['sensors'])),
+            round(mypw($upgrade_factor, $targetinfo['beams'])),
+            round(mypw($upgrade_factor, $targetinfo['torp_launchers'])),
+            round(mypw($upgrade_factor, $targetinfo['shields'])),
+            round(mypw($upgrade_factor, $targetinfo['armor'])),
+            round(mypw($upgrade_factor, $targetinfo['cloak']))
+        ]);
         $ship_salvage_rate = rand(10, 20);
         $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  //added credits for xenobe - 0 if normal player - GunSlinger
 
@@ -500,25 +511,26 @@ if ($targetarmor < 1) {
 
 if ($playerarmor < 1) {
     $messages[] = $l_att_yshiplost;
-    
+
     if ($playerinfo['dev_escapepod'] == "Y") {
         $messages[] = $l_att_loosepod;
-        
+
         $playerinfo['rating'] /= 2;
         $playerinfo = shipEscapePod($playerinfo);
-        
+
         collect_bounty($targetinfo['ship_id'], $playerinfo['ship_id']);
     } else {
         $messages[] = 'Didnt have pod?! ' . $playerinfo['dev_escapepod'];
         db_kill_player($playerinfo['ship_id']);
         collect_bounty($targetinfo['ship_id'], $playerinfo['ship_id']);
     }
-    
+
     if ($targetarmor > 0) {
-        $free_ore = round($playerinfo[ship_ore] / 2);
-        $free_organics = round($playerinfo[ship_organics] / 2);
-        $free_goods = round($playerinfo[ship_goods] / 2);
-        $free_holds = NUM_HOLDS($targetinfo[hull]) - $targetinfo[ship_ore] - $targetinfo[ship_organics] - $targetinfo[ship_goods] - $targetinfo[ship_colonists];
+        $free_ore = round($playerinfo['ship_ore'] / 2);
+        $free_organics = round($playerinfo['ship_organics'] / 2);
+        $free_goods = round($playerinfo['ship_goods'] / 2);
+        $free_holds = NUM_HOLDS($targetinfo['hull']) - $targetinfo['ship_ore'] - $targetinfo['ship_organics'] - $targetinfo['ship_goods'] - $targetinfo['ship_colonists'];
+
         if ($free_holds > $free_goods) {
             $salv_goods = $free_goods;
             $free_holds = $free_holds - $free_goods;
@@ -528,6 +540,7 @@ if ($playerarmor < 1) {
         } else {
             $salv_goods = 0;
         }
+
         if ($free_holds > $free_ore) {
             $salv_ore = $free_ore;
             $free_holds = $free_holds - $free_ore;
@@ -537,6 +550,7 @@ if ($playerarmor < 1) {
         } else {
             $salv_ore = 0;
         }
+
         if ($free_holds > $free_organics) {
             $salv_organics = $free_organics;
             $free_holds = $free_holds - $free_organics;
@@ -547,7 +561,18 @@ if ($playerarmor < 1) {
             $salv_organics = 0;
         }
 
-        $ship_value = $upgrade_cost * (round(mypw($upgrade_factor, $playerinfo[hull])) + round(mypw($upgrade_factor, $playerinfo[engines])) + round(mypw($upgrade_factor, $playerinfo[power])) + round(mypw($upgrade_factor, $playerinfo[computer])) + round(mypw($upgrade_factor, $playerinfo[sensors])) + round(mypw($upgrade_factor, $playerinfo[beams])) + round(mypw($upgrade_factor, $playerinfo[torp_launchers])) + round(mypw($upgrade_factor, $playerinfo[shields])) + round(mypw($upgrade_factor, $playerinfo[armor])) + round(mypw($upgrade_factor, $playerinfo[cloak])));
+        $ship_value = $upgrade_cost * array_sum([
+            round(mypw($upgrade_factor, $playerinfo['hull'])),
+            round(mypw($upgrade_factor, $playerinfo['engines'])),
+            round(mypw($upgrade_factor, $playerinfo['power'])),
+            round(mypw($upgrade_factor, $playerinfo['computer'])),
+            round(mypw($upgrade_factor, $playerinfo['sensors'])),
+            round(mypw($upgrade_factor, $playerinfo['beams'])),
+            round(mypw($upgrade_factor, $playerinfo['torp_launchers'])),
+            round(mypw($upgrade_factor, $playerinfo['shields'])),
+            round(mypw($upgrade_factor, $playerinfo['armor'])),
+            round(mypw($upgrade_factor, $playerinfo['cloak']))
+        ]);
         $ship_salvage_rate = rand(10, 20);
         $ship_salvage = $ship_value * $ship_salvage_rate / 100 + $salv_credits;  //added credits for xenobe - 0 if normal player - GunSlinger
 

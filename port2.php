@@ -17,13 +17,13 @@ if(checklogin())
 //-------------------------------------------------------------------------------------------------
 
 
-$result     = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$result     = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $result->fields;
 
-$result2    = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
+$result2    = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
 $sectorinfo = $result2->fields;
 
-$res = $db->Execute("SELECT * FROM $dbtables[zones] WHERE zone_id=$sectorinfo[zone_id]");
+$res = $db->adoExecute("SELECT * FROM $dbtables[zones] WHERE zone_id=$sectorinfo[zone_id]");
 $zoneinfo = $res->fields;
 
 if($zoneinfo[allow_trade] == 'N')
@@ -39,7 +39,7 @@ elseif($zoneinfo[allow_trade] == 'L')
 {
   if($zoneinfo[corp_zone] == 'N')
   {
-    $res = $db->Execute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
+    $res = $db->adoExecute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
     $ownerinfo = $res->fields;
 
     if($playerinfo[ship_id] != $zoneinfo[owner] && $playerinfo[team] == 0 || $playerinfo[team] != $ownerinfo[team])
@@ -411,7 +411,7 @@ else
         BuildOneCol("$l_lssd $l_trade_installed");
       }
       $query = $query . ", turns=turns-1, turns_used=turns_used+1 WHERE ship_id=$playerinfo[ship_id]";
-      $purchase = $db->Execute("$query");
+      $purchase = $db->adoExecute("$query");
       $hull_upgrade=0;
       echo "
       </table>
@@ -562,7 +562,7 @@ else
       ";
 
       /* Update ship cargo, credits and turns */
-      $trade_result     = $db->Execute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, rating=rating+1, credits=credits-$total_cost, ship_ore=ship_ore+$trade_ore, ship_organics=ship_organics+$trade_organics, ship_goods=ship_goods+$trade_goods, ship_energy=ship_energy+$trade_energy where ship_id=$playerinfo[ship_id]");
+      $trade_result     = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, rating=rating+1, credits=credits-$total_cost, ship_ore=ship_ore+$trade_ore, ship_organics=ship_organics+$trade_organics, ship_goods=ship_goods+$trade_goods, ship_energy=ship_energy+$trade_energy where ship_id=$playerinfo[ship_id]");
 
       /* Make all trades positive to change port values*/
       $trade_ore        = round(abs($trade_ore));
@@ -572,7 +572,7 @@ else
 
 
       /* Decrease supply and demand on port */
-      $trade_result2    = $db->Execute("UPDATE $dbtables[universe] SET port_ore=port_ore-$trade_ore, port_organics=port_organics-$trade_organics, port_goods=port_goods-$trade_goods, port_energy=port_energy-$trade_energy where sector_id=$sectorinfo[sector_id]");
+      $trade_result2    = $db->adoExecute("UPDATE $dbtables[universe] SET port_ore=port_ore-$trade_ore, port_organics=port_organics-$trade_organics, port_goods=port_goods-$trade_goods, port_energy=port_energy-$trade_energy where sector_id=$sectorinfo[sector_id]");
        
       echo "$l_trade_complete.<BR><BR>";
     }

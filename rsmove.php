@@ -18,7 +18,7 @@ if(checklogin())
 //-------------------------------------------------------------------------------------------------
 
 
-$res = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 
 bigtitle();
@@ -30,9 +30,9 @@ if(isset($destination))
   $destination = round(abs($destination));
 }
 
-  $result2 = $db->Execute("SELECT angle1,angle2,distance FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+  $result2 = $db->adoExecute("SELECT angle1,angle2,distance FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
   $start = $result2->fields;
-  $result3 = $db->Execute("SELECT angle1,angle2,distance FROM $dbtables[universe] WHERE sector_id=$destination");
+  $result3 = $db->adoExecute("SELECT angle1,angle2,distance FROM $dbtables[universe] WHERE sector_id=$destination");
   $finish = $result3->fields;
   $sa1 = $start[angle1] * $deg;
   $sa2 = $start[angle2] * $deg;
@@ -135,7 +135,7 @@ elseif($destination <= $sector_max && $engage > 0)
    $l_rs_movetime=str_replace("[triptime]",NUMBER($triptime),$l_rs_movetime);
     echo "$l_rs_movetime<BR><BR>";
     echo "$l_rs_noturns";
-    $db->Execute("UPDATE ships SET cleared_defences=' ' where ship_id=$playerinfo[ship_id]");
+    $db->adoExecute("UPDATE ships SET cleared_defences=' ' where ship_id=$playerinfo[ship_id]");
   }
   else
   {
@@ -146,7 +146,7 @@ elseif($destination <= $sector_max && $engage > 0)
     if($ok>0)
     {
        $stamp = date("Y-m-d H-i-s");
-       $update = $db->Execute("UPDATE ships SET last_login='$stamp',sector=$destination,ship_energy=ship_energy+$energyscooped,turns=turns-$triptime,turns_used=turns_used+$triptime WHERE ship_id=$playerinfo[ship_id]");
+       $update = $db->adoExecute("UPDATE ships SET last_login='$stamp',sector=$destination,ship_energy=ship_energy+$energyscooped,turns=turns-$triptime,turns_used=turns_used+$triptime WHERE ship_id=$playerinfo[ship_id]");
        log_move($playerinfo[ship_id],$destination);
        $l_rs_ready=str_replace("[sector]",$destination,$l_rs_ready);
        $l_rs_ready=str_replace("[triptime]",NUMBER($triptime),$l_rs_ready);
@@ -159,7 +159,7 @@ elseif($destination <= $sector_max && $engage > 0)
 else
 {
   echo "$l_rs_invalid.<BR><BR>";
-  $db->Execute("UPDATE ships SET cleared_defences=' ' where ship_id=$playerinfo[ship_id]");
+  $db->adoExecute("UPDATE ships SET cleared_defences=' ' where ship_id=$playerinfo[ship_id]");
 }
 
 

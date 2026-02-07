@@ -16,15 +16,15 @@ if(checklogin())
 }
 //-------------------------------------------------------------------------------------------------
 
-$result = $db->Execute("SELECT * FROM ships WHERE email='$username'");
+$result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo=$result->fields;
 
-$result2 = $db->Execute("SELECT * FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+$result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
 $sectorinfo=$result2->fields;
 
 $planet_id = stripnum($planet_id);
 
-$result3 = $db->Execute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
+$result3 = $db->adoExecute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
 if($result3)
   $planetinfo=$result3->fields;
 
@@ -38,7 +38,7 @@ if(!empty($planetinfo))
   if($playerinfo[sector] != $planetinfo[sector_id])
   {
     if($playerinfo[on_planet] == 'Y')
-      $db->Execute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
+      $db->adoExecute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
     echo "$l_planet_none <p>";
     TEXT_GOTOMAIN();
     include("footer.php");
@@ -57,7 +57,7 @@ if(!empty($planetinfo))
   }
   if($planetinfo[owner] != 0)
   {
-    $result3 = $db->Execute("SELECT * FROM ships WHERE ship_id=$planetinfo[owner]");
+    $result3 = $db->adoExecute("SELECT * FROM ships WHERE ship_id=$planetinfo[owner]");
     $ownerinfo = $result3->fields;
   }
   if(empty($command))
@@ -85,9 +85,9 @@ if(!empty($planetinfo))
        { 
           if($playerinfo[dev_genesis] > 0) 
           { 
-             $update = $db->Execute("delete from $dbtables[planets] where planet_id=$planet_id"); 
-             $update2=$db->Execute("UPDATE ships SET turns_used=turns_used+1, turns=turns-1,dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]"); 
-             $update3=$db->Execute("UPDATE ships SET on_planet='N' WHERE planet_id=$planet_id"); 
+             $update = $db->adoExecute("delete from $dbtables[planets] where planet_id=$planet_id"); 
+             $update2=$db->adoExecute("UPDATE ships SET turns_used=turns_used+1, turns=turns-1,dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]"); 
+             $update3=$db->adoExecute("UPDATE ships SET on_planet='N' WHERE planet_id=$planet_id"); 
              calc_ownership($playerinfo[sector]);
              echo "<META HTTP-EQUIV=\"Refresh\" CONTENT=\"0;URL=main.php\">"; 
           } 
@@ -237,12 +237,12 @@ if(!empty($planetinfo))
       {
         /* set planet to not sell */
         echo "$l_planet_nownosell<BR>";
-        $result4 = $db->Execute("UPDATE $dbtables[planets] SET sells='N' WHERE planet_id=$planet_id");
+        $result4 = $db->adoExecute("UPDATE $dbtables[planets] SET sells='N' WHERE planet_id=$planet_id");
       }
       else
       {
         echo "$l_planet_nowsell<BR>";
-        $result4b = $db->Execute ("UPDATE $dbtables[planets] SET sells='Y' WHERE planet_id=$planet_id");
+        $result4b = $db->adoExecute ("UPDATE $dbtables[planets] SET sells='Y' WHERE planet_id=$planet_id");
       }
     }
     elseif($command == "name")
@@ -258,7 +258,7 @@ if(!empty($planetinfo))
     {
       /* name2 menu */
       $new_name = trim(strip_tags($new_name));
-      $result5 = $db->Execute("UPDATE $dbtables[planets] SET name='$new_name' WHERE planet_id=$planet_id");
+      $result5 = $db->adoExecute("UPDATE $dbtables[planets] SET name='$new_name' WHERE planet_id=$planet_id");
       $new_name = stripslashes($new_name);
       echo "$l_planet_cname $new_name.";
     }
@@ -266,13 +266,13 @@ if(!empty($planetinfo))
     {
       /* land menu */
       echo "$l_planet_landed<BR><BR>";
-      $update = $db->Execute("UPDATE ships SET on_planet='Y', planet_id=$planet_id WHERE ship_id=$playerinfo[ship_id]");
+      $update = $db->adoExecute("UPDATE ships SET on_planet='Y', planet_id=$planet_id WHERE ship_id=$playerinfo[ship_id]");
     }
     elseif($command == "leave")
     {
       /* leave menu */
       echo "$l_planet_left<BR><BR>";
-      $update = $db->Execute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
+      $update = $db->adoExecute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
     }
     elseif($command == "transfer")
     {
@@ -303,11 +303,11 @@ if(!empty($planetinfo))
       if($planetinfo[ore] >= $base_ore && $planetinfo[organics] >= $base_organics && $planetinfo[goods] >= $base_goods && $planetinfo[credits] >= $base_credits)
       {
       // ** Create The Base
-        $update1 = $db->Execute("UPDATE $dbtables[planets] SET base='Y', ore=$planetinfo[ore]-$base_ore, organics=$planetinfo[organics]-$base_organics, goods=$planetinfo[goods]-$base_goods, credits=$planetinfo[credits]-$base_credits WHERE planet_id=$planet_id");
+        $update1 = $db->adoExecute("UPDATE $dbtables[planets] SET base='Y', ore=$planetinfo[ore]-$base_ore, organics=$planetinfo[organics]-$base_organics, goods=$planetinfo[goods]-$base_goods, credits=$planetinfo[credits]-$base_credits WHERE planet_id=$planet_id");
       // ** Update User Turns
-        $update1b = $db->Execute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 where ship_id=$playerinfo[ship_id]");
+        $update1b = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 where ship_id=$playerinfo[ship_id]");
       // ** Refresh Plant Info
-        $result3 = $db->Execute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
+        $result3 = $db->adoExecute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
         $planetinfo=$result3->fields;
       // ** Notify User Of Base Results
         echo "$l_planet_bbuild<BR><BR>";
@@ -342,7 +342,7 @@ if(!empty($planetinfo))
       }
       else
       {
-        $db->Execute("UPDATE $dbtables[planets] SET prod_ore=$pore,prod_organics=$porganics,prod_goods=$pgoods,prod_energy=$penergy,prod_fighters=$pfighters,prod_torp=$ptorp WHERE planet_id=$planet_id");
+        $db->adoExecute("UPDATE $dbtables[planets] SET prod_ore=$pore,prod_organics=$porganics,prod_goods=$pgoods,prod_energy=$penergy,prod_fighters=$pfighters,prod_torp=$ptorp WHERE planet_id=$planet_id");
         echo "$l_planet_p_changed<BR><BR>";
       }
     }
@@ -611,7 +611,7 @@ if(!empty($planetinfo))
 //           echo "<B>$ownerinfo[character_name] $l_planet_ison</B><BR>";
 //         }
         
-       $res = $db->Execute("SELECT * FROM ships WHERE on_planet = 'Y' and planet_id = $planet_id"); 
+       $res = $db->adoExecute("SELECT * FROM ships WHERE on_planet = 'Y' and planet_id = $planet_id"); 
 
        while(!$res->EOF)       
        { 
@@ -636,12 +636,12 @@ if(!empty($planetinfo))
         //
         
       }
-      $update = $db->Execute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=$playerinfo[ship_id]");
+      $update = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=$playerinfo[ship_id]");
     }
     elseif($command == "capture" &&  $planetinfo[owner] == 0)
     {
       echo "$l_planet_captured<BR>";
-      $update = $db->Execute("UPDATE $dbtables[planets] SET corp=null, owner=$playerinfo[ship_id], base='N', defeated='N' WHERE planet_id=$planet_id");
+      $update = $db->adoExecute("UPDATE $dbtables[planets] SET corp=null, owner=$playerinfo[ship_id], base='N', defeated='N' WHERE planet_id=$planet_id");
       $ownership = calc_ownership($playerinfo[sector]);
 
         if(!empty($ownership))
@@ -654,7 +654,7 @@ if(!empty($planetinfo))
       
       if($planetinfo[owner] != 0)
       {
-        $res = $db->Execute("SELECT character_name FROM ships WHERE ship_id=$planetinfo[owner]");
+        $res = $db->adoExecute("SELECT character_name FROM ships WHERE ship_id=$planetinfo[owner]");
         $query = $res->fields;
         $planetowner=$query[character_name];
       }
@@ -667,7 +667,7 @@ if(!empty($planetinfo))
     elseif($command == "capture" &&  ($planetinfo[owner] == 0 || $planetinfo[defeated] == 'Y'))
     {
       echo "$l_planet_notdef<BR>";
-      $db->Execute("UPDATE $dbtables[planets] SET defeated='N' WHERE planet_id=$planetinfo[planet_id]");
+      $db->adoExecute("UPDATE $dbtables[planets] SET defeated='N' WHERE planet_id=$planetinfo[planet_id]");
     }
     else
     {
