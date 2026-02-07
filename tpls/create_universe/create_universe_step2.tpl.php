@@ -1,6 +1,6 @@
 <?php include "header.php"; ?>
 <div class="alert alert-info mb-4" role="alert">
-    Create Universe Confirmation [So you would like your <?php echo $sector_max; ?> sector universe to have:] --- Stage2
+    Create Universe Confirmation [So you would like your <?php echo $sector_max; ?> sector universe to have]
 </div>
 <?php if ($fedsecs > $sector_max): ?>
     <div class="alert alert-danger mb-4" role="alert">
@@ -10,7 +10,7 @@
 <?php endif; ?>
 
 <form action="create_universe.php" method="post" class="form-container">
-    <input type="hidden" name="step" value="4">
+    <input type="hidden" name="step" value="7">
     <input type="hidden" name="spp" value="<?php echo $spp; ?>">
     <input type="hidden" name="oep" value="<?php echo $oep; ?>">
     <input type="hidden" name="ogp" value="<?php echo $ogp; ?>">
@@ -29,65 +29,59 @@
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Special ports</div>
-            <div class="col-md-6"><?php echo $spp; ?></div>
+            <div class="col-md-6"><?php echo intval($spp); ?></div>
         </div>
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Ore ports</div>
-            <div class="col-md-6"><?php echo $oep; ?></div>
+            <div class="col-md-6"><?php echo intval($oep); ?></div>
         </div>
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Organics ports</div>
-            <div class="col-md-6"><?php echo $ogp; ?></div>
+            <div class="col-md-6"><?php echo intval($ogp); ?></div>
         </div>
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Goods ports</div>
-            <div class="col-md-6"><?php echo $gop; ?></div>
+            <div class="col-md-6"><?php echo intval($gop); ?></div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6 fw-bold">Energy ports</div>
-            <div class="col-md-6"><?php echo $enp; ?></div>
+            <div class="col-md-6"><?php echo intval($enp); ?></div>
         </div>
 
         <hr class="my-3">
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Initial commodities to sell</div>
-            <div class="col-md-6"><?php echo $initscommod; ?>%</div>
+            <div class="col-md-6"><?php echo number_format($initscommod, 2); ?>%</div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6 fw-bold">Initial commodities to buy</div>
-            <div class="col-md-6"><?php echo $initbcommod; ?>%</div>
+            <div class="col-md-6"><?php echo number_format($initbcommod, 2); ?>%</div>
         </div>
 
         <hr class="my-3">
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Empty sectors</div>
-            <div class="col-md-6"><?php echo $empty; ?></div>
+            <div class="col-md-6"><?php echo intval($empty); ?></div>
         </div>
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Federation sectors</div>
-            <div class="col-md-6"><?php echo $fedsecs; ?></div>
+            <div class="col-md-6"><?php echo intval($fedsecs); ?></div>
         </div>
-
-        <div class="row mb-2">
-            <div class="col-md-6 fw-bold">Loops</div>
-            <div class="col-md-6"><?php echo $loops; ?></div>
-        </div>
-
         <div class="row mb-3">
             <div class="col-md-6 fw-bold">Unowned planets</div>
-            <div class="col-md-6"><?php echo $nump; ?></div>
+            <div class="col-md-6"><?php echo intval($nump); ?></div>
         </div>
     </div>
 
-    <div class="d-grid gap-2 d-md-flex justify-content-md-center mb-4">
+    <div class="d-grid gap-2 d-md-flex  mb-4">
         <input type="submit" class="btn btn-primary" value="Confirm">
     </div>
 </form>

@@ -3,7 +3,7 @@
 /**
  * @return ADOPDO
  */
-function db() 
+function db()
 {
     global $db;
 
@@ -173,65 +173,32 @@ function mturnsMax()
 
 function shipCreate($data)
 {
-    $columns = [];
+    return rowCreate('ships', $data);
+}
+
+function rowCreate($table, $data)
+{
     $parameters = [];
-    $values = [];
+    $sets = [];
 
     foreach ($data as $key => $value) {
-        $columns[] =  $key;
-        $values[] = sprintf(':%s', $key);
+        $sets[] = sprintf('%s = :%s', $key, $key);
         $parameters[$key] = $value;
     }
 
-    return db()->q(sprintf('INSERT INTO ships (%s) VALUES (%s)', implode(', ', $columns), implode(', ', $values)), $parameters);
+    db()->q(sprintf('INSERT INTO %s SET %s', $table, implode(', ', $sets)), $parameters);
+    
+    return db()->lastInsertId();
 }
 
-
-
-function zoneCreate($shipId, $zoneName)
+function zoneCreate($data)
 {
-    global $db;
-
-    $sql = "
-    INSERT INTO
-        zones 
-    VALUES(
-        NULL, 
-        :zone_name, 
-        :ship_id, 
-        :allow_attack, 
-        :allow_planetattack, 
-        :allow_trade, 
-        :allow_defenses, 
-        :allow_shipyard, 
-        :allow_build, 
-        :allow_energy, 
-        :allow_warpedit, 
-        0
-    )
-    ";
-
-    $db->q($sql, [
-        ':zone_name' => $zoneName,
-        ':ship_id' => (int) $shipId,
-        ':allow_attack' => 'N',
-        ':allow_planetattack' => 'Y',
-        ':allow_trade' => 'Y',
-        ':allow_defenses' => 'Y',
-        ':allow_shipyard' => 'Y',
-        ':allow_build' => 'Y',
-        ':allow_energy' => 'Y',
-        ':allow_warpedit' => 'Y',
-    ]);
+    return rowCreate('zones', $data);
 }
 
-function bankAccountCreate($shipId)
+function bankAccountCreate($data)
 {
-    db()->q("INSERT INTO ibank_accounts (ship_id, balance, loan) VALUES(:ship_id, :balance, :loan)", [
-        ':ship_id' => (int) $shipId,
-        ':balance' => 0,
-        ':loan' => 0,
-    ]);
+    return rowCreate('ibank_accounts', $data);
 }
 
 function shipsGetOnlinePlayersCount()
@@ -573,6 +540,7 @@ function teamById($team)
         'team' => $team,
     ]);
 }
+
 function zoneUpdate($zone, $data)
 {
     $parameters = [];
@@ -633,7 +601,6 @@ function sectorUpdate($sector, $data)
     return db()->q(sprintf('UPDATE universe SET %s WHERE sector_id = :sector_id', implode(', ', $values)), $parameters);
 }
 
-
 function sectorCreate($data)
 {
     $columns = [];
@@ -641,7 +608,7 @@ function sectorCreate($data)
     $values = [];
 
     foreach ($data as $key => $value) {
-        $columns[] =  $key;
+        $columns[] = $key;
         $values[] = sprintf(':%s', $key);
         $parameters[$key] = $value;
     }
@@ -684,7 +651,7 @@ function shipTurn($shipId, $turns)
 function shipEscapePod(array $ship)
 {
     global $start_energy;
-    
+
     $ship['hull'] = 0;
     $ship['engines'] = 0;
     $ship['power'] = 0;
@@ -714,8 +681,8 @@ function shipEscapePod(array $ship)
     $ship['on_planet'] = 'N';
     $ship['cleared_defences'] = '';
     $ship['dev_lssd'] = 'N';
-    
+
     shipUpdate($ship['ship_id'], $ship);
-    
+
     return $ship;
 }

@@ -43,24 +43,18 @@
         </div>
     </div>
 
-    <hr class="my-4">
 
     <div class="mb-4">
-        <h4 class="mb-3">Create Universe [Sector/Link Setup] — Stage 1</h4>
+        <h4 class="mb-3">Create Universe [Sector/Link Setup]</h4>
 
         <div class="mb-3">
-            <label class="form-label">Number of sectors total (<b>overrides config.php</b>)</label>
+            <label class="form-label">Number of sectors total</label>
             <input type="text" class="form-control" name="sektors" size="10" maxlength="10" value="<?php echo $sector_max; ?>">
         </div>
 
         <div class="mb-3">
             <label class="form-label">Number of Federation sectors</label>
             <input type="text" class="form-control" name="fedsecs" size="10" maxlength="10" value="<?php echo $fedsecs; ?>">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Number of loops</label>
-            <input type="text" class="form-control" name="loops" size="10" maxlength="10" value="<?php echo $loops; ?>">
         </div>
 
         <div class="mb-3">

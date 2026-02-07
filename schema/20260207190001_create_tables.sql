@@ -3,6 +3,7 @@ CREATE TABLE links
     link_id int unsigned NOT NULL auto_increment,
     link_start int unsigned DEFAULT '0' NOT NULL,
     link_dest int unsigned DEFAULT '0' NOT NULL,
+    link_type tinyint(3) unsigned DEFAULT '0' NOT NULL,
     PRIMARY KEY (link_id),
     KEY link_start (link_start),
     KEY link_dest (link_dest)

@@ -15,7 +15,7 @@
                 <div class="mb-3">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <?php foreach ($links as $link) : ?>
-                            <button type="button" class="btn btn-secondary" disabled><?php echo $link['link_dest']; ?> </button>
+                            <button type="button" class="btn <?php if ($link['link_type'] == 1):?>btn-secondary<?php else:?>btn-primary<?php endif;?>" disabled><?php echo $link['link_dest']; ?> </button>
                         <?php endforeach; ?>
                     </div>
                 </div>

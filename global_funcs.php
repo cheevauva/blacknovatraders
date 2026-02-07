@@ -59,9 +59,20 @@ function redirectTo($location)
     header('Location: ' . $location, true, 302);
 }
 
+function responseJsonByMessages(array $messages)
+{
+    return json_encode([
+        'success' => true,
+        'type' => 'messages',
+        'messages' => array_values($messages),
+    ], JSON_UNESCAPED_UNICODE);
+}
+
 function responseJsonByException(\Exception $ex)
 {
     return json_encode([
+        'success' => false,
+        'type' => 'exception',
         'error' => $ex->getMessage(),
         'code' => $ex->getCode(),
     ], JSON_UNESCAPED_UNICODE);
