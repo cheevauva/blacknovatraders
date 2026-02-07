@@ -9,10 +9,11 @@ CREATE TABLE links
     KEY link_dest (link_dest)
 );
 
-CREATE TABLE settings
+CREATE TABLE config
 (
-    name tinytext,
-    value text
+    name varchar(50),
+    value text,
+    UNIQUE name(name)
 );
 
 CREATE TABLE planets 

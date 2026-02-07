@@ -6,47 +6,52 @@ include 'config.php';
 
 $title = "Create Universe";
 
-if ($adminpass != $_POST['swordfish']) {
-    $step = "0";
+$step = fromPost('step');
+
+if ($adminpass != fromPost('swordfish')) {
+    $step = 0;
 }
 
-if ($engage == "" && $adminpass == $_POST['swordfish']) {
-    $step = "1";
-}
-
-if ($engage == "1" && $adminpass == $_POST['swordfish']) {
-    $step = "2";
-}
+$sector_max = round(fromPost('sector_max', $sector_max));
+$initscommod = fromPost('initscommod', 100);
+$initbcommod = fromPost('initbcommod', 100);
+$universe_size = fromPost('universe_size', $universe_size);
+$special = fromPost('special', 1);
+$ore = fromPost('ore', 15);
+$organics = fromPost('organics', 10);
+$goods = fromPost('goods', 15);
+$energy = fromPost('energy', 10);
+$planets = fromPost('planets', 10);
+$fedsecs = fromPost('fedsecs', intval($sector_max / 200));
+$initsore = $ore_limit * $initscommod / 100.0;
+$initsorganics = $organics_limit * $initscommod / 100.0;
+$initsgoods = $goods_limit * $initscommod / 100.0;
+$initsenergy = $energy_limit * $initscommod / 100.0;
+$initbore = $ore_limit * $initbcommod / 100.0;
+$initborganics = $organics_limit * $initbcommod / 100.0;
+$initbgoods = $goods_limit * $initbcommod / 100.0;
+$initbenergy = $energy_limit * $initbcommod / 100.0;
+$specialSectorsCount = round($sector_max * $special / 100);
+$oreSectorsCount = round($sector_max * $ore / 100);
+$organicsSectorsCount = round($sector_max * $organics / 100);
+$goodsSectorsCount = round($sector_max * $goods / 100);
+$energySectorsCount = round($sector_max * $energy / 100);
+$fedSectorsCount = round($sector_max * $fedsecs / 100);
+$empty = $sector_max - $specialSectorsCount - $oreSectorsCount - $organicsSectorsCount - $goodsSectorsCount - $energySectorsCount;
+$unownedPlanetsCount = round($sector_max * $planets / 100);
 
 switch ($step) {
-    case "1":
-        $fedsecs = intval($sector_max / 200);
-
+    case 1:
         include 'tpls/create_universe/create_universe_step1.tpl.php';
         return;
-    case "2":
-        $spp = round($sector_max * $special / 100);
-        $oep = round($sector_max * $ore / 100);
-        $ogp = round($sector_max * $organics / 100);
-        $gop = round($sector_max * $goods / 100);
-        $enp = round($sector_max * $energy / 100);
-        $empty = $sector_max - $spp - $oep - $ogp - $gop - $enp;
-        $nump = round($sector_max * $planets / 100);
-        $sector_max = round($sektors);
-
+    case 2:
+        configUpdate([
+            'sector_max' => $sector_max,
+            'universe_size' => $universe_size,
+        ]);
         include 'tpls/create_universe/create_universe_step2.tpl.php';
         return;
-    case "7":
-        $initsore = $ore_limit * $initscommod / 100.0;
-        $initsorganics = $organics_limit * $initscommod / 100.0;
-        $initsgoods = $goods_limit * $initscommod / 100.0;
-        $initsenergy = $energy_limit * $initscommod / 100.0;
-        $initbore = $ore_limit * $initbcommod / 100.0;
-        $initborganics = $organics_limit * $initbcommod / 100.0;
-        $initbgoods = $goods_limit * $initbcommod / 100.0;
-        $initbenergy = $energy_limit * $initbcommod / 100.0;
-        $remaining = $sector_max - 2;
-
+    case 3:
         $sql = "
         INSERT INTO universe (sector_id, zone_id, angle1, angle2, distance) 
         SELECT 
@@ -75,7 +80,7 @@ switch ($step) {
             'fed_max_hull' => $fed_max_hull,
         ]);
         db()->q("UPDATE universe SET zone_id= 2 WHERE sector_id < :fedsecs", [
-            'fedsecs' => $fedsecs,
+            'fedsecs' => $fedSectorsCount,
         ]);
 
         $specialPortsSql = "
@@ -105,16 +110,16 @@ switch ($step) {
         ";
 
         db()->q($specialPortsSql, [
-            'spp' => (int) $spp,
+            'spp' => (int) $specialSectorsCount,
         ], [
             'spp' => \PDO::PARAM_INT,
         ]);
 
         $portTypes = [
-            'ore' => $oep,
-            'organics' => $ogp,
-            'goods' => $gop,
-            'energy' => $enp,
+            'ore' => $oreSectorsCount,
+            'organics' => $organicsSectorsCount,
+            'goods' => $goodsSectorsCount,
+            'energy' => $energySectorsCount,
         ];
 
         foreach ($portTypes as $portType => $limit) {
@@ -187,7 +192,7 @@ switch ($step) {
             'default_prod_energy' => $default_prod_energy,
             'default_prod_fighters' => $default_prod_fighters,
             'default_prod_torp' => $default_prod_torp,
-            'nump' => (int) $nump,
+            'nump' => (int) $unownedPlanetsCount,
         ], [
             'nump' => \PDO::PARAM_INT,
         ]);
@@ -295,13 +300,13 @@ switch ($step) {
             'lang' => $language,
             'role' => 'admin'
         ]);
-        
+
         zoneCreate([
             'zone_name' => 'WebMaster\'s Territory',
             'owner' => $shipAdminId,
         ]);
         bankAccountCreate([
-            'ship_id'  => $shipAdminId,
+            'ship_id' => $shipAdminId,
         ]);
         include 'tpls/create_universe/create_universe_step7.tpl.php';
         break;

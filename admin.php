@@ -42,6 +42,9 @@ try {
 
             if ($module === 'univedit' && $operation === 'doexpand') {
                 $radius = (int) fromPost('radius', new \Exception('radius'));
+                configUpdate([
+                    'universe_size' => $universe_size,
+                ]);
 
                 db()->q('UPDATE universe SET distance = FLOOR(RAND() * :radius) WHERE 1 = 1', [
                     'radius' => $radius + 1,

@@ -1,4 +1,5 @@
 <?php
+
 //$Id$
 //ini_set('display_errors', 0);
 date_default_timezone_set('UTC');
@@ -6,20 +7,20 @@ include("db_config.php");
 define('MICROTIME_START', microtime(true));
 
 /* Main scheduler variables (game flow control)
------------------------------------------------*/
+  ----------------------------------------------- */
 
 /*
   Set this to how often (in minutes) you are running
   the scheduler script.
-*/
+ */
 $sched_ticks = 6;
 
 /* All following vars are in minutes.
-   These are TRUE minutes, no matter to what interval
-   you're running the scheduler script! The scheduler
-   will auto-adjust, possibly running many of the same
-   events in a single call.
-*/
+  These are TRUE minutes, no matter to what interval
+  you're running the scheduler script! The scheduler
+  will auto-adjust, possibly running many of the same
+  events in a single call.
+ */
 $sched_turns = 2;    //New turns rate (also includes towing, xenobe)
 $sched_ports = 2;    //How often port production occurs
 $sched_planets = 2;  //How often planet production occurs
@@ -47,7 +48,7 @@ $ip = getenv("REMOTE_ADDR");
 $mine_hullsize = 8; //Minimum size hull has to be to hit mines
 $ewd_maxhullsize = 15; //Max hull size before EWD degrades
 $sector_max = 5000;
-$link_max=10;
+$link_max = 10;
 $universe_size = 200;
 
 $game_name = "Default Game Name"; // Please set this to a unique name for your game
@@ -55,10 +56,10 @@ $release_version = "0.55";     // Please do not change this. Doing so will cause
 
 $fed_max_hull = 8;
 $maxlen_password = 30;
-$max_rank=100;
-$rating_combat_factor=.8;    //ammount of rating gained from combat
-$server_closed=false;        //true = block logins but not new account creation
-$account_creation_closed=false;    //true = block new account creation
+$max_rank = 100;
+$rating_combat_factor = .8;    //ammount of rating gained from combat
+$server_closed = false;        //true = block logins but not new account creation
+$account_creation_closed = false;    //true = block new account creation
 
 
 /* newbie niceness variables */
@@ -80,7 +81,6 @@ $allow_fullscan = true;                // full long range scan
 $allow_navcomp = true;                 // navigation computer
 $allow_ibank = true;                  // Intergalactic Bank (IGB)
 $allow_genesis_destroy = true;         // Genesis torps can destroy planets
-
 // iBank Config - Intergalactic Banking
 // Trying to keep ibank constants unique by prefixing with $ibank_
 // Please EDIT the following variables to your liking.
@@ -90,22 +90,20 @@ $ibank_paymentfee = 0.05;       // Paymentfee
 $ibank_loaninterest = 0.0010;       // Loan interest (good idea to put double what you get on a planet)
 $ibank_loanfactor = 0.10;           // One-time loan fee
 $ibank_loanlimit = 0.25;        // Maximum loan allowed, percent of net worth
-
 // Information displayed on the 'Manage Own Account' section
 $ibank_ownaccount_info = "Interest rate is " . $ibank_interest * 100 . "%<BR>Loan rate is " .
-$ibank_loaninterest * 100 . "%<P>If you have loans Make sure you have enough credits deposited each turn " .
-  "to pay the interest and mortage, otherwise it will be deducted from your ships acccount at <FONT COLOR=RED>" .
-  "twice the current Loan rate (" . $ibank_loaninterest * 100 * 2 .")%</FONT>.";
+ $ibank_loaninterest * 100 . "%<P>If you have loans Make sure you have enough credits deposited each turn " .
+ "to pay the interest and mortage, otherwise it will be deducted from your ships acccount at <FONT COLOR=RED>" .
+ "twice the current Loan rate (" . $ibank_loaninterest * 100 * 2 . ")%</FONT>.";
 
 // end of iBank config
-
 // default planet production percentages
-$default_prod_ore      = 20.0;
+$default_prod_ore = 20.0;
 $default_prod_organics = 20.0;
-$default_prod_goods    = 20.0;
-$default_prod_energy   = 20.0;
+$default_prod_goods = 20.0;
+$default_prod_energy = 20.0;
 $default_prod_fighters = 10.0;
-$default_prod_torp     = 10.0;
+$default_prod_torp = 10.0;
 
 /* port pricing variables */
 $ore_price = 11;
@@ -183,7 +181,7 @@ $max_turns = 2500;
 $max_emerwarp = 10;
 
 $fullscan_cost = 1;
-$scan_error_factor=20;
+$scan_error_factor = 20;
 
 $max_planets_sector = 5;
 $max_traderoutes_player = 40;
@@ -226,3 +224,11 @@ $xen_planets = 5;                     //Percent of created xenobe that will own 
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
 
 include("global_funcs.php");
+
+try {
+    foreach (configRead() as $name => $value) {
+        $$name = $value;
+    }
+} catch (\Exception $ex) {
+    
+}

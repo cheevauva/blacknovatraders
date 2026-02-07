@@ -10,46 +10,50 @@
 <?php endif; ?>
 
 <form action="create_universe.php" method="post" class="form-container">
-    <input type="hidden" name="step" value="7">
-    <input type="hidden" name="spp" value="<?php echo $spp; ?>">
-    <input type="hidden" name="oep" value="<?php echo $oep; ?>">
-    <input type="hidden" name="ogp" value="<?php echo $ogp; ?>">
-    <input type="hidden" name="gop" value="<?php echo $gop; ?>">
-    <input type="hidden" name="enp" value="<?php echo $enp; ?>">
-    <input type="hidden" name="initscommod" value="<?php echo $initscommod; ?>">
-    <input type="hidden" name="initbcommod" value="<?php echo $initbcommod; ?>">
-    <input type="hidden" name="nump" value="<?php echo $nump; ?>">
-    <input type="hidden" name="fedsecs" value="<?php echo $fedsecs; ?>">
-    <input type="hidden" name="loops" value="<?php echo $loops; ?>">
+    <input type="hidden" name="step" value="3">
+    <input type="hidden" name="spp" value="<?php echo (int) $specialSectorsCount; ?>">
+    <input type="hidden" name="spp" value="<?php echo (int) $specialSectorsCount; ?>">
+    <input type="hidden" name="oep" value="<?php echo (int) $oreSectorsCount; ?>">
+    <input type="hidden" name="ogp" value="<?php echo (int) $organicsSectorsCount; ?>">
+    <input type="hidden" name="gop" value="<?php echo (int) $goodsSectorsCount; ?>">
+    <input type="hidden" name="enp" value="<?php echo (int) $energySectorsCount; ?>">
+    <input type="hidden" name="initscommod" value="<?php echo (int) $initscommod; ?>">
+    <input type="hidden" name="initbcommod" value="<?php echo (int) $initbcommod; ?>">
+    <input type="hidden" name="nump" value="<?php echo (int) $unownedPlanetsCount; ?>">
+    <input type="hidden" name="fedsecs" value="<?php echo (int) $fedsecs; ?>">
     <input type="hidden" name="engage" value="3">
     <input type="hidden" name="swordfish" value="<?php echo $swordfish; ?>">
-
     <div class="mb-4">
         <h4 class="mb-3">Configuration Summary</h4>
-
+        
+        <div class="row mb-2">
+            <div class="col-md-6 fw-bold">Universe size</div>
+            <div class="col-md-6"><?php echo (int) $universe_size; ?></div>
+        </div>
+        
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Special ports</div>
-            <div class="col-md-6"><?php echo intval($spp); ?></div>
+            <div class="col-md-6"><?php echo intval($specialSectorsCount); ?></div>
         </div>
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Ore ports</div>
-            <div class="col-md-6"><?php echo intval($oep); ?></div>
+            <div class="col-md-6"><?php echo intval($oreSectorsCount); ?></div>
         </div>
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Organics ports</div>
-            <div class="col-md-6"><?php echo intval($ogp); ?></div>
+            <div class="col-md-6"><?php echo intval($organicsSectorsCount); ?></div>
         </div>
 
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Goods ports</div>
-            <div class="col-md-6"><?php echo intval($gop); ?></div>
+            <div class="col-md-6"><?php echo intval($goodsSectorsCount); ?></div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6 fw-bold">Energy ports</div>
-            <div class="col-md-6"><?php echo intval($enp); ?></div>
+            <div class="col-md-6"><?php echo intval($energySectorsCount); ?></div>
         </div>
 
         <hr class="my-3">
@@ -77,7 +81,7 @@
         </div>
         <div class="row mb-3">
             <div class="col-md-6 fw-bold">Unowned planets</div>
-            <div class="col-md-6"><?php echo intval($nump); ?></div>
+            <div class="col-md-6"><?php echo intval($unownedPlanetsCount); ?></div>
         </div>
     </div>
 

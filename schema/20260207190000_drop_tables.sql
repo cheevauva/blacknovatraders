@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS settings; 
+DROP TABLE IF EXISTS config; 
 DROP TABLE IF EXISTS ibank_accounts; 
 DROP TABLE IF EXISTS links;
 DROP TABLE IF EXISTS planets; 

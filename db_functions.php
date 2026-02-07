@@ -171,6 +171,11 @@ function mturnsMax()
     return $mturns;
 }
 
+function schedulerCreate($data)
+{
+    return rowCreate('scheduler', $data);
+}
+
 function shipCreate($data)
 {
     return rowCreate('ships', $data);
@@ -187,8 +192,22 @@ function rowCreate($table, $data)
     }
 
     db()->q(sprintf('INSERT INTO %s SET %s', $table, implode(', ', $sets)), $parameters);
-    
+
     return db()->lastInsertId();
+}
+function configRead()
+{
+    return db()->fetchAllKeyValue('SELECT name, value FROM config');
+}
+
+function configUpdate($data)
+{
+    foreach ($data as $name => $value) {
+        db()->q('REPLACE INTO config SET value = :value , name = :name', [
+            'name' => $name,
+            'value' => $value,
+        ]);
+    }
 }
 
 function zoneCreate($data)
