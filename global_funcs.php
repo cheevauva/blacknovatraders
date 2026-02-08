@@ -2,8 +2,10 @@
 
 use BNT\ADODB\ADOPDO;
 use BNT\Log\LogTypeConstants;
+use BNT\Config\DAO\ConfigReadDAO;
+use BNT\Ship\Servant\ShipEscapepodServant;
 
-spl_autoload_register(function($className) {
+spl_autoload_register(function ($className) {
     $fullPath = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
 
     if (file_exists($fullPath)) {
@@ -12,7 +14,6 @@ spl_autoload_register(function($className) {
     }
 });
 
-
 $dsn = sprintf("%s:host=%s;port=%s;dbname=%s;charset=utf8mb4", $db_type, $dbhost, $dbport, $dbname);
 
 $db = new ADOPDO($dsn, $dbuname, $dbpass, [
@@ -20,7 +21,33 @@ $db = new ADOPDO($dsn, $dbuname, $dbpass, [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ]);
 
-include_once 'db_functions.php';
+$container = new \UUA\Container\Container(function () use ($db) {
+    return [
+        'db' => $db,
+    ];
+});
+
+try {
+    $configRead = ConfigReadDAO::_new($container);
+    $configRead->serve();
+
+    foreach ($configRead->config as $name => $value) {
+        $$name = $value;
+    }
+} catch (\Exception $ex) {
+    
+}
+
+/**
+ * @return ADOPDO
+ */
+function db()
+{
+    global $db;
+
+    return $db;
+}
+
 $PHP_SELF = $_SERVER['PHP_SELF'];
 //$Id$
 // Separate userpass into username & password to support the legacy of multiple cookies for login.
@@ -35,36 +62,25 @@ function uuidv7()
     return sprintf('%02x%02x%02x%02x-%02x%02x-%04x-%04x-%012x', ($timestamp >> 40) & 0xFF, ($timestamp >> 32) & 0xFF, ($timestamp >> 24) & 0xFF, ($timestamp >> 16) & 0xFF, ($timestamp >> 8) & 0xFF, $timestamp & 0xFF, mt_rand(0, 0x0FFF) | 0x7000, mt_rand(0, 0x3FFF) | 0x8000, mt_rand(0, 0xFFFFFFFFFFFF));
 }
 
-//----- Start register_globals fix ----
-// reg_global_fix,0.1.1,22-09-2004,BNT DevTeam
+if (empty($disableRegisterGlobalFix)) {
+    foreach ($_POST as $k => $v) {
+        if (!isset($GLOBALS[$k])) {
+            ${$k} = $v;
+        }
+    }
+    foreach ($_GET as $k => $v) {
+        if (!isset($GLOBALS[$k])) {
+            ${$k} = $v;
+        }
+    }
 
-if(!defined('reg_global_fix'))define('reg_global_fix', True, TRUE);
+    foreach ($_COOKIE as $k => $v) {
+        if (!isset($GLOBALS[$k])) {
+            ${$k} = $v;
+        }
+    }
+}
 
-$reg_globals_on = (bool) ini_get('register_globals');
-
-  foreach ($_POST as $k=>$v)
-  {
-      if (!isset($GLOBALS[$k]))
-      {
-          ${$k}=$v;
-      }
-  }
-  foreach ($_GET as $k=>$v)
-  {
-      if (!isset($GLOBALS[$k]))
-      {
-          ${$k}=$v;
-      }
-  }
-
-  foreach ($_COOKIE as $k=>$v)
-  {
-      if (!isset($GLOBALS[$k]))
-      {
-          ${$k}=$v;
-      }
-  }
-//------ End register_globals fix
 
 
 function redirectTo($location)
@@ -206,65 +222,33 @@ function checklogin($return = true)
     global $username, $playerinfo, $l_global_needlogin, $l_global_died;
     global $l_login_died, $l_die_please;
     global $server_closed, $l_login_closed_message;
-    
+
     if ($server_closed) {
         echo $return ? $l_login_closed_message : '';
         return true;
     }
-    
-    /* Check the cookie to see if username/password are empty - check password against database */
+
     if (empty($playerinfo)) {
-        echo $return ? $l_global_needlogin :  '';
+        echo $return ? $l_global_needlogin : '';
         return true;
     }
 
-    /* Check for destroyed ship */
     if ($playerinfo['ship_destroyed'] == "N") {
         $username = $playerinfo['email'];
         return false;
     }
-    /* if the player has an escapepod, set the player up with a new ship */
     if ($playerinfo['dev_escapepod'] == "Y") {
-        BNT\ShipFunc::shipUpdate($playerinfo['ship_id'], [
-            'power' => '0',
-            'computer' => '0',
-            'sensors' => '0',
-            'beams' => '0',
-            'torp_launchers' => '0',
-            'torps' => '0',
-            'armor' => '0',
-            'armor_pts' => '100',
-            'cloak' => '0',
-            'shields' => '0',
-            'sector' => '0',
-            'ship_ore' => '0',
-            'ship_organics' => '0',
-            'ship_energy' => '1000',
-            'ship_colonists' => '0',
-            'ship_goods' => '0',
-            'ship_fighters' => '100',
-            'ship_damage' => '0',
-            'on_planet' => "'N'",
-            'dev_warpedit' => '0',
-            'dev_genesis' => '0',
-            'dev_beacon' => '0',
-            'dev_emerwarp' => '0',
-            'dev_escapepod' => 'N',
-            'dev_fuelscoop' => 'N',
-            'dev_minedeflector' => '0',
-            'ship_destroyed' => 'N',
-            'dev_lssd' => 'N'
-        ]);
+        $escapepod = ShipEscapepodServant::_new($this->container);
+        $escapepod->ship = $playerinfo;
+        $escapepod->serve();
         echo $return ? $l_login_died : '';
         return true;
-    } 
-    /* if the player doesn't have an escapepod - they're dead, delete them. */
-    /* uhhh  don't delete them to prevent self-distruct inherit */
+    }
+
     echo $return ? $l_global_died . $l_die_please : '';
-    
+
     return true;
 }
-
 
 function updatecookie()
 {

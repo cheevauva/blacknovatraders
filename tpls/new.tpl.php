@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="mb-3">
-            <label class="form-label"><?php echo $l_login_email; ?></label>
+            <label class="form-label"><?php echo $l_new_username; ?></label>
             <input type="text" name="username" class="form-control" maxlength="40" required>
         </div>
         <div class="mb-3">
@@ -29,7 +29,7 @@
             <input type="text" name="character" class="form-control" maxlength="20"  required>
         </div>
         <div class="mb-3">
-            <label class="form-label"><? echo $l_new_pname; ?></label>
+            <label class="form-label"><? echo $l_new_password; ?></label>
             <input type="password" name="password" class="form-control" maxlength="20"  required>
         </div>
         <input type="submit" class="btn btn-primary" value="<? echo $l_submit; ?>">

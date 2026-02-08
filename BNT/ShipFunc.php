@@ -33,45 +33,6 @@ class ShipFunc
         ]);
     }
 
-    public static function shipEscapePod(array $ship)
-    {
-        global $start_energy;
-
-        $ship['hull'] = 0;
-        $ship['engines'] = 0;
-        $ship['power'] = 0;
-        $ship['sensors'] = 0;
-        $ship['computer'] = 0;
-        $ship['beams'] = 0;
-        $ship['torp_launchers'] = 0;
-        $ship['torps'] = 0;
-        $ship['armor'] = 0;
-        $ship['armor_pts'] = 100;
-        $ship['cloak'] = 0;
-        $ship['shields'] = 0;
-        $ship['sector'] = 0;
-        $ship['ship_organics'] = 0;
-        $ship['ship_ore'] = 0;
-        $ship['ship_goods'] = 0;
-        $ship['ship_energy'] = $start_energy;
-        $ship['ship_colonists'] = 0;
-        $ship['ship_fighters'] = 100;
-        $ship['dev_warpedit'] = 0;
-        $ship['dev_genesis'] = 0;
-        $ship['dev_beacon'] = 0;
-        $ship['dev_emerwarp'] = 0;
-        $ship['dev_escapepod'] = 'N';
-        $ship['dev_fuelscoop'] = 'N';
-        $ship['dev_minedeflector'] = 0;
-        $ship['on_planet'] = 'N';
-        $ship['cleared_defences'] = '';
-        $ship['dev_lssd'] = 'N';
-
-        self::shipUpdate($ship['ship_id'], $ship);
-
-        return $ship;
-    }
-
     public static function shipUpdate($ship, $data)
     {
         $parameters = [];
@@ -181,16 +142,24 @@ class ShipFunc
 
     public static function shipById($id)
     {
-        return db()->fetch("SELECT * FROM ships WHERE ship_id = :id LIMIT 1", [
-            'id' => $id,
-        ]);
+        global $container;
+        
+        $shipById = \BNT\Ship\DAO\ShipByIdDAO::_new($container);
+        $shipById->id = $id;
+        $shipById->serve();
+
+        return $shipById->ship;
     }
 
     public static function shipByToken($token)
     {
-        return db()->fetch("SELECT * FROM ships WHERE token = :token LIMIT 1", [
-            'token' => $token,
-        ]);
+        global $container;
+    
+        $shipByToken = \BNT\Ship\DAO\ShipByTokenDAO::_new($container);
+        $shipByToken->token = $token;
+        $shipByToken->serve();
+
+        return $shipByToken->ship;
     }
 
     public static function shipsGetNotDestroyedExcludeXenobeCount()
@@ -246,50 +215,6 @@ class ShipFunc
             'limit' => $max_rank,
         ], [
             'limit' => PDO::PARAM_INT,
-        ]);
-    }
-
-    public static function shipRestoreEscapepod($ship_id)
-    {
-        $sql = "
-    UPDATE 
-        ships 
-    SET 
-        hull = 0,
-        engines = 0,
-        power = 0,
-        computer = 0,
-        sensors = 0,
-        beams = 0,
-        torp_launchers = 0,
-        torps = 0,
-        armor = 0,
-        armor_pts = 100,
-        cloak = 0,
-        shields = 0,
-        sector = 0,
-        ship_ore = 0,
-        ship_organics = 0,
-        ship_energy = 1000,
-        ship_colonists = 0,
-        ship_goods = 0,
-        ship_fighters = 100,
-        ship_damage = 0,
-        on_planet = 'N',
-        dev_warpedit = 0,
-        dev_genesis = 0,
-        dev_beacon = 0,
-        dev_emerwarp = 0,
-        dev_escapepod = 'N',
-        dev_fuelscoop = 'N',
-        dev_minedeflector = 0,
-        ship_destroyed = 'N',
-        dev_lssd = 'N' 
-        WHERE ship_id = :ship_id
-    ";
-
-        db()->q($sql, [
-            'ship_id' => $ship_id,
         ]);
     }
 

@@ -1,14 +1,5 @@
 <?php
 
-/**
- * @return ADOPDO
- */
-function db()
-{
-    global $db;
-
-    return $db;
-}
 
 function ipBansCheck($ip)
 {
@@ -90,30 +81,11 @@ function sectorUpdateBeacon($sector, $beaconText)
     ]);
 }
 
-function schedulerGetLastRun()
-{
-    return db()->column("SELECT last_run FROM scheduler LIMIT 1");
-}
 
 function newsByDate($date)
 {
     return db()->fetchAll("SELECT * FROM news WHERE date = :date ORDER BY news_id DESC", [
         'date' => $date,
-    ]);
-}
-
-function messagesCountByShip($shipId)
-{
-
-    return db()->column("SELECT COUNT(*) FROM messages WHERE recp_id = :shipId AND notified = 'N'", [
-        'shipId' => $shipId,
-    ]);
-}
-
-function messagesNotifiedByShip($shipId)
-{
-    db()->q("UPDATE messages SET notified = 'Y' WHERE recp_id = :shipId AND notified = 'N'", [
-        'shipId' => $shipId,
     ]);
 }
 

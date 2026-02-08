@@ -223,12 +223,7 @@ $xen_aggression = 100;                // Percent of xenobe that are aggressive o
 $xen_planets = 5;                     //Percent of created xenobe that will own planets. Recommended to keep at small percentage - rjordan
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
 
-include("global_funcs.php");
+include 'global_funcs.php';
 
-try {
-    foreach (configRead() as $name => $value) {
-        $$name = $value;
-    }
-} catch (\Exception $ex) {
-    
-}
+
+

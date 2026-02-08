@@ -1,6 +1,9 @@
 <?php
 
+use BNT\Config\DAO\ConfigUpdateDAO;
+
 $disableAutoLogin = true;
+$disableRegisterGlobalFix = true;
 
 include 'config.php';
 
@@ -45,10 +48,12 @@ switch ($step) {
         include 'tpls/create_universe/create_universe_step1.tpl.php';
         return;
     case 2:
-        configUpdate([
+        $configUpdate = ConfigUpdateDAO::_new($container);
+        $configUpdate->config = [
             'sector_max' => $sector_max,
             'universe_size' => $universe_size,
-        ]);
+        ];
+        $configUpdate->serve();
         include 'tpls/create_universe/create_universe_step2.tpl.php';
         return;
     case 3:

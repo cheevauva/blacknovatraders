@@ -70,7 +70,7 @@
 
     <input type="hidden" name="engage" value="1">
     <input type="hidden" name="step" value="2">
-    <input type="hidden" name="swordfish" value="<?php echo $swordfish; ?>">
+    <input type="hidden" name="swordfish" value="<?php echo htmlspecialchars(fromPost('swordfish')); ?>">
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
         <input type="submit" class="btn btn-primary me-md-2" value="Submit">
