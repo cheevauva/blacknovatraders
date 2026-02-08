@@ -1,5 +1,8 @@
 <?php
 
+use BNT\Sector\Exception\SectorFightException;
+use BNT\Sector\Exception\SectorChooseMoveException;
+
 include 'config.php';
 
 if (checklogin()) {

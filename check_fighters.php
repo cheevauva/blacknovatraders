@@ -1,5 +1,10 @@
 <?php
 
+use BNT\Sector\Exception\SectorChooseMoveException;
+use BNT\Sector\Exception\SectorFightException;
+use BNT\Sector\Exception\SectorRetreatException;
+use BNT\Sector\Exception\SectorNotEnoghtCreditsTollException;
+
 preg_match("/check_fighters.php/i", $_SERVER['PHP_SELF']) ? die('You can not access this file directly!') : null;
 
 if (!isset($sector)) {

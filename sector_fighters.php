@@ -1,5 +1,7 @@
 <?php
 
+use BNT\Sector\Exception\SectorFightShipDestroyedException;
+
 preg_match("/sector_fighters.php/i", $_SERVER['PHP_SELF']) ? die('You can not access this file directly!') : null;
 
 if (!isset($total_sector_fighters)) {
