@@ -53,9 +53,9 @@ try {
 
             if ($module === 'useredit' && $operation === 'save') {
                 $user = (int) fromGet('user', new \Exception('user'));
-                $row = shipById($user);
+                $row = BNT\ShipFunc::shipById($user);
 
-                shipUpdate($user, [
+                BNT\ShipFunc::shipUpdate($user, [
                     'character_name' => (string) fromPost('character_name', new \Exception('character_name')),
                     'password' => fromPost('password2') ? md5((string) fromPost('password2')) : $row['password'],
                     'email' => (string) fromPost('email', new \Exception('email')),
@@ -147,7 +147,7 @@ try {
             if ($module === 'useredit' && $operation === 'edit') {
                 $user = (int) fromGet('user', new \Exception('user'));
 
-                $row = shipById($user);
+                $row = BNT\ShipFunc::shipById($user);
                 include 'tpls/admin/useredit.tpl.php';
             }
 

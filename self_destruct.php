@@ -17,8 +17,8 @@ try {
             
             db_kill_player($playerinfo['ship_id']);
             cancel_bounty($playerinfo['ship_id']);
-            adminlog(LOG_ADMIN_HARAKIRI, $playerinfo['character_name'] . '|' . $ip);
-            playerlog($playerinfo['ship_id'], LOG_HARAKIRI, $ip);
+            adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_HARAKIRI, $playerinfo['character_name'] . '|' . $ip);
+            playerlog($playerinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_HARAKIRI, $ip);
             redirectTo('index.php');
             break;
         case 'GET':

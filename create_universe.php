@@ -286,7 +286,7 @@ switch ($step) {
         $db->adoExecute("INSERT INTO scheduler VALUES(NULL, 'Y', 0, $sched_degrade, 0, 'sched_degrade.php', NULL,unix_timestamp(now()))");
         $db->adoExecute("INSERT INTO scheduler VALUES(NULL, 'Y', 0, $sched_apocalypse, 0, 'sched_apocalypse.php', NULL,unix_timestamp(now()))");
 
-        $shipAdminId = shipCreate([
+        $shipAdminId = BNT\ShipFunc::shipCreate([
             'ship_name' => 'WebMaster',
             'character_name' => 'WebMaster',
             'password' => md5($admin_pass),

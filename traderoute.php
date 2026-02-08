@@ -40,27 +40,27 @@ if ($playerinfo[ship_colonists] < 0 || $playerinfo[ship_ore] < 0 || $playerinfo[
 {
     if ($playerinfo[ship_colonists] < 0 || $playerinfo[ship_colonists] > $maxholds)
     {
-        adminlog(LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
+        adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_colonists]|colonists|$maxholds");
         $playerinfo[ship_colonists] = 0;
     }
     if ($playerinfo[ship_ore] < 0 || $playerinfo[ship_ore] > $maxholds)
     {
-        adminlog(LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
+        adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_ore]|ore|$maxholds");
         $playerinfo[ship_ore] = 0;
     }
     if ($playerinfo[ship_organics] < 0 || $playerinfo[ship_organics] > $maxholds)
     {
-        adminlog(LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
+        adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_organics]|organics|$maxholds");
         $playerinfo[ship_organics] = 0;
     }
     if ($playerinfo[ship_goods] < 0 || $playerinfo[ship_goods] > $maxholds)
     {
-        adminlog(LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
+        adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_goods]|goods|$maxholds");
         $playerinfo[ship_goods] = 0;
     }
     if ($playerinfo[ship_energy] < 0 || $playerinfo[ship_energy] > $maxenergy)
     {
-        adminlog(LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
+        adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_ILLEGVALUE, $playerinfo[ship_id], "$playerinfo[ship_name]|$playerinfo[ship_energy]|energy|$maxenergy");
         $playerinfo[ship_energy] = 0;
     }
     if ($freeholds < 0)

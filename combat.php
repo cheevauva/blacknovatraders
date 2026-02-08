@@ -197,7 +197,7 @@ function planetbombing()
 
     if ($debug) echo "total figs go boom $planetfighterslost<BR>\n";
     echo "<br><br>\n";
-playerlog($ownerinfo[ship_id], LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
+playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
 
     $res = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, ship_fighters=ship_fighters-$attackerfighters WHERE ship_id=$playerinfo[ship_id]");
     $res = $db->adoExecute("UPDATE $dbtables[planets] SET energy=energy-$beamsused,fighters=fighters-$planetfighterslost, torps=torps-$planettorps WHERE planet_id=$planetinfo[planet_id]");
@@ -681,15 +681,15 @@ function planetcombat()
             {
                 echo "<CENTER>$l_cmb_citizenswanttodie</CENTER><BR><BR>";
                 $db->adoExecute("DELETE FROM $dbtables[planets] WHERE planet_id=$planetinfo[planet_id]");
-                playerlog($ownerinfo[ship_id], LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
-                adminlog(LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
+                playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
                 gen_score($ownerinfo[ship_id]);
             }
             else
             {
                 $l_cmb_youmaycapture = str_replace("[cmb_planetinfo_planet_id]", $planetinfo[planet_id], $l_cmb_youmaycapture);
                 echo "<CENTER><font color=red>$l_cmb_youmaycapture</font></CENTER><BR><BR>";
-                playerlog($ownerinfo[ship_id], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+                playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 gen_score($ownerinfo[ship_id]);
                 $update7a = $db->adoExecute("UPDATE $dbtables[planets] SET owner=0, fighters=0, torps=torps-$planettorps, base='N', defeated='Y' WHERE planet_id=$planetinfo[planet_id]");
             }
@@ -698,7 +698,7 @@ function planetcombat()
         {
             $l_cmb_youmaycapture2 = str_replace("[cmb_planetinfo_planet_id]", $planetinfo[planet_id], $l_cmb_youmaycapture2);
             echo "<CENTER>$l_cmb_youmaycapture2</CENTER><BR><BR>";
-            playerlog($ownerinfo[ship_id], LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+            playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
             gen_score($ownerinfo[ship_id]);
             $update7a = $db->adoExecute("UPDATE $dbtables[planets] SET owner=0,fighters=0, torps=torps-$planettorps, base='N', defeated='Y' WHERE planet_id=$planetinfo[planet_id]");
         }
@@ -718,7 +718,7 @@ function planetcombat()
         $energy=$planetinfo[energy];
         if ($debug)
             echo "$l_cmb_energyleft: $planetinfo[energy]<BR>";
-        playerlog($ownerinfo[ship_id], LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
+        playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
         gen_score($ownerinfo[ship_id]);
         $update7b = $db->adoExecute("UPDATE $dbtables[planets] SET energy=$energy,fighters=fighters-$fighters_lost, torps=torps-$planettorps, ore=ore+$free_ore, goods=goods+$free_goods, organics=organics+$free_organics, credits=credits+$ship_salvage WHERE planet_id=$planetinfo[planet_id]");
         if ($debug)
@@ -1190,12 +1190,12 @@ function shiptoship($ship_id)
             echo "$l_cmb_escapepodlaunched<BR><BR>";
             echo "<BR><BR>ship_id=$targetinfo[ship_id]<BR><BR>";
             $test = $db->adoExecute("UPDATE ships SET hull=0,engines=0,power=0,sensors=0,computer=0,beams=0,torp_launchers=0,torps=0,armor=0,armor_pts=100,cloak=0,shields=0,sector=0,ship_organics=0,ship_ore=0,ship_goods=0,ship_energy=$start_energy,ship_colonists=0,ship_fighters=100,dev_warpedit=0,dev_genesis=0,dev_beacon=0,dev_emerwarp=0,dev_escapepod='N',dev_fuelscoop='N',dev_minedeflector=0,on_planet='N',rating='$rating',dev_lssd='N' WHERE ship_id=$targetinfo[ship_id]");
-            playerlog($targetinfo[ship_id],LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
+            playerlog($targetinfo[ship_id],\BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, "$playerinfo[character_name]|Y");
             collect_bounty($playerinfo[ship_id],$targetinfo[ship_id]);
         }
         else
         {
-            playerlog($targetinfo[ship_id], LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
+            playerlog($targetinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, "$playerinfo[character_name]|N");
             db_kill_player($targetinfo['ship_id']);
             collect_bounty($playerinfo[ship_id],$targetinfo[ship_id]);
         }
@@ -1208,7 +1208,7 @@ function shiptoship($ship_id)
         $target_armor_lost=$targetinfo[armor_pts]-$targetarmor;
         $target_fighters_lost=$targetinfo[ship_fighters]-$targetfighters;
         $target_energy=$targetinfo[ship_energy];
-        playerlog($targetinfo[ship_id], LOG_ATTACKED_WIN, "$playerinfo[character_name] $armor_lost $fighters_lost");
+        playerlog($targetinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_ATTACKED_WIN, "$playerinfo[character_name] $armor_lost $fighters_lost");
         $update4 = $db->adoExecute ("UPDATE ships SET ship_energy=$target_energy,ship_fighters=ship_fighters-$target_fighters_lost, armor_pts=armor_pts-$target_armor_lost, torps=torps-$targettorpnum WHERE ship_id=$targetinfo[ship_id]");
     }
     echo "<BR>_+_+_+_+_+_+_<BR>";

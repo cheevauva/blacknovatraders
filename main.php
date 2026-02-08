@@ -29,7 +29,7 @@ $planets = planetsBySector($playerinfo['sector']);
 $defences = defencesBySector($playerinfo['sector']);
 $zoneinfo = zoneById($sectorinfo['zone_id']);
 $traderoutes = traderoutesBySectorAndShip($playerinfo['sector'], $playerinfo['ship_id']);
-$shipsInSector = getShipsInSector($playerinfo['sector'], $playerinfo['ship_id']);
+$shipsInSector = BNT\ShipFunc::getShipsInSector($playerinfo['sector'], $playerinfo['ship_id']);
 
 if (!empty($_GET['demo'])) {
     $traderoutes[] = [];

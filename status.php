@@ -6,7 +6,7 @@ include 'config.php';
 
 checklogin(false);
 
-$online = shipsGetOnlinePlayersCount();
+$online = BNT\ShipFunc::shipsGetOnlinePlayersCount();
 $mySEC = 0;
 
 $schedulerLastRun = schedulerGetLastRun();

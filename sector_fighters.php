@@ -112,7 +112,7 @@ message_defence_owner($sector, strtr($l_sf_sendlog, [
     "[lost]" => $fighterslost,
     "[sector]" => $sector
 ]));
-playerlog($playerinfo['ship_id'], LOG_DEFS_DESTROYED_F, "$fighterslost|$sector");
+playerlog($playerinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_DEFS_DESTROYED_F, "$fighterslost|$sector");
 $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
 $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
 $energy = $playerinfo['ship_energy'];
@@ -127,7 +127,7 @@ $messages[] = strtr($l_sf_lreport, [
 
 if ($playerarmor < 1) {
     $messages[] = $l_sf_shipdestroyed;
-    playerlog($playerinfo[ship_id], LOG_DEFS_KABOOM, "$sector|{$playerinfo['dev_escapepod']}");
+    playerlog($playerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_DEFS_KABOOM, "$sector|{$playerinfo['dev_escapepod']}");
     message_defence_owner($sector, strtr($l_sf_sendlog2, [
         "[player]" => $playerinfo['character_name'],
         "[sector]" => $sector

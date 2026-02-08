@@ -195,7 +195,7 @@ function change_planet_production($prodpercentarray)
           if($res->fields['owned_planet']==0)
           {
             $planet_hack=True;
-##          adminlog(LOG_ADMIN_PLANETCHEAT_1,$_SERVER["REMOTE_ADDR"]."|$planet_id");
+##          adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETCHEAT_1,$_SERVER["REMOTE_ADDR"]."|$planet_id");
           }
 
           $db->adoExecute("UPDATE $dbtables[planets] SET $commod_type=$prodpercent WHERE planet_id=$planet_id AND owner = $ship_id");
@@ -218,13 +218,13 @@ function change_planet_production($prodpercentarray)
           {
             /* Oh dear they are different so send admin a log */
             $planet_hack=True;
-##          adminlog(LOG_ADMIN_PLANETCHEAT_2,$_SERVER["REMOTE_ADDR"]."|$prodpercent");
+##          adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETCHEAT_2,$_SERVER["REMOTE_ADDR"]."|$prodpercent");
           }
         }
         else
         {
           $planet_hack=True;
-##        adminlog(LOG_ADMIN_PLANETCHEAT_3,$_SERVER["REMOTE_ADDR"]."|$planet_id");
+##        adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETCHEAT_3,$_SERVER["REMOTE_ADDR"]."|$planet_id");
         }
       }
     }

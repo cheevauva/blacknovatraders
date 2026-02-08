@@ -49,34 +49,34 @@ function logParse($entry)
     }
 
     switch ($entry['type']) {
-        case LOG_LOGIN:
-        case LOG_LOGOUT:
-        case LOG_BADLOGIN:
-        case LOG_HARAKIRI:
+        case \BNT\Log\LogTypeConstants::LOG_LOGIN:
+        case \BNT\Log\LogTypeConstants::LOG_LOGOUT:
+        case \BNT\Log\LogTypeConstants::LOG_BADLOGIN:
+        case \BNT\Log\LogTypeConstants::LOG_HARAKIRI:
             $placeholders = [
                 '[ip]' => $entry['data']
             ];
             break;
-        case LOG_ATTACK_OUTMAN:
-        case LOG_ATTACK_OUTSCAN:
-        case LOG_ATTACK_EWD:
-        case LOG_ATTACK_EWDFAIL:
-        case LOG_SHIP_SCAN:
-        case LOG_SHIP_SCAN_FAIL:
-        case LOG_Xenobe_ATTACK:
-        case LOG_TEAM_NOT_LEAVE:
+        case \BNT\Log\LogTypeConstants::LOG_ATTACK_OUTMAN:
+        case \BNT\Log\LogTypeConstants::LOG_ATTACK_OUTSCAN:
+        case \BNT\Log\LogTypeConstants::LOG_ATTACK_EWD:
+        case \BNT\Log\LogTypeConstants::LOG_ATTACK_EWDFAIL:
+        case \BNT\Log\LogTypeConstants::LOG_SHIP_SCAN:
+        case \BNT\Log\LogTypeConstants::LOG_SHIP_SCAN_FAIL:
+        case \BNT\Log\LogTypeConstants::LOG_Xenobe_ATTACK:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_NOT_LEAVE:
             $placeholders = [
                 '[player]' => $entry['data']
             ];
             break;
-        case LOG_ATTACK_LOSE:
+        case \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE:
             list($name, $pod) = split("\|", $entry['data']);
             $text .= ($pod == 'Y' ? $l_log_pod : $l_log_nopod);
             $placeholders = [
                 '[player]' => $name
             ];
             break;
-        case LOG_ATTACKED_WIN:
+        case \BNT\Log\LogTypeConstants::LOG_ATTACKED_WIN:
             list($name, $armor, $fighters) = split("\|", $entry['data']);
             $placeholders = [
                 '[player]' => $name,
@@ -84,33 +84,33 @@ function logParse($entry)
                 '[fighters]' => $fighters
             ];
             break;
-        case LOG_TOLL_PAID:
-        case LOG_TOLL_RECV:
+        case \BNT\Log\LogTypeConstants::LOG_TOLL_PAID:
+        case \BNT\Log\LogTypeConstants::LOG_TOLL_RECV:
             list($toll, $sector) = split("\|", $entry['data']);
             $placeholders = [
                 '[toll]' => $toll,
                 '[sector]' => $sector
             ];
             break;
-        case LOG_HIT_MINES:
+        case \BNT\Log\LogTypeConstants::LOG_HIT_MINES:
             list($mines, $sector) = split("\|", $entry['data']);
             $placeholders = [
                 '[mines]' => $mines,
                 '[sector]' => $sector
             ];
             break;
-        case LOG_SHIP_DESTROYED_MINES:
-        case LOG_DEFS_KABOOM:
+        case \BNT\Log\LogTypeConstants::LOG_SHIP_DESTROYED_MINES:
+        case \BNT\Log\LogTypeConstants::LOG_DEFS_KABOOM:
             list($sector, $pod) = split("\|", $entry['data']);
             $text .= ($pod == 'Y' ? $l_log_pod : $l_log_nopod);
             $placeholders = [
                 '[sector]' => $sector
             ];
             break;
-        case LOG_PLANET_DEFEATED_D:
-        case LOG_PLANET_DEFEATED:
-        case LOG_PLANET_SCAN:
-        case LOG_PLANET_SCAN_FAIL:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED_D:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_SCAN:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_SCAN_FAIL:
             list($planet_name, $sector, $name) = split("\|", $entry['data']);
             $placeholders = [
                 '[planet_name]' => $planet_name,
@@ -119,7 +119,7 @@ function logParse($entry)
             ];
             break;
 
-        case LOG_PLANET_NOT_DEFEATED:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_NOT_DEFEATED:
             list($planet_name, $sector, $name, $ore, $organics, $goods, $salvage, $credits) = split("\|", $entry['data']);
             $placeholders = [
                 '[planet_name]' => $planet_name,
@@ -133,10 +133,10 @@ function logParse($entry)
             ];
             break;
 
-        case LOG_RAW:
+        case \BNT\Log\LogTypeConstants::LOG_RAW:
             $text = $entry['data'];
             break;
-        case LOG_DEFS_DESTROYED:
+        case \BNT\Log\LogTypeConstants::LOG_DEFS_DESTROYED:
             list($quantity, $type, $sector) = split("\|", $entry['data']);
             $placeholders = [
                 '[quantity]' => $quantity,
@@ -145,7 +145,7 @@ function logParse($entry)
             ];
             break;
 
-        case LOG_PLANET_EJECT:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_EJECT:
             list($sector, $name) = split("\|", $entry['data']);
             $placeholders = [
                 '[sector]' => $sector,
@@ -153,14 +153,14 @@ function logParse($entry)
             ];
             break;
 
-        case LOG_STARVATION:
+        case \BNT\Log\LogTypeConstants::LOG_STARVATION:
             list($sector, $starvation) = split("\|", $entry['data']);
             $placeholders = [
                 '[sector]' => $sector,
                 '[starvation]' => $starvation
             ];
             break;
-        case LOG_TOW:
+        case \BNT\Log\LogTypeConstants::LOG_TOW:
             list($sector, $newsector, $hull) = split("\|", $entry['data']);
             $placeholders = [
                 '[sector]' => $sector,
@@ -168,48 +168,48 @@ function logParse($entry)
                 '[hull]' => $hull
             ];
             break;
-        case LOG_DEFS_DESTROYED_F:
+        case \BNT\Log\LogTypeConstants::LOG_DEFS_DESTROYED_F:
             list($fighters, $sector) = split("\|", $entry['data']);
             $placeholders = [
                 '[sector]' => $sector,
                 '[fighters]' => $fighters
             ];
             break;
-        case LOG_TEAM_REJECT:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_REJECT:
             list($player, $teamname) = split("\|", $entry['data']);
             $placeholders = [
                 '[player]' => $player,
                 '[teamname]' => $teamname
             ];
             break;
-        case LOG_TEAM_RENAME:
-        case LOG_TEAM_M_RENAME:
-        case LOG_TEAM_KICK:
-        case LOG_TEAM_CREATE:
-        case LOG_TEAM_LEAVE:
-        case LOG_TEAM_LEAD:
-        case LOG_TEAM_JOIN:
-        case LOG_TEAM_INVITE:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_RENAME:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_M_RENAME:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_KICK:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_CREATE:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_LEAVE:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_LEAD:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_JOIN:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_INVITE:
             $placeholders = [
                 '[team]' => $entry['data']
             ];
             break;
-        case LOG_TEAM_NEWLEAD:
-        case LOG_TEAM_NEWMEMBER:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_NEWLEAD:
+        case \BNT\Log\LogTypeConstants::LOG_TEAM_NEWMEMBER:
             list($team, $name) = split("\|", $entry['data']);
             $placeholders = [
                 '[team]' => $team,
                 '[name]' => $name
             ];
             break;
-        case LOG_ADMIN_HARAKIRI:
+        case \BNT\Log\LogTypeConstants::LOG_ADMIN_HARAKIRI:
             list($player, $ip) = split("\|", $entry['data']);
             $placeholders = [
                 '[player]' => $player,
                 '[ip]' => $ip
             ];
             break;
-        case LOG_ADMIN_ILLEGVALUE:
+        case \BNT\Log\LogTypeConstants::LOG_ADMIN_ILLEGVALUE:
             list($player, $quantity, $type, $holds) = split("\|", $entry['data']);
             $placeholders = [
                 '[player]' => $player,
@@ -218,7 +218,7 @@ function logParse($entry)
                 '[holds]' => $holds
             ];
             break;
-        case LOG_ADMIN_PLANETDEL:
+        case \BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETDEL:
             list($attacker, $defender, $sector) = split("\|", $entry['data']);
             $placeholders = [
                 '[attacker]' => $attacker,
@@ -226,14 +226,14 @@ function logParse($entry)
                 '[sector]' => $sector
             ];
             break;
-        case LOG_DEFENCE_DEGRADE:
+        case \BNT\Log\LogTypeConstants::LOG_DEFENCE_DEGRADE:
             list($sector, $degrade) = split("\|", $entry['data']);
             $placeholders = [
                 '[sector]' => $sector,
                 '[degrade]' => $degrade
             ];
             break;
-        case LOG_PLANET_CAPTURED:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_CAPTURED:
             list($cols, $credits, $owner) = split("\|", $entry['data']);
             $placeholders = [
                 '[cols]' => $cols,
@@ -241,7 +241,7 @@ function logParse($entry)
                 '[owner]' => $owner
             ];
             break;
-        case LOG_BOUNTY_CLAIMED:
+        case \BNT\Log\LogTypeConstants::LOG_BOUNTY_CLAIMED:
             list($amount, $bounty_on, $placed_by) = split("\|", $entry['data']);
             $placeholders = [
                 '[amount]' => $amount,
@@ -249,26 +249,26 @@ function logParse($entry)
                 '[placed_by]' => $placed_by
             ];
             break;
-        case LOG_BOUNTY_PAID:
+        case \BNT\Log\LogTypeConstants::LOG_BOUNTY_PAID:
             list($amount, $bounty_on) = split("\|", $entry['data']);
             $placeholders = [
                 '[amount]' => $amount,
                 '[bounty_on]' => $bounty_on
             ];
             break;
-        case LOG_BOUNTY_CANCELLED:
+        case \BNT\Log\LogTypeConstants::LOG_BOUNTY_CANCELLED:
             list($amount, $bounty_on) = split("\|", $entry['data']);
             $placeholders = [
                 '[amount]' => $amount,
                 '[bounty_on]' => $bounty_on
             ];
             break;
-        case LOG_BOUNTY_FEDBOUNTY:
+        case \BNT\Log\LogTypeConstants::LOG_BOUNTY_FEDBOUNTY:
             $placeholders = [
                 '[amount]' => $entry['data']
             ];
             break;
-        case LOG_SPACE_PLAGUE:
+        case \BNT\Log\LogTypeConstants::LOG_SPACE_PLAGUE:
             list($name, $sector) = split("\|", $entry['data']);
             $percentage = $space_plague_kills * 100;
             $placeholders = [
@@ -277,7 +277,7 @@ function logParse($entry)
                 '[percentage]' => $space_plague_kills
             ];
             break;
-        case LOG_PLASMA_STORM:
+        case \BNT\Log\LogTypeConstants::LOG_PLASMA_STORM:
             list($name, $sector, $percentage) = split("\|", $entry['data']);
             $placeholders = [
                 '[name]' => $name,
@@ -285,7 +285,7 @@ function logParse($entry)
                 '[percentage]' => $percentage
             ];
             break;
-        case LOG_PLANET_BOMBED:
+        case \BNT\Log\LogTypeConstants::LOG_PLANET_BOMBED:
             list($planet_name, $sector, $name, $beams, $torps, $figs) = split("\|", $entry['data']);
             $placeholders = [
                 '[planet_name]' => $planet_name,

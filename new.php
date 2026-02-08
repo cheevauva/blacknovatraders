@@ -38,7 +38,7 @@ try {
             $escape = 'N';  //start game equip[[ped with escape pod?]]
             $scoop = 'N';  //start game equipped with fuel scoop?
 
-            if (shipByEmail($username)) {
+            if (BNT\ShipFunc::shipByEmail($username)) {
                 throw new \Exception("$l_new_inuse  $l_new_4gotpw1 <a href=mail.php?mail=$username>$l_clickme</a> $l_new_4gotpw2<BR>");
             }
 
@@ -79,9 +79,9 @@ try {
                 'dev_lssd' => (int) $start_lssd
             ];
 
-            shipCreate($playerData);
+            BNT\ShipFunc::shipCreate($playerData);
             
-            $playerinfo = shipByEmail($username);
+            $playerinfo = BNT\ShipFunc::shipByEmail($username);
 
             $l_new_message = str_replace("[pass]", $password, $l_new_message);
             $link_to_game = "http://";
@@ -93,8 +93,8 @@ try {
             bankAccountCreate($playerinfo['ship_id']);
 
             setcookie('token', $token, time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-            playerlog($playerinfo['ship_id'], LOG_LOGIN, $ip);
-            shipSetToken($playerinfo['ship_id'], $token);
+            playerlog($playerinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_LOGIN, $ip);
+            BNT\ShipFunc::shipSetToken($playerinfo['ship_id'], $token);
             redirectTo('main.php?id=' . $playerinfo['ship_id']);
             break;
         case 'GET':

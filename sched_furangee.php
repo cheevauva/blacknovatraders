@@ -61,7 +61,7 @@
             if ($playerinfo[fighters] > $rowo0[fighters])
             {
               $furcount0a++;
-              playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo0[character_name]");
+              playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo0[character_name]");
               furangeetoship($rowo0[ship_id]);
               if ($furangeeisdead>0) {
                 $res->MoveNext();
@@ -72,7 +72,7 @@
           elseif ($playerinfo[aggression] == 2)        // ****** O = 0 & AGRESSION = 2 ATTACK ALLWAYS ******
           {
             $furcount0a++;
-            playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo0[character_name]");
+            playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo0[character_name]");
             furangeetoship($rowo0[ship_id]);
             if ($furangeeisdead>0) {
               $res->MoveNext();
@@ -110,7 +110,7 @@
             if ($playerinfo[fighters] > $rowo1[fighters] && $rowo1[planet_id] == 0)
             {
               $furcount1a++;
-              playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo1[character_name]");
+              playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo1[character_name]");
               furangeetoship($rowo1[ship_id]);
               if ($furangeeisdead>0) {
                 $res->MoveNext();
@@ -121,7 +121,7 @@
           elseif ($playerinfo[aggression] == 2)        // ****** O = 1 & AGRESSION = 2 ATTACK ALLWAYS ******
           {
             $furcount1a++;
-            playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo1[character_name]");
+            playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo1[character_name]");
             if (!$rowo1[planet_id] == 0) {              // *** IS ON PLANET ***
               furangeetoplanet($rowo1[planet_id]);
             } else {
@@ -165,7 +165,7 @@
             if ($playerinfo[fighters] > $rowo2[fighters] && $rowo2[planet_id] == 0)
             {
               $furcount2a++;
-              playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo2[character_name]");
+              playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo2[character_name]");
               furangeetoship($rowo2[ship_id]);
               if ($furangeeisdead>0) {
                 $res->MoveNext();
@@ -176,7 +176,7 @@
           elseif ($playerinfo[aggression] == 2)        // ****** O = 2 & AGRESSION = 2 ATTACK ALLWAYS ******
           {
             $furcount2a++;
-            playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo2[character_name]");
+            playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo2[character_name]");
             if (!$rowo2[planet_id] == 0) {              // *** IS ON PLANET ***
               furangeetoplanet($rowo2[planet_id]);
             } else {
@@ -232,7 +232,7 @@
               if ($playerinfo[fighters] > $rowo3[fighters] && $rowo3[planet_id] == 0)
               {
                 $furcount3a++;
-                playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo3[character_name]");
+                playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo3[character_name]");
                 furangeetoship($rowo3[ship_id]);
                 if ($furangeeisdead>0) {
                   $res->MoveNext();
@@ -243,7 +243,7 @@
             elseif ($playerinfo[aggression] == 2)        // ****** O = 3 & AGRESSION = 2 ATTACK ALLWAYS ******
             {
               $furcount3a++;
-              playerlog($playerinfo[player_id], LOG_FURANGEE_ATTACK, "$rowo3[character_name]");
+              playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_FURANGEE_ATTACK, "$rowo3[character_name]");
               if (!$rowo3[planet_id] == 0) {              // *** IS ON PLANET ***
                 furangeetoplanet($rowo3[planet_id]);
               } else {

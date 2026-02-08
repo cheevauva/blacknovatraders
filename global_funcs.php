@@ -1,6 +1,7 @@
 <?php
 
 use BNT\ADODB\ADOPDO;
+use BNT\Log\LogTypeConstants;
 
 spl_autoload_register(function($className) {
     $fullPath = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
@@ -224,7 +225,7 @@ function checklogin($return = true)
     }
     /* if the player has an escapepod, set the player up with a new ship */
     if ($playerinfo['dev_escapepod'] == "Y") {
-        shipUpdate($playerinfo['ship_id'], [
+        BNT\ShipFunc::shipUpdate($playerinfo['ship_id'], [
             'power' => '0',
             'computer' => '0',
             'sensors' => '0',
@@ -586,7 +587,7 @@ function message_defence_owner($sector, $message)
        while(!$result3->EOF)
        {
 
-          playerlog($result3->fields[ship_id],LOG_RAW, $message);
+          playerlog($result3->fields[ship_id],LogTypeConstants::LOG_RAW, $message);
           $result3->MoveNext();
        }
     }
@@ -598,7 +599,7 @@ function distribute_toll($sector, $toll, $total_fighters)
     foreach (defencesBySectorAndFighters($sector) as $defence) {
           $toll_amount = ROUND(($defence['quantity'] / $total_fighters) * $toll);
           shipCreditsAdd($defence['ship_id'], $toll_amount);
-          playerlog($defence['ship_id'], LOG_TOLL_RECV, "$toll_amount|$sector");
+          playerlog($defence['ship_id'], LogTypeConstants::LOG_TOLL_RECV, "$toll_amount|$sector");
     }
 }
 
@@ -626,15 +627,15 @@ function defence_vs_defence($ship_id)
                   $db->adoExecute("DELETE FROM $dbtables[sector_defence] WHERE defence_id = $cur[defence_id]");
                   $qty -= $cur['quantity'];
                   $db->adoExecute("UPDATE $dbtables[sector_defence] SET quantity = $qty where defence_id = $row[defence_id]");
-                  playerlog($cur[ship_id], LOG_DEFS_DESTROYED, "$cur[quantity]|$targetdeftype|$row[sector_id]");
-                  playerlog($row[ship_id], LOG_DEFS_DESTROYED, "$cur[quantity]|$deftype|$row[sector_id]");
+                  playerlog($cur[ship_id], LogTypeConstants::LOG_DEFS_DESTROYED, "$cur[quantity]|$targetdeftype|$row[sector_id]");
+                  playerlog($row[ship_id], LogTypeConstants::LOG_DEFS_DESTROYED, "$cur[quantity]|$deftype|$row[sector_id]");
                }
                else
                {
                   $db->adoExecute("DELETE FROM $dbtables[sector_defence] WHERE defence_id = $row[defence_id]");
                   $db->adoExecute("UPDATE $dbtables[sector_defence] SET quantity=quantity - $qty WHERE defence_id = $cur[defence_id]");
-                  playerlog($cur[ship_id], LOG_DEFS_DESTROYED, "$qty|$targetdeftype|$row[sector_id]");
-                  playerlog($row[ship_id], LOG_DEFS_DESTROYED, "$qty|$deftype|$row[sector_id]");
+                  playerlog($cur[ship_id], LogTypeConstants::LOG_DEFS_DESTROYED, "$qty|$targetdeftype|$row[sector_id]");
+                  playerlog($row[ship_id], LogTypeConstants::LOG_DEFS_DESTROYED, "$qty|$deftype|$row[sector_id]");
                   $qty = 0;
                }
                $result2->MoveNext();
@@ -664,7 +665,7 @@ function kick_off_planet($ship_id,$whichteam)
             {
                $cur = $result2->fields;
                $db->adoExecute("UPDATE ships SET on_planet = 'N',planet_id = '0' WHERE ship_id='$cur[ship_id]'");
-               playerlog($cur[ship_id], LOG_PLANET_EJECT, "$cur[sector]|$row[character_name]");
+               playerlog($cur[ship_id], LogTypeConstants::LOG_PLANET_EJECT, "$cur[sector]|$row[character_name]");
                $result2->MoveNext();
             }
          }
@@ -977,8 +978,8 @@ function collect_bounty($attacker,$bounty_on)
          $update = $db->adoExecute("UPDATE ships SET credits = credits + $bountydetails[amount] WHERE ship_id = $attacker");
          $delete = $db->adoExecute("DELETE FROM $dbtables[bounty] WHERE bounty_id = $bountydetails[bounty_id]");
 
-         playerlog($attacker, LOG_BOUNTY_CLAIMED, "$bountydetails[amount]|$bountydetails[character_name]|$placed");
-         playerlog($bountydetails[placed_by],LOG_BOUNTY_PAID,"$bountydetails[amount]|$bountydetails[character_name]");
+         playerlog($attacker, LogTypeConstants::LOG_BOUNTY_CLAIMED, "$bountydetails[amount]|$bountydetails[character_name]|$placed");
+         playerlog($bountydetails[placed_by],LogTypeConstants::LOG_BOUNTY_PAID,"$bountydetails[amount]|$bountydetails[character_name]");
 
          $res->MoveNext();
       }
@@ -999,7 +1000,7 @@ function cancel_bounty($bounty_on)
          {
             $update = $db->adoExecute("UPDATE ships SET credits = credits + $bountydetails[amount] WHERE ship_id = $bountydetails[placed_by]");
 
-            playerlog($bountydetails[placed_by],LOG_BOUNTY_CANCELLED,"$bountydetails[amount]|$bountydetails[character_name]");
+            playerlog($bountydetails[placed_by],LogTypeConstants::LOG_BOUNTY_CANCELLED,"$bountydetails[amount]|$bountydetails[character_name]");
          }
          $delete = $db->adoExecute("DELETE FROM $dbtables[bounty] WHERE bounty_id = $bountydetails[bounty_id]");
          $res->MoveNext();
@@ -1131,7 +1132,7 @@ if (empty($disableAutoLogin)) {
     $playerinfo = null;
 
     if ($token) {
-        $playerinfo = shipByToken($token);
+        $playerinfo = BNT\ShipFunc::shipByToken($token);
     }
 }
 

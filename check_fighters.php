@@ -70,7 +70,7 @@ switch ($response) {
             $tollstring = NUMBER($fighterstoll);
             shipCreditsSub($playerinfo['ship_id'], $fighterstoll);
             distribute_toll($sector, $fighterstoll, $total_sector_fighters);
-            playerlog($playerinfo['ship_id'], LOG_TOLL_PAID, "$tollstring|$sector");
+            playerlog($playerinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_TOLL_PAID, "$tollstring|$sector");
         }
         break;
     case 'sneak':

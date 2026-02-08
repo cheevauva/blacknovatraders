@@ -21,7 +21,7 @@ try {
 
     if ($zoneinfo['allow_beacon'] == 'L') {
         $zoneowner_info = zoneById($sectorinfo['zone_id']);
-        $zoneteam = shipById($zoneowner_info['owner']);
+        $zoneteam = BNT\ShipFunc::shipById($zoneowner_info['owner']);
 
         if ($zoneowner_info['owner'] != $playerinfo['ship_id']) {
             if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0)) {
@@ -38,7 +38,7 @@ try {
             sectorUpdate($playerinfo['sector'], [
                 'beacon' => fromPost('beacon_text', new \Exception('beacon_text')),
             ]);
-            shipDevBeaconSub($playerinfo['ship_id'], 1);
+            BNT\ShipFunc::shipDevBeaconSub($playerinfo['ship_id'], 1);
             redirectTo('beacon.php');
             break;
     }

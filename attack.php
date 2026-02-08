@@ -56,14 +56,14 @@ if ($zoneinfo['allow_attack'] == 'N') {
 if ($flee < $roll2) {
     $messages[] = $l_att_flee;
     shipTurn($playerinfo['ship_id'], 1);
-    playerlog($targetinfo['ship_id'], LOG_ATTACK_OUTMAN, $playerinfo['character_name']);
+    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_OUTMAN, $playerinfo['character_name']);
     goto attackEnd;
 }
 
 if ($roll > $success) {
     $messages[] = $l_planet_noscan;
     shipTurn($playerinfo['ship_id'], 1);
-    playerlog($targetinfo['ship_id'], LOG_ATTACK_OUTSCAN, $playerinfo['character_name']);
+    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_OUTSCAN, $playerinfo['character_name']);
     goto attackEnd;
 }
 
@@ -86,7 +86,7 @@ if ($targetinfo['dev_emerwarp'] > 0 && $random_value > $chance) {
     $playerinfo['rating'] -= $rating_change;
 
     shipUpdate($playerinfo['ship_id'], $playerinfo);
-    playerlog($targetinfo['ship_id'], LOG_ATTACK_EWD, $playerinfo['character_name']);
+    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_EWD, $playerinfo['character_name']);
 
     $targetinfo['sector'] = $dest_sector;
     $targetinfo['dev_emerwarp'] -= 1;
@@ -114,13 +114,13 @@ if (($targetscore / $playerscore < $bounty_ratio || $targetinfo['turns_used'] < 
             'placed_by' => 0,
             'amount' => $bounty,
         ]);
-        playerlog($playerinfo['ship_id'], LOG_BOUNTY_FEDBOUNTY, $bounty);
+        playerlog($playerinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_BOUNTY_FEDBOUNTY, $bounty);
         $messages[] = $l_by_fedbounty2;
     }
 }
 
 if ($targetinfo['dev_emerwarp'] > 0) {
-    playerlog($targetinfo['ship_id'], LOG_ATTACK_EWDFAIL, $playerinfo['character_name']);
+    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_EWDFAIL, $playerinfo['character_name']);
 }
 
 $targetenergy = $targetinfo['ship_energy'];
@@ -373,10 +373,10 @@ if ($targetarmor < 1) {
         $targetinfo['rating'] /= 2;
         $targetinfo = shipEscapePod($playerinfo);
 
-        playerlog($targetinfo['ship_id'], LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'Y']);
+        playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'Y']);
         collect_bounty($playerinfo['ship_id'], $targetinfo['ship_id']);
     } else {
-        playerlog($targetinfo['ship_id'], LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
+        playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
         db_kill_player($targetinfo['ship_id']);
         collect_bounty($playerinfo['ship_id'], $targetinfo['ship_id']);
     }
@@ -394,7 +394,7 @@ if ($targetarmor < 1) {
 
             if ($rating_change > 0) {
                 $rating_change = 0 - $rating_change;
-                playerlog($targetinfo['ship_id'], LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
+                playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
                 collect_bounty($playerinfo['ship_id'], $targetinfo['ship_id']);
                 db_kill_player($targetinfo['ship_id']);
             }
@@ -485,7 +485,7 @@ if ($targetarmor < 1) {
     $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
     $fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
 
-    playerlog($targetinfo['ship_id'], LOG_ATTACKED_WIN, [$playerinfo['character_name'], $armor_lost, $fighters_lost]);
+    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACKED_WIN, [$playerinfo['character_name'], $armor_lost, $fighters_lost]);
 
     $targetinfo['ship_fighters'] -= $fighters_lost;
     $targetinfo['armor_pts'] -= $armor_lost;

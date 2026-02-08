@@ -241,13 +241,13 @@ else
             $logtype = "";
             switch($logrow[type])
             {
-              case LOG_Xenobe_ATTACK:
+              case \BNT\Log\LogTypeConstants::LOG_Xenobe_ATTACK:
                 $logtype = "Launching an attack on ";
                 break;
-              case LOG_ATTACK_LOSE:
+              case \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE:
                 $logtype = "We were attacked and lost against ";
                 break;
-              case LOG_ATTACK_WIN:
+              case \BNT\Log\LogTypeConstants::LOG_ATTACK_WIN:
                 $logtype = "We were attacked and won against ";
                 break;
             }

@@ -17,144 +17,10 @@ function ipBansCheck($ip)
     ]);
 }
 
-function shipSetToken($shipId, $token)
-{
-    db()->q("UPDATE ships SET last_login = NOW(), token = :token WHERE ship_id = :ship_id", [
-        'token' => $token,
-        'ship_id' => $shipId,
-    ]);
-}
-
 function planetById($id)
 {
     return db()->fetch('SELECT * FROM planets WHERE planet_id = :id', [
         'id' => $id,
-    ]);
-}
-
-function shipRestoreEscapepod($ship_id)
-{
-    $sql = "
-    UPDATE 
-        ships 
-    SET 
-        hull = 0,
-        engines = 0,
-        power = 0,
-        computer = 0,
-        sensors = 0,
-        beams = 0,
-        torp_launchers = 0,
-        torps = 0,
-        armor = 0,
-        armor_pts = 100,
-        cloak = 0,
-        shields = 0,
-        sector = 0,
-        ship_ore = 0,
-        ship_organics = 0,
-        ship_energy = 1000,
-        ship_colonists = 0,
-        ship_goods = 0,
-        ship_fighters = 100,
-        ship_damage = 0,
-        on_planet = 'N',
-        dev_warpedit = 0,
-        dev_genesis = 0,
-        dev_beacon = 0,
-        dev_emerwarp = 0,
-        dev_escapepod = 'N',
-        dev_fuelscoop = 'N',
-        dev_minedeflector = 0,
-        ship_destroyed = 'N',
-        dev_lssd = 'N' 
-        WHERE ship_id = :ship_id
-    ";
-
-    db()->q($sql, [
-        'ship_id' => $ship_id,
-    ]);
-}
-
-function shipCheckNewbie($ship_id)
-{
-    global $newbie_hull, $newbie_engines, $newbie_power, $newbie_computer, $newbie_sensors, $newbie_armor, $newbie_shields, $newbie_beams, $newbie_torp_launchers, $newbie_cloak;
-    $sql = "
-    SELECT 
-        COUNT(id)
-    FROM 
-        ships
-    WHERE 
-        ship_id = :ship_id
-        AND hull <= :newbie_hull
-        AND engines <= :newbie_engines
-        AND power <= :newbie_power
-        AND computer <= :newbie_computer
-        AND sensors <= :newbie_sensors
-        AND armor <= :newbie_armor
-        AND shields <= :newbie_shields
-        AND beams <= :newbie_beams
-        AND torp_launchers <= :newbie_torp_launchers
-        AND cloak <= :newbie_cloak
-    ";
-
-    return db()->column($sql, [
-        ':ship_id' => $ship_id,
-        ':newbie_hull' => $newbie_hull,
-        ':newbie_engines' => $newbie_engines,
-        ':newbie_power' => $newbie_power,
-        ':newbie_computer' => $newbie_computer,
-        ':newbie_sensors' => $newbie_sensors,
-        ':newbie_armor' => $newbie_armor,
-        ':newbie_shields' => $newbie_shields,
-        ':newbie_beams' => $newbie_beams,
-        ':newbie_torp_launchers' => $newbie_torp_launchers,
-        ':newbie_cloak' => $newbie_cloak,
-    ]);
-}
-
-function shipRestoreNewbie($ship_id)
-{
-    $sql = "
-    UPDATE 
-        ships 
-    SET 
-        hull = 0,
-        engines = 0,
-        power = 0,
-        computer = 0,
-        sensors = 0,
-        beams = 0,
-        torp_launchers = 0,
-        torps = 0,
-        armor = 0,
-        armor_pts = 100,
-        cloak = 0,
-        shields = 0,
-        sector = 0,
-        ship_ore = 0,
-        ship_organics = 0,
-        ship_energy = 1000,
-        ship_colonists = 0,
-        ship_goods = 0,
-        ship_fighters = 100,
-        ship_damage = 0,
-        credits = 1000,
-        on_planet = 'N',
-        dev_warpedit = 0,
-        dev_genesis = 0,
-        dev_beacon = 0,
-        dev_emerwarp = 0,
-        dev_escapepod = 'N',
-        dev_fuelscoop = 'N',
-        dev_minedeflector = 0,
-        ship_destroyed = 'N',
-        dev_lssd = 'N' 
-        WHERE ship_id = :ship_id
-    ";
-
-    db()->q($sql, [
-        'ship_id' => $ship_id,
     ]);
 }
 
@@ -176,11 +42,6 @@ function schedulerCreate($data)
     return rowCreate('scheduler', $data);
 }
 
-function shipCreate($data)
-{
-    return rowCreate('ships', $data);
-}
-
 function rowCreate($table, $data)
 {
     $parameters = [];
@@ -195,6 +56,7 @@ function rowCreate($table, $data)
 
     return db()->lastInsertId();
 }
+
 function configRead()
 {
     return db()->fetchAllKeyValue('SELECT name, value FROM config');
@@ -220,9 +82,12 @@ function bankAccountCreate($data)
     return rowCreate('ibank_accounts', $data);
 }
 
-function shipsGetOnlinePlayersCount()
+function sectorUpdateBeacon($sector, $beaconText)
 {
-    return (int) db()->column("SELECT COUNT(*) as loggedin FROM ships WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(ships.last_login)) / 60 <= 5 AND email NOT LIKE '%@xenobe'");
+    return db()->q('UPDATE universe SET beacon = :beaconText WHERE sector_id= :sector', [
+        'sector' => $sector,
+        'beaconText' => $beaconText,
+    ]);
 }
 
 function schedulerGetLastRun()
@@ -234,62 +99,6 @@ function newsByDate($date)
 {
     return db()->fetchAll("SELECT * FROM news WHERE date = :date ORDER BY news_id DESC", [
         'date' => $date,
-    ]);
-}
-
-function shipsGetNotDestroyedExcludeXenobeCount()
-{
-    return db()->column("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe'");
-}
-
-function shipsGetRankingData($sort, $max_rank)
-{
-    if ($sort == "turns") {
-        $by = "turns_used DESC,character_name ASC";
-    } elseif ($sort == "login") {
-        $by = "last_login DESC,character_name ASC";
-    } elseif ($sort == "good") {
-        $by = "rating DESC,character_name ASC";
-    } elseif ($sort == "bad") {
-        $by = "rating ASC,character_name ASC";
-    } elseif ($sort == "alliance") {
-        $by = "teams.team_name DESC, character_name ASC";
-    } elseif ($sort == "efficiency") {
-        $by = "efficiency DESC";
-    } elseif ($sort == "online") {
-        $by = "online DESC";
-    } else {
-        $by = "score DESC,character_name ASC";
-    }
-
-    $query = "
-    SELECT 
-        ships.email,
-        ships.score,
-        ships.character_name,
-        ships.turns_used,
-        ships.last_login,
-        UNIX_TIMESTAMP(ships.last_login) as online,
-        ships.rating, 
-        teams.team_name, 
-        IF(ships.turns_used<150,0,ROUND(ships.score/ships.turns_used)) AS efficiency 
-    FROM 
-        ships 
-    LEFT JOIN 
-        teams 
-    ON 
-        ships.team = teams.id  
-    WHERE 
-        ship_destroyed='N' AND 
-        email NOT LIKE '%@xenobe' 
-    ORDER BY $by 
-    LIMIT :limit
-    ";
-
-    return db()->fetchAll($query, [
-        'limit' => $max_rank,
-    ], [
-        'limit' => PDO::PARAM_INT,
     ]);
 }
 
@@ -305,27 +114,6 @@ function messagesNotifiedByShip($shipId)
 {
     db()->q("UPDATE messages SET notified = 'Y' WHERE recp_id = :shipId AND notified = 'N'", [
         'shipId' => $shipId,
-    ]);
-}
-
-function shipByEmail($email)
-{
-    return db()->fetch("SELECT * FROM ships WHERE email = :username LIMIT 1", [
-        'username' => $email,
-    ]);
-}
-
-function shipById($id)
-{
-    return db()->fetch("SELECT * FROM ships WHERE ship_id = :id LIMIT 1", [
-        'id' => $id,
-    ]);
-}
-
-function shipByToken($token)
-{
-    return db()->fetch("SELECT * FROM ships WHERE token = :token LIMIT 1", [
-        'token' => $token,
     ]);
 }
 
@@ -415,36 +203,6 @@ function defencesBySector($sectorId)
     ]);
 }
 
-function getShipsInSector($sectorId, $playerShipId)
-{
-    if (empty($sectorId)) {
-        return [];
-    }
-
-    $sql = " 
-    SELECT
-        ships.*,
-        (ships.hull + ships.engines + ships.power + ships.computer + ships.sensors + ships.armor + ships.shields + ships.beams + ships.torp_launchers + ships.cloak) / 10 AS score,
-        teams.team_name,
-        teams.id
-    FROM 
-        ships
-    LEFT JOIN
-        teams
-    ON 
-        ships.team = teams.id
-    WHERE 
-        ships.ship_id != :playerShipId AND
-        ships.sector = :sector AND
-        ships.on_planet = 'N'
-    ";
-
-    return db()->fetchAll($sql, [
-        'sector' => $sectorId,
-        'playerShipId' => $playerShipId,
-    ]);
-}
-
 function traderoutesBySectorAndShip($sector, $shipId)
 {
     $sql = "
@@ -475,61 +233,6 @@ function traderoutesBySectorAndShip($sector, $shipId)
     return db()->fetchAll($sql, [
         'sector_id' => $sector,
         'ship_id' => $shipId,
-    ]);
-}
-
-function shipResetClearedDefences($shipId)
-{
-    db()->q("UPDATE ships SET last_login = NOW(), cleared_defences = '' WHERE ship_id= :shipId", [
-        'shipId' => $shipId,
-    ]);
-}
-
-function shipSetClearedDefences($shipId, $cleared_defences)
-{
-    db()->q("UPDATE ships SET last_login = NOW(), cleared_defences = :cleared_defences WHERE ship_id= :shipId", [
-        'shipId' => $shipId,
-        'cleared_defences' => $cleared_defences,
-    ]);
-}
-
-function shipMoveToSector($shipId, $sector)
-{
-    db()->q("UPDATE ships SET last_login = NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector WHERE ship_id = :shipId", [
-        'sector' => $sector,
-        'shipId' => $shipId,
-    ]);
-}
-
-function shipCreditsAdd($shipId, $credits)
-{
-    db()->q("UPDATE ships SET last_login = NOW(), credits = credits + :credits WHERE ship_id = :shipId", [
-        'credits' => $credits,
-        'shipId' => $shipId,
-    ]);
-}
-
-function shipCreditsSub($shipId, $credits)
-{
-    db()->q("UPDATE ships SET last_login = NOW(), credits = credits - :credits WHERE ship_id = :shipId", [
-        'credits' => $credits,
-        'shipId' => $shipId,
-    ]);
-}
-
-function shipToSector($shipId, $sector)
-{
-    db()->q("UPDATE ships SET last_login=NOW(), sector=:sector WHERE ship_id = :shipId", [
-        'sector' => $sector,
-        'shipId' => $shipId,
-    ]);
-}
-
-function shipRetreatToSector($shipId, $sector)
-{
-    db()->q("UPDATE ships SET last_login=NOW(), turns=turns - 2, turns_used = turns_used + 2, sector=:sector where ship_id = :shipId", [
-        'sector' => $sector,
-        'shipId' => $shipId,
     ]);
 }
 
@@ -590,21 +293,6 @@ function planetUpdate($planet, $data)
     return db()->q(sprintf('UPDATE planets SET %s WHERE planet_id = :planet_id', implode(', ', $values)), $parameters);
 }
 
-function shipUpdate($ship, $data)
-{
-    $parameters = [];
-    $values = [];
-
-    foreach ($data as $key => $value) {
-        $values[] = sprintf('%s = :%s', $key, $key);
-        $parameters[$key] = $value;
-    }
-
-    $parameters['ship_id'] = $ship;
-
-    return db()->q(sprintf('UPDATE ships SET %s WHERE ship_id = :ship_id', implode(', ', $values)), $parameters);
-}
-
 function sectorUpdate($sector, $data)
 {
     $parameters = [];
@@ -633,75 +321,4 @@ function sectorCreate($data)
     }
 
     return db()->q(sprintf('INSERT INTO universe (%s) VALUES (%s)', implode(', ', $columns), implode(', ', $values)), $parameters);
-}
-
-function shipDevWarpeditSub($ship, $devWarpedit)
-{
-    return db()->q('UPDATE ships SET dev_warpedit = dev_warpedit - :dev_warpedit WHERE ship_id= :ship', [
-        'ship' => $ship,
-        'dev_warpedit' => $devWarpedit,
-    ]);
-}
-
-function shipDevBeaconSub($ship, $beacon)
-{
-    return db()->q('UPDATE ships SET dev_beacon = dev_beacon - :beacon WHERE ship_id= :ship', [
-        'ship' => $ship,
-        'beacon' => $beacon,
-    ]);
-}
-
-function sectorUpdateBeacon($sector, $beaconText)
-{
-    return db()->q('UPDATE universe SET beacon = :beaconText WHERE sector_id= :sector', [
-        'sector' => $sector,
-        'beaconText' => $beaconText,
-    ]);
-}
-
-function shipTurn($shipId, $turns)
-{
-    return db()->q('UPDATE ships SET last_login = NOW(), turns = turns - :turns, turns_used = turns_used + :turns WHERE ship_id = :shipId', [
-        'turns' => $turns,
-        'shipId' => $shipId,
-    ]);
-}
-
-function shipEscapePod(array $ship)
-{
-    global $start_energy;
-
-    $ship['hull'] = 0;
-    $ship['engines'] = 0;
-    $ship['power'] = 0;
-    $ship['sensors'] = 0;
-    $ship['computer'] = 0;
-    $ship['beams'] = 0;
-    $ship['torp_launchers'] = 0;
-    $ship['torps'] = 0;
-    $ship['armor'] = 0;
-    $ship['armor_pts'] = 100;
-    $ship['cloak'] = 0;
-    $ship['shields'] = 0;
-    $ship['sector'] = 0;
-    $ship['ship_organics'] = 0;
-    $ship['ship_ore'] = 0;
-    $ship['ship_goods'] = 0;
-    $ship['ship_energy'] = $start_energy;
-    $ship['ship_colonists'] = 0;
-    $ship['ship_fighters'] = 100;
-    $ship['dev_warpedit'] = 0;
-    $ship['dev_genesis'] = 0;
-    $ship['dev_beacon'] = 0;
-    $ship['dev_emerwarp'] = 0;
-    $ship['dev_escapepod'] = 'N';
-    $ship['dev_fuelscoop'] = 'N';
-    $ship['dev_minedeflector'] = 0;
-    $ship['on_planet'] = 'N';
-    $ship['cleared_defences'] = '';
-    $ship['dev_lssd'] = 'N';
-
-    shipUpdate($ship['ship_id'], $ship);
-
-    return $ship;
 }
