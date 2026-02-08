@@ -14,7 +14,6 @@
   // ******* INCLUDE FUNCTIONS *******
   // *********************************
   include_once("furangee_funcs.php");
-  include_once("languages/$lang");
   global $targetlink;
   global $furangeeisdead;
 

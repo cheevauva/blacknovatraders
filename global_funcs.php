@@ -1153,8 +1153,7 @@ if (!empty($playerinfo['lang'])) {
     }
 }
 
-$lang = $language . ".inc";
-$languageFileMain = sprintf('languages/%s.inc', $language);
+$languageFileMain = sprintf('languages/%s.php', $language);
 $languageFileSub = sprintf('languages/%s%s', $language, $PHP_SELF);
 
 include $languageFileMain;

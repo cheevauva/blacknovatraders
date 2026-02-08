@@ -352,7 +352,6 @@ function Real_Space_Move($destination)
   global $dbtables;
   global $level_factor;
   global $username;
-  global $lang;
 
   $res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
   $playerinfo = $res->fields;
