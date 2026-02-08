@@ -73,10 +73,10 @@ function options($options, $selected)
                         <div class="navbar-nav">
                             <a class="nav-link" href="news.php"><?php echo $l_news_title; ?></a>
                             <a class="nav-link" href="ranking.php"><?php echo $l_rankings; ?></a>
-                            <a class="nav-link" href="settings.php"><?php echo $l_login_settings; ?></A>
+                            <a class="nav-link" href="settings.php"><?php echo $l_settings_game; ?></A>
                             <a class="nav-link" href="help.php"><?php echo $l_help; ?></a>
                             <a class="nav-link" href="faq.html"><? echo "$l_faq"; ?></a>
-                            <a class="nav-link" href="mailto:<? echo $admin_mail; ?>"><?php echo $l_login_emailus; ?></a>
+                            <a class="nav-link" href="mailto:<? echo $admin_mail; ?>"><?php echo $l_emailus; ?></a>
 
                             <?php if (!empty($link_forums)) : ?>
                                 <a class="nav-link" href="<?php echo $link_forums; ?>" target="_blank"><?php echo $l_forums; ?></A>

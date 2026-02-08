@@ -31,11 +31,11 @@
                         <td><?php echo $beacon; ?>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_att_att; ?></td>
+                        <td>&nbsp;<?php echo $l_attack; ?></td>
                         <td><?php echo $attack; ?>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_md_title; ?></td>
+                        <td>&nbsp;<?php echo $l_modify_defence; ?></td>
                         <td><?php echo $defense; ?>&nbsp;</td>
                     </tr>
                     <tr>
@@ -47,7 +47,7 @@
                         <td><?php echo $planet; ?>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_title_port; ?></td>
+                        <td>&nbsp;<?php echo $l_port; ?></td>
                         <td><?php echo $trade; ?>&nbsp;</td>
                     </tr>
                     <tr>

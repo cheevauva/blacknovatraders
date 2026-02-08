@@ -2,10 +2,6 @@
 
 include 'config.php';
 
-
-
-checklogin(false);
-
 $online = BNT\ShipFunc::shipsGetOnlinePlayersCount();
 $mySEC = 0;
 
@@ -33,4 +29,6 @@ echo json_encode([
     'schedTicks' => $sched_ticks,
     'myx' => $mySEC,
     'unreadMessages' => $unreadMessages ? $l_youhave . $unreadMessages . $l_messages_wait : null,
+    'M' => sprintf('%.2f',memory_get_peak_usage() / 1024 / 1024, 2),
+    'E' => sprintf('%.3f', microtime(true) - MICROTIME_START),
 ], JSON_UNESCAPED_UNICODE);

@@ -4,6 +4,8 @@
 
 namespace BNT;
 
+use PDO;
+
 class ShipFunc
 {
 
@@ -65,7 +67,7 @@ class ShipFunc
         $ship['cleared_defences'] = '';
         $ship['dev_lssd'] = 'N';
 
-        shipUpdate($ship['ship_id'], $ship);
+        self::shipUpdate($ship['ship_id'], $ship);
 
         return $ship;
     }

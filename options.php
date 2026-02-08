@@ -1,5 +1,7 @@
 <?php
 
+use BNT\ShipFunc;
+
 include 'config.php';
 
 if (checklogin()) {
@@ -15,7 +17,7 @@ switch (requestMethod()) {
             $newlang = fromPost('newlang', $language);
 
             if (in_array($newlang, array_keys(languages()), true)) {
-                shipUpdate($playerinfo['ship_id'], [
+                ShipFunc::shipUpdate($playerinfo['ship_id'], [
                     'lang' => $newlang
                 ]);
             }
@@ -30,10 +32,10 @@ switch (requestMethod()) {
                         throw new \Exception($l_opt2_srcpassfalse);
                     }
 
-                    $shipUpdated = shipUpdate($playerinfo['ship_id'], [
+                    $shipUpdated = ShipFunc::shipUpdate($playerinfo['ship_id'], [
                         'password' => md5($newpass1)
                     ]);
-                    
+
                     if (!$shipUpdated) {
                         throw new \Exception($l_opt2_passchangeerr);
                     }

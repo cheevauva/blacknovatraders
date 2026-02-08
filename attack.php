@@ -1,5 +1,5 @@
 <?php
-
+use BNT\ShipFunc;
 include 'config.php';
 
 $title = $l_att_title;
@@ -85,14 +85,14 @@ if ($targetinfo['dev_emerwarp'] > 0 && $random_value > $chance) {
     $playerinfo['turns_used'] += 1;
     $playerinfo['rating'] -= $rating_change;
 
-    shipUpdate($playerinfo['ship_id'], $playerinfo);
+    ShipFunc::shipUpdate($playerinfo['ship_id'], $playerinfo);
     playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_EWD, $playerinfo['character_name']);
 
     $targetinfo['sector'] = $dest_sector;
     $targetinfo['dev_emerwarp'] -= 1;
     $targetinfo['cleared_defences'] = '';
 
-    shipUpdate($targetinfo['ship_id'], $targetinfo);
+    ShipFunc::shipUpdate($targetinfo['ship_id'], $targetinfo);
 
     log_move($targetinfo['ship_id'], $dest_sector);
     $messages[] = $l_att_ewd;
@@ -474,7 +474,7 @@ if ($targetarmor < 1) {
         $playerinfo['turns_used'] += 1;
         $playerinfo['rating'] -= $rating_change;
 
-        shipUpdate($playerinfo['ship_id'], $playerinfo);
+        ShipFunc::shipUpdate($playerinfo['ship_id'], $playerinfo);
 
         $messages[] = implode(' ', [$l_att_ylost, $armor_lost, $l_armorpts, $fighters_lost, ',', $l_fighters, $l_att_andused, $playertorpnum, $l_torps]);
     }
@@ -491,7 +491,7 @@ if ($targetarmor < 1) {
     $targetinfo['armor_pts'] -= $armor_lost;
     $targetinfo['torps'] -= $targettorpnum;
 
-    shipUpdate($targetinfo['ship_id'], $targetinfo);
+    ShipFunc::shipUpdate($targetinfo['ship_id'], $targetinfo);
 
     $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
     $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
@@ -504,7 +504,7 @@ if ($targetarmor < 1) {
     $playerinfo['turns_used'] += 1;
     $playerinfo['rating'] -= $rating_change;
 
-    shipUpdate($playerinfo['ship_id'], $playerinfo);
+    ShipFunc::shipUpdate($playerinfo['ship_id'], $playerinfo);
 
     $messages[] = implode(' ', [$l_att_ylost, $armor_lost, $l_armorpts, $fighters_lost, $l_fighters, ',', $l_att_andused, $playertorpnum, $l_torps]);
 }
@@ -598,7 +598,7 @@ if ($playerarmor < 1) {
         $targetinfo['armor_pts'] -= $armor_lost;
         $targetinfo['torps'] -= $targettorpnum;
 
-        shipUpdate($targetinfo['ship_id'], $targetinfo);
+        ShipFunc::shipUpdate($targetinfo['ship_id'], $targetinfo);
     }
 }
 

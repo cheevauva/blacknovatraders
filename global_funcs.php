@@ -1154,7 +1154,13 @@ if (!empty($playerinfo['lang'])) {
 }
 
 $lang = $language . ".inc";
+$languageFileMain = sprintf('languages/%s.inc', $language);
+$languageFileSub = sprintf('languages/%s%s', $language, $PHP_SELF);
 
-include("languages/$lang");
+include $languageFileMain;
+
+if (file_exists($languageFileSub)) {
+    include $languageFileSub;
+}
 
 updatecookie();
