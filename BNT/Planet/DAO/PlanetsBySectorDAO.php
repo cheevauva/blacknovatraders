@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Planet\DAO;
 
@@ -12,7 +12,7 @@ class PlanetsBySectorDAO extends \UUA\DAO
     public $sector;
     public $planets;
 
-    public function serve()
+    public function serve(): void
     {
         $sql = "
         SELECT 

@@ -6,7 +6,7 @@ $disableRegisterGlobalFix = true;
 
 include 'config.php';
 
-$entrtyPointStatus = EntryPointStatusServant::_new($container);
+$entrtyPointStatus = EntryPointStatusServant::new($container);
 $entrtyPointStatus->ship = $playerinfo;
 $entrtyPointStatus->serve();
 

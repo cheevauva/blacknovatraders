@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Traderoute\DAO;
 
@@ -13,7 +13,7 @@ class TraderoutesBySectorAndShipDAO extends \UUA\DAO
     public $ship;
     public $traderoutes;
 
-    public function serve()
+    public function serve(): void
     {
         $sql = "
         SELECT

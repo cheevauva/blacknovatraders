@@ -74,11 +74,11 @@ if(!isset($tr_repeat) || $tr_repeat <= 0)
 
 
 if($command == 'new')   //displays new trade route form
-  traderoute_new('');
+  traderoutenew('');
 elseif($command == 'create')    //enters new route in db
   traderoute_create();
 elseif($command == 'edit')    //displays new trade route form, edit
-  traderoute_new($traderoute_id);
+  traderoutenew($traderoute_id);
 elseif($command == 'delete')  //displays delete info
   traderoute_delete();
 elseif($command == 'settings')  //global traderoute settings form
@@ -456,7 +456,7 @@ function traderoute_distance($type1, $type2, $start, $dest, $circuit, $sells = '
   return $retvalue;
 }
 
-function traderoute_new($traderoute_id)
+function traderoutenew($traderoute_id)
 {
   global $playerinfo, $color_line1, $color_line2, $color_header;
   global $num_traderoutes, $servertimezone;

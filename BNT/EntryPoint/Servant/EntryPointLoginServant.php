@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\EntryPoint\Servant;
 
@@ -19,7 +19,7 @@ class EntryPointLoginServant extends \UUA\Servant
     public $password;
     public $ship;
 
-    public function serve()
+    public function serve(): void
     {
         global $l_login_email;
         global $l_login_pw;
@@ -47,22 +47,14 @@ class EntryPointLoginServant extends \UUA\Servant
             throw new \Exception($l_login_pw . ' ' . $l_is_required);
         }
 
-        $shipByEmail = ShipByEmailDAO::_new($this->container);
-        $shipByEmail->email = $this->email;
-        $shipByEmail->serve();
-
-        $ship = $shipByEmail->ship;
+        $ship = ShipByEmailDAO::call($this->container, $this->email)->ship;
 
         if (empty($ship)) {
             throw new \Exception($l_login_noone);
         }
 
         if ($ship['password'] !== md5($this->password)) {
-            $logBadLogin = LogPlayerDAO::_new($this->container);
-            $logBadLogin->ship = $ship['ship_id'];
-            $logBadLogin->type = LogTypeConstants::LOG_BADLOGIN;
-            $logBadLogin->data = $ip;
-            $logBadLogin->serve();
+            LogPlayerDAO::call($this->container, $ship['ship_id'], LogTypeConstants::LOG_BADLOGIN, $ip);
 
             throw new \Exception($l_login_4gotpw1);
         }
@@ -73,22 +65,15 @@ class EntryPointLoginServant extends \UUA\Servant
             $ship['token'] = $token;
             $ship['last_login'] = gmdate('Y-m-d H:i:s');
 
-            $logLogin = LogPlayerDAO::_new($this->container);
-            $logLogin->ship = $ship['ship_id'];
-            $logLogin->type = LogTypeConstants::LOG_LOGIN;
-            $logLogin->data = $ip;
-            $logLogin->serve();
-
-            $shipUpdate = ShipUpdateDAO::_new($this->container);
-            $shipUpdate->ship = $ship;
-            $shipUpdate->serve();
-
+            LogPlayerDAO::call($this->container, $ship['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
+            ShipUpdateDAO::call($this->container, $ship);
+            
             $this->ship = $ship;
             return;
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $ship['dev_escapepod'] == 'Y') {
-            $escapepod = ShipEscapepodServant::_new($this->container);
+            $escapepod = ShipEscapepodServant::new($this->container);
             $escapepod->ship = $ship;
             $escapepod->serve();
 
@@ -102,7 +87,7 @@ class EntryPointLoginServant extends \UUA\Servant
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $newbie_nice == 'YES') {
-            $checkNewbie = ShipCheckNewbieServant::_new($this->container);
+            $checkNewbie = ShipCheckNewbieServant::new($this->container);
             $checkNewbie->ship = $ship;
             $checkNewbie->serve();
 
@@ -110,7 +95,7 @@ class EntryPointLoginServant extends \UUA\Servant
                 throw new \Exception($youHaveDied . ' ' . $l_login_looser);
             }
 
-            $restore = ShipRestoreAsNewbieServant::_new($this->container);
+            $restore = ShipRestoreAsNewbieServant::new($this->container);
             $restore->ship = $ship;
             $restore->serve();
 

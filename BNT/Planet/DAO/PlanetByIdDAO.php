@@ -12,7 +12,7 @@ class PlanetByIdDAO extends \UUA\DAO
     public $id;
     public $planet;
 
-    public function serve()
+    public function serve(): void
     {
         $this->planet = $this->db()->fetch('SELECT * FROM planets WHERE planet_id = :id', [
             'id' => $this->id,

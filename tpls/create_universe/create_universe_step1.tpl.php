@@ -1,37 +1,64 @@
 <?php include "header.php"; ?>
 <form action="create_universe.php" method="post" class="form-container">
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Create Universe [Base/Planet Setup]</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col mb-2">
+                    <label class="form-label">Percent Special</label>
+                    <input type="text" class="form-control" name="special" size="10" maxlength="10" value="<?php echo (int) $special; ?>">
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Percent Ore</label>
+                    <input type="text" class="form-control" name="ore" size="10" maxlength="10" value="<?php echo (int) $ore; ?>">
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Percent Organics</label>
+                    <input type="text" class="form-control" name="organics" size="10" maxlength="10" value="<?php echo (int) $organics; ?>">
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Percent Goods</label>
+                    <input type="text" class="form-control" name="goods" size="10" maxlength="10" value="<?php echo (int) $goods; ?>">
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Percent Energy</label>
+                    <input type="text" class="form-control" name="energy" size="10" maxlength="10" value="<?php echo (int) $energy; ?>">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Limits</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+              <div class="col mb-2">
+                    <label class="form-label">Organics</label>
+                    <input type="number" class="form-control" name="organics_limit" size="10" maxlength="10" value="<?php echo (int) $organics_limit; ?>">
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Goods</label>
+                    <input type="number" class="form-control" name="goods_limit" size="10" maxlength="10" value="<?php echo (int) $goods_limit; ?>">
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Energy</label>
+                    <input type="number" class="form-control" name="energy_limit" size="10" maxlength="10" value="<?php echo (int) $energy_limit; ?>">
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Ore limit</label>
+                    <input type="number" class="form-control" name="ore_limit" size="10" maxlength="10" value="<?php echo (int) $ore_limit; ?>">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
     <div class="mb-4">
-        <h4 class="mb-3">Create Universe [Base/Planet Setup]</h4>
-
-        <div class="mb-3">
-            <label class="form-label">Universe size</label>
-            <input type="text" class="form-control" name="universe_size" size="10" maxlength="10" value="<?php echo (int) $universe_size; ?>">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Percent Special</label>
-            <input type="text" class="form-control" name="special" size="10" maxlength="10" value="<?php echo (int) $special; ?>">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Percent Ore</label>
-            <input type="text" class="form-control" name="ore" size="10" maxlength="10" value="<?php echo (int) $ore; ?>">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Percent Organics</label>
-            <input type="text" class="form-control" name="organics" size="10" maxlength="10" value="<?php echo (int) $organics; ?>">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Percent Goods</label>
-            <input type="text" class="form-control" name="goods" size="10" maxlength="10" value="<?php echo (int) $goods; ?>">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Percent Energy</label>
-            <input type="text" class="form-control" name="energy" size="10" maxlength="10" value="<?php echo (int) $energy; ?>">
-        </div>
 
         <div class="alert alert-info mb-4">
             Percent Empty: Equal to 100 - total of above.
@@ -51,6 +78,11 @@
 
     <div class="mb-4">
         <h4 class="mb-3">Create Universe [Sector/Link Setup]</h4>
+
+        <div class="mb-3">
+            <label class="form-label">Universe size</label>
+            <input type="text" class="form-control" name="universe_size" size="10" maxlength="10" value="<?php echo (int) $universe_size; ?>">
+        </div>
 
         <div class="mb-3">
             <label class="form-label">Number of sectors total</label>

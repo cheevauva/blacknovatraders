@@ -4,6 +4,7 @@ use BNT\Sector\Exception\SectorChooseMoveException;
 use BNT\Sector\Exception\SectorFightException;
 use BNT\Sector\Exception\SectorRetreatException;
 use BNT\Sector\Exception\SectorNotEnoghtCreditsTollException;
+use BNT\Ship\DAO\ShipByIdDAO;
 
 preg_match("/check_fighters.php/i", $_SERVER['PHP_SELF']) ? die('You can not access this file directly!') : null;
 
@@ -39,7 +40,7 @@ if (!$isProblem) {
 // find out if the fighter owner and player are on the same team
 // All sector defences must be owned by members of the same team
 $fm_owner = $defences[0]['ship_id'];
-$fighters_owner = shipById($fm_owner);
+$fighters_owner = ShipByIdDAO::call($container, $fm_owner)->ship;
 $isProblem = $fighters_owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0;
 
 if (!$isProblem) {

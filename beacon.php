@@ -1,5 +1,10 @@
 <?php
 
+use BNT\Ship\DAO\ShipByIdDAO;
+use BNT\Zone\DAO\ZoneByIdDAO;
+
+$disableRegisterGlobalFix = true;
+
 include 'config.php';
 
 if (checklogin()) {
@@ -20,8 +25,12 @@ try {
     }
 
     if ($zoneinfo['allow_beacon'] == 'L') {
-        $zoneowner_info = zoneById($sectorinfo['zone_id']);
-        $zoneteam = BNT\ShipFunc::shipById($zoneowner_info['owner']);
+        $zoneById = ZoneByIdDAO::new($this->container);
+        $zoneById->id = $sectorinfo['zone_id'];
+        $zoneById->serve();
+        
+        $zoneowner_info = $zoneById->zone;
+        $zoneteam = ShipByIdDAO::call($container, $zoneowner_info['owner'])->ship;
 
         if ($zoneowner_info['owner'] != $playerinfo['ship_id']) {
             if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0)) {

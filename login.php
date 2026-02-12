@@ -12,7 +12,7 @@ try {
             $email = fromPost('email');
             $pass = fromPost('pass');
 
-            $entryPointLogin = EntryPointLoginServant::_new($container);
+            $entryPointLogin = EntryPointLoginServant::new($container);
             $entryPointLogin->email = $email;
             $entryPointLogin->password = $pass;
             $entryPointLogin->serve();

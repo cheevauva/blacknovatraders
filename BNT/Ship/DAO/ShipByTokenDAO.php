@@ -1,11 +1,13 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
 class ShipByTokenDAO extends \UUA\DAO
 {
+
+    use \BNT\Traits\DatabaseMainTrait;
 
     /**
      * @var string
@@ -17,10 +19,24 @@ class ShipByTokenDAO extends \UUA\DAO
      */
     public $ship;
 
-    public function serve()
+    public function serve(): void
     {
-        $this->ship = db()->fetch("SELECT * FROM ships WHERE token = :token LIMIT 1", [
+        $this->ship = $this->db()->fetch("SELECT * FROM ships WHERE token = :token LIMIT 1", [
             'token' => $this->token,
         ]);
+    }
+
+    /**
+     * @param type $container
+     * @param string $token
+     * @return self
+     */
+    public static function call($container, $token)
+    {
+        $self = self::new($container);
+        $self->token = $token;
+        $self->serve();
+
+        return $self;
     }
 }

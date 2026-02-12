@@ -1,5 +1,9 @@
 <?php
 
+use BNT\Ship\DAO\ShipByIdDAO;
+
+$disableRegisterGlobalFix = false;
+
 include 'config.php';
 
 $title = $l_log_titlet;
@@ -14,7 +18,7 @@ if ($isAdmin) {
     $player = fromGet('player', 0);
 
     if ($player) {
-        $playerinfo = shipById($player);
+        $playerinfo = ShipByIdDAO::call($container, $player)->ship;
     }
 }
 

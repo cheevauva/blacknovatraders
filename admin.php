@@ -1,5 +1,10 @@
 <?php
 
+use BNT\Ship\DAO\ShipByIdDAO;
+use BNT\Ship\DAO\ShipUpdateDAO;
+
+$disableRegisterGlobalFix = true;
+
 include 'config.php';
 
 function CHECKED($yesno)
@@ -53,9 +58,9 @@ try {
 
             if ($module === 'useredit' && $operation === 'save') {
                 $user = (int) fromGet('user', new \Exception('user'));
-                $row = BNT\ShipFunc::shipById($user);
+                $row = ShipByIdDAO::call($container, $user)->ship;
 
-                BNT\ShipFunc::shipUpdate($user, [
+                ShipUpdateDAO::call($container, [
                     'character_name' => (string) fromPost('character_name', new \Exception('character_name')),
                     'password' => fromPost('password2') ? md5((string) fromPost('password2')) : $row['password'],
                     'email' => (string) fromPost('email', new \Exception('email')),
@@ -89,7 +94,7 @@ try {
                     'ship_fighters' => (int) fromPost('ship_fighters'),
                     'torps' => (int) fromPost('torps'),
                     'armor_pts' => (int) fromPost('armor_pts'),
-                ]);
+                ], $user);
             }
 
             if ($module === 'planedit' && $operation === 'save') {
@@ -146,8 +151,8 @@ try {
 
             if ($module === 'useredit' && $operation === 'edit') {
                 $user = (int) fromGet('user', new \Exception('user'));
-
-                $row = BNT\ShipFunc::shipById($user);
+                
+                $row = ShipByIdDAO::call($container, $user)->ship;
                 include 'tpls/admin/useredit.tpl.php';
             }
 

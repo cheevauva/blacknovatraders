@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\SectorDefence\DAO;
 
@@ -12,7 +12,7 @@ class SectorDefencesBySectorDAO extends \UUA\DAO
     public $sector;
     public $sectorDefences;
 
-    public function serve()
+    public function serve(): void
     {
         $sql = "
         SELECT 

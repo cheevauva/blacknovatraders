@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\EntryPoint\Servant;
 
@@ -21,7 +21,7 @@ class EntryPointNewServant extends \UUA\Servant
     public $shipname;
     public $ship;
 
-    public function serve()
+    public function serve(): void
     {
         global $l_new_invalid;
         global $l_new_username;
@@ -35,41 +35,34 @@ class EntryPointNewServant extends \UUA\Servant
             throw new \Exception($l_new_username . ' ' . $l_new_invalid);
         }
 
-        $shipByEmail = ShipByEmailDAO::_new($this->container);
-        $shipByEmail->email = $this->username;
-        $shipByEmail->serve();
-
-        if ($shipByEmail->ship) {
+        if (ShipByEmailDAO::call($this->container, $this->username)->ship) {
             throw new \Exception($l_new_inuse);
         }
-
+        
         $ship = $this->newShip();
+        $ship['ship_id'] = ShipCreateDAO::call($this->container, $ship)->id;
 
-        $shipCreate = ShipCreateDAO::_new($this->container);
-        $shipCreate->ship = &$ship;
-        $shipCreate->serve();
-
-        $sendEmail = EmailSendDAO::_new($this->container);
+        $sendEmail = EmailSendDAO::new($this->container);
         $sendEmail->from = $admin_mail;
         $sendEmail->replyTo = $admin_mail;
         $sendEmail->subject = $l_new_topic;
         $sendEmail->message = str_replace("[pass]", $this->password, $l_new_message);
         $sendEmail->to = $this->username;
 
-        $zoneCreate = ZoneCreateDAO::_new($this->container);
+        $zoneCreate = ZoneCreateDAO::new($this->container);
         $zoneCreate->zone = [
             'owner' => $ship['ship_id'],
             'zone_name' => $this->character . "'s Territory",
         ];
         $zoneCreate->serve();
 
-        $ibankAccountCreate = IBankAccountCreateDAO::_new($this->container);
+        $ibankAccountCreate = IBankAccountCreateDAO::new($this->container);
         $ibankAccountCreate->ibackAccount = [
             'ship_id' => $ship['ship_id'],
         ];
         $ibankAccountCreate->serve();
 
-        $log = LogPlayerDAO::_new($this->container);
+        $log = LogPlayerDAO::new($this->container);
         $log->type = LogTypeConstants::LOG_LOGIN;
         $log->data = $ip;
         $log->ship = $ship['ship_id'];
@@ -96,7 +89,7 @@ class EntryPointNewServant extends \UUA\Servant
             'credits' => (int) $start_credits,
             'ship_energy' => (int) $start_energy,
             'ship_fighters' => (int) $start_fighters,
-            'turns' => (int) $this->mturnsMax(),
+            'turns' => 1200,//(int) $this->mturnsMax(),
             'on_planet' => 'N',
             'dev_warpedit' => 0,
             'dev_genesis' => 0,

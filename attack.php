@@ -1,5 +1,9 @@
 <?php
 use BNT\ShipFunc;
+use BNT\Ship\DAO\ShipUpdateDAO;
+
+$disableRegisterGlobalFix = true;
+
 include 'config.php';
 
 $title = $l_att_title;
@@ -10,7 +14,7 @@ if (checklogin()) {
 }
 
 $ship_id = intval(fromPost('ship_id', new \Exception('ship_id')));
-$targetinfo = shipById($ship_id);
+$targetinfo = ShipByIdDAO::call($container, $ship_id)->ship;
 
 bigtitle();
 
@@ -85,15 +89,15 @@ if ($targetinfo['dev_emerwarp'] > 0 && $random_value > $chance) {
     $playerinfo['turns_used'] += 1;
     $playerinfo['rating'] -= $rating_change;
 
-    ShipFunc::shipUpdate($playerinfo['ship_id'], $playerinfo);
+    ShipUpdateDAO::call($container, $playerinfo);
     playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_EWD, $playerinfo['character_name']);
 
     $targetinfo['sector'] = $dest_sector;
     $targetinfo['dev_emerwarp'] -= 1;
     $targetinfo['cleared_defences'] = '';
 
-    ShipFunc::shipUpdate($targetinfo['ship_id'], $targetinfo);
-
+    ShipUpdateDAO::call($container, $targetinfo);
+    
     log_move($targetinfo['ship_id'], $dest_sector);
     $messages[] = $l_att_ewd;
     goto attackEnd;
@@ -474,7 +478,7 @@ if ($targetarmor < 1) {
         $playerinfo['turns_used'] += 1;
         $playerinfo['rating'] -= $rating_change;
 
-        ShipFunc::shipUpdate($playerinfo['ship_id'], $playerinfo);
+        ShipUpdateDAO::call($container, $playerinfo);
 
         $messages[] = implode(' ', [$l_att_ylost, $armor_lost, $l_armorpts, $fighters_lost, ',', $l_fighters, $l_att_andused, $playertorpnum, $l_torps]);
     }
@@ -491,7 +495,7 @@ if ($targetarmor < 1) {
     $targetinfo['armor_pts'] -= $armor_lost;
     $targetinfo['torps'] -= $targettorpnum;
 
-    ShipFunc::shipUpdate($targetinfo['ship_id'], $targetinfo);
+    ShipUpdateDAO::call($container, $targetinfo);
 
     $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
     $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
@@ -504,7 +508,7 @@ if ($targetarmor < 1) {
     $playerinfo['turns_used'] += 1;
     $playerinfo['rating'] -= $rating_change;
 
-    ShipFunc::shipUpdate($playerinfo['ship_id'], $playerinfo);
+    ShipUpdateDAO::call($container, $playerinfo);
 
     $messages[] = implode(' ', [$l_att_ylost, $armor_lost, $l_armorpts, $fighters_lost, $l_fighters, ',', $l_att_andused, $playertorpnum, $l_torps]);
 }
@@ -598,7 +602,7 @@ if ($playerarmor < 1) {
         $targetinfo['armor_pts'] -= $armor_lost;
         $targetinfo['torps'] -= $targettorpnum;
 
-        ShipFunc::shipUpdate($targetinfo['ship_id'], $targetinfo);
+        ShipUpdateDAO::call($container, $targetinfo);
     }
 }
 

@@ -1,19 +1,31 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
+
+use Psr\Container\ContainerInterface;
 
 class ShipCreateDAO extends \UUA\DAO
 {
 
     use \BNT\Traits\DatabaseRowCreateTrait;
 
-    public $ship;
-    public $id;
+    public array $ship;
+    public int $id;
 
-    public function serve()
+    #[\Override]
+    public function serve(): void
     {
-        $this->ship['ship_id'] = $this->id = $this->rowCreate('ships', $this->ship);
+        $this->ship['ship_id'] = $this->id = (int) $this->rowCreate('ships', $this->ship);
+    }
+
+    public static function call(ContainerInterface $container, array $ship): self
+    {
+        $self = self::new($container);
+        $self->ship = $ship;
+        $self->serve();
+
+        return $self;
     }
 }

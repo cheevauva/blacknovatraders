@@ -17,7 +17,7 @@ try {
 
     switch (requestMethod()) {
         case 'POST':
-            $entryPointNew = EntryPointNewServant::_new($container);
+            $entryPointNew = EntryPointNewServant::new($container);
             $entryPointNew->username = fromPost('username', new \Exception($l_new_username . ' ' . $l_is_required));
             $entryPointNew->character = fromPost('character', new \Exception($l_new_character . ' ' . $l_is_required));
             $entryPointNew->shipname = fromPost('shipname', new \Exception($l_new_shipname . ' ' . $l_is_required));

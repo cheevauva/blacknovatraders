@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Message\DAO;
 
@@ -12,7 +12,7 @@ class MessagesCountByShipDAO extends \UUA\DAO
     public $count;
     public $ship;
 
-    public function serve()
+    public function serve(): void
     {
         $this->count = $this->db()->column("SELECT COUNT(*) FROM messages WHERE recp_id = :shipId AND notified = 'N'", [
             'shipId' => $this->ship,

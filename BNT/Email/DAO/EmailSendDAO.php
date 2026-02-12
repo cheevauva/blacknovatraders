@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Email\DAO;
 
@@ -13,7 +13,7 @@ class EmailSendDAO extends \UUA\DAO
     public $from;
     public $replyTo;
 
-    public function serve()
+    public function serve(): void
     {
         mail($this->to, $this->subject, $this->message, implode("\r\n", array_filter([
             $this->from ? sprintf('From: %s', $this->from) : null,

@@ -10,7 +10,7 @@ class ShipCheckNewbieServant extends \UUA\Servant
     public $ship;
     public $isNewbie;
 
-    public function serve()
+    public function serve(): void
     {
         global $newbie_hull;
         global $newbie_engines;

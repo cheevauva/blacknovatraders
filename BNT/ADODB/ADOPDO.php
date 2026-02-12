@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\ADODB;
 
@@ -9,12 +9,18 @@ use PDO;
 class ADOPDO extends PDO
 {
 
-    public function fetch($sql, array $params = [], array $types = [])
+    public function fetch($sql, array $params = [], array $types = []): ?array
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (empty($row)) {
+            return null;
+        }
+        
+        return $row;
     }
     
     
@@ -26,7 +32,7 @@ class ADOPDO extends PDO
         return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     }
     
-    public function fetchAll($sql, array $params = [], array $types = [])
+    public function fetchAll($sql, array $params = [], array $types = []): array
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();

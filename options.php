@@ -1,6 +1,9 @@
 <?php
 
 use BNT\ShipFunc;
+use BNT\Ship\DAO\ShipUpdateDAO;
+
+$disableRegisterGlobalFix = false;
 
 include 'config.php';
 
@@ -17,9 +20,9 @@ switch (requestMethod()) {
             $newlang = fromPost('newlang', $language);
 
             if (in_array($newlang, array_keys(languages()), true)) {
-                ShipFunc::shipUpdate($playerinfo['ship_id'], [
-                    'lang' => $newlang
-                ]);
+                $playerinfo['lang'] = $newlang;
+
+                ShipUpdateDAO::call($container, $playerinfo);
             }
 
             if (!empty($newpass1) || !empty($newpass2)) {
@@ -31,10 +34,10 @@ switch (requestMethod()) {
                     if (md5($oldpass) != $playerinfo['password']) {
                         throw new \Exception($l_opt2_srcpassfalse);
                     }
+                    
+                    $playerinfo['password'] = md5($newpass1);
 
-                    $shipUpdated = ShipFunc::shipUpdate($playerinfo['ship_id'], [
-                        'password' => md5($newpass1)
-                    ]);
+                    ShipUpdateDAO::call($container, $playerinfo);
 
                     if (!$shipUpdated) {
                         throw new \Exception($l_opt2_passchangeerr);

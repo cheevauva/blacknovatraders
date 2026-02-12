@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace UUA\Traits;
 
@@ -9,10 +9,7 @@ use Psr\Container\ContainerInterface;
 trait ContainerTrait
 {
 
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
@@ -20,10 +17,7 @@ trait ContainerTrait
         $this->init();
     }
 
-    /**
-     * @return void
-     */
-    protected function init()
+    protected function init(): void
     {
         
     }

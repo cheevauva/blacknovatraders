@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\EntryPoint\Servant;
 
@@ -28,14 +28,14 @@ class EntryPointMainServant extends \UUA\Servant
     public $ships;
     public $messages = [];
 
-    public function serve()
+    public function serve(): void
     {
         global $l_nonexistant_pl;
 
         $this->messages = [];
         
         if ($this->playerinfo['on_planet'] == 'Y') {
-            $planetById = PlanetByIdDAO::_new($this->container);
+            $planetById = PlanetByIdDAO::new($this->container);
             $planetById->id = $this->playerinfo['planet_id'];
             $planetById->serve();
 
@@ -47,42 +47,40 @@ class EntryPointMainServant extends \UUA\Servant
             } else {
                 $this->playerinfo['on_planet'] = 'N';
 
-                $shipUpdate = ShipUpdateDAO::_new($this->container);
-                $shipUpdate->ship = $this->playerinfo;
-                $shipUpdate->serve();
+                ShipUpdateDAO::call($this->container, $this->playerinfo);
 
                 $this->messages[] = $l_nonexistant_pl;
             }
         }
 
-        $sectorById = SectorByIdDAO::_new($this->container);
+        $sectorById = SectorByIdDAO::new($this->container);
         $sectorById->id = $this->playerinfo['sector'];
         $sectorById->serve();
 
         $this->sector = $sectorById->sector;
 
-        $linkByStart = LinksByStartDAO::_new($this->container);
+        $linkByStart = LinksByStartDAO::new($this->container);
         $linkByStart->start = $this->playerinfo['sector'];
         $linkByStart->serve();
 
-        $planetsBySector = PlanetsBySectorDAO::_new($this->container);
+        $planetsBySector = PlanetsBySectorDAO::new($this->container);
         $planetsBySector->sector = $this->playerinfo['sector'];
         $planetsBySector->serve();
 
-        $defencesBySector = SectorDefencesBySectorDAO::_new($this->container);
+        $defencesBySector = SectorDefencesBySectorDAO::new($this->container);
         $defencesBySector->sector = $this->playerinfo['sector'];
         $defencesBySector->serve();
 
-        $zoneById = ZoneByIdDAO::_new($this->container);
+        $zoneById = ZoneByIdDAO::new($this->container);
         $zoneById->id = $this->sector['zone_id'];
         $zoneById->serve();
 
-        $traderoutesBySectorAndShip = TraderoutesBySectorAndShipDAO::_new($this->container);
+        $traderoutesBySectorAndShip = TraderoutesBySectorAndShipDAO::new($this->container);
         $traderoutesBySectorAndShip->sector = $this->playerinfo['sector'];
         $traderoutesBySectorAndShip->ship = $this->playerinfo['ship_id'];
         $traderoutesBySectorAndShip->serve();
 
-        $shipsInSector = ShipsInSectorDAO::_new($this->container);
+        $shipsInSector = ShipsInSectorDAO::new($this->container);
         $shipsInSector->sector = $this->playerinfo['sector'];
         $shipsInSector->excludeShip = $this->playerinfo['ship_id'];
         $shipsInSector->serve();

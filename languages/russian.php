@@ -75,6 +75,7 @@ $l_genesis = "Торпеды Генезис";
 $l_escape_pod = "Спасательная капсула";
 $l_fuel_scoop = "Сборщик топлива";
 $l_is_required = 'является обязательным';
+$l_is_wrong = 'является неправильным';
 
 // global_funcs.php
 

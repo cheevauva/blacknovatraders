@@ -1,5 +1,8 @@
 <?php
 
+use BNT\Ship\DAO\ShipByIdDAO;
+
+$disableRegisterGlobalFix = true;
 include 'config.php';
 
 if (checklogin()) {
@@ -22,7 +25,7 @@ if ($zoneinfo['zone_id'] == 2) {
     $ownername = $l_zi_war;
 } else {
     if ($zoneinfo['corp_zone'] == 'N') {
-        $ownerinfo = shipById($zoneinfo['owner']);
+        $ownerinfo = ShipByIdDAO::call($container, $zoneinfo['owner'])->ship;
         $ownername = $ownerinfo['character_name'];
     } else {
         $ownerinfo = teamById($zoneinfo['owner']);

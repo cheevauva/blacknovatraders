@@ -15,7 +15,7 @@ if (!empty(trim($playerinfo['cleared_defences']))) {
 }
 
 try {
-    $entryPointMain = EntryPointMainServant::_new($container);
+    $entryPointMain = EntryPointMainServant::new($container);
     $entryPointMain->playerinfo = $playerinfo;
     $entryPointMain->serve();
 

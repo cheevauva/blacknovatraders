@@ -11,7 +11,7 @@ class ShipRestoreAsNewbieServant extends \UUA\Servant
 
     public $ship;
 
-    public function serve()
+    public function serve(): void
     {
         $ship = $this->ship;
         $ship['hull'] = 0;
@@ -45,8 +45,6 @@ class ShipRestoreAsNewbieServant extends \UUA\Servant
         $ship['cleared_defences'] = '';
         $ship['dev_lssd'] = 'N';
 
-        $update = ShipUpdateDAO::_new($this->container);
-        $update->ship = $ship;
-        $update->serve();
+        ShipUpdateDAO::call($this->container, $ship);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use BNT\Ship\DAO\ShipByIdDAO;
+
 include 'config.php';
 
 if (checklogin()) {
@@ -25,7 +27,7 @@ try {
     if ($zoneinfo['allow_warpedit'] == 'L') {
         $zoneowner_info = $zoneinfo;
 
-        $zoneteam = shipById($zoneowner_info['owner']);
+        $zoneteam = ShipByIdDAO::call($container, $zoneowner_info['owner'])->ship;
 
         if ($zoneowner_info['owner'] != $playerinfo['ship_id']) {
             if (($zoneteam['team'] != $playerinfo['team']) || ($playerinfo['team'] == 0)) {
@@ -103,11 +105,11 @@ try {
                     if (!linksByStartAndDest($playerinfo['sector'], $target_sector)) {
                         throw new \Exception(str_replace("[target_sector]", $target_sector, $l_warp_unlinked));
                     }
-                    
+
                     linksDeleteByStartAndDest($playerinfo['sector'], $target_sector);
                     shipDevWarpeditSub($playerinfo['ship_id'], 1);
                     shipTurn($playerinfo['ship_id'], 1);
-                    
+
                     if ($bothway) {
                         linksDeleteByStartAndDest($target_sector, $playerinfo['sector']);
                     }

@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Zone\DAO;
 
@@ -9,12 +9,13 @@ class ZoneByIdDAO extends \UUA\DAO
 
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $id;
-    public $zone;
+    public int $id;
+    public ?array $zone;
 
-    public function serve()
+    #[\Override]
+    public function serve(): void
     {
-        $this->zone = db()->fetch('SELECT * FROM zones WHERE zone_id = :zoneId', [
+        $this->zone = $this->db()->fetch('SELECT * FROM zones WHERE zone_id = :zoneId', [
             'zoneId' => $this->id,
         ]);
     }

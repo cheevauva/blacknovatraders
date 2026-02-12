@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
@@ -16,7 +16,7 @@ class ShipUpdateDAO extends \UUA\DAO
      */
     public $ship;
 
-    public function serve()
+    public function serve(): void
     {
         $parameters = [];
         $values = [];
@@ -31,5 +31,18 @@ class ShipUpdateDAO extends \UUA\DAO
         }
 
         $this->db()->q(sprintf('UPDATE ships SET %s WHERE ship_id = :ship_id', implode(', ', $values)), $parameters);
+    }
+
+    /**
+     * @param type $container
+     * @param string $email
+     * @return self
+     */
+    public static function call($container, $ship, $id = null)
+    {
+        $self = self::new($container);
+        $self->ship = $ship;
+        $self->id = $id;
+        $self->serve();
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Link\DAO;
 
@@ -12,7 +12,7 @@ class LinksByStartDAO extends \UUA\DAO
     public $start;
     public $links;
 
-    public function serve()
+    public function serve(): void
     {
         $this->links = $this->db()->fetchAll("SELECT * FROM links WHERE link_start= :sectorId ORDER BY link_dest ASC", [
             'sectorId' => $this->start,
