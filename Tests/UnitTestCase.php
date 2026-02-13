@@ -10,7 +10,6 @@ use UUA\Container\Container;
 
 class UnitTestCase extends TestCase
 {
-
     public static ContainerInterface $container;
 
     protected function setUp(): void

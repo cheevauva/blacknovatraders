@@ -6,7 +6,6 @@ namespace BNT\Config\DAO;
 
 class ConfigReadDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     /**

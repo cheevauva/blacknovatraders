@@ -1,9 +1,9 @@
-<?
+<?php
 
-  if (preg_match("/sched_ports.php/i", $PHP_SELF)) {
-      echo "You can not access this file directly!";
-      die();
-  }
+if (preg_match("/sched_ports.php/i", $PHP_SELF)) {
+    echo "You can not access this file directly!";
+    die();
+}
 
   echo "<B>PORTS</B><BR><BR>";
   echo "Adding ore to all commodities ports...";
@@ -39,4 +39,3 @@
   QUERYOK($db->Execute("UPDATE $dbtables[universe] SET port_organics=$organics_limit WHERE port_organics > $organics_limit"));
   QUERYOK($db->Execute("UPDATE $dbtables[universe] SET port_ore=$ore_limit WHERE port_ore > $ore_limit"));
   $multiplier = 0;
-?>

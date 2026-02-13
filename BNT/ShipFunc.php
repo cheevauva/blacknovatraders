@@ -8,7 +8,6 @@ use PDO;
 
 class ShipFunc
 {
-
     public static function shipDevWarpeditSub($ship, $devWarpedit)
     {
         return db()->q('UPDATE ships SET dev_warpedit = dev_warpedit - :dev_warpedit WHERE ship_id= :ship', [
@@ -87,6 +86,4 @@ class ShipFunc
             'shipId' => $shipId,
         ]);
     }
-
-
 }

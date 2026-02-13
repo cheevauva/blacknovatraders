@@ -6,7 +6,6 @@ namespace UUA;
 
 class Factory implements FactoryInterface
 {
-
     /**
      * @var array<string, string|\Closure|null>
      */
@@ -42,7 +41,7 @@ class Factory implements FactoryInterface
         }
 
         if ($isClassName) {
-            return (new $this->assets[$id])($this->container);
+            return (new $this->assets[$id]())($this->container);
         }
 
         return new $id($this->container);

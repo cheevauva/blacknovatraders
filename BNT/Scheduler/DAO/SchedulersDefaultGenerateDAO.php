@@ -6,7 +6,6 @@ namespace BNT\Scheduler\DAO;
 
 class SchedulersDefaultGenerateDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
     use \BNT\Traits\UnitSimpleCallTrait;
 
@@ -21,7 +20,7 @@ class SchedulersDefaultGenerateDAO extends \UUA\DAO
         global $sched_ranking;
         global $sched_degrade;
         global $sched_apocalypse;
-        
+
         $this->db()->q("INSERT INTO scheduler VALUES(NULL, 'Y', 0, $sched_turns, 0, 'sched_turns.php', NULL,unix_timestamp(now()))");
         $this->db()->q("INSERT INTO scheduler VALUES(NULL, 'Y', 0, $sched_turns, 0, 'sched_defenses.php', NULL,unix_timestamp(now()))");
         $this->db()->q("INSERT INTO scheduler VALUES(NULL, 'Y', 0, $sched_turns, 0, 'sched_xenobe.php', NULL,unix_timestamp(now()))");

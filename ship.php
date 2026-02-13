@@ -14,4 +14,3 @@ $ship_id = fromGet('ship_id');
 $othership = ShipByIdDAO::call($container, $ship_id)->ship;
 
 include 'tpls/ship.tpl.php';
-

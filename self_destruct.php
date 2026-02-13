@@ -13,8 +13,8 @@ try {
             if ($sure !== 2) {
                 redirectTo('index.php');
                 return;
-            }   
-            
+            }
+
             db_kill_player($playerinfo['ship_id']);
             cancel_bounty($playerinfo['ship_id']);
             adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_HARAKIRI, $playerinfo['character_name'] . '|' . $ip);

@@ -10,7 +10,6 @@ use UUA\Factory;
 
 class Container implements \Psr\Container\ContainerInterface
 {
-
     /**
      * @var array<string, mixed>
      */

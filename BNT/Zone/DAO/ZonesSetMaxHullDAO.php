@@ -6,7 +6,6 @@ namespace BNT\Zone\DAO;
 
 class ZonesSetMaxHullDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $fedMaxHull;

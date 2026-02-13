@@ -84,4 +84,3 @@ if ($zoneinfo['max_hull'] == 0) {
 $isAllowChangeZone = ($zoneinfo['corp_zone'] == 'N' && $zoneinfo['owner'] == $playerinfo['ship_id']) || ($zoneinfo['corp_zone'] == 'Y' && $zoneinfo['owner'] == $playerinfo['team'] && $playerinfo['ship_id'] == $ownerinfo['creator']);
 
 include 'tpls/zoneinfo.tpl.php';
-

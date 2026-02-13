@@ -8,10 +8,8 @@ use SetCMS\Contract\ContractObjectInteraction;
 
 class SignedDTO extends \UUA\DTO
 {
-
     public function __construct(public string $name, public ?object $object = null)
     {
-        
     }
 
     public function to(ContractObjectInteraction $object): void

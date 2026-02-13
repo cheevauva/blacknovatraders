@@ -5,11 +5,11 @@
     <div class="alert alert-warning">
         <?php echo $ex->getMessage(); ?>
     </div>
-<?php else: ?>
+<?php else : ?>
     <div class="alert alert-info">
-        <?php if (!empty($sectorinfo['beacon'])): ?>
+        <?php if (!empty($sectorinfo['beacon'])) : ?>
             <?php echo $l_beacon_reads; ?>: "<?php echo htmlspecialchars($sectorinfo['beacon']); ?>"
-        <?php else: ?>
+        <?php else : ?>
             <?php echo $l_beacon_none; ?><br><br>
         <?php endif; ?>
     </div>

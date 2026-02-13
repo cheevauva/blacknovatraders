@@ -8,6 +8,5 @@ use Psr\Container\ContainerInterface;
 
 interface ContainerConstructInterface
 {
-
     public function __construct(ContainerInterface $container);
 }

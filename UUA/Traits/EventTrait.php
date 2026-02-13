@@ -8,7 +8,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 
 trait EventTrait
 {
-
     use AsTrait;
 
     public function dispatch(EventDispatcherInterface $eventDispatcher): void

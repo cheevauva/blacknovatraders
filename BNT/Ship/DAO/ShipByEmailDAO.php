@@ -8,7 +8,6 @@ use Psr\Container\ContainerInterface;
 
 class ShipByEmailDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public string $email;

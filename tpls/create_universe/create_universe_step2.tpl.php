@@ -2,7 +2,7 @@
 <div class="alert alert-info mb-4" role="alert">
     Create Universe Confirmation [So you would like your <?php echo $sector_max; ?> sector universe to have]
 </div>
-<?php if ($fedsecs > $sector_max): ?>
+<?php if ($fedsecs > $sector_max) : ?>
     <div class="alert alert-danger mb-4" role="alert">
         The number of Federation sectors must be smaller than the size of the universe!
     </div>

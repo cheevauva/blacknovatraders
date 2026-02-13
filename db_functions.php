@@ -1,6 +1,5 @@
 <?php
 
-
 function ipBansCheck($ip)
 {
     return db()->column("SELECT * FROM ip_bans WHERE :ip LIKE ban_mask", [

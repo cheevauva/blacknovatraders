@@ -22,7 +22,6 @@ use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
 class EntryPointCreateUniverseStep2Servant extends \UUA\Servant
 {
-
     public int $sectorMax;
     public int $universeSize;
     public GameCalculateStartParamsServant $startParams;
@@ -38,7 +37,7 @@ class EntryPointCreateUniverseStep2Servant extends \UUA\Servant
         global $start_fighters;
         global $start_turns;
         global $language;
-        
+
         $startParams = $this->startParams;
 
         $sectorsGenerate = SectorGenerateDAO::new($this->container);

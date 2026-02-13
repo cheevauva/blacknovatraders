@@ -1,4 +1,5 @@
 <?php
+
 use BNT\ShipFunc;
 use BNT\Ship\DAO\ShipUpdateDAO;
 
@@ -97,7 +98,7 @@ if ($targetinfo['dev_emerwarp'] > 0 && $random_value > $chance) {
     $targetinfo['cleared_defences'] = '';
 
     ShipUpdateDAO::call($container, $targetinfo);
-    
+
     log_move($targetinfo['ship_id'], $dest_sector);
     $messages[] = $l_att_ewd;
     goto attackEnd;

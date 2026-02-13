@@ -6,7 +6,6 @@ namespace BNT\Zone\DAO;
 
 class ZoneByIdDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $id;

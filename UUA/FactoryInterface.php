@@ -6,6 +6,5 @@ namespace UUA;
 
 interface FactoryInterface
 {
-
     public function make(string $id): object;
 }

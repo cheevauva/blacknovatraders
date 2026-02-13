@@ -6,7 +6,6 @@ namespace UUA;
 
 abstract class Wrapper extends Unit
 {
-
     use Traits\ContainerTrait;
     use Traits\BuildTrait;
 
@@ -27,6 +26,5 @@ abstract class Wrapper extends Unit
 
     public function from(object $object): void
     {
-        
     }
 }

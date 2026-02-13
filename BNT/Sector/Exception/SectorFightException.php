@@ -6,5 +6,4 @@ namespace BNT\Sector\Exception;
 
 class SectorFightException extends \Exception
 {
-    
 }

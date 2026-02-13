@@ -8,7 +8,6 @@ use Psr\Container\ContainerInterface;
 
 class ZoneCreateDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseRowCreateTrait;
 
     public array $zone;

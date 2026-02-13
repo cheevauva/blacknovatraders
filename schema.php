@@ -13,7 +13,7 @@ try {
             if (fromPost('password', new \Exception($l_schema_password . ' ' . $l_is_required)) !== $adminpass) {
                 throw new \Exception($l_schema_password . ' ' . $l_is_wrong);
             }
-            
+
             $messages = EntryPointSchemaServant::call($container)->messages;
 
             include 'tpls/schema_messages.tpl.php';
@@ -25,8 +25,3 @@ try {
 } catch (\Exception $ex) {
     include 'tpls/error.tpl.php';
 }
-
-
-
-
-

@@ -1,9 +1,9 @@
 <?php $title = $l_ranks_title; ?>
 <?php include("header.php"); ?>
 <?php bigtitle(); ?>
-<?php if (empty($rows)): ?>
+<?php if (empty($rows)) : ?>
     <?php echo $l_ranks_none; ?>
-<?php else: ?>
+<?php else : ?>
     <p class="text-start"><?php echo $l_ranks_pnum; ?>: <?php echo NUMBER($num_players); ?></p>
     <div class="alert alert-info" role="alert">
         <?php echo $l_ranks_dships; ?>
@@ -22,7 +22,7 @@
                 <td><a href="ranking.php?sort=efficiency">Eff. Rating.</a></td>
             </TR>
             <?php $i = 0; ?>
-            <?php foreach ($rows as $row): ?>
+            <?php foreach ($rows as $row) : ?>
                 <?php $i++; ?>
                 <?php $rating = round(sqrt(abs($row['rating']))); ?>
                 <?php $rating = $row['rating'] < 0 ? -1 * $rating : $rating; ?>

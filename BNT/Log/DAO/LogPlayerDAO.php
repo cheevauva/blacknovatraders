@@ -8,7 +8,6 @@ use Psr\Container\ContainerInterface;
 
 class LogPlayerDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $ship;

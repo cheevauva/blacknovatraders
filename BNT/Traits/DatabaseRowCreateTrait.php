@@ -6,7 +6,6 @@ namespace BNT\Traits;
 
 trait DatabaseRowCreateTrait
 {
-
     use DatabaseMainTrait;
 
     protected function rowCreate($table, $data)

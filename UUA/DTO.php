@@ -6,8 +6,5 @@ namespace UUA;
 
 class DTO
 {
-
     use \UUA\Traits\AsTrait;
-    
-    
 }

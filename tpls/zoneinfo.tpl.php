@@ -1,12 +1,11 @@
 <?php $title = $l_zi_title; ?>
 <?php include 'header.php'; ?>
 <?php bigtitle(); ?>
-<?php if (empty($zoneinfo)): ?>
+<?php if (empty($zoneinfo)) : ?>
     <?php echo $l_zi_nexist; ?>
-<?php else: ?>
-
+<?php else : ?>
     <table class="table">
-        <?php if ($isAllowChangeZone): ?>
+        <?php if ($isAllowChangeZone) : ?>
             <tr>
                 <td>
                     <div class="alert alert-info">

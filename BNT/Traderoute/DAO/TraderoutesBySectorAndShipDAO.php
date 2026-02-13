@@ -6,7 +6,6 @@ namespace BNT\Traderoute\DAO;
 
 class TraderoutesBySectorAndShipDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $sector;

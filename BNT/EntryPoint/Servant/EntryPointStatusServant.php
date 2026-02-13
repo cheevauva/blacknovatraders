@@ -11,7 +11,6 @@ use BNT\Message\DAO\MessagesNotifiedByShipDAO;
 
 class EntryPointStatusServant extends \UUA\Servant
 {
-
     public $ship;
     public $schedulerLastRun;
     public $online;

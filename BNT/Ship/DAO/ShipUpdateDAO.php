@@ -6,7 +6,6 @@ namespace BNT\Ship\DAO;
 
 class ShipUpdateDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $id;

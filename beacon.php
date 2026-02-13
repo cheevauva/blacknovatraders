@@ -28,7 +28,7 @@ try {
         $zoneById = ZoneByIdDAO::new($this->container);
         $zoneById->id = $sectorinfo['zone_id'];
         $zoneById->serve();
-        
+
         $zoneowner_info = $zoneById->zone;
         $zoneteam = ShipByIdDAO::call($container, $zoneowner_info['owner'])->ship;
 
@@ -61,5 +61,3 @@ try {
             break;
     }
 }
-
-

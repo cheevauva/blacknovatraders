@@ -17,7 +17,6 @@ use BNT\Ship\DAO\ShipUpdateDAO;
 
 class EntryPointMainServant extends \UUA\Servant
 {
-
     public $playerinfo;
     public $links;
     public $sector;
@@ -33,7 +32,7 @@ class EntryPointMainServant extends \UUA\Servant
         global $l_nonexistant_pl;
 
         $this->messages = [];
-        
+
         if ($this->playerinfo['on_planet'] == 'Y') {
             $planetById = PlanetByIdDAO::new($this->container);
             $planetById->id = $this->playerinfo['planet_id'];

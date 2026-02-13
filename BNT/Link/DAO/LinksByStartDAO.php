@@ -6,9 +6,8 @@ namespace BNT\Link\DAO;
 
 class LinksByStartDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
-    
+
     public $start;
     public $links;
 

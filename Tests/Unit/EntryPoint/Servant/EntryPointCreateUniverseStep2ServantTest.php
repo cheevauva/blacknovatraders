@@ -23,7 +23,6 @@ use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
 class EntryPointCreateUniverseStep2ServantTest extends \Tests\UnitTestCase
 {
-
     public static ?array $shipData;
 
     #[\Override]
@@ -70,96 +69,73 @@ class EntryPointCreateUniverseStep2ServantTest extends \Tests\UnitTestCase
     protected function stubs(): array
     {
         return [
-            SectorGenerateDAO::class => fn($c) => new class($c) extends SectorGenerateDAO {
-
+            SectorGenerateDAO::class => fn($c) => new class ($c) extends SectorGenerateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            ZonesSetMaxHullDAO::class => fn($c) => new class($c) extends ZonesSetMaxHullDAO {
-
+            ZonesSetMaxHullDAO::class => fn($c) => new class ($c) extends ZonesSetMaxHullDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            SectorsAssignZoneDAO::class => fn($c) => new class($c) extends SectorsAssignZoneDAO {
-
+            SectorsAssignZoneDAO::class => fn($c) => new class ($c) extends SectorsAssignZoneDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            SectorsReassignSpecialPortsDAO::class => fn($c) => new class($c) extends SectorsReassignSpecialPortsDAO {
-
+            SectorsReassignSpecialPortsDAO::class => fn($c) => new class ($c) extends SectorsReassignSpecialPortsDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            SectorsReassignResourcesPortsDAO::class => fn($c) => new class($c) extends SectorsReassignResourcesPortsDAO {
-
+            SectorsReassignResourcesPortsDAO::class => fn($c) => new class ($c) extends SectorsReassignResourcesPortsDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            PlanetsGenerateDAO::class => fn($c) => new class($c) extends PlanetsGenerateDAO {
-
+            PlanetsGenerateDAO::class => fn($c) => new class ($c) extends PlanetsGenerateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            LinksTwoWayGenerateDAO::class => fn($c) => new class($c) extends LinksTwoWayGenerateDAO {
-
+            LinksTwoWayGenerateDAO::class => fn($c) => new class ($c) extends LinksTwoWayGenerateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            LinksTwoWayGenerateRandomDAO::class => fn($c) => new class($c) extends LinksTwoWayGenerateRandomDAO {
-
+            LinksTwoWayGenerateRandomDAO::class => fn($c) => new class ($c) extends LinksTwoWayGenerateRandomDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            LinksOneWayGenerateDAO::class => fn($c) => new class($c) extends LinksOneWayGenerateDAO {
-
+            LinksOneWayGenerateDAO::class => fn($c) => new class ($c) extends LinksOneWayGenerateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            LinksTwoWayBackGenerateDAO::class => fn($c) => new class($c) extends LinksTwoWayBackGenerateDAO {
-
+            LinksTwoWayBackGenerateDAO::class => fn($c) => new class ($c) extends LinksTwoWayBackGenerateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            SchedulersDefaultGenerateDAO::class => fn($c) => new class($c) extends SchedulersDefaultGenerateDAO {
-
+            SchedulersDefaultGenerateDAO::class => fn($c) => new class ($c) extends SchedulersDefaultGenerateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            ShipCreateDAO::class => fn($c) => new class($c) extends ShipCreateDAO {
-
+            ShipCreateDAO::class => fn($c) => new class ($c) extends ShipCreateDAO {
                 #[\Override]
                 public function serve(): void
                 {
@@ -167,20 +143,16 @@ class EntryPointCreateUniverseStep2ServantTest extends \Tests\UnitTestCase
                     $this->id = 1;
                 }
             },
-            ZoneCreateDAO::class => fn($c) => new class($c) extends ZoneCreateDAO {
-
+            ZoneCreateDAO::class => fn($c) => new class ($c) extends ZoneCreateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
-            IBankAccountCreateDAO::class => fn($c) => new class($c) extends IBankAccountCreateDAO {
-
+            IBankAccountCreateDAO::class => fn($c) => new class ($c) extends IBankAccountCreateDAO {
                 #[\Override]
                 public function serve(): void
                 {
-                    
                 }
             },
         ];

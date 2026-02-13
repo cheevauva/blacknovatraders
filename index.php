@@ -7,4 +7,3 @@ if (checklogin(false)) {
 } else {
     redirectTo('main.php');
 }
-

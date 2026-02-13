@@ -1,9 +1,9 @@
-<?
+<?php
 
-  if (preg_match("/sched_turns.php/i", $PHP_SELF)) {
-      echo "You can not access this file directly!";
-      die();
-  }
+if (preg_match("/sched_turns.php/i", $PHP_SELF)) {
+    echo "You can not access this file directly!";
+    die();
+}
 
   echo "<B>TURNS</B><BR><BR>";
   echo "Adding turns...";
@@ -12,5 +12,3 @@
   QUERYOK($db->adoExecute("UPDATE ships SET turns=$max_turns WHERE turns>$max_turns"));
   echo "<BR>";
   $multiplier = 0;
-
-?>

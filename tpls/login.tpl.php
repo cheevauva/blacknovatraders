@@ -5,7 +5,7 @@
     <div class="alert alert-danger">
         <?php echo $ex->getMessage(); ?>
     </div>
-<?php else: ?>
+<?php else : ?>
     <form action="login.php" id="bntLoginForm" method="post">
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label"><?php echo $l_login_email; ?></label>

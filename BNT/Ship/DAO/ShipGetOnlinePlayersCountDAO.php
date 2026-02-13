@@ -6,7 +6,6 @@ namespace BNT\Ship\DAO;
 
 class ShipGetOnlinePlayersCountDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $count;

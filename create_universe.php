@@ -83,5 +83,3 @@ switch ($step) {
         include 'tpls/create_universe/create_universe_login.tpl.php';
         break;
 }
-
-

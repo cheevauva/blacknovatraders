@@ -6,7 +6,6 @@ namespace BNT\Traits;
 
 trait DatabaseMainTrait
 {
-
     use \UUA\Traits\ContainerTrait;
 
     /**

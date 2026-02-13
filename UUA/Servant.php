@@ -6,7 +6,6 @@ namespace UUA;
 
 abstract class Servant extends Unit
 {
-
     use Traits\BuildTrait;
     use Traits\ContainerTrait;
     use Traits\EventDispatcherTrait;

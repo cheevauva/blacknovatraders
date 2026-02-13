@@ -6,7 +6,6 @@ namespace BNT\Migration\DAO;
 
 class MigrationsCreateTableDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
     use \BNT\Traits\UnitSimpleCallTrait;
 

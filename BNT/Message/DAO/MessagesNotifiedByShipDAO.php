@@ -6,9 +6,8 @@ namespace BNT\Message\DAO;
 
 class MessagesNotifiedByShipDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
-    
+
     public $ship;
 
     public function serve(): void

@@ -6,7 +6,6 @@ namespace BNT\Planet\DAO;
 
 class PlanetByIdDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $id;

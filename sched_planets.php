@@ -1,12 +1,12 @@
-<?
+<?php
 
-  if (preg_match("/sched_planets.php/i", $PHP_SELF)) {
-      echo "You can not access this file directly!";
-      die();
-  }
+if (preg_match("/sched_planets.php/i", $PHP_SELF)) {
+    echo "You can not access this file directly!";
+    die();
+}
 
   $expoprod = mypw($colonist_reproduction_rate + 1, $multiplier);
-  $expoprod *=$multiplier;
+  $expoprod *= $multiplier;
 
   $expocreds = mypw($interest_rate, $multiplier);
 
@@ -28,11 +28,8 @@
     "WHERE owner!=0";
 
   $db->Execute($planetupdate);
- 
+
   $multiplier = 0;
 
   echo "Planets updated.<BR><BR>";
   echo "<BR>";
-
-?>
-

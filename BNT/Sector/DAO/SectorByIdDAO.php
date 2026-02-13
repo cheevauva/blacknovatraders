@@ -6,7 +6,6 @@ namespace BNT\Sector\DAO;
 
 class SectorByIdDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $id;

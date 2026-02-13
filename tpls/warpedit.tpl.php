@@ -4,18 +4,22 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <?php if (empty($links)): ?>
+            <?php if (empty($links)) : ?>
                 <div class="alert alert-info">
                     <?php echo $l_warp_nolink; ?>
                 </div>
-            <?php else: ?>
+            <?php else : ?>
                 <div class="mb-3">
                     <?php echo $l_warp_linkto; ?>
                 </div>
                 <div class="mb-3">
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <?php foreach ($links as $link) : ?>
-                            <button type="button" class="btn <?php if ($link['link_type'] == 1):?>btn-secondary<?php else:?>btn-primary<?php endif;?>" disabled><?php echo $link['link_dest']; ?> </button>
+                            <button type="button" class="btn <?php if ($link['link_type'] == 1) :
+                                ?>btn-secondary<?php
+                                                             else :
+                                                                    ?>btn-primary<?php
+                                                             endif;?>" disabled><?php echo $link['link_dest']; ?> </button>
                         <?php endforeach; ?>
                     </div>
                 </div>

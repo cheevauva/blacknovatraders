@@ -8,7 +8,6 @@ use Psr\Container\ContainerInterface;
 
 trait ContainerTrait
 {
-
     protected ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
@@ -19,6 +18,5 @@ trait ContainerTrait
 
     protected function init(): void
     {
-        
     }
 }

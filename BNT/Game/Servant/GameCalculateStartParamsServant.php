@@ -6,7 +6,6 @@ namespace BNT\Game\Servant;
 
 class GameCalculateStartParamsServant extends \UUA\Servant
 {
-
     public int $sectorMax;
     public float $special;
     public float $ore;

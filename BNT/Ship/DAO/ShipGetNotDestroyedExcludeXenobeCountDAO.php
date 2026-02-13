@@ -6,7 +6,6 @@ namespace BNT\Ship\DAO;
 
 class ShipGetNotDestroyedExcludeXenobeCountDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $count;
@@ -26,7 +25,7 @@ class ShipGetNotDestroyedExcludeXenobeCountDAO extends \UUA\DAO
     {
         $self = self::new($container);
         $self->serve();
-        
+
         return $serve;
     }
 }

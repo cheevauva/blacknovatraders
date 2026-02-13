@@ -1,9 +1,9 @@
-<?
+<?php
 
-  if (preg_match("/sched_igb.php/i", $PHP_SELF)) {
-      echo "You can not access this file directly!";
-      die();
-  }
+if (preg_match("/sched_igb.php/i", $PHP_SELF)) {
+    echo "You can not access this file directly!";
+    die();
+}
 
   $exponinter = mypw($ibank_interest + 1, $multiplier);
   $expoloan = mypw($ibank_loaninterest + 1, $multiplier);
@@ -14,5 +14,3 @@
   echo "All IGB accounts updated ($multiplier times).<p>";
 
   $multiplier = 0;
-
-?>

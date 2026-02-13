@@ -14,7 +14,6 @@ use BNT\Log\DAO\LogPlayerDAO;
 
 class EntryPointLoginServant extends \UUA\Servant
 {
-
     public $email;
     public $password;
     public $ship;
@@ -61,13 +60,13 @@ class EntryPointLoginServant extends \UUA\Servant
 
         if ($ship['ship_destroyed'] == 'N') {
             $token = uuidv7();
-            
+
             $ship['token'] = $token;
             $ship['last_login'] = gmdate('Y-m-d H:i:s');
 
             LogPlayerDAO::call($this->container, $ship['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
             ShipUpdateDAO::call($this->container, $ship);
-            
+
             $this->ship = $ship;
             return;
         }

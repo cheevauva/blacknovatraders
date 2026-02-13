@@ -6,7 +6,6 @@ namespace BNT\Planet\DAO;
 
 class PlanetsGenerateDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $unownedPlanetsCount;

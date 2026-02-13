@@ -8,7 +8,6 @@ use BNT\Game\Servant\GameCalculateStartParamsServant;
 
 class GameCalculateStartParamsServantTest extends \Tests\UnitTestCase
 {
-
     public function testMain(): void
     {
         global $organics_limit;

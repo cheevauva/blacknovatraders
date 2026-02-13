@@ -6,7 +6,6 @@ namespace BNT\Traits;
 
 trait UnitSimpleCallTrait
 {
-
     /**
      * @param type $container
      * @return self

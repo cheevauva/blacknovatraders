@@ -6,7 +6,6 @@ namespace BNT\Message\DAO;
 
 class MessagesCountByShipDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $count;

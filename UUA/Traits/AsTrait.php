@@ -6,7 +6,6 @@ namespace UUA\Traits;
 
 trait AsTrait
 {
-
     public static function as(?object $self): static
     {
         if (is_null($self)) {

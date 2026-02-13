@@ -6,6 +6,5 @@ namespace BNT\EntryPoint\Exception;
 
 class EntryPointMainShipOnPlanetException extends \Exception
 {
-
     public $planet;
 }

@@ -6,7 +6,6 @@ namespace BNT\Ship\DAO;
 
 class ShipByTokenDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     /**

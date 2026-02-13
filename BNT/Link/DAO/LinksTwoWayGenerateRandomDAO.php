@@ -6,7 +6,6 @@ namespace BNT\Link\DAO;
 
 class LinksTwoWayGenerateRandomDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $sectorMax;

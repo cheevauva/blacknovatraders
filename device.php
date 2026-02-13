@@ -7,4 +7,3 @@ if (checklogin()) {
 }
 
 include 'tpls/device.tpl.php';
-

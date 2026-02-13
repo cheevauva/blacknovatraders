@@ -9,7 +9,6 @@ use UUA\Wrapper;
 
 trait WrappingTrait
 {
-
     use ContainerTrait;
 
     protected function wrapping(Unit $unit): Unit
@@ -29,7 +28,7 @@ trait WrappingTrait
 
             $prev = $next;
         }
-        
+
         return $next ?? $unit;
     }
 }

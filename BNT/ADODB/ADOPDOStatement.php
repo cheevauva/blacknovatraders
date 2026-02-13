@@ -9,7 +9,6 @@ use PDO;
 
 class ADOPDOStatement
 {
-
     /**
      * @var PDOStatement
      */

@@ -6,9 +6,8 @@ namespace BNT\Sector\DAO;
 
 class SectorsReassignSpecialPortsDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
-    
+
     public int $specialSectorsCount;
 
     #[\Override]

@@ -26,7 +26,6 @@ if (empty($disableConfigRewrite)) {
             $$name = $value;
         }
     } catch (\Exception $ex) {
-        
     }
 }
 
@@ -186,7 +185,6 @@ function bigtitle()
 
 function TEXT_GOTOMAIN()
 {
-    
 }
 
 function TEXT_GOTOLOGIN()
@@ -534,7 +532,6 @@ function message_defence_owner($sector, $message)
     //Put the defence information into the array "defenceinfo"
     if ($result3 > 0) {
         while (!$result3->EOF) {
-
             playerlog($result3->fields[ship_id], LogTypeConstants::LOG_RAW, $message);
             $result3->MoveNext();
         }
@@ -621,14 +618,14 @@ function calc_ownership($sector)
 
     $i = 0;
     if ($num_bases > 0) {
-
         while (!$res->EOF) {
             $bases[$i] = $res->fields;
             $i++;
             $res->MoveNext();
         }
-    } else
+    } else {
         return "Sector ownership didn't change";
+    }
 
     $owner_num = 0;
 
@@ -684,9 +681,9 @@ function calc_ownership($sector)
     $nbcorps = 0;
     $nbships = 0;
     while ($loop < $owner_num) {
-        if ($owners[$loop][type] == 'C')
+        if ($owners[$loop][type] == 'C') {
             $nbcorps++;
-        else {
+        } else {
             $res = $db->adoExecute("SELECT team FROM ships WHERE ship_id=" . $owners[$loop][id]);
             if ($res && $res->RecordCount() != 0) {
                 $curship = $res->fields;
@@ -708,8 +705,9 @@ function calc_ownership($sector)
     //More than one unallied ship, war
     $numunallied = 0;
     foreach ($scorps as $corp) {
-        if ($corp == 0)
+        if ($corp == 0) {
             $numunallied++;
+        }
     }
     if ($numunallied > 1) {
         $db->adoExecute("UPDATE $dbtables[universe] SET zone_id=4 WHERE sector_id=$sector");
@@ -729,10 +727,11 @@ function calc_ownership($sector)
         foreach ($ships as $ship) {
             $query = $query . "ship_id=$ship";
             $i++;
-            if ($i != $nbships)
+            if ($i != $nbships) {
                 $query = $query . " OR ";
-            else
+            } else {
                 $query = $query . ")";
+            }
         }
         $query = $query . " AND team!=0";
         $res = $db->adoExecute($query);
@@ -747,11 +746,12 @@ function calc_ownership($sector)
     $winner = 0;
     $i = 1;
     while ($i < $owner_num) {
-        if ($owners[$i][num] > $owners[$winner][num])
+        if ($owners[$i][num] > $owners[$winner][num]) {
             $winner = $i;
-        elseif ($owners[$i][num] == $owners[$winner][num]) {
-            if ($owners[$i][type] == 'C')
+        } elseif ($owners[$i][num] == $owners[$winner][num]) {
+            if ($owners[$i][type] == 'C') {
                 $winner = $i;
+            }
         }
         $i++;
     }
@@ -774,8 +774,9 @@ function calc_ownership($sector)
     } else {
         $onpar = 0;
         foreach ($owners as $curowner) {
-            if ($curowner[type] == 'S' && $curowner[id] != $owners[$winner][id] && $curowner[num] == $owners[winners][num])
+            if ($curowner[type] == 'S' && $curowner[id] != $owners[$winner][id] && $curowner[num] == $owners[winners][num]) {
                 $onpar = 1;
+            }
             break;
         }
 
@@ -815,8 +816,9 @@ function player_insignia_name($a_username)
         }
     }
 
-    if (!isset($player_insignia))
+    if (!isset($player_insignia)) {
         $player_insignia = end($l_insignia);
+    }
 
     return $player_insignia;
 }
@@ -929,17 +931,20 @@ function isLoanPending($ship_id)
     if ($res) {
         $account = $res->fields;
 
-        if ($account[loan] == 0)
+        if ($account[loan] == 0) {
             return false;
+        }
 
         $curtime = time();
         $difftime = ($curtime - $account[time]) / 60;
-        if ($difftime > $IGB_lrate)
+        if ($difftime > $IGB_lrate) {
             return true;
-        else
+        } else {
             return false;
-    } else
+        }
+    } else {
         return false;
+    }
 }
 
 function sensorsCloakSuccess($sensors, $cloak)
@@ -974,15 +979,15 @@ function shipScore($ship)
 
 function planetLevel($score)
 {
-    if ($score < 8):
+    if ($score < 8) :
         return 0;
-    elseif ($score < 12):
+    elseif ($score < 12) :
         return 1;
-    elseif ($score < 16):
+    elseif ($score < 16) :
         return 2;
-    elseif ($score < 20):
+    elseif ($score < 20) :
         return 3;
-    else:
+    else :
         return 4;
     endif;
 }
@@ -993,15 +998,15 @@ function shipLevel($score)
         $score = shipScore($score);
     }
 
-    if ($score < 8):
+    if ($score < 8) :
         return 0;
-    elseif ($score < 12):
+    elseif ($score < 12) :
         return 1;
-    elseif ($score < 16):
+    elseif ($score < 16) :
         return 2;
-    elseif ($score < 20):
+    elseif ($score < 20) :
         return 3;
-    else:
+    else :
         return 4;
     endif;
 }

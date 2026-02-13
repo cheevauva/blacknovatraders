@@ -6,7 +6,6 @@ namespace BNT\Log;
 
 class LogTypeConstants
 {
-
     const LOG_LOGIN = 1;
     const LOG_LOGOUT = 2;
     const LOG_ATTACK_OUTMAN = 3;           //sent to target when better engines
@@ -61,7 +60,6 @@ class LogTypeConstants
     const LOG_BOUNTY_FEDBOUNTY = 52;       // Sent when the federation places a bounty on a player
     const LOG_PLANET_BOMBED = 53;     //Sent after bombing a planet
     const LOG_ADMIN_ILLEGVALUE = 54;        //sent to admin on planet destruction instead of capture
-    const LOG_FURANGEE_ATTACK =55;
+    const LOG_FURANGEE_ATTACK = 55;
     const LOG_PLANET_YOUR_CAPTURED = 56;
 }
-

@@ -9,7 +9,6 @@ namespace UUA;
  */
 class ArrayObjectStrict extends \ArrayObject
 {
-
     #[\Override]
     public function offsetGet(mixed $key): mixed
     {

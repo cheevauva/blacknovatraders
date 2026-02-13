@@ -5,7 +5,7 @@
     <div class="alert alert-danger">
         <?php echo $ex->getMessage(); ?>
     </div>
-<?php else: ?>
+<?php else : ?>
     <form action="new.php" id="bntNewForm" method="post">
         <div class="alert alert-warning alert-dismissible bntNewError d-none" role="alert">
             <span class="error"></span>
@@ -13,7 +13,7 @@
         </div>
         <div class="mb-3">
             <div class="form-text">
-                <? echo $l_new_info; ?>
+                <?php echo $l_new_info; ?>
             </div>
         </div>
         <div class="mb-3">
@@ -21,23 +21,23 @@
             <input type="text" name="username" class="form-control" maxlength="40" required>
         </div>
         <div class="mb-3">
-            <label class="form-label"><? echo $l_new_shipname; ?></label>
+            <label class="form-label"><?php echo $l_new_shipname; ?></label>
             <input type="text" name="shipname" class="form-control" maxlength="20"  required>
         </div>
         <div class="mb-3">
-            <label class="form-label"><? echo $l_new_pname; ?></label>
+            <label class="form-label"><?php echo $l_new_pname; ?></label>
             <input type="text" name="character" class="form-control" maxlength="20"  required>
         </div>
         <div class="mb-3">
-            <label class="form-label"><? echo $l_new_password; ?></label>
+            <label class="form-label"><?php echo $l_new_password; ?></label>
             <input type="password" name="password" class="form-control" maxlength="20"  required>
         </div>
-        <input type="submit" class="btn btn-primary" value="<? echo $l_submit; ?>">
-        <input type="reset"  class="btn btn-primary" value="<? echo $l_reset; ?>">
+        <input type="submit" class="btn btn-primary" value="<?php echo $l_submit; ?>">
+        <input type="reset"  class="btn btn-primary" value="<?php echo $l_reset; ?>">
     </form>
 
     <script type="text/javascript">
         bntForm('bntNewForm');
     </script>
 <?php endif; ?>
-<? include("footer.php"); ?>
+<?php include("footer.php"); ?>

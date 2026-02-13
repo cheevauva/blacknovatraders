@@ -10,7 +10,6 @@ if (!checklogin(false)) {
 }
 
 try {
-
     if ($account_creation_closed) {
         throw new \Exception($l_new_closed_message);
     }

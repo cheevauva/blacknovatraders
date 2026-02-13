@@ -62,5 +62,3 @@ try {
     echo $ex->getMessage() . '<pre>' . $ex->getTraceAsString() . '</pre>';
     include 'footer.php';
 }
-
-

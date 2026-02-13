@@ -6,12 +6,11 @@ namespace BNT\Ship\DAO;
 
 class ShipsInSectorDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $sector;
     public int $excludeShip;
-    
+
     /**
      * @var array
      */

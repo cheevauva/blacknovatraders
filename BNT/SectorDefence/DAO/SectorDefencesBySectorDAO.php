@@ -6,7 +6,6 @@ namespace BNT\SectorDefence\DAO;
 
 class SectorDefencesBySectorDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $sector;

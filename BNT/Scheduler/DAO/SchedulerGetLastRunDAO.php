@@ -6,9 +6,8 @@ namespace BNT\Scheduler\DAO;
 
 class SchedulerGetLastRunDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
-    
+
     public $lastRun;
 
     public function serve(): void

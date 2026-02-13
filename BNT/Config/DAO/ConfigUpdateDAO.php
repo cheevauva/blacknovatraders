@@ -6,7 +6,6 @@ namespace BNT\Config\DAO;
 
 class ConfigUpdateDAO extends \UUA\DAO
 {
-
     /**
      * @var array<string, mixed>
      */

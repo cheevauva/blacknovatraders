@@ -8,22 +8,21 @@ use PDO;
 
 class ADOPDO extends PDO
 {
-
     public function fetch($sql, array $params = [], array $types = []): ?array
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if (empty($row)) {
             return null;
         }
-        
+
         return $row;
     }
-    
-    
+
+
     public function fetchAllKeyValue($sql, array $params = [], array $types = [])
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
@@ -31,7 +30,7 @@ class ADOPDO extends PDO
 
         return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     }
-    
+
     public function fetchAll($sql, array $params = [], array $types = []): array
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
@@ -76,7 +75,7 @@ class ADOPDO extends PDO
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();
-        
+
         return $stmt->rowCount();
     }
 

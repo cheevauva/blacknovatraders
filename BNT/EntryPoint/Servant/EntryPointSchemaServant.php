@@ -11,7 +11,6 @@ use BNT\Migration\DAO\MigrationExecuteDAO;
 
 class EntryPointSchemaServant extends \UUA\Servant
 {
-
     use \BNT\Traits\UnitSimpleCallTrait;
 
     public $messages;
@@ -21,7 +20,7 @@ class EntryPointSchemaServant extends \UUA\Servant
         global $l_schema_skip_already_executed;
         global $l_schema_fail;
         global $l_schema_success;
-        
+
         $this->messages = [];
 
         try {

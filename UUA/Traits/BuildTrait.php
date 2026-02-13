@@ -9,7 +9,6 @@ use UUA\FactoryInterface;
 
 trait BuildTrait
 {
-
     use AsTrait;
 
     final public static function new(ContainerInterface $container): static

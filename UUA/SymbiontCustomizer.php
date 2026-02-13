@@ -6,7 +6,6 @@ namespace UUA;
 
 class SymbiontCustomizer extends Symbiont
 {
-
     protected object $master;
 
     public function __construct(object $master)
@@ -16,16 +15,14 @@ class SymbiontCustomizer extends Symbiont
 
     public function from(object $object): void
     {
-        
     }
 
     public function to(object $object): void
     {
-        
     }
 
     public function catch(\Exception $object): void
     {
-        throw new $object;
+        throw new $object();
     }
 }

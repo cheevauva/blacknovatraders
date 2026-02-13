@@ -22,7 +22,7 @@ Move from one sector to another through warp links, by clicking on the sector nu
 <BR><BR>
 <B>Long-range scan:</B><BR>
 Scan a neighboring sector with your long range scanners without actually moving there.
-<?php if ($allow_fullscan): ?>
+<?php if ($allow_fullscan) : ?>
     A full scan will give you an outlook on all the neighboring sectors in one wide sweep of your 
     sensors.
 <?php endif; ?>
@@ -37,7 +37,7 @@ Access the port trading menu by clicking on a port's type when you enter a secto
 <B>Planets:</B><BR>
 Access the planet menu by clicking on a planet's name when you enter a sector where one is present.
 <BR><BR>
-<?php if ($allow_navcomp): ?>
+<?php if ($allow_navcomp) : ?>
     <B>Navigation computer:</B><BR>
     Use your computer to find a route to a specific sector. The navigation computer's power depends on 
     your computer tech level.

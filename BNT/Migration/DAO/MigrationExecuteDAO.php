@@ -6,7 +6,6 @@ namespace BNT\Migration\DAO;
 
 class MigrationExecuteDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $migration;

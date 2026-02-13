@@ -151,7 +151,7 @@ try {
 
             if ($module === 'useredit' && $operation === 'edit') {
                 $user = (int) fromGet('user', new \Exception('user'));
-                
+
                 $row = ShipByIdDAO::call($container, $user)->ship;
                 include 'tpls/admin/useredit.tpl.php';
             }

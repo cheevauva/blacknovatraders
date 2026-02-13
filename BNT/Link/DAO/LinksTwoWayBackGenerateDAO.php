@@ -6,7 +6,6 @@ namespace BNT\Link\DAO;
 
 class LinksTwoWayBackGenerateDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
     use \BNT\Traits\UnitSimpleCallTrait;
 
@@ -24,7 +23,7 @@ class LinksTwoWayBackGenerateDAO extends \UUA\DAO
         WHERE
             links.link_type = 2
         ";
-        
+
         $this->db()->q($sql);
     }
 }

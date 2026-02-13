@@ -14,7 +14,6 @@ use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
 class EntryPointNewServant extends \UUA\Servant
 {
-
     public $username;
     public $password;
     public $character;
@@ -38,7 +37,7 @@ class EntryPointNewServant extends \UUA\Servant
         if (ShipByEmailDAO::call($this->container, $this->username)->ship) {
             throw new \Exception($l_new_inuse);
         }
-        
+
         $ship = $this->newShip();
         $ship['ship_id'] = ShipCreateDAO::call($this->container, $ship)->id;
 
@@ -78,7 +77,7 @@ class EntryPointNewServant extends \UUA\Servant
         global $start_credits;
         global $start_energy;
         global $start_fighters;
-        
+
         return [
             'ship_name' => $this->shipname,
             'ship_destroyed' => 'N',
@@ -105,7 +104,7 @@ class EntryPointNewServant extends \UUA\Servant
             'trade_fighters' => 'N',
             'trade_torps' => 'N',
             'trade_energy' => 'Y',
-            'cleared_defences' => NULL,
+            'cleared_defences' => null,
             'lang' => $language,
             'dev_lssd' => (int) 'N',
         ];

@@ -8,7 +8,6 @@ use BNT\Ship\DAO\ShipUpdateDAO;
 
 class ShipEscapepodServant extends \UUA\Servant
 {
-
     public $ship;
 
     public function serve(): void

@@ -8,7 +8,6 @@ use BNT\Ship\DAO\ShipUpdateDAO;
 
 class ShipRestoreAsNewbieServant extends \UUA\Servant
 {
-
     public $ship;
 
     public function serve(): void

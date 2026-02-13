@@ -19,7 +19,7 @@
 <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($startdate . ' -2 day')) . $postlink; ?>" class="btn btn-primary"><?php echo date('Y-m-d', strtotime($startdate . ' -2 day')); ?></a>
 <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($startdate . ' -1 day')) . $postlink; ?>" class="btn btn-primary"><?php echo date('Y-m-d', strtotime($startdate . ' -1 day')); ?></a>
 <a href="log.php?startdate=<?php echo $startdate . $postlink; ?>" class="btn btn-primary"><?php echo $startdate; ?></a>
-<?php if (strtotime($startdate) < strtotime('today')): ?>
+<?php if (strtotime($startdate) < strtotime('today')) : ?>
     <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($startdate . ' + 1 day')) . $postlink; ?>" class="btn btn-primary">>>></a>
 <?php endif; ?>
 <?php include "footer.php"; ?>

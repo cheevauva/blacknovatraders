@@ -8,7 +8,6 @@ use PDO;
 
 class ShipsGetRankingDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public $ranking;

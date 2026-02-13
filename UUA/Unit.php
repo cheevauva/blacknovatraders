@@ -6,7 +6,5 @@ namespace UUA;
 
 abstract class Unit implements UnitInterface
 {
-
     use Traits\AsTrait;
-
 }

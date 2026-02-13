@@ -6,7 +6,6 @@ namespace BNT\Sector\DAO;
 
 class SectorsAssignZoneDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $zone;

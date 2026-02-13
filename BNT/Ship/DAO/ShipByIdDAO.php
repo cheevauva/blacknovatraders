@@ -6,7 +6,6 @@ namespace BNT\Ship\DAO;
 
 class ShipByIdDAO extends \UUA\DAO
 {
-
     /**
      * @var int
      */
@@ -23,9 +22,9 @@ class ShipByIdDAO extends \UUA\DAO
             'id' => $this->id,
         ]);
     }
-    
+
     /**
-     * 
+     *
      * @param type $container
      * @param id $id
      * @return self
@@ -35,8 +34,7 @@ class ShipByIdDAO extends \UUA\DAO
         $self = self::new($container);
         $self->id = $id;
         $self->serve();
-        
+
         return $self;
     }
-    
 }

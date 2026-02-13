@@ -6,7 +6,6 @@ namespace BNT\Email\DAO;
 
 class EmailSendDAO extends \UUA\DAO
 {
-
     public $to;
     public $subject;
     public $message;

@@ -141,6 +141,6 @@ if ($playerarmor < 1) {
         cancel_bounty($playerinfo['ship_id']);
         db_kill_player($playerinfo['ship_id']);
     }
-    
+
     throw new SectorFightShipDestroyedException(implode("\n", $messages));
 }

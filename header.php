@@ -75,8 +75,8 @@ function options($options, $selected)
                             <a class="nav-link" href="ranking.php"><?php echo $l_rankings; ?></a>
                             <a class="nav-link" href="settings.php"><?php echo $l_settings_game; ?></A>
                             <a class="nav-link" href="help.php"><?php echo $l_help; ?></a>
-                            <a class="nav-link" href="faq.html"><? echo "$l_faq"; ?></a>
-                            <a class="nav-link" href="mailto:<? echo $admin_mail; ?>"><?php echo $l_emailus; ?></a>
+                            <a class="nav-link" href="faq.html"><?php echo "$l_faq"; ?></a>
+                            <a class="nav-link" href="mailto:<?php echo $admin_mail; ?>"><?php echo $l_emailus; ?></a>
 
                             <?php if (!empty($link_forums)) : ?>
                                 <a class="nav-link" href="<?php echo $link_forums; ?>" target="_blank"><?php echo $l_forums; ?></A>

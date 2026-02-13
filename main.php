@@ -71,7 +71,7 @@ try {
             unset($shipsInSector[$idx]);
         }
     }
-    
+
     include 'tpls/main.tpl.php';
 } catch (EntryPointMainShipOnPlanetException $ex) {
     redirectTo('planet.php?planet_id=' . $ex->planet);
@@ -79,6 +79,3 @@ try {
     $title = $l_error;
     include 'tpls/error.tpl.php';
 }
-
-
-

@@ -34,7 +34,7 @@ switch (requestMethod()) {
                     if (md5($oldpass) != $playerinfo['password']) {
                         throw new \Exception($l_opt2_srcpassfalse);
                     }
-                    
+
                     $playerinfo['password'] = md5($newpass1);
 
                     ShipUpdateDAO::call($container, $playerinfo);
@@ -54,4 +54,3 @@ switch (requestMethod()) {
         include 'tpls/options.tpl.php';
         break;
 }
-

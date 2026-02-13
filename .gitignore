@@ -1,2 +1,3 @@
 /.phpunit.result.cache
 /phpunit-8.5.52.phar
+/phpcbf.phar

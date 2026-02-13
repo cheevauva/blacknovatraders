@@ -6,6 +6,5 @@ namespace UUA;
 
 interface UnitInterface extends ContainerConstructInterface
 {
-
     public function serve(): void;
 }
