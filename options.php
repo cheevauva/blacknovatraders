@@ -1,6 +1,5 @@
 <?php
 
-use BNT\ShipFunc;
 use BNT\Ship\DAO\ShipUpdateDAO;
 
 $disableRegisterGlobalFix = false;

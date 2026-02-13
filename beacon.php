@@ -50,7 +50,7 @@ try {
             SectorUpdateDAO::call($container, [
                 'beacon' => fromPOST('beacon_text', new \Exception('beacon_text')),
             ], $playerinfo['sector']);
-            BNT\ShipFunc::shipDevBeaconSub($playerinfo['ship_id'], 1);
+            shipDevBeaconSub($playerinfo['ship_id'], 1);
             redirectTo('beacon.php');
             break;
     }

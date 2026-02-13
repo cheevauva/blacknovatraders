@@ -44,7 +44,7 @@ try {
         include 'sector_fighters.php';
     }
 
-    BNT\ShipFunc::shipMoveToSector($playerinfo['ship_id'], $sector);
+    shipMoveToSector($playerinfo['ship_id'], $sector);
     log_move($playerinfo['ship_id'], $sector);
 
     include 'check_mines.php';

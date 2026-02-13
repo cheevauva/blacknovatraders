@@ -244,4 +244,5 @@ $xenstartsize = 15;                   // Max starting size of Xenobes at univers
 
 require_once 'bootstrap.php';
 require_once 'global_funcs.php';
+require_once 'db_functions.php';
 require_once 'init.php';
