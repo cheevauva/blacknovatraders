@@ -1,6 +1,8 @@
 <?php
 
 use BNT\Ship\DAO\ShipByIdDAO;
+use BNT\Sector\DAO\SectorByIdDAO;
+use BNT\Zone\DAO\ZoneByIdDAO;
 
 include 'config.php';
 
@@ -17,8 +19,8 @@ try {
         throw new \Exception($l_warp_none);
     }
 
-    $sectorinfo = sectoryById($playerinfo['sector']);
-    $zoneinfo = zoneById($sectorinfo['zone_id']);
+    $sectorinfo = SectorByIdDAO::call($container, $playerinfo['sector'])->sector;
+    $zoneinfo = ZoneByIdDAO::call($container, $sectorinfo['zone_id'])->zone;
 
     if ($zoneinfo['allow_warpedit'] == 'N') {
         throw new \Exception($l_warp_forbid);
@@ -44,22 +46,22 @@ try {
             include 'tpls/warpedit.tpl.php';
             break;
         case 'POST':
-            switch (fromPost('action')) {
+            switch (fromPOST('action')) {
                 case 'link':
-                    $target_sector = intval(fromPost('target_sector', new \Exception('target_sector')));
-                    $oneway = fromPost('oneway');
+                    $target_sector = intval(fromPOST('target_sector', new \Exception('target_sector')));
+                    $oneway = fromPOST('oneway');
 
                     if ($playerinfo['sector'] == $target_sector) {
                         throw new \Exception($l_warp_cantsame);
                     }
 
-                    $tgSector = sectoryById($target_sector);
+                    $tgSector = SectorByIdDAO::call($container, $target_sector)->sector;
 
                     if (empty($tgSector)) {
                         throw new \Exception($l_warp_nosector);
                     }
 
-                    $tgZone = zoneById($tgSector['zone_id']);
+                    $tgZone = ZoneByIdDAO::call($container, $tgSector['zone_id'])->zone;
 
                     if ($tgZone['allow_warpedit'] == 'N' && !$oneway) {
                         throw new \Exception(str_replace("[target_sector]", $target_sector, $l_warp_twoerror));
@@ -87,16 +89,16 @@ try {
                     redirectTo('warpedit.php');
                     break;
                 case 'unlink':
-                    $target_sector = intval(fromPost('target_sector', new \Exception('target_sector')));
-                    $bothway = fromPost('bothway');
+                    $target_sector = intval(fromPOST('target_sector', new \Exception('target_sector')));
+                    $bothway = fromPOST('bothway');
 
-                    $tgSector = sectoryById($target_sector);
+                    $tgSector = SectorByIdDAO::call($container, $target_sector)->sector;
 
                     if (empty($tgSector)) {
                         throw new \Exception($l_warp_nosector);
                     }
 
-                    $tgZone = zoneById($tgSector['zone_id']);
+                    $tgZone = ZoneByIdDAO::call($container, $tgSector['zone_id'])->zone;
 
                     if ($tgZone['allow_warpedit'] == 'N' && $bothway) {
                         throw new \Exception(str_replace("[target_sector]", $target_sector, $l_warp_forbidtwo));

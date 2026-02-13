@@ -7,8 +7,14 @@ namespace BNT\ADODB;
 use PDOStatement;
 use PDO;
 
+
+/**
+ * @property array $fields
+ * @property bool $EOF
+ */
 class ADOPDOStatement
 {
+
     /**
      * @var PDOStatement
      */
@@ -32,11 +38,13 @@ class ADOPDOStatement
         $this->EOF = empty($this->fields);
     }
 
-    public function __get($name)
+    public function __get(string $name): mixed
     {
         if ($name == 'fields') {
             $this->MoveNext();
             return $this->fields;
         }
+        
+        return null;
     }
 }

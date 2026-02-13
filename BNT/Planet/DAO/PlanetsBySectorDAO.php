@@ -6,11 +6,13 @@ namespace BNT\Planet\DAO;
 
 class PlanetsBySectorDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
     public $sector;
     public $planets;
 
+    #[\Override]
     public function serve(): void
     {
         $sql = "

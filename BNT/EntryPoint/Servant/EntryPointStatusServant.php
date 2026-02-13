@@ -11,11 +11,13 @@ use BNT\Message\DAO\MessagesNotifiedByShipDAO;
 
 class EntryPointStatusServant extends \UUA\Servant
 {
+
     public $ship;
     public $schedulerLastRun;
     public $online;
     public $messages = 0;
 
+    #[\Override]
     public function serve(): void
     {
         $this->messages = 0;

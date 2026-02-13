@@ -14,12 +14,14 @@ use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
 class EntryPointNewServant extends \UUA\Servant
 {
+
     public $username;
     public $password;
     public $character;
     public $shipname;
     public $ship;
 
+    #[\Override]
     public function serve(): void
     {
         global $l_new_invalid;
@@ -88,7 +90,7 @@ class EntryPointNewServant extends \UUA\Servant
             'credits' => (int) $start_credits,
             'ship_energy' => (int) $start_energy,
             'ship_fighters' => (int) $start_fighters,
-            'turns' => 1200,//(int) $this->mturnsMax(),
+            'turns' => 1200, //(int) $this->mturnsMax(),
             'on_planet' => 'N',
             'dev_warpedit' => 0,
             'dev_genesis' => 0,

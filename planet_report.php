@@ -412,6 +412,6 @@ function base_build_check($planet, $i)
 
 echo "<BR><BR>";
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

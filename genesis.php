@@ -137,6 +137,6 @@ elseif ($playerinfo[dev_genesis] < 1) {
 $db->adoExecute("UNLOCK TABLES");
 
 echo "<BR><BR>";
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

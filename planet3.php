@@ -24,21 +24,21 @@ if ($result2) {
   bigtitle();
 if ($playerinfo[turns] < 1) {
     echo "$l_trade_turnneed<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
 
 if ($planetinfo[sector_id] <> $playerinfo[sector]) {
     echo "$l_planet2_sector<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
 if (empty($planetinfo)) {
     echo "$l_planet_none<br>";
 
-    TEXT_GOTOMAIN();
+    
 
       include("footer.php");
 
@@ -89,5 +89,5 @@ if ($planetinfo[sells] == 'Y') {
 }
 
     gen_score($planetinfo[owner]);
-    TEXT_GOTOMAIN();
+    
     include("footer.php");

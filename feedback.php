@@ -32,5 +32,5 @@ if (empty($content)) {
     mail("$admin_mail", $l_feedback_subj, "IP address - $ip\r\nGame Name - $playerinfo[character_name] - $gamedomain \r\n\r\n$content", "From: $playerinfo[email]\r\nX-Mailer: PHP/" . phpversion());
 }
 
-    TEXT_GOTOMAIN();
+    
     include("footer.php");

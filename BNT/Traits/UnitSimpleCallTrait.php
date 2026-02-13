@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace BNT\Traits;
 
+use Psr\Container\ContainerInterface;
+
 trait UnitSimpleCallTrait
 {
-    /**
-     * @param type $container
-     * @return self
-     */
-    public static function call($container)
+
+    public static function call(ContainerInterface $container): static
     {
         $self = self::new($container);
         $self->serve();

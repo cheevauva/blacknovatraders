@@ -14,10 +14,10 @@ if (checklogin()) {
 switch (requestMethod()) {
     case 'POST':
         try {
-            $oldpass = fromPost('oldpass');
-            $newpass1 = fromPost('newpass1');
-            $newpass2 = fromPost('newpass2');
-            $newlang = fromPost('newlang', $language);
+            $oldpass = fromPOST('oldpass');
+            $newpass1 = fromPOST('newpass1');
+            $newpass2 = fromPOST('newpass2');
+            $newlang = fromPOST('newlang', $language);
 
             if (in_array($newlang, array_keys(languages()), true)) {
                 $playerinfo['lang'] = $newlang;

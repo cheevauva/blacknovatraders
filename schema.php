@@ -10,7 +10,7 @@ include 'config.php';
 try {
     switch (requestMethod()) {
         case 'POST':
-            if (fromPost('password', new \Exception($l_schema_password . ' ' . $l_is_required)) !== $adminpass) {
+            if (fromPOST('password', new \Exception($l_schema_password . ' ' . $l_is_required)) !== $adminpass) {
                 throw new \Exception($l_schema_password . ' ' . $l_is_wrong);
             }
 

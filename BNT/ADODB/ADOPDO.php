@@ -8,7 +8,14 @@ use PDO;
 
 class ADOPDO extends PDO
 {
-    public function fetch($sql, array $params = [], array $types = []): ?array
+
+    /**
+     * @param string $sql
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $types
+     * @return array<string, mixed>|null
+     */
+    public function fetch(string $sql, array $params = [], array $types = []): ?array
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();
@@ -22,8 +29,13 @@ class ADOPDO extends PDO
         return $row;
     }
 
-
-    public function fetchAllKeyValue($sql, array $params = [], array $types = [])
+    /**
+     * @param string $sql
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $types
+     * @return array<mixed, mixed>
+     */
+    public function fetchAllKeyValue(string $sql, array $params = [], array $types = [])
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();
@@ -31,7 +43,13 @@ class ADOPDO extends PDO
         return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-    public function fetchAll($sql, array $params = [], array $types = []): array
+    /**
+     * @param string $sql
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $types
+     * @return array<int, array<string, mixed>>
+     */
+    public function fetchAll(string $sql, array $params = [], array $types = []): array
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();
@@ -39,6 +57,12 @@ class ADOPDO extends PDO
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @param string $sql
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $types
+     * @return mixed
+     */
     public function column($sql, array $params = [], array $types = [])
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
@@ -49,11 +73,11 @@ class ADOPDO extends PDO
 
     /**
      * @param string $sql
-     * @param array $params
-     * @param array $types
-     * @return PDOStatement
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $types
+     * @return \PDOStatement
      */
-    protected function prepareStmt($sql, array $params = [], array $types = [])
+    protected function prepareStmt(string $sql, array $params = [], array $types = []): \PDOStatement
     {
         $stmt = $this->prepare($sql);
 
@@ -64,14 +88,20 @@ class ADOPDO extends PDO
         return $stmt;
     }
 
-    public function adoExecute($sql)
+    public function adoExecute(string $sql): ADOPDOStatement
     {
-        $stmt = $this->query($sql);
+        $stmt = $this->query($sql) ?: throw new \Exception($sql);
 
         return new ADOPDOStatement($stmt);
     }
 
-    public function q($sql, array $params = [], array $types = [])
+    /**
+     * @param string $sql
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $types
+     * @return int
+     */
+    public function q(string $sql, array $params = [], array $types = [])
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();
@@ -79,12 +109,12 @@ class ADOPDO extends PDO
         return $stmt->rowCount();
     }
 
-    public function ErrorNo()
+    public function ErrorNo(): ?string
     {
         return $this->errorCode();
     }
 
-    public function ErrorMsg()
+    public function ErrorMsg(): string
     {
         return implode(' ', $this->errorInfo());
     }

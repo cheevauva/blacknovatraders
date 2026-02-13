@@ -22,10 +22,12 @@ use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
 class EntryPointCreateUniverseStep2Servant extends \UUA\Servant
 {
+
     public int $sectorMax;
     public int $universeSize;
     public GameCalculateStartParamsServant $startParams;
 
+    #[\Override]
     public function serve(): void
     {
         global $fed_max_hull;
@@ -108,7 +110,7 @@ class EntryPointCreateUniverseStep2Servant extends \UUA\Servant
         ZoneCreateDAO::call($this->container, [
             'zone_name' => 'WebMaster\'s Territory',
             'owner' => $shipAdminId,
-        ]);
+        ])->id;
         IBankAccountCreateDAO::call($this->container, [
             'ship_id' => $shipAdminId,
         ]);

@@ -1,0 +1,9 @@
+parameters:
+    level: 8
+    excludePaths:
+        - Tests
+    bootstrapFiles:
+        - config.php
+        - languages/english.php
+    paths:
+        - ./BNT

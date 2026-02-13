@@ -27,7 +27,7 @@ bigtitle();
 
 if ($planetinfo[sector_id] <> $playerinfo[sector]) {
     echo "$l_planet2_sector<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     die();
 }
 
@@ -349,6 +349,6 @@ if ($playerinfo[turns] < 1) {
 
 //-------------------------------------------------------------------------------------------------
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

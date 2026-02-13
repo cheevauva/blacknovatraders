@@ -52,6 +52,6 @@ if (!isset($change)) {
     }
 }
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

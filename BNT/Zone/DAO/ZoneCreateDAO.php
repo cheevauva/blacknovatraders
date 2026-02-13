@@ -8,21 +8,30 @@ use Psr\Container\ContainerInterface;
 
 class ZoneCreateDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseRowCreateTrait;
 
+    /**
+     * @var array<string, mixed>
+     */
     public array $zone;
-    public int $id;
+    public protected(set) int $id;
 
     #[\Override]
     public function serve(): void
     {
-        $this->id = $this->zone['zone_id'] = $this->rowCreate('zones', $this->zone);
+        $this->id = $this->zone['zone_id'] = (int) $this->rowCreate('zones', $this->zone);
     }
 
-    public static function call(ContainerInterface $container, array $ship): self
+    /**
+     * @param ContainerInterface $container
+     * @param array<string, mixed> $zone
+     * @return self
+     */
+    public static function call(ContainerInterface $container, array $zone): self
     {
         $self = self::new($container);
-        $self->zone = $ship;
+        $self->zone = $zone;
         $self->serve();
 
         return $self;

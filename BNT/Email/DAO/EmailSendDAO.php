@@ -6,12 +6,14 @@ namespace BNT\Email\DAO;
 
 class EmailSendDAO extends \UUA\DAO
 {
+
     public $to;
     public $subject;
     public $message;
     public $from;
     public $replyTo;
 
+    #[\Override]
     public function serve(): void
     {
         mail($this->to, $this->subject, $this->message, implode("\r\n", array_filter([

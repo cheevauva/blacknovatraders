@@ -1,10 +1,29 @@
 <?php
 
+define('MICROTIME_START', microtime(true));
+define('COUNT_CLASS_CORE', count(get_declared_classes()));
+
 //$Id$
 //ini_set('display_errors', 0);
 date_default_timezone_set('UTC');
-include("db_config.php");
-define('MICROTIME_START', microtime(true));
+
+$gameroot = __DIR__;
+$gamedomain = "";
+$gamepath = "";
+//
+$dbhost = "db";
+$dbport = 3306;
+$dbuname = "bnt";
+$dbpass = "bnt";
+$dbname = "bnt";
+$db_type = "mysql";
+//
+$adminpass = "secret";
+$admin_mail = "admin@example.com";
+$admin_pass = "admin@example.com";
+$adminname = "Admin Name";
+//
+$link_forums = "http://forums.blacknova.net";
 
 /* Main scheduler variables (game flow control)
   ----------------------------------------------- */
@@ -223,4 +242,6 @@ $xen_aggression = 100;                // Percent of xenobe that are aggressive o
 $xen_planets = 5;                     //Percent of created xenobe that will own planets. Recommended to keep at small percentage - rjordan
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
 
-include 'global_funcs.php';
+require_once 'bootstrap.php';
+require_once 'global_funcs.php';
+require_once 'init.php';

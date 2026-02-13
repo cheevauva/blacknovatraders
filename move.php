@@ -2,6 +2,7 @@
 
 use BNT\Sector\Exception\SectorFightException;
 use BNT\Sector\Exception\SectorChooseMoveException;
+use BNT\Sector\DAO\SectorByIdDAO;
 
 include 'config.php';
 
@@ -18,7 +19,7 @@ try {
         throw new \Exception($l_move_turn);
     }
 
-    $sectorinfo = sectoryById($playerinfo['sector']);
+    $sectorinfo = SectorByIdDAO::call($container, $playerinfo['sector'])->sector;
     $links = linksByStart($playerinfo['sector']);
 
     $flag = false;

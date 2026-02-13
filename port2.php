@@ -30,7 +30,7 @@ if ($zoneinfo[allow_trade] == 'N') {
     $title = $l_no_trade;
     bigtitle();
     echo "$l_no_trade_info<p>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 } elseif ($zoneinfo[allow_trade] == 'L') {
@@ -42,7 +42,7 @@ if ($zoneinfo[allow_trade] == 'N') {
             $title = $l_no_trade;
             bigtitle();
             echo "$l_no_trade_out<p>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -51,7 +51,7 @@ if ($zoneinfo[allow_trade] == 'N') {
             $title = $l_no_trade;
             bigtitle();
             echo "$l_no_trade_out<p>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -120,7 +120,7 @@ if ($playerinfo[turns] < 1) {
         if (isLoanPending($playerinfo[ship_id])) {
             echo "$l_port_loannotrade<p>";
             echo "<A HREF=igb.php>$l_igb_term</a><p>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -503,7 +503,7 @@ if ($playerinfo[turns] < 1) {
 //-------------------------------------------------------------------------------------------------
 
 echo "<BR><BR>";
-TEXT_GOTOMAIN();
+
 
 if ($sectorinfo[port_type] == "special") {
     echo "<BR><BR>Click <A HREF=port.php>here</A> to return to the supply depot.";

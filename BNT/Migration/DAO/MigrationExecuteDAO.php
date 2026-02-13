@@ -6,10 +6,12 @@ namespace BNT\Migration\DAO;
 
 class MigrationExecuteDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
     public $migration;
 
+    #[\Override]
     public function serve(): void
     {
         $this->db()->q($this->migration['query']);

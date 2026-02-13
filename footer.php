@@ -2,8 +2,10 @@
     <div id="footer_metrics">
         <span class="myx">-</span> <?php echo $l_footer_until_update; ?> |
         <?php echo $l_footer_players_on_1; ?>  <span class="counter_online">0</span>  <?php echo $l_footer_players_on_2; ?> |
-        M: <?php echo sprintf('%.2f', memory_get_peak_usage() / 1024 / 1024, 2);?> MB |
-        E: <?php echo sprintf('%.3f', microtime(true) - MICROTIME_START);?> S
+        M: <?php echo sprintf('%.2f', memory_get_peak_usage() / 1024 / 1024, 2); ?> MB |
+        E: <?php echo sprintf('%.3f', microtime(true) - MICROTIME_START); ?> S |
+        DF: <?php echo count(get_defined_functions()['user']); ?> |
+        DC: <?php echo count(get_declared_classes()) - COUNT_CLASS_CORE; ?>
     </div>
     © 2000-<?php echo date('Y'); ?> Ron Harwood and L. Patrick Smallwood
 </div>

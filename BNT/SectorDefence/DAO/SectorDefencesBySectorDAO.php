@@ -6,11 +6,13 @@ namespace BNT\SectorDefence\DAO;
 
 class SectorDefencesBySectorDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
     public $sector;
     public $sectorDefences;
 
+    #[\Override]
     public function serve(): void
     {
         $sql = "

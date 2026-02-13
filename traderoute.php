@@ -259,7 +259,7 @@ if ($num_traderoutes == 0) {
 
 //-------------------------------------------------------------------------------------------------
 
-TEXT_GOTOMAIN();
+
 include("footer.php");
 
 ?>
@@ -273,7 +273,7 @@ function traderoute_die($error_msg)
     echo "<p>$error_msg<p>";
 
 
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
@@ -734,7 +734,7 @@ function traderoutenew($traderoute_id)
     ";
 
 
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }

@@ -245,7 +245,7 @@ $l_planet_landed     = "You have landed on the planet's surface.";
 $l_planet_left       = "You are no longer on the planet's surface.";
 $l_planet_cinfo      = "You have room for [cargo] units of additional cargo.  You have capacity for [energy] units of addtional power.";
 $l_planet_toplanet   = "To Planet?";
-$l_planet_baseinfo   = "To build a base there must be at least $base_credits credits, $base_ore units of ore, $base_organics units of organics, and $base_goods units of goods on the planet .";
+$l_planet_baseinfo   = "To build a base there must be at least [base_credits] credits, [base_ore] units of ore, [base_organics] units of organics, and [base_goods] units of goods on the planet .";
 $l_planet_p_under        = "You may not change production percentages to a negative number.";
 $l_planet_p_over     = "You may not change production percentages to higher than a total of 100%.";
 $l_planet_p_changed  = "Production percentages changed.";
@@ -360,7 +360,7 @@ $l_warp_destquery    = "What sector would you like to remove a link to?";
 $l_warp_bothway      = "Both-ways";
 $l_warp_nosector     = "Sector does not exist.";
 $l_warp_twoerror     = "Using a Warp Editor to create a two-way link to sector [target_sector] is not permitted.";
-$l_warp_sectex       = "Cannot create warp link from current sector - that would exceed the maximum of $link_max per sector.";
+$l_warp_sectex       = "Cannot create warp link from current sector - that would exceed the maximum of [link_max] per sector.";
 $l_warp_linked       = "Target sector ([target_sector]) already has a link from this sector.";
 $l_warp_unlinked     = "Target sector ([target_sector]) does not have a link from this sector.";
 $l_warp_coneway          = "Link created one-way to";
@@ -422,7 +422,7 @@ $l_scan_carry        = "Carrying:";
 
 $l_lrs_title         = "Long Range Scan";
 $l_lrs_nofull        = "Your scanners do not possess full long range scan capabilities.";
-$l_lrs_noturns       = "You need at least $fullscan_cost turn(s) to run a full long range scan.";
+$l_lrs_noturns       = "You need at least [fullscan_cost] turn(s) to run a full long range scan.";
 $l_lrs_used      = "Used";
 $l_lrs_turns         = "turn(s)";
 $l_lrs_left      = "left";
@@ -686,7 +686,7 @@ $l_team_noalliances  = "There are no alliances in the Galaxy at this time.";
 
 // ranking.php
 
-$l_ranks_title       = "Top $max_rank Players";
+$l_ranks_title       = "Top [max_rank] Players";
 $l_ranks_none        = "No Results to show.";
 $l_ranks_pnum        = "Total number of players";
 $l_ranks_dships      = "Players with destroyed ships are not counted.";
@@ -1196,13 +1196,13 @@ $l_new_blank            = "E-mail, ship name, and character name may not be blan
 $l_new_inuse            = "E-mail address is already in use.";
 $l_new_4gotpw1          = "If you have forgotten your password,";
 $l_new_4gotpw2          = "to have it e-mailed to you.";
-$l_new_inusechar        = "Character name $character, is already in use.";
-$l_new_inuseship        = "Ship name $shipname, is already in use.";
-$l_new_pwsent           = "Password has been sent to ${HTTP_POST_VARS['username']}.";
+$l_new_inusechar        = "Character name [character], is already in use.";
+$l_new_inuseship        = "Ship name [shipname], is already in use.";
+$l_new_pwsent           = "Password has been sent to [username].";
 $l_new_login            = "to go to the login screen.";
 $l_new_err          = "Please go back or <a href=new.php>click here</a> and try again.";
 $l_new_topic            = "Traders Password";
-$l_new_message          = "Greetings,\n\nSomeone from the IP address $ip requested that your password for Traders be sent to you.\n\nYour password is: [pass]\n\nThank you\n\nThe Traders web team.";
+$l_new_message          = "Greetings,\n\nSomeone from the IP address [ip] requested that your password for Traders be sent to you.\n\nYour password is: [pass]\n\nThank you\n\nThe Traders web team.";
 
 // logout.php
 
@@ -1214,8 +1214,8 @@ $l_logout_text          = "[name] is now logged out.  Click <A HREF=index.php>he
 $l_mail_title           = "Mail Password";
 $l_mail_noplayer        = "No Such Player! - Create a new player <a href=new.php>here</a>.";
 $l_mail_sent            = "Password has been sent to";
-$l_mail_topic           = "$game_name Password";
-$l_mail_message         = "Greetings,\n\nSomeone from the IP address $ip requested that your password for $game_name be sent to you.\n\nYour password is: [pass]\n\nThank you\n\nThe $game_name web team.";
+$l_mail_topic           = "[game_name] Password";
+$l_mail_message         = "Greetings,\n\nSomeone from the IP address [ip] requested that your password for [game_name] be sent to you.\n\nYour password is: [pass]\n\nThank you\n\nThe [game_name] web team.";
 
 // global_funcs.php
 
@@ -1331,7 +1331,7 @@ $l_by_thefeds  = "The Federation";
 $l_by_cancel   = "Cancel";
 $l_by_yourself = "You can not place a bounty on your self.";
 $l_by_notenough = "You do not have enough credits to place a bounty of that amount.";
-$l_by_toomuch   = "You can not place that bounty. Maximum bounty allowed on another player is $percent percent of your net worth";
+$l_by_toomuch   = "You can not place that bounty. Maximum bounty allowed on another player is [percent] percent of your net worth";
 $l_by_zeroamount = "Bounties must be greater than 0 credits.";
 $l_by_placed     = "The bounty has been placed.";
 $l_by_nobounty = "That bounty no longer exists.";

@@ -302,6 +302,6 @@ if ($targetinfo[sector] != $playerinfo[sector]) {
 
 
 echo "<BR><BR>";
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

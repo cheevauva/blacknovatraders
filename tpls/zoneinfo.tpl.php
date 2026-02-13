@@ -1,3 +1,22 @@
+<?php
+
+function YesNoLimit($value, $other = null): string
+{
+    global $l_zi_allow;
+    global $l_zi_notallow;
+    global $l_zi_limit;
+
+    if ($value == 'Y') {
+        return $l_zi_allow;
+    } elseif ($value == 'N') {
+        return $l_zi_notallow;
+    } elseif ($value == 'L') {
+        return $l_zi_limit;
+    } else {
+        return $other;
+    }
+}
+?>
 <?php $title = $l_zi_title; ?>
 <?php include 'header.php'; ?>
 <?php bigtitle(); ?>
@@ -22,36 +41,36 @@
             <td colspan="2">
                 <table class="table table-hover">
                     <tr>
-                        <td width="50%">&nbsp;<?php echo $l_zi_owner; ?></td>
-                        <td width="50%"><?php echo $ownername; ?>&nbsp;</td>
+                        <td width="50%"><?php echo $l_zi_owner; ?></td>
+                        <td width="50%"><?php echo $ownername; ?></td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_beacons; ?></td>
-                        <td><?php echo $beacon; ?>&nbsp;</td>
+                        <td><?php echo $l_beacons; ?></td>
+                        <td><?php echo YesNoLimit($zoneinfo['allow_beacon']); ?></td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_attack; ?></td>
-                        <td><?php echo $attack; ?>&nbsp;</td>
+                        <td><?php echo $l_attack; ?></td>
+                        <td><?php echo YesNoLimit($zoneinfo['allow_attack']); ?></td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_modify_defence; ?></td>
-                        <td><?php echo $defense; ?>&nbsp;</td>
+                        <td><?php echo $l_modify_defence; ?></td>
+                        <td><?php echo YesNoLimit($zoneinfo['allow_defenses']); ?></td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_warpedit; ?></td>
-                        <td><?php echo $warpedit; ?>&nbsp;</td>
+                        <td><?php echo $l_warpedit; ?></td>
+                        <td><?php echo YesNoLimit($zoneinfo['allow_warpedit']); ?></td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_planets; ?></td>
-                        <td><?php echo $planet; ?>&nbsp;</td>
+                        <td><?php echo $l_planets; ?></td>
+                        <td><?php echo YesNoLimit($zoneinfo['allow_planet']); ?></td>
                     </tr>
                     <tr>
-                        <td>&nbsp;<?php echo $l_port; ?></td>
-                        <td><?php echo $trade; ?>&nbsp;</td>
+                        <td><?php echo $l_port; ?></td>
+                        <td><?php echo YesNoLimit($zoneinfo['allow_trade']); ?></td>
                     </tr>
                     <tr>
                         <td>&nbsp;<?php echo $l_zi_maxhull; ?></td>
-                        <td><?php echo $hull; ?>&nbsp;</td>
+                        <td><?php if (empty($zoneinfo['max_hull'])): ?><?php echo $l_zi_ul; ?><?php else: ?><?php echo $zoneinfo['max_hull']; ?><?php endif; ?> </td>
                     </tr>
                 </table>
             </td>

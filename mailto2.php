@@ -77,7 +77,7 @@ if (empty($content)) {
     }
 }
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");
 

@@ -8,12 +8,14 @@ use PDO;
 
 class ShipsGetRankingDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
     public $ranking;
     public $sort;
     public $max_rank;
 
+    #[\Override]
     public function serve(): void
     {
         $sort = $this->sort;

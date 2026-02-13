@@ -8,8 +8,10 @@ use BNT\Ship\DAO\ShipUpdateDAO;
 
 class ShipRestoreAsNewbieServant extends \UUA\Servant
 {
+
     public $ship;
 
+    #[\Override]
     public function serve(): void
     {
         $ship = $this->ship;

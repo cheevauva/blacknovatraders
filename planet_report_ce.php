@@ -31,7 +31,7 @@ if (isset($HTTP_POST_VARS["TPCreds"])) {
 }
 
 echo "<BR><BR>";
-TEXT_GOTOMAIN();
+
 
 
 function go_build_base($planet_id, $sector_id)

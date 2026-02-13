@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
+use Psr\Container\ContainerInterface;
+
 class ShipByTokenDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
-    /**
-     * @var string
-     */
-    public $token;
+    public string $token;
 
     /**
-     * @var array
+     * @var array<string, mixed>|null
      */
-    public $ship;
+    public protected(set) ?array $ship;
 
+    #[\Override]
     public function serve(): void
     {
         $this->ship = $this->db()->fetch("SELECT * FROM ships WHERE token = :token LIMIT 1", [
@@ -25,12 +26,7 @@ class ShipByTokenDAO extends \UUA\DAO
         ]);
     }
 
-    /**
-     * @param type $container
-     * @param string $token
-     * @return self
-     */
-    public static function call($container, $token)
+    public static function call(ContainerInterface $container, string $token): self
     {
         $self = self::new($container);
         $self->token = $token;

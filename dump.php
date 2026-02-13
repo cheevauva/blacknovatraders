@@ -22,7 +22,7 @@ if (checklogin()) {
 
 if ($playerinfo[turns] < 1) {
     echo "$l_dump_turn<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
@@ -34,5 +34,5 @@ if ($playerinfo[ship_colonists] == 0) {
 } else {
     echo "$l_dump_nono<BR><BR>";
 }
-    TEXT_GOTOMAIN();
+    
     include("footer.php");

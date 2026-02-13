@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace BNT\Config\DAO;
 
+use Psr\Container\ContainerInterface;
+
 class ConfigUpdateDAO extends \UUA\DAO
 {
+
     /**
      * @var array<string, mixed>
      */
-    public $config;
+    public array $config;
 
+    #[\Override]
     public function serve(): void
     {
         foreach ($this->config as $name => $value) {
@@ -19,5 +23,19 @@ class ConfigUpdateDAO extends \UUA\DAO
                 'value' => $value,
             ]);
         }
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param array<string, mixed> $config
+     * @return static
+     */
+    public static function call(ContainerInterface $container, array $config): self
+    {
+        $self = self::new($container);
+        $self->config = $config;
+        $self->serve();
+
+        return $self;
     }
 }

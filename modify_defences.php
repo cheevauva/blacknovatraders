@@ -17,7 +17,7 @@ if (checklogin()) {
 
 if (!isset($defence_id)) {
     echo "$l_md_invalid<BR>";
-    TEXT_GOTOMAIN();
+    
     die();
 }
 
@@ -28,7 +28,7 @@ $sectorinfo = $res->fields;
 
 if ($playerinfo[turns] < 1) {
     echo "$l_md_noturn<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
@@ -38,13 +38,13 @@ $result3 = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE defenc
 
 if ($result3 == 0) {
     echo "$l_md_nolonger<BR>";
-    TEXT_GOTOMAIN();
+    
     die();
 }
 $defenceinfo = $result3->fields;
 if ($defenceinfo['sector_id'] <> $playerinfo['sector']) {
     echo "$l_md_nothere<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
@@ -71,7 +71,7 @@ switch ($response) {
         bigtitle();
         if ($defenceinfo['ship_id'] == $playerinfo['ship_id']) {
             echo "$l_md_yours<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -101,14 +101,14 @@ switch ($response) {
             $l_md_msgdownerb = str_replace("[mines]", $playerbeams, $l_md_msgdownerb);
             $l_md_msgdownerb = str_replace("[name]", $char_name, $l_md_msgdownerb);
             message_defence_owner($sector, "$l_md_msgdownerb");
-            TEXT_GOTOMAIN();
+            
             die();
         }
         break;
     case "retrieve":
         if ($defenceinfo['ship_id'] <> $playerinfo['ship_id']) {
             echo "$l_md_notyours<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -146,14 +146,14 @@ switch ($response) {
         $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, sector=$playerinfo[sector] where ship_id=$playerinfo[ship_id]");
         bigtitle();
         echo "$l_md_retr $quantity $defence_type.<BR>";
-        TEXT_GOTOMAIN();
+        
         die();
       break;
     case "change":
         bigtitle();
         if ($defenceinfo['ship_id'] <> $playerinfo['ship_id']) {
             echo "$l_md_notyours<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -167,7 +167,7 @@ switch ($response) {
         }
         $l_md_mode = str_replace("[mode]", $mode, $l_md_mode);
         echo "$l_md_mode<BR>";
-        TEXT_GOTOMAIN();
+        
         die();
       break;
     default:
@@ -209,7 +209,7 @@ switch ($response) {
                 echo "</FORM>";
             }
         }
-        TEXT_GOTOMAIN();
+        
         die();
       break;
 }
@@ -217,6 +217,6 @@ switch ($response) {
 
 //-------------------------------------------------------------------------------------------------
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

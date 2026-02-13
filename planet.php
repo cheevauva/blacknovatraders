@@ -40,7 +40,7 @@ if (!empty($planetinfo)) {
             $db->adoExecute("UPDATE ships SET on_planet='N' WHERE ship_id=$playerinfo[ship_id]");
         }
         echo "$l_planet_none <p>";
-        TEXT_GOTOMAIN();
+        
         include("footer.php");
         die();
     }
@@ -52,7 +52,7 @@ if (!empty($planetinfo)) {
         $l_planet_capture2 = str_replace("[capture]", $capture_link, $l_planet_capture2);
         echo "$l_planet_capture2.<BR><BR>";
         echo "<BR>";
-        TEXT_GOTOMAIN();
+        
         include("footer.php");
         die();
     }
@@ -350,7 +350,7 @@ if (!empty($planetinfo)) {
           /* scan menu */
             if ($playerinfo[turns] < 1) {
                 echo "$l_plant_scn_turn<BR><BR>";
-                TEXT_GOTOMAIN();
+                
                 include("footer.php");
                 die();
             }
@@ -366,7 +366,7 @@ if (!empty($planetinfo)) {
             if ($roll > $success) {
               /* if scan fails - inform both player and target. */
                 echo "$l_planet_noscan<BR><BR>";
-                TEXT_GOTOMAIN();
+                
                 playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_SCAN_FAIL, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 include("footer.php");
                 die();
@@ -546,6 +546,6 @@ if ($allow_ibank) {
 echo "<A HREF =\"bounty.php\">$l_by_placebounty</A><p>";
 
 //-------------------------------------------------------------------------------------------------
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

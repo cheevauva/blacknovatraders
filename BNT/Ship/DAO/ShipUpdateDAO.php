@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
+use Psr\Container\ContainerInterface;
+
 class ShipUpdateDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $id;
+    public int $id;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     public $ship;
 
+    #[\Override]
     public function serve(): void
     {
         $parameters = [];
@@ -32,16 +36,13 @@ class ShipUpdateDAO extends \UUA\DAO
         $this->db()->q(sprintf('UPDATE ships SET %s WHERE ship_id = :ship_id', implode(', ', $values)), $parameters);
     }
 
-    /**
-     * @param type $container
-     * @param string $email
-     * @return self
-     */
-    public static function call($container, $ship, $id = null)
+    public static function call(ContainerInterface $container, array $ship, ?int $id = null): self
     {
         $self = self::new($container);
         $self->ship = $ship;
         $self->id = $id;
         $self->serve();
+
+        return $self;
     }
 }

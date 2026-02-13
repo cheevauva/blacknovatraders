@@ -8,8 +8,10 @@ use BNT\Ship\DAO\ShipUpdateDAO;
 
 class ShipEscapepodServant extends \UUA\Servant
 {
+
     public $ship;
 
+    #[\Override]
     public function serve(): void
     {
         global $start_energy;

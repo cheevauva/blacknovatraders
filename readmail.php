@@ -169,7 +169,7 @@ if ($res->EOF) {
 <?php
  //}
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");
 ?>

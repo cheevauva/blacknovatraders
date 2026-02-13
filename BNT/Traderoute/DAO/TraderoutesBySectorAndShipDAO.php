@@ -6,12 +6,18 @@ namespace BNT\Traderoute\DAO;
 
 class TraderoutesBySectorAndShipDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $sector;
-    public $ship;
-    public $traderoutes;
+    public int $sector;
+    public int $ship;
 
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    public array $traderoutes;
+
+    #[\Override]
     public function serve(): void
     {
         $sql = "

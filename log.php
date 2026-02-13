@@ -1,12 +1,13 @@
 <?php
 
 use BNT\Ship\DAO\ShipByIdDAO;
+use BNT\Log\DAO\LogsByShipAndDateDAO;
 
 $disableRegisterGlobalFix = false;
 
 include 'config.php';
 
-$title = $l_log_titlet;
+$title = $l_log_title;
 
 if (checklogin()) {
     die();
@@ -26,7 +27,8 @@ $startdate = fromRequest('startdate', date('Y-m-d'));
 $yesterday = date('Y-m-d', strtotime($startdate . ' -1 day'));
 $yesterday2 = date('Y-m-d', strtotime($startdate . ' -2 day'));
 
-$logs = logsByShipAndDate($playerinfo['ship_id'], $startdate);
+$logs = LogsByShipAndDateDAO::call($container, $playerinfo['ship_id'], $startdate)->logs;
+
 
 foreach ($logs as $index => $log) {
     $logs[$index] = logParse($log);

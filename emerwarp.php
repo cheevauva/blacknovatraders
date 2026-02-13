@@ -27,6 +27,6 @@ if ($playerinfo[dev_emerwarp] > 0) {
     echo "$l_ewd_none<BR><BR>";
 }
 
-    TEXT_GOTOMAIN();
+    
 
     include("footer.php");

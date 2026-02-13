@@ -14,10 +14,12 @@ use BNT\Log\DAO\LogPlayerDAO;
 
 class EntryPointLoginServant extends \UUA\Servant
 {
+
     public $email;
     public $password;
     public $ship;
 
+    #[\Override]
     public function serve(): void
     {
         global $l_login_email;

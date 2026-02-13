@@ -51,6 +51,6 @@ if (empty($content)) {
   #using this three lines to get recipients ship_id and sending the message -- blindcoder
 }
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

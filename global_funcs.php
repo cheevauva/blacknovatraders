@@ -2,49 +2,15 @@
 
 use BNT\ADODB\ADOPDO;
 use BNT\Log\LogTypeConstants;
-use BNT\Config\DAO\ConfigReadDAO;
 use BNT\Ship\Servant\ShipEscapepodServant;
-use BNT\Ship\DAO\ShipByTokenDAO;
 
-include 'bootstrap.php';
+preg_match("/global_funcs.php/i", $_SERVER['PHP_SELF']) ? die("You can not access this file directly!") : null;
 
-$dsn = sprintf("%s:host=%s;port=%s;dbname=%s;charset=utf8mb4", $db_type, $dbhost, $dbport, $dbname);
-$db = new ADOPDO($dsn, $dbuname, $dbpass, [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-]);
-$container = new \UUA\Container\Container(fn($c) => [
-    'db' => $db,
-]);
-
-if (empty($disableConfigRewrite)) {
-    try {
-        $configRead = ConfigReadDAO::new($container);
-        $configRead->serve();
-
-        foreach ($configRead->config as $name => $value) {
-            $$name = $value;
-        }
-    } catch (\Exception $ex) {
-    }
-}
-
-/**
- * @return ADOPDO
- */
-function db()
+function db(): ADOPDO
 {
     global $db;
 
     return $db;
-}
-
-$PHP_SELF = $_SERVER['PHP_SELF'];
-//$Id$
-// Separate userpass into username & password to support the legacy of multiple cookies for login.
-if (preg_match("/global_funcs.php/i", $PHP_SELF)) {
-    echo "You can not access this file directly!";
-    die();
 }
 
 function uuidv7()
@@ -52,25 +18,6 @@ function uuidv7()
     $timestamp = intval(microtime(true) * 1000);
 
     return sprintf('%02x%02x%02x%02x-%02x%02x-%04x-%04x-%012x', ($timestamp >> 40) & 0xFF, ($timestamp >> 32) & 0xFF, ($timestamp >> 24) & 0xFF, ($timestamp >> 16) & 0xFF, ($timestamp >> 8) & 0xFF, $timestamp & 0xFF, mt_rand(0, 0x0FFF) | 0x7000, mt_rand(0, 0x3FFF) | 0x8000, mt_rand(0, 0xFFFFFFFFFFFF));
-}
-
-if (empty($disableRegisterGlobalFix)) {
-    foreach ($_POST as $k => $v) {
-        if (!isset($GLOBALS[$k])) {
-            ${$k} = $v;
-        }
-    }
-    foreach ($_GET as $k => $v) {
-        if (!isset($GLOBALS[$k])) {
-            ${$k} = $v;
-        }
-    }
-
-    foreach ($_COOKIE as $k => $v) {
-        if (!isset($GLOBALS[$k])) {
-            ${$k} = $v;
-        }
-    }
 }
 
 function redirectTo($location)
@@ -123,10 +70,10 @@ function fromRequest($name, $default = null)
         return $fromGet;
     }
 
-    return fromPost($name, $default);
+    return fromPOST($name, $default);
 }
 
-function fromPost($name, $default = null)
+function fromPOST($name, $default = null)
 {
     if (empty($_POST[$name]) && $default instanceof \Exception) {
         throw $default;
@@ -183,28 +130,6 @@ function bigtitle()
     echo "<h1>$title</h1>";
 }
 
-function TEXT_GOTOMAIN()
-{
-}
-
-function TEXT_GOTOLOGIN()
-{
-    global $l_global_mlogin;
-    echo $l_global_mlogin;
-}
-
-function TEXT_JAVASCRIPT_BEGIN()
-{
-    echo "\n<SCRIPT LANGUAGE=\"JavaScript\">\n";
-    echo "<!--\n";
-}
-
-function TEXT_JAVASCRIPT_END()
-{
-    echo "\n// -->\n";
-    echo "</SCRIPT>\n";
-}
-
 function checklogin($return = true)
 {
     global $username, $playerinfo, $l_global_needlogin, $l_global_died;
@@ -236,22 +161,6 @@ function checklogin($return = true)
     echo $return ? $l_global_died . $l_die_please : '';
 
     return true;
-}
-
-function updatecookie()
-{
-    // refresh the cookie with token/id/res - times out after 60 mins, and player must login again.
-    global $gamepath;
-    global $gamedomain;
-    global $id;
-    global $res;
-
-    if (!empty($_COOKIE['token'])) {
-        setcookie("token", $_COOKIE['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-    }
-
-    setcookie("id", $id);
-    setcookie("res", $res);
 }
 
 function playerlog($sid, $log_type, $data = "")
@@ -1010,45 +919,3 @@ function shipLevel($score)
         return 4;
     endif;
 }
-
-$token = uuidv7();
-
-if (!empty($_COOKIE['token'])) {
-    $token = $_COOKIE['token'];
-}
-
-if (empty($disableAutoLogin)) {
-    $playerinfo = null;
-
-    if ($token) {
-        $playerinfo = ShipByTokenDAO::call($container, $token)->ship;
-    }
-}
-
-$language = $default_lang;
-
-if (!empty($playerinfo['lang'])) {
-    $language = $playerinfo['lang'];
-} else {
-    if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-        switch (mb_strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2))) {
-            case 'ru':
-                $language = 'russian';
-                break;
-            case 'en':
-                $language = 'english';
-                break;
-        }
-    }
-}
-
-$languageFileMain = sprintf('languages/%s.php', $language);
-$languageFileSub = sprintf('languages/%s%s', $language, $PHP_SELF);
-
-include $languageFileMain;
-
-if (file_exists($languageFileSub)) {
-    include $languageFileSub;
-}
-
-updatecookie();

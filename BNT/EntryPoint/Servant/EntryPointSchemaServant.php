@@ -11,10 +11,12 @@ use BNT\Migration\DAO\MigrationExecuteDAO;
 
 class EntryPointSchemaServant extends \UUA\Servant
 {
+
     use \BNT\Traits\UnitSimpleCallTrait;
 
     public $messages;
 
+    #[\Override]
     public function serve(): void
     {
         global $l_schema_skip_already_executed;

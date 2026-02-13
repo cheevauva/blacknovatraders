@@ -2,6 +2,13 @@
 
 use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Ship\DAO\ShipUpdateDAO;
+use BNT\Config\DAO\ConfigUpdateDAO;
+use BNT\Planet\DAO\PlanetByIdDAO;
+use BNT\Planet\DAO\PlanetUpdateDAO;
+use BNT\Sector\DAO\SectorByIdDAO;
+use BNT\Sector\DAO\SectorUpdateDAO;
+use BNT\Zone\DAO\ZoneByIdDAO;
+use BNT\Zone\DAO\ZoneUpdateDAO;
 
 $disableRegisterGlobalFix = true;
 
@@ -30,24 +37,24 @@ try {
             if ($module === 'sectoredit' && $operation === 'save') {
                 $sector = (int) fromGET('sector', new \Exception('sector'));
 
-                sectorUpdate($sector, [
-                    'sector_name' => (string) fromPost('sector_name'),
-                    'zone_id' => (int) fromPost('zone_id'),
-                    'beacon' => (string) fromPost('beacon'),
-                    'port_type' => (string) fromPost('port_type'),
-                    'port_organics' => (int) fromPost('port_organics'),
-                    'port_ore' => (int) fromPost('port_ore'),
-                    'port_goods' => (int) fromPost('port_goods'),
-                    'port_energy' => (int) fromPost('port_energy'),
-                    'distance' => (int) fromPost('distance'),
-                    'angle1' => (float) fromPost('angle1'),
-                    'angle2' => (float) fromPost('angle2'),
-                ]);
+                SectorUpdateDAO::call($container, [
+                    'sector_name' => (string) fromPOST('sector_name'),
+                    'zone_id' => (int) fromPOST('zone_id'),
+                    'beacon' => (string) fromPOST('beacon'),
+                    'port_type' => (string) fromPOST('port_type'),
+                    'port_organics' => (int) fromPOST('port_organics'),
+                    'port_ore' => (int) fromPOST('port_ore'),
+                    'port_goods' => (int) fromPOST('port_goods'),
+                    'port_energy' => (int) fromPOST('port_energy'),
+                    'distance' => (int) fromPOST('distance'),
+                    'angle1' => (float) fromPOST('angle1'),
+                    'angle2' => (float) fromPOST('angle2'),
+                ], $sector);
             }
 
             if ($module === 'univedit' && $operation === 'doexpand') {
-                $radius = (int) fromPost('radius', new \Exception('radius'));
-                configUpdate([
+                $radius = (int) fromPOST('radius', new \Exception('radius'));
+                $configUpdate = ConfigUpdateDAO::call($container, [
                     'universe_size' => $universe_size,
                 ]);
 
@@ -61,81 +68,81 @@ try {
                 $row = ShipByIdDAO::call($container, $user)->ship;
 
                 ShipUpdateDAO::call($container, [
-                    'character_name' => (string) fromPost('character_name', new \Exception('character_name')),
-                    'password' => fromPost('password2') ? md5((string) fromPost('password2')) : $row['password'],
-                    'email' => (string) fromPost('email', new \Exception('email')),
-                    'ship_name' => (string) fromPost('ship_name', new \Exception('ship_name')),
-                    'ship_destroyed' => !fromPost('ship_destroyed') ? 'N' : 'Y',
-                    'hull' => (int) fromPost('hull', 0),
-                    'engines' => (int) fromPost('engines', 0),
-                    'power' => (int) fromPost('power', 0),
-                    'computer' => (int) fromPost('computer', 0),
-                    'sensors' => (int) fromPost('sensors', 0),
-                    'armor' => (int) fromPost('armor', 0),
-                    'shields' => (int) fromPost('shields', 0),
-                    'beams' => (int) fromPost('beams', 0),
-                    'torp_launchers' => (int) fromPost('torp_launchers', 0),
-                    'cloak' => (int) fromPost('cloak', 0),
-                    'credits' => (int) fromPost('credits', 0),
-                    'turns' => (int) fromPost('turns', 0),
-                    'dev_warpedit' => (int) fromPost('dev_warpedit'),
-                    'dev_genesis' => (int) fromPost('dev_genesis'),
-                    'dev_beacon' => (int) fromPost('dev_beacon'),
-                    'dev_emerwarp' => (int) fromPost('dev_emerwarp'),
-                    'dev_escapepod' => !fromPost('dev_escapepod') ? 'N' : 'Y',
-                    'dev_fuelscoop' => !fromPost('dev_fuelscoop') ? 'N' : 'Y',
-                    'dev_minedeflector' => (int) fromPost('dev_minedeflector'),
-                    'sector' => (int) fromPost('sector'),
-                    'ship_ore' => (int) fromPost('ship_ore'),
-                    'ship_organics' => (int) fromPost('ship_organics'),
-                    'ship_goods' => (int) fromPost('ship_goods'),
-                    'ship_energy' => (int) fromPost('ship_energy'),
-                    'ship_colonists' => (int) fromPost('ship_colonists'),
-                    'ship_fighters' => (int) fromPost('ship_fighters'),
-                    'torps' => (int) fromPost('torps'),
-                    'armor_pts' => (int) fromPost('armor_pts'),
+                    'character_name' => (string) fromPOST('character_name', new \Exception('character_name')),
+                    'password' => fromPOST('password2') ? md5((string) fromPOST('password2')) : $row['password'],
+                    'email' => (string) fromPOST('email', new \Exception('email')),
+                    'ship_name' => (string) fromPOST('ship_name', new \Exception('ship_name')),
+                    'ship_destroyed' => !fromPOST('ship_destroyed') ? 'N' : 'Y',
+                    'hull' => (int) fromPOST('hull', 0),
+                    'engines' => (int) fromPOST('engines', 0),
+                    'power' => (int) fromPOST('power', 0),
+                    'computer' => (int) fromPOST('computer', 0),
+                    'sensors' => (int) fromPOST('sensors', 0),
+                    'armor' => (int) fromPOST('armor', 0),
+                    'shields' => (int) fromPOST('shields', 0),
+                    'beams' => (int) fromPOST('beams', 0),
+                    'torp_launchers' => (int) fromPOST('torp_launchers', 0),
+                    'cloak' => (int) fromPOST('cloak', 0),
+                    'credits' => (int) fromPOST('credits', 0),
+                    'turns' => (int) fromPOST('turns', 0),
+                    'dev_warpedit' => (int) fromPOST('dev_warpedit'),
+                    'dev_genesis' => (int) fromPOST('dev_genesis'),
+                    'dev_beacon' => (int) fromPOST('dev_beacon'),
+                    'dev_emerwarp' => (int) fromPOST('dev_emerwarp'),
+                    'dev_escapepod' => !fromPOST('dev_escapepod') ? 'N' : 'Y',
+                    'dev_fuelscoop' => !fromPOST('dev_fuelscoop') ? 'N' : 'Y',
+                    'dev_minedeflector' => (int) fromPOST('dev_minedeflector'),
+                    'sector' => (int) fromPOST('sector'),
+                    'ship_ore' => (int) fromPOST('ship_ore'),
+                    'ship_organics' => (int) fromPOST('ship_organics'),
+                    'ship_goods' => (int) fromPOST('ship_goods'),
+                    'ship_energy' => (int) fromPOST('ship_energy'),
+                    'ship_colonists' => (int) fromPOST('ship_colonists'),
+                    'ship_fighters' => (int) fromPOST('ship_fighters'),
+                    'torps' => (int) fromPOST('torps'),
+                    'armor_pts' => (int) fromPOST('armor_pts'),
                 ], $user);
             }
 
             if ($module === 'planedit' && $operation === 'save') {
                 $planet = (int) fromGet('planet', new \Exception('planet'));
 
-                planetUpdate($planet, [
-                    'sector_id' => (int) fromPost('sector_id'),
-                    'defeated' => !fromPost('defeated') ? 'N' : 'Y',
-                    'name' => (string) fromPost('name'),
-                    'base' => !fromPost('base') ? 'N' : 'Y',
-                    'sells' => !fromPost('sells') ? 'N' : 'Y',
-                    'owner' => (string) fromPost('owner'),
-                    'organics' => (int) fromPost('organics', 0),
-                    'ore' => (int) fromPost('ore', 0),
-                    'goods' => (int) fromPost('goods', 0),
-                    'energy' => (int) fromPost('energy', 0),
-                    'corp' => (string) fromPost('corp'),
-                    'colonists' => (int) fromPost('colonists', 0),
-                    'credits' => (int) fromPost('credits', 0),
-                    'fighters' => (int) fromPost('fighters', 0),
-                    'torps' => (int) fromPost('torps', 0),
-                    'prod_organics' => (int) fromPost('prod_organics', 0),
-                    'prod_ore' => (int) fromPost('prod_ore', 0),
-                    'prod_goods' => (int) fromPost('prod_goods', 0),
-                    'prod_energy' => (int) fromPost('prod_energy', 0),
-                    'prod_fighters' => (int) fromPost('prod_fighters', 0),
-                    'prod_torp' => (int) fromPost('prod_torp', 0)
-                ]);
+                PlanetUpdateDAO::call($container, [
+                    'sector_id' => (int) fromPOST('sector_id'),
+                    'defeated' => !fromPOST('defeated') ? 'N' : 'Y',
+                    'name' => (string) fromPOST('name'),
+                    'base' => !fromPOST('base') ? 'N' : 'Y',
+                    'sells' => !fromPOST('sells') ? 'N' : 'Y',
+                    'owner' => (string) fromPOST('owner'),
+                    'organics' => (int) fromPOST('organics', 0),
+                    'ore' => (int) fromPOST('ore', 0),
+                    'goods' => (int) fromPOST('goods', 0),
+                    'energy' => (int) fromPOST('energy', 0),
+                    'corp' => (string) fromPOST('corp'),
+                    'colonists' => (int) fromPOST('colonists', 0),
+                    'credits' => (int) fromPOST('credits', 0),
+                    'fighters' => (int) fromPOST('fighters', 0),
+                    'torps' => (int) fromPOST('torps', 0),
+                    'prod_organics' => (int) fromPOST('prod_organics', 0),
+                    'prod_ore' => (int) fromPOST('prod_ore', 0),
+                    'prod_goods' => (int) fromPOST('prod_goods', 0),
+                    'prod_energy' => (int) fromPOST('prod_energy', 0),
+                    'prod_fighters' => (int) fromPOST('prod_fighters', 0),
+                    'prod_torp' => (int) fromPOST('prod_torp', 0)
+                ], $planet);
             }
 
             if ($module === 'zoneedit' && $operation === 'save') {
                 $zone = (int) fromGet('zone', new \Exception('zone'));
 
-                zoneUpdate($zone, [
-                    'zone_name' => (string) fromPost('zone_name'),
-                    'allow_beacon' => !fromPost('zone_beacon') ? 'N' : 'Y',
-                    'allow_attack' => !fromPost('zone_attack') ? 'N' : 'Y',
-                    'allow_warpedit' => !fromPost('zone_warpedit') ? 'N' : 'Y',
-                    'allow_planet' => !fromPost('zone_planet') ? 'N' : 'Y',
-                    'max_hull' => (int) fromPost('zone_hull', 0)
-                ]);
+                ZoneUpdateDAO::call($container, [
+                    'zone_name' => (string) fromPOST('zone_name'),
+                    'allow_beacon' => !fromPOST('zone_beacon') ? 'N' : 'Y',
+                    'allow_attack' => !fromPOST('zone_attack') ? 'N' : 'Y',
+                    'allow_warpedit' => !fromPOST('zone_warpedit') ? 'N' : 'Y',
+                    'allow_planet' => !fromPOST('zone_planet') ? 'N' : 'Y',
+                    'max_hull' => (int) fromPOST('zone_hull', 0)
+                ], $zone);
             }
 
             redirectTo('admin.php');
@@ -144,7 +151,7 @@ try {
             if ($module === 'sectoredit' && $operation === 'edit') {
                 $sector = (int) fromGet('sector', new \Exception('sector'));
 
-                $row = sectoryById($sector);
+                $row = SectorByIdDAO::call($container, $sector)->sector;
                 $zones = db()->fetchAllKeyValue('SELECT zone_id, zone_name FROM zones ORDER BY zone_name');
                 include 'tpls/admin/sectoredit.tpl.php';
             }
@@ -158,14 +165,14 @@ try {
 
             if ($module === 'planedit' && $operation === 'edit') {
                 $planet = (int) fromGet('planet', new \Exception('planet'));
-                $row = planetById($planet);
+                $row = PlanetByIdDAO::call($container, $planet)->planet;
                 $owners = db()->fetchAllKeyValue("SELECT ship_id,character_name FROM ships ORDER BY character_name");
                 include 'tpls/admin/planetedit.tpl.php';
             }
 
             if ($module === 'zoneedit' && $operation === 'edit') {
                 $zone = (int) fromGet('zone', new \Exception('zone'));
-                $row = zoneById($zone);
+                $row = ZoneByIdDAO::call($container, $zone)->zone;
                 $zones = db()->fetchAllKeyValue('SELECT zone_id,zone_name FROM zones ORDER BY zone_name');
                 include 'tpls/admin/zoneedit.tpl.php';
             }

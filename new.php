@@ -17,10 +17,10 @@ try {
     switch (requestMethod()) {
         case 'POST':
             $entryPointNew = EntryPointNewServant::new($container);
-            $entryPointNew->username = fromPost('username', new \Exception($l_new_username . ' ' . $l_is_required));
-            $entryPointNew->character = fromPost('character', new \Exception($l_new_character . ' ' . $l_is_required));
-            $entryPointNew->shipname = fromPost('shipname', new \Exception($l_new_shipname . ' ' . $l_is_required));
-            $entryPointNew->password = fromPost('password', new \Exception($l_new_password . ' ' . $l_is_required));
+            $entryPointNew->username = fromPOST('username', new \Exception($l_new_username . ' ' . $l_is_required));
+            $entryPointNew->character = fromPOST('character', new \Exception($l_new_character . ' ' . $l_is_required));
+            $entryPointNew->shipname = fromPOST('shipname', new \Exception($l_new_shipname . ' ' . $l_is_required));
+            $entryPointNew->password = fromPOST('password', new \Exception($l_new_password . ' ' . $l_is_required));
             $entryPointNew->serve();
 
             setcookie('token', $entryPointNew->ship['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);

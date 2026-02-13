@@ -81,6 +81,6 @@ if ($num_sectors < 1) {
 }
 echo "<BR><BR>";
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

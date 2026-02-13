@@ -9,8 +9,8 @@ include 'config.php';
 try {
     switch (requestMethod()) {
         case 'POST':
-            $email = fromPost('email');
-            $pass = fromPost('pass');
+            $email = fromPOST('email');
+            $pass = fromPOST('pass');
 
             $entryPointLogin = EntryPointLoginServant::new($container);
             $entryPointLogin->email = $email;

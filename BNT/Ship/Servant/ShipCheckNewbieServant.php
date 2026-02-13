@@ -6,9 +6,11 @@ namespace BNT\Ship\Servant;
 
 class ShipCheckNewbieServant extends \UUA\Servant
 {
+
     public $ship;
     public $isNewbie;
 
+    #[\Override]
     public function serve(): void
     {
         global $newbie_hull;
@@ -21,7 +23,6 @@ class ShipCheckNewbieServant extends \UUA\Servant
         global $newbie_beams;
         global $newbie_torp_launchers;
         global $newbie_cloak;
-
 
         $isNewbie = $this->ship['hull'] <= $newbie_hull;
         $isNewbie &= $this->ship['engines'] <= $newbie_engines;

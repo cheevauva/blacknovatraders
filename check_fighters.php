@@ -5,6 +5,7 @@ use BNT\Sector\Exception\SectorFightException;
 use BNT\Sector\Exception\SectorRetreatException;
 use BNT\Sector\Exception\SectorNotEnoghtCreditsTollException;
 use BNT\Ship\DAO\ShipByIdDAO;
+use BNT\Sector\DAO\SectorByIdDAO;
 
 preg_match("/check_fighters.php/i", $_SERVER['PHP_SELF']) ? die('You can not access this file directly!') : null;
 
@@ -12,7 +13,7 @@ if (!isset($sector)) {
     throw new \Exception('sector is required');
 }
 
-$sectorinfo = sectoryById($sector);
+$sectorinfo = SectorByIdDAO::call($container, $sector)->sector;
 $defencesBySector = defencesBySectorAndFighters($sector);
 
 $i = 0;
@@ -47,7 +48,7 @@ if (!$isProblem) {
     return;
 }
 
-$response = fromPost('response');
+$response = fromPOST('response');
 $message = null;
 
 switch ($response) {

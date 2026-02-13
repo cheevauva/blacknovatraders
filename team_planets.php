@@ -23,7 +23,7 @@ $playerinfo = $res->fields;
 if ($playerinfo[team] == 0) {
     echo "<BR>$l_teamplanet_notally";
     echo "<BR><BR>";
-    TEXT_GOTOMAIN();
+    
 
     include("footer.php");
 
@@ -164,6 +164,6 @@ if ($num_planets < 1) {
 
 echo "<BR><BR>";
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

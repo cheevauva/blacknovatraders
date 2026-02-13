@@ -117,7 +117,7 @@ function planetbombing()
 
     if ($playerinfo[turns] < 1) {
         echo "$l_cmb_atleastoneturn<BR><BR>";
-        TEXT_GOTOMAIN();
+        
         include("footer.php");
         die();
     }
@@ -255,7 +255,7 @@ function planetcombat()
 
     if ($playerinfo[turns] < 1) {
         echo "$l_cmb_atleastoneturn<BR><BR>";
-        TEXT_GOTOMAIN();
+        
         include("footer.php");
         die();
     }

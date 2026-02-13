@@ -379,7 +379,7 @@ switch ($teamwhat) {
                 echo "<INPUT TYPE=SUBMIT VALUE=$l_submit><INPUT TYPE=RESET VALUE=$l_reset>";
                 echo "</FORM>";
                 echo "<BR><BR>";
-                TEXT_GOTOMAIN();
+                
                 include("footer.php");
                 die();
             }
@@ -459,7 +459,7 @@ switch ($teamwhat) {
                 echo "<INPUT TYPE=SUBMIT VALUE=$l_submit><INPUT TYPE=RESET VALUE=$l_reset>";
                 echo "</FORM>";
                 echo "<BR><BR>";
-                TEXT_GOTOMAIN();
+                
                 include("footer.php");
                 die();
             }
@@ -543,6 +543,6 @@ switch ($teamwhat) {
 } // switch ($teamwhat)
 
     echo "<BR><BR>";
-    TEXT_GOTOMAIN();
+    
 
     include("footer.php");

@@ -80,7 +80,7 @@ switch ($response) {
         bigtitle();
         if ($playerinfo[turns] < 1) {
             echo "$l_by_noturn<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -88,14 +88,14 @@ switch ($response) {
         $res = $db->adoExecute("SELECT * from $dbtables[bounty] WHERE bounty_id = $bid");
         if (!res) {
             echo "$l_by_nobounty<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
         $bty = $res->fields;
         if ($bty[placed_by] <> $playerinfo[ship_id]) {
             echo "$l_by_notyours<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -104,7 +104,7 @@ switch ($response) {
         $refund = $bty['amount'];
         $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, credits=credits+$refund where ship_id=$playerinfo[ship_id]");
         echo "$l_by_canceled<BR>";
-        TEXT_GOTOMAIN();
+        
         die();
       break;
     case "place":
@@ -113,39 +113,39 @@ switch ($response) {
         $ex = $db->adoExecute("SELECT * from ships WHERE ship_id = $bounty_on");
         if (!$ex) {
             echo "$l_by_notexists<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
         $bty = $ex->fields;
         if ($bty[ship_destroyed] == "Y") {
             echo "$l_by_destroyed<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
         if ($playerinfo[turns] < 1) {
             echo "$l_by_noturn<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
         $amount = stripnum($amount);
         if ($amount < 0) {
             echo "$l_by_zeroamount<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
         if ($bounty_on == $playerinfo['ship_id']) {
             echo "$l_by_yourself<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
         if ($amount > $playerinfo['credits']) {
             echo "$l_by_notenough<BR><BR>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -161,7 +161,7 @@ switch ($response) {
             }
             if ($amount + previous_bounty > $maxtrans) {
                 echo "$l_by_toomuch<BR><BR>";
-                TEXT_GOTOMAIN();
+                
                 include("footer.php");
                 die();
             }
@@ -170,7 +170,7 @@ switch ($response) {
         $stamp = date("Y-m-d H-i-s");
         $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, credits=credits-$amount where ship_id=$playerinfo[ship_id]");
         echo "$l_by_placed<BR>";
-        TEXT_GOTOMAIN();
+        
         die();
       break;
     default:
@@ -245,6 +245,6 @@ switch ($response) {
 
 //-------------------------------------------------------------------------------------------------
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

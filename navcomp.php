@@ -18,7 +18,7 @@ if (checklogin()) {
 
 if (!$allow_navcomp) {
     echo "$l_nav_nocomp<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
@@ -102,5 +102,5 @@ if ($state == 0) {
     }
 }
 
-    TEXT_GOTOMAIN();
+    
     include("footer.php");

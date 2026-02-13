@@ -65,7 +65,7 @@ $num_defences = $i;
 bigtitle();
 if ($playerinfo[turns] < 1) {
     echo "$l_mines_noturn<BR><BR>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 }
@@ -82,7 +82,7 @@ if ($zoneinfo[allow_defenses] == 'N') {
 
             if ($fighters_owner[team] != $playerinfo[team] || $playerinfo['team'] == 0) {
                 echo "$l_mines_nodeploy<BR>";
-                TEXT_GOTOMAIN();
+                
                 die();
             }
         }
@@ -95,7 +95,7 @@ if ($zoneinfo[allow_defenses] == 'N') {
         if ($zone_owner <> $playerinfo[ship_id]) {
             if ($zoneowner_info['team'] != $playerinfo['team'] || $playerinfo['team'] == 0) {
                 echo "$l_mines_nopermit<BR><BR>";
-                TEXT_GOTOMAIN();
+                
                 die();
             }
         }
@@ -174,6 +174,6 @@ if ($zoneinfo[allow_defenses] == 'N') {
 
 //-------------------------------------------------------------------------------------------------
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

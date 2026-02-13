@@ -7,13 +7,13 @@ namespace BNT\Game\Servant;
 class GameCalculateStartParamsServant extends \UUA\Servant
 {
     public int $sectorMax;
-    public float $special;
-    public float $ore;
-    public float $organics;
-    public float $goods;
-    public float $energy;
-    public float $fedsecs;
-    public float $planets;
+    public int $special;
+    public int $ore;
+    public int $organics;
+    public int $goods;
+    public int $energy;
+    public int $fedsecs;
+    public int $planets;
     public float $sellCommod;
     public float $buyCommod;
     //
@@ -57,6 +57,6 @@ class GameCalculateStartParamsServant extends \UUA\Servant
         $this->energySectorsCount = (int) round($this->sectorMax * $this->energy / 100);
         $this->fedSectorsCount = (int) round($this->sectorMax * $this->fedsecs / 100);
         $this->emptySectorsCount = $this->sectorMax - $this->specialSectorsCount - $this->oreSectorsCount - $this->organicsSectorsCount - $this->goodsSectorsCount - $this->energySectorsCount;
-        $this->unownedPlanetsCount = (int) round($this->sectorMax * $this->planets / 100);
+        $this->unownedPlanetsCount = (int) round($this->sectorMax * ($this->planets / 100));
     }
 }

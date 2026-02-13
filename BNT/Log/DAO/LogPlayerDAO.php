@@ -8,12 +8,14 @@ use Psr\Container\ContainerInterface;
 
 class LogPlayerDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $ship;
     public int $type;
     public mixed $data;
 
+    #[\Override]
     public function serve(): void
     {
         if (empty($this->ship) || empty($this->type)) {

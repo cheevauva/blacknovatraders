@@ -47,10 +47,10 @@ if ($planetinfo[owner] == $playerinfo[ship_id] || ($planetinfo[corp] == $playeri
             echo "<p>$ownership<p>";
         }
     }
-    TEXT_GOTOMAIN();
+    
 } else {
     echo ("<BR>$l_corpm_exploit<BR>");
-    TEXT_GOTOMAIN();
+    
 }
 
 

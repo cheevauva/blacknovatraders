@@ -26,13 +26,13 @@ $playerinfo = $result->fields;
 if ($sector == "*") {
     if (!$allow_fullscan) {
         echo "$l_lrs_nofull<BR><BR>";
-        TEXT_GOTOMAIN();
+        
         include("footer.php");
         die();
     }
     if ($playerinfo[turns] < $fullscan_cost) {
         echo "$l_lrs_noturns<BR><BR>";
-        TEXT_GOTOMAIN();
+        
         include("footer.php");
         die();
     }
@@ -155,7 +155,7 @@ if ($sector == "*") {
 
     if ($flag == 0) {
         echo "$l_lrs_cantscan<BR><BR>";
-        TEXT_GOTOMAIN();
+        
         die();
     }
 
@@ -303,6 +303,6 @@ echo $port_bnthelper_string;
 echo $planet_bnthelper_string;
 echo $rspace_bnthelper_string;
 echo "<BR><BR>";
-TEXT_GOTOMAIN();
+
 
 include("footer.php");

@@ -11,23 +11,23 @@ include 'config.php';
 
 $title = "Create Universe";
 
-$step = fromPost('step');
+$step = fromPOST('step');
 
-if ($adminpass != fromPost('swordfish')) {
+if ($adminpass != fromPOST('swordfish')) {
     $step = 0;
 }
 
-$sector_max = round(fromPost('sector_max', $sector_max));
-$initscommod = fromPost('initscommod', 100);
-$initbcommod = fromPost('initbcommod', 100);
-$universe_size = fromPost('universe_size', $universe_size);
-$special = fromPost('special', 1);
-$ore = fromPost('ore', 15);
-$organics = fromPost('organics', 10);
-$goods = fromPost('goods', 15);
-$energy = fromPost('energy', 10);
-$planets = fromPost('planets', 10);
-$fedsecs = fromPost('fedsecs', intval($sector_max / 200));
+$sector_max = round(fromPOST('sector_max', $sector_max));
+$initscommod = fromPOST('initscommod', 100);
+$initbcommod = fromPOST('initbcommod', 100);
+$universe_size = fromPOST('universe_size', $universe_size);
+$special = fromPOST('special', 1);
+$ore = fromPOST('ore', 15);
+$organics = fromPOST('organics', 10);
+$goods = fromPOST('goods', 15);
+$energy = fromPOST('energy', 10);
+$planets = fromPOST('planets', 10);
+$fedsecs = fromPOST('fedsecs', intval($sector_max / 200));
 
 $startParams = GameCalculateStartParamsServant::new($container);
 $startParams->special = $special;

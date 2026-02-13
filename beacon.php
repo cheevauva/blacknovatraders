@@ -2,6 +2,9 @@
 
 use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
+use BNT\Sector\DAO\SectorByIdDAO;
+use BNT\Sector\DAO\SectorUpdateDAO;
+use BNT\Zone\DAO\ZoneByIdDAO;
 
 $disableRegisterGlobalFix = true;
 
@@ -11,14 +14,14 @@ if (checklogin()) {
     die();
 }
 
-$sectorinfo = sectoryById($playerinfo['sector']);
+$sectorinfo = SectorByIdDAO::call($container, $playerinfo['sector'])->sector;
 
 try {
     if ($playerinfo['dev_beacon'] < 1) {
         throw new \Exception($l_beacon_donthave);
     }
 
-    $zoneinfo = zoneById($sectorinfo['zone_id']);
+    $zoneinfo = ZoneByIdDAO::call($container, $sectorinfo['zone_id'])->zone;
 
     if ($zoneinfo['allow_beacon'] == 'N') {
         throw new \Exception($l_beacon_notpermitted);
@@ -44,9 +47,9 @@ try {
             include 'tpls/beacon.tpl.php';
             break;
         case 'POST':
-            sectorUpdate($playerinfo['sector'], [
-                'beacon' => fromPost('beacon_text', new \Exception('beacon_text')),
-            ]);
+            SectorUpdateDAO::call($container, [
+                'beacon' => fromPOST('beacon_text', new \Exception('beacon_text')),
+            ], $playerinfo['sector']);
             BNT\ShipFunc::shipDevBeaconSub($playerinfo['ship_id'], 1);
             redirectTo('beacon.php');
             break;

@@ -6,11 +6,13 @@ namespace BNT\Migration\DAO;
 
 class MigrationsFindAllDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
     use \BNT\Traits\UnitSimpleCallTrait;
 
     public $migrations;
 
+    #[\Override]
     public function serve(): void
     {
         $files = glob('schema/*.sql');

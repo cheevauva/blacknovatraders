@@ -77,14 +77,14 @@ if ($zoneinfo[zone_id] == 4) {
     $title = $l_sector_war;
     bigtitle();
     echo "$l_war_info <p>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 } elseif ($zoneinfo[allow_trade] == 'N') {
     $title = "Trade forbidden";
     bigtitle();
     echo "$l_no_trade_info<p>";
-    TEXT_GOTOMAIN();
+    
     include("footer.php");
     die();
 } elseif ($zoneinfo[allow_trade] == 'L') {
@@ -96,7 +96,7 @@ if ($zoneinfo[zone_id] == 4) {
             $title = "Trade forbidden";
             bigtitle();
             echo "Trading at this port is not allowed for outsiders<p>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -105,7 +105,7 @@ if ($zoneinfo[zone_id] == 4) {
             $title = $l_no_trade;
             bigtitle();
             echo "$l_no_trade_out<p>";
-            TEXT_GOTOMAIN();
+            
             include("footer.php");
             die();
         }
@@ -216,7 +216,7 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     if (isLoanPending($playerinfo[ship_id])) {
         echo "$l_port_loannotrade<p>";
         echo "<A HREF=igb.php>$l_igb_term</a><p>";
-        TEXT_GOTOMAIN();
+        
         include("footer.php");
         die();
     }
@@ -230,13 +230,13 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
                 $l_port_bounty2 = str_replace("[amount]", NUMBER($bty[total_bounty]), $l_port_bounty2);
                 echo $l_port_bounty2 . "<BR>";
                 echo "<A HREF=\"bounty.php\">$l_by_placebounty</A><BR><BR>";
-                TEXT_GOTOMAIN();
+                
                 die();
             } else {
                 if ($playerinfo[credits] < $bty[total_bounty]) {
                     $l_port_btynotenough = str_replace("[amount]", NUMBER($bty[total_bounty]), $l_port_btynotenough);
                     echo $l_port_btynotenough;
-                    TEXT_GOTOMAIN();
+                    
                     die();
                 } else {
                     $db->adoExecute("UPDATE ships SET credits=credits-$bty[total_bounty] WHERE ship_id = $playerinfo[ship_id]");
@@ -257,7 +257,8 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     $colonist_max = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods];
     $colonist_free = $colonist_max - $playerinfo[ship_colonists];
 
-    TEXT_JAVASCRIPT_BEGIN();
+    echo "\n<SCRIPT LANGUAGE=\"JavaScript\">\n";
+    echo "<!--\n";
 
     echo "function MakeMax(name, val)\n";
     echo "{\n";
@@ -390,7 +391,8 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "form.hull_costper.value=changeDelta(form.hull_upgrade.value,$playerinfo[hull]);\n";
     echo "form.shields_costper.value=changeDelta(form.shields_upgrade.value,$playerinfo[shields]);\n";
     echo "}";
-    TEXT_JAVASCRIPT_END();
+    echo "\n// -->\n";
+    echo "</SCRIPT>\n";
 
     $onblur = "ONBLUR=\"countTotal()\"";
     $onfocus =  "ONFOCUS=\"countTotal()\"";
@@ -673,7 +675,7 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
 
 echo "\n";
 echo "<BR><BR>\n";
-TEXT_GOTOMAIN();
+
 echo "\n";
 
 include("footer.php");

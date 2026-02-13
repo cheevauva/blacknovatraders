@@ -1,7 +1,8 @@
 <?php
 
-use BNT\ShipFunc;
 use BNT\Ship\DAO\ShipUpdateDAO;
+use BNT\Sector\DAO\SectorByIdDAO;
+use BNT\Zone\DAO\ZoneByIdDAO;
 
 $disableRegisterGlobalFix = true;
 
@@ -14,7 +15,7 @@ if (checklogin()) {
     die();
 }
 
-$ship_id = intval(fromPost('ship_id', new \Exception('ship_id')));
+$ship_id = intval(fromPOST('ship_id', new \Exception('ship_id')));
 $targetinfo = ShipByIdDAO::call($container, $ship_id)->ship;
 
 bigtitle();
@@ -49,8 +50,8 @@ $flee = (10 - $targetinfo['engines'] + $playerinfo['engines']) * 5;
 $roll = rand(1, 100);
 $roll2 = rand(1, 100);
 
-$targetSector = sectoryById($targetinfo['sector']);
-$targetZone = zoneById($targetSector['zone_id']);
+$targetSector = SectorByIdDAO::call($container, $targetinfo['sector'])->sector;
+$targetZone = ZoneByIdDAO::call($container, $targetSector['zone_id'])->zone;
 
 $zoneinfo = $targetZone;
 
@@ -609,6 +610,6 @@ if ($playerarmor < 1) {
 
 attackEnd:
 
-TEXT_GOTOMAIN();
+
 
 include("footer.php");
