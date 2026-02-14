@@ -62,4 +62,5 @@ class LogTypeConstants
     const LOG_ADMIN_ILLEGVALUE = 54;        //sent to admin on planet destruction instead of capture
     const LOG_FURANGEE_ATTACK = 55;
     const LOG_PLANET_YOUR_CAPTURED = 56;
+    const LOG_ATTACK_WIN = 57;
 }

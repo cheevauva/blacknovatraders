@@ -208,14 +208,6 @@ $min_bases_to_own = 3;
 
 $default_lang = 'english';
 
-$avail_lang[0]['file'] = 'english';
-$avail_lang[0]['name'] = 'English';
-$avail_lang[1]['file'] = 'french';
-$avail_lang[1]['name'] = 'Francais';
-$avail_lang[2]['file'] = 'spanish';
-$avail_lang[2]['name'] = 'Spanish';
-$avail_lang[3]['file'] = 'russian';
-$avail_lang[3]['name'] = 'Русский';
 $IGB_min_turns = $start_turns; //Turns a player has to play before ship transfers are allowed 0=disable
 $IGB_svalue = 0.15; //Max amount of sender's value allowed for ship transfers 0=disable
 $IGB_trate = 1440; //Time (in minutes) before two similar transfers are allowed for ship transfers.0=disable
@@ -243,6 +235,17 @@ $xenstartsize = 15;                   // Max starting size of Xenobes at univers
 
 $disableRegisterGlobalFix = false;
 $disableAutoLogin = false;
+
+
+$avail_lang[0]['file'] = 'english';
+$avail_lang[0]['name'] = 'English';
+$avail_lang[1]['file'] = 'french';
+$avail_lang[1]['name'] = 'Francais';
+$avail_lang[2]['file'] = 'spanish';
+$avail_lang[2]['name'] = 'Spanish';
+$avail_lang[3]['file'] = 'russian';
+$avail_lang[3]['name'] = 'Русский';
+
 
 require_once 'bootstrap.php';
 require_once 'global_funcs.php';
