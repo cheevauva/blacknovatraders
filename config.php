@@ -232,6 +232,7 @@ $xen_unemployment = 100000;   // Amount of credits each xenobe receive on each x
 $xen_aggression = 100;                // Percent of xenobe that are aggressive or hostile - rjordan
 $xen_planets = 5;                     //Percent of created xenobe that will own planets. Recommended to keep at small percentage - rjordan
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
+$title = 'BlackNova Traders';
 
 $disableRegisterGlobalFix ??= false;
 $disableAutoLogin ??= false;

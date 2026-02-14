@@ -50,6 +50,7 @@ class CreateUniverseController extends BaseController
         $this->energy_limit = $energy_limit;
         $this->ore_limit = $ore_limit;
         $this->startParams = null;
+        $this->title = "Create Universe";
     }
 
     #[\Override]

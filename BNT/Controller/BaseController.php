@@ -15,6 +15,7 @@ abstract class BaseController extends \UUA\Unit
     public array $_POST;
     public array $_GET;
     public protected(set) string $location;
+    public string $title = 'BlackNova Traders';
 
     protected function fromRequest($name, $default = null)
     {
@@ -49,8 +50,11 @@ abstract class BaseController extends \UUA\Unit
 
     protected function render(string $template): void
     {
-        $l = new Language();
+        global $title;
         
+        $l = new Language();
+        $title = $this->title;
+
         include $template;
     }
 

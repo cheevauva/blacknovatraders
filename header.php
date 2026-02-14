@@ -1,5 +1,5 @@
 <?php
-global $l_news_title, $l_rankings, $l_settings_game, $l_help, $l_faq, $l_emailus, $l_forums, $link_forums;
+global $title, $l_news_title, $l_rankings, $l_settings_game, $l_help, $l_faq, $l_emailus, $l_forums, $link_forums;
 global $admin_mail;
 
 $shiptypes = [];
