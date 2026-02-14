@@ -18,7 +18,7 @@ class ConfigUpdateDAO extends \UUA\DAO
     public function serve(): void
     {
         foreach ($this->config as $name => $value) {
-            db()->q('REPLACE INTO config SET value = :value , name = :name', [
+            $this->db()->q('REPLACE INTO config SET value = :value , name = :name', [
                 'name' => $name,
                 'value' => $value,
             ]);

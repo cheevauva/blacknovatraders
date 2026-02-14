@@ -42,7 +42,7 @@ function xenobetoship($ship_id)
     }
 
     if ($targetinfo['dev_emerwarp'] > 0) {
-        LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_EWD, "Xenobe $playerinfo[character_name]");
+        LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_EWD, sprintf("Xenobe %s", $playerinfo['character_name']));
         $dest_sector = rand(0, $sector_max);
         db()->q("UPDATE ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = :ship_id", [
             'sector' => $dest_sector,
@@ -252,9 +252,9 @@ function xenobetoship($ship_id)
                 'rating' => $rating,
                 'ship_id' => $targetinfo['ship_id']
             ]);
-            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|Y");
+            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, sprintf("Xenobe %s|Y", $playerinfo['character_name']));
         } else {
-            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|N");
+            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, sprintf("Xenobe %s|N", $playerinfo['character_name']));
             db_kill_player($targetinfo['ship_id']);
         }
         if ($attackerarmor > 0) {
@@ -293,7 +293,7 @@ function xenobetoship($ship_id)
             $ship_value = $upgrade_cost * (round(mypw($upgrade_factor, $targetinfo['hull'])) + round(mypw($upgrade_factor, $targetinfo['engines'])) + round(mypw($upgrade_factor, $targetinfo['power'])) + round(mypw($upgrade_factor, $targetinfo['computer'])) + round(mypw($upgrade_factor, $targetinfo['sensors'])) + round(mypw($upgrade_factor, $targetinfo['beams'])) + round(mypw($upgrade_factor, $targetinfo['torp_launchers'])) + round(mypw($upgrade_factor, $targetinfo['shields'])) + round(mypw($upgrade_factor, $targetinfo['armor'])) + round(mypw($upgrade_factor, $targetinfo['cloak'])));
             $ship_salvage_rate = rand(10, 20);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
+            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Attack successful, %s was defeated and salvaged for %s credits.", $targetinfo['character_name'], $ship_salvage));
             db()->q("UPDATE ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods, credits=credits+:ship_salvage WHERE ship_id = :ship_id", [
                 'salv_ore' => $salv_ore,
                 'salv_organics' => $salv_organics,
@@ -324,8 +324,8 @@ function xenobetoship($ship_id)
         $target_armor_lost = $targetinfo['armor_pts'] - $targetarmor;
         $target_fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
         $target_energy = $targetinfo['ship_energy'];
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Attack failed, $targetinfo[character_name] survived.");
-        LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Attack failed, %s survived.", $targetinfo['character_name']));
+        LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_WIN, sprintf("Xenobe %s|%s|%s", $playerinfo['character_name'], $target_armor_lost, $target_fighters_lost));
         db()->q("UPDATE ships SET ship_energy=:energy,ship_fighters=ship_fighters-:fighters_lost, torps=torps-:attackertorps,armor_pts=armor_pts-:armor_lost, rating=rating-:rating_change WHERE ship_id = :ship_id", [
             'energy' => $energy,
             'fighters_lost' => $fighters_lost,
@@ -345,7 +345,7 @@ function xenobetoship($ship_id)
     }
 
     if (!$attackerarmor > 0) {
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "$targetinfo[character_name] destroyed your ship!");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("%s destroyed your ship!", $targetinfo['character_name']));
         db_kill_player($playerinfo['ship_id']);
         $xenobeisdead = 1;
         if ($targetarmor > 0) {
@@ -384,8 +384,8 @@ function xenobetoship($ship_id)
             $ship_value = $upgrade_cost * (round(mypw($upgrade_factor, $playerinfo['hull'])) + round(mypw($upgrade_factor, $playerinfo['engines'])) + round(mypw($upgrade_factor, $playerinfo['power'])) + round(mypw($upgrade_factor, $playerinfo['computer'])) + round(mypw($upgrade_factor, $playerinfo['sensors'])) + round(mypw($upgrade_factor, $playerinfo['beams'])) + round(mypw($upgrade_factor, $playerinfo['torp_launchers'])) + round(mypw($upgrade_factor, $playerinfo['shields'])) + round(mypw($upgrade_factor, $playerinfo['armor'])) + round(mypw($upgrade_factor, $playerinfo['cloak'])));
             $ship_salvage_rate = rand(10, 20);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
-            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_RAW, "You destroyed the Xenobe ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
+            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_WIN, sprintf("Xenobe %s|%s|%s", $playerinfo['character_name'], $armor_lost, $fighters_lost));
+            LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("You destroyed the Xenobe ship and salvaged %s units of ore, %s units of organics, %s units of goods, and salvaged %s%% of the ship for %s credits.", $salv_ore, $salv_organics, $salv_goods, $ship_salvage_rate, $ship_salvage));
             db()->q("UPDATE ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods, credits=credits+:ship_salvage WHERE ship_id = :ship_id", [
                 'salv_ore' => $salv_ore,
                 'salv_organics' => $salv_organics,
@@ -448,7 +448,7 @@ function xenobetosecdef()
             }
         }
         if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) {
-            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "ATTACKING SECTOR DEFENCES $total_sector_fighters fighters and $total_sector_mines mines.");
+            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("ATTACKING SECTOR DEFENCES %s fighters and %s mines.", $total_sector_fighters, $total_sector_mines));
 
             $targetfighters = $total_sector_fighters;
             $playerbeams = NUM_BEAMS($playerinfo['beams']);
@@ -525,9 +525,7 @@ function xenobetosecdef()
             $fighterslost = $total_sector_fighters - $targetfighters;
             destroy_fighters($targetlink, $fighterslost);
 
-            $l_sf_sendlog = str_replace("[player]", "Xenobe $playerinfo[character_name]", $l_sf_sendlog);
-            $l_sf_sendlog = str_replace("[lost]", $fighterslost, $l_sf_sendlog);
-            $l_sf_sendlog = str_replace("[sector]", $targetlink, $l_sf_sendlog);
+            $l_sf_sendlog = sprintf($l_sf_sendlog, sprintf("Xenobe %s", $playerinfo['character_name']), $fighterslost, $targetlink);
             message_defence_owner($targetlink, $l_sf_sendlog);
 
             $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
@@ -542,8 +540,7 @@ function xenobetosecdef()
             ]);
 
             if ($playerarmor < 1) {
-                $l_sf_sendlog2 = str_replace("[player]", "Xenobe " . $playerinfo['character_name'], $l_sf_sendlog2);
-                $l_sf_sendlog2 = str_replace("[sector]", $targetlink, $l_sf_sendlog2);
+                $l_sf_sendlog2 = sprintf($l_sf_sendlog2, sprintf("Xenobe %s", $playerinfo['character_name']), $targetlink);
                 message_defence_owner($targetlink, $l_sf_sendlog2);
                 cancel_bounty($playerinfo['ship_id']);
                 db_kill_player($playerinfo['ship_id']);
@@ -551,10 +548,8 @@ function xenobetosecdef()
                 return;
             }
 
-            $l_chm_hehitminesinsector = str_replace("[chm_playerinfo_character_name]", "Xenobe " . $playerinfo['character_name'], $l_chm_hehitminesinsector);
-            $l_chm_hehitminesinsector = str_replace("[chm_roll]", $roll, $l_chm_hehitminesinsector);
-            $l_chm_hehitminesinsector = str_replace("[chm_sector]", $targetlink, $l_chm_hehitminesinsector);
-            message_defence_owner($targetlink, "$l_chm_hehitminesinsector");
+            $l_chm_hehitminesinsector = sprintf($l_chm_hehitminesinsector, sprintf("Xenobe %s", $playerinfo['character_name']), $roll, $targetlink);
+            message_defence_owner($targetlink, $l_chm_hehitminesinsector);
 
             if ($playerminedeflect >= $roll) {
                 
@@ -575,9 +570,8 @@ function xenobetosecdef()
                             'ship_id' => $playerinfo['ship_id']
                         ]);
                     } else {
-                        $l_chm_hewasdestroyedbyyourmines = str_replace("[chm_playerinfo_character_name]", "Xenobe " . $playerinfo['character_name'], $l_chm_hewasdestroyedbyyourmines);
-                        $l_chm_hewasdestroyedbyyourmines = str_replace("[chm_sector]", $targetlink, $l_chm_hewasdestroyedbyyourmines);
-                        message_defence_owner($targetlink, "$l_chm_hewasdestroyedbyyourmines");
+                        $l_chm_hewasdestroyedbyyourmines = sprintf($l_chm_hewasdestroyedbyyourmines, sprintf("Xenobe %s", $playerinfo['character_name']), $targetlink);
+                        message_defence_owner($targetlink, $l_chm_hewasdestroyedbyyourmines);
 
                         cancel_bounty($playerinfo['ship_id']);
                         db_kill_player($playerinfo['ship_id']);
@@ -678,7 +672,7 @@ function xenobemove()
                 xenobetosecdef();
                 return;
             } else {
-                LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Move failed, the sector is defended by $total_sector_fighters fighters and $total_sector_mines mines.");
+                LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Move failed, the sector is defended by %s fighters and %s mines.", $total_sector_fighters, $total_sector_mines));
                 return;
             }
         }
@@ -692,8 +686,8 @@ function xenobemove()
             'ship_id' => $playerinfo['ship_id']
         ]);
         if (!$result) {
-            $error = db()->error();
-            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Move failed with error: $error ");
+            $error = db()->ErrorMsg();
+            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Move failed with error: %s ", $error));
         }
     } else {
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Move failed due to lack of target link.");
@@ -713,13 +707,13 @@ function xenoberegen()
     $maxenergy = NUM_ENERGY($playerinfo['power']);
     if ($playerinfo['ship_energy'] <= ($maxenergy - 50)) {
         $playerinfo['ship_energy'] = $playerinfo['ship_energy'] + round(($maxenergy - $playerinfo['ship_energy']) / 2);
-        $gene = "regenerated Energy to $playerinfo[ship_energy] units,";
+        $gene = sprintf("regenerated Energy to %s units,", $playerinfo['ship_energy']);
     }
 
     $maxarmor = NUM_ARMOUR($playerinfo['armor']);
     if ($playerinfo['armor_pts'] <= ($maxarmor - 50)) {
         $playerinfo['armor_pts'] = $playerinfo['armor_pts'] + round(($maxarmor - $playerinfo['armor_pts']) / 2);
-        $gena = "regenerated Armour to $playerinfo[armor_pts] points,";
+        $gena = sprintf("regenerated Armour to %s points,", $playerinfo['armor_pts']);
     }
 
     $available_fighters = NUM_FIGHTERS($playerinfo['computer']) - $playerinfo['ship_fighters'];
@@ -728,12 +722,12 @@ function xenoberegen()
             $purchase = ($available_fighters * 6);
             $playerinfo['credits'] = $playerinfo['credits'] - $purchase;
             $playerinfo['ship_fighters'] = $playerinfo['ship_fighters'] + $available_fighters;
-            $genf = "purchased $available_fighters fighters for $purchase credits,";
+            $genf = sprintf("purchased %s fighters for %s credits,", $available_fighters, $purchase);
         }
         if (round($playerinfo['credits'] / 6) <= $available_fighters) {
             $purchase = (round($playerinfo['credits'] / 6));
             $playerinfo['ship_fighters'] = $playerinfo['ship_fighters'] + $purchase;
-            $genf = "purchased $purchase fighters for $playerinfo[credits] credits,";
+            $genf = sprintf("purchased %s fighters for %s credits,", $purchase, $playerinfo['credits']);
             $playerinfo['credits'] = 0;
         }
     }
@@ -744,12 +738,12 @@ function xenoberegen()
             $purchase = ($available_torpedoes * 3);
             $playerinfo['credits'] = $playerinfo['credits'] - $purchase;
             $playerinfo['torps'] = $playerinfo['torps'] + $available_torpedoes;
-            $gent = "purchased $available_torpedoes torpedoes for $purchase credits,";
+            $gent = sprintf("purchased %s torpedoes for %s credits,", $available_torpedoes, $purchase);
         }
         if (round($playerinfo['credits'] / 3) <= $available_torpedoes) {
             $purchase = (round($playerinfo['credits'] / 3));
             $playerinfo['torps'] = $playerinfo['torps'] + $purchase;
-            $gent = "purchased $purchase torpedoes for $playerinfo[credits] credits,";
+            $gent = sprintf("purchased %s torpedoes for %s credits,", $purchase, $playerinfo['credits']);
             $playerinfo['credits'] = 0;
         }
     }
@@ -764,7 +758,7 @@ function xenoberegen()
     ]);
 
     if (!empty($gene) || !empty($gena) || !empty($genf) || !empty($gent)) {
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe $gene $gena $genf $gent and has been updated.");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Xenobe %s %s %s %s and has been updated.", $gene, $gena, $genf, $gent));
     }
 }
 
@@ -884,7 +878,7 @@ function xenobetrade()
             'amount_goods' => $amount_goods,
             'sector_id' => $sectorinfo['sector_id']
         ]);
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Xenobe Trade Results: Sold %s Organics Sold %s Goods Bought %s Ore Cost %s", $amount_organics, $amount_goods, $amount_ore, $total_cost));
     }
     if ($sectorinfo['port_type'] == "organics") {
         $organics_price = $organics_price - $organics_delta * $sectorinfo['port_organics'] / $organics_limit * $inventory_factor;
@@ -915,7 +909,7 @@ function xenobetrade()
             'amount_goods' => $amount_goods,
             'sector_id' => $sectorinfo['sector_id']
         ]);
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Xenobe Trade Results: Sold %s Goods Sold %s Ore Bought %s Organics Cost %s", $amount_goods, $amount_ore, $amount_organics, $total_cost));
     }
     if ($sectorinfo['port_type'] == "goods") {
         $goods_price = $goods_price - $goods_delta * $sectorinfo['port_goods'] / $goods_limit * $inventory_factor;
@@ -946,7 +940,7 @@ function xenobetrade()
             'amount_goods' => $amount_goods,
             'sector_id' => $sectorinfo['sector_id']
         ]);
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Xenobe Trade Results: Sold %s Ore Sold %s Organics Bought %s Goods Cost %s", $amount_ore, $amount_organics, $amount_goods, $total_cost));
     }
 }
 
@@ -995,10 +989,10 @@ function xenobehunter()
             'sector' => $targetinfo['sector'],
             'ship_id' => $playerinfo['ship_id']
         ]);
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Xenobe used a wormhole to warp to sector %s where he is hunting player %s.", $targetinfo['sector'], $targetinfo['character_name']));
         if (!$move_result) {
-            $error = db()->error();
-            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Move failed with error: $error ");
+            $error = db()->ErrorMsg();
+            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Move failed with error: %s ", $error));
             return;
         }
 
@@ -1036,7 +1030,7 @@ function xenobehunter()
             return;
         }
 
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe launching an attack on $targetinfo[character_name].");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Xenobe launching an attack on %s.", $targetinfo['character_name']));
 
         if ($targetinfo['planet_id'] > 0) {
             xenobetoplanet($targetinfo['planet_id']);
@@ -1044,7 +1038,7 @@ function xenobehunter()
             xenobetoship($targetinfo['ship_id']);
         }
     } else {
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe hunt failed, target $targetinfo[character_name] was in a no attack zone (sector $targetinfo[sector]).");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Xenobe hunt failed, target %s was in a no attack zone (sector %s).", $targetinfo['character_name'], $targetinfo['sector']));
     }
 }
 
@@ -1244,7 +1238,7 @@ function xenobetoplanet($planet_id)
     }
 
     if (!$attackerarmor > 0) {
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Ship destroyed by planetary defenses on planet $planetinfo[name]");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Ship destroyed by planetary defenses on planet %s", $planetinfo['name']));
         db_kill_player($playerinfo['ship_id']);
         $xenobeisdead = 1;
 
@@ -1256,7 +1250,15 @@ function xenobetoplanet($planet_id)
         $ship_salvage = $ship_value * $ship_salvage_rate / 100;
         $fighters_lost = $planetinfo['fighters'] - $targetfighters;
 
-        LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
+        LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_NOT_DEFEATED, sprintf("%s|%s|Xenobe %s|%s|%s|%s|%s|%s", 
+            $planetinfo['name'], 
+            $playerinfo['sector'], 
+            $playerinfo['character_name'], 
+            $free_ore, 
+            $free_organics, 
+            $free_goods, 
+            $ship_salvage_rate, 
+            $ship_salvage));
 
         db()->q("UPDATE planets SET energy = :energy, fighters = fighters - :fighters_lost, torps = torps - :targettorps, ore = ore + :free_ore, goods = goods + :free_goods, organics = organics + :free_organics, credits = credits + :ship_salvage WHERE planet_id = :planet_id", [
             'energy' => $planetinfo['energy'],
@@ -1271,7 +1273,7 @@ function xenobetoplanet($planet_id)
     } else {
         $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
         $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
-        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Made it past defenses on planet $planetinfo[name]");
+        LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Made it past defenses on planet %s", $planetinfo['name']));
 
         db()->q("UPDATE ships SET ship_energy = :ship_energy, ship_fighters = ship_fighters - :fighters_lost, torps = torps - :attackertorps, armor_pts = armor_pts - :armor_lost WHERE ship_id = :ship_id", [
             'ship_energy' => $playerinfo['ship_energy'],
@@ -1309,16 +1311,22 @@ function xenobetoplanet($planet_id)
         ]);
         $shipsonplanet = count($resultps);
         if ($shipsonplanet == 0 && $xenobeisdead < 1) {
-            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Defeated all ships on planet $planetinfo[name]");
-            LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
+            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("Defeated all ships on planet %s", $planetinfo['name']));
+            LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_DEFEATED, sprintf("%s|%s|%s", 
+                $planetinfo['name'], 
+                $playerinfo['sector'], 
+                $playerinfo['character_name']));
 
             db()->q("UPDATE planets SET fighters = 0, torps = 0, base = 'N', owner = 0, corp = 0 WHERE planet_id = :planet_id", [
                 'planet_id' => $planetinfo['planet_id']
             ]);
             calc_ownership($planetinfo['sector_id']);
         } else {
-            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "We were KILLED by ships defending planet $planetinfo[name]");
-            LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|0|0|0|0|0");
+            LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, sprintf("We were KILLED by ships defending planet %s", $planetinfo['name']));
+            LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_NOT_DEFEATED, sprintf("%s|%s|Xenobe %s|0|0|0|0|0", 
+                $planetinfo['name'], 
+                $playerinfo['sector'], 
+                $playerinfo['character_name']));
         }
     }
 }
