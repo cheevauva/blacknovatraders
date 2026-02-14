@@ -4,6 +4,8 @@ use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 
+$disableRegisterGlobalFix = true;
+
 include 'config.php';
 
 if (checklogin()) {
@@ -48,7 +50,7 @@ try {
         case 'POST':
             switch (fromPOST('action')) {
                 case 'link':
-                    $target_sector = intval(fromPOST('target_sector', new \Exception('target_sector')));
+                    $target_sector = (int) fromPOST('target_sector', new \Exception('target_sector'));
                     $oneway = fromPOST('oneway');
 
                     if ($playerinfo['sector'] == $target_sector) {
@@ -64,7 +66,7 @@ try {
                     $tgZone = ZoneByIdDAO::call($container, $tgSector['zone_id'])->zone;
 
                     if ($tgZone['allow_warpedit'] == 'N' && !$oneway) {
-                        throw new \Exception(str_replace("[target_sector]", $target_sector, $l_warp_twoerror));
+                        throw new \Exception(str_replace("[target_sector]", (string) $target_sector, $l_warp_twoerror));
                     }
 
                     if (count($links) >= $link_max) { // @todo refactoring to count sql
@@ -75,7 +77,7 @@ try {
                     $linksToFrom = linksByStartAndDest($target_sector, $playerinfo['sector']);
 
                     if (!empty($linksFromTo)) {
-                        throw new \Exception(str_replace("[target_sector]", $target_sector, $l_warp_linked));
+                        throw new \Exception(str_replace("[target_sector]", (string) $target_sector, $l_warp_linked));
                     }
 
                     linkCreate($playerinfo['sector'], $target_sector);
@@ -89,7 +91,7 @@ try {
                     redirectTo('warpedit.php');
                     break;
                 case 'unlink':
-                    $target_sector = intval(fromPOST('target_sector', new \Exception('target_sector')));
+                    $target_sector = (int) fromPOST('target_sector', new \Exception('target_sector'));
                     $bothway = fromPOST('bothway');
 
                     $tgSector = SectorByIdDAO::call($container, $target_sector)->sector;
@@ -101,11 +103,11 @@ try {
                     $tgZone = ZoneByIdDAO::call($container, $tgSector['zone_id'])->zone;
 
                     if ($tgZone['allow_warpedit'] == 'N' && $bothway) {
-                        throw new \Exception(str_replace("[target_sector]", $target_sector, $l_warp_forbidtwo));
+                        throw new \Exception(str_replace("[target_sector]", (string) $target_sector, $l_warp_forbidtwo));
                     }
 
                     if (!linksByStartAndDest($playerinfo['sector'], $target_sector)) {
-                        throw new \Exception(str_replace("[target_sector]", $target_sector, $l_warp_unlinked));
+                        throw new \Exception(str_replace("[target_sector]", (string) $target_sector, $l_warp_unlinked));
                     }
 
                     linksDeleteByStartAndDest($playerinfo['sector'], $target_sector);
