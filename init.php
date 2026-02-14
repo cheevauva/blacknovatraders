@@ -8,7 +8,7 @@ use UUA\Container\Container;
 use Psr\Container\ContainerInterface;
 use BNT\ADODB\ADOPDO;
 
-if (constant('DISABLE_REGISTER_GLOBAL_FIX')) {
+if (empty($disableRegisterGlobalFix)) {
     foreach ($_POST as $k => $v) {
         if (!isset($GLOBALS[$k])) {
             ${$k} = $v;

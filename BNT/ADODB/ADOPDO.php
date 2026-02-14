@@ -116,6 +116,10 @@ class ADOPDO extends PDO
 
     public function ErrorMsg(): string
     {
+        if ($this->errorCode() === '00000') {
+            return '';
+        }
+        
         return implode(' ', $this->errorInfo());
     }
 }

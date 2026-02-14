@@ -75,11 +75,11 @@ function fromRequest($name, $default = null)
 
 function fromPOST($name, $default = null)
 {
-    if (empty($_POST[$name]) && $default instanceof \Exception) {
+    if (!isset($_POST[$name]) && $default instanceof \Exception) {
         throw $default;
     }
 
-    if (empty($_POST[$name])) {
+    if (!isset($_POST[$name])) {
         return $default;
     }
 
@@ -88,11 +88,11 @@ function fromPOST($name, $default = null)
 
 function fromGET($name, $default = null)
 {
-    if (empty($_GET[$name]) && $default instanceof \Exception) {
+    if (!isset($_GET[$name]) && $default instanceof \Exception) {
         throw $default;
     }
 
-    if (empty($_GET[$name])) {
+    if (!isset($_GET[$name])) {
         return $default;
     }
 
