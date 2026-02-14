@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Planet\DAO;
 
+use Psr\Container\ContainerInterface;
+
 class PlanetByIdDAO extends \UUA\DAO
 {
 

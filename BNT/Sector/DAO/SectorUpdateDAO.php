@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Sector\DAO;
 
+use Psr\Container\ContainerInterface;
+
 class SectorUpdateDAO extends \UUA\DAO
 {
 

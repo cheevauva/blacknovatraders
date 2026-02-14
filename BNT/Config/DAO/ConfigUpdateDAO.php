@@ -9,6 +9,8 @@ use Psr\Container\ContainerInterface;
 class ConfigUpdateDAO extends \UUA\DAO
 {
 
+    use \BNT\Traits\DatabaseMainTrait;
+
     /**
      * @var array<string, mixed>
      */
