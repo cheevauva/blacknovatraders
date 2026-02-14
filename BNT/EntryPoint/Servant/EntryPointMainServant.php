@@ -53,7 +53,7 @@ class EntryPointMainServant extends \UUA\Servant
             } else {
                 $this->playerinfo['on_planet'] = 'N';
 
-                ShipUpdateDAO::call($this->container, $this->playerinfo);
+                ShipUpdateDAO::call($this->container, $this->playerinfo, $this->playerinfo['ship_id']);
 
                 $this->messages[] = $l_nonexistant_pl;
             }

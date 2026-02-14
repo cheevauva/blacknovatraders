@@ -67,7 +67,7 @@ class EntryPointLoginServant extends \UUA\Servant
             $ship['last_login'] = gmdate('Y-m-d H:i:s');
 
             LogPlayerDAO::call($this->container, $ship['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
-            ShipUpdateDAO::call($this->container, $ship);
+            ShipUpdateDAO::call($this->container, $ship, $ship['ship_id']);
 
             $this->ship = $ship;
             return;

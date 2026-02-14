@@ -29,14 +29,12 @@ class ShipUpdateDAO extends \UUA\DAO
             $parameters[$key] = $value;
         }
 
-        if (empty($parameters['ship_id'])) {
-            $parameters['ship_id'] = $this->id;
-        }
+        $parameters['ship_id'] = $this->id;
 
         $this->db()->q(sprintf('UPDATE ships SET %s WHERE ship_id = :ship_id', implode(', ', $values)), $parameters);
     }
 
-    public static function call(ContainerInterface $container, array $ship, ?int $id = null): self
+    public static function call(ContainerInterface $container, array $ship, int $id): self
     {
         $self = self::new($container);
         $self->ship = $ship;

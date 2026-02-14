@@ -3,6 +3,7 @@
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
+use BNT\Log\LogTypeConstants;
 
 $disableRegisterGlobalFix = true;
 
@@ -62,14 +63,14 @@ if ($zoneinfo['allow_attack'] == 'N') {
 if ($flee < $roll2) {
     $messages[] = $l_att_flee;
     shipTurn($playerinfo['ship_id'], 1);
-    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_OUTMAN, $playerinfo['character_name']);
+    playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_OUTMAN, $playerinfo['character_name']);
     goto attackEnd;
 }
 
 if ($roll > $success) {
     $messages[] = $l_planet_noscan;
     shipTurn($playerinfo['ship_id'], 1);
-    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_OUTSCAN, $playerinfo['character_name']);
+    playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_OUTSCAN, $playerinfo['character_name']);
     goto attackEnd;
 }
 
@@ -91,14 +92,14 @@ if ($targetinfo['dev_emerwarp'] > 0 && $random_value > $chance) {
     $playerinfo['turns_used'] += 1;
     $playerinfo['rating'] -= $rating_change;
 
-    ShipUpdateDAO::call($container, $playerinfo);
-    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_EWD, $playerinfo['character_name']);
+    ShipUpdateDAO::call($container, $playerinfo, $playerinfo['ship_id']);
+    playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_EWD, $playerinfo['character_name']);
 
     $targetinfo['sector'] = $dest_sector;
     $targetinfo['dev_emerwarp'] -= 1;
     $targetinfo['cleared_defences'] = '';
 
-    ShipUpdateDAO::call($container, $targetinfo);
+    ShipUpdateDAO::call($container, $targetinfo, $targetinfo['ship_id']);
 
     log_move($targetinfo['ship_id'], $dest_sector);
     $messages[] = $l_att_ewd;
@@ -120,13 +121,13 @@ if (($targetscore / $playerscore < $bounty_ratio || $targetinfo['turns_used'] < 
             'placed_by' => 0,
             'amount' => $bounty,
         ]);
-        playerlog($playerinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_BOUNTY_FEDBOUNTY, $bounty);
+        playerlog($playerinfo['ship_id'], LogTypeConstants::LOG_BOUNTY_FEDBOUNTY, $bounty);
         $messages[] = $l_by_fedbounty2;
     }
 }
 
 if ($targetinfo['dev_emerwarp'] > 0) {
-    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_EWDFAIL, $playerinfo['character_name']);
+    playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_EWDFAIL, $playerinfo['character_name']);
 }
 
 $targetenergy = $targetinfo['ship_energy'];
@@ -379,10 +380,10 @@ if ($targetarmor < 1) {
         $targetinfo['rating'] /= 2;
         $targetinfo = shipEscapePod($playerinfo);
 
-        playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'Y']);
+        playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'Y']);
         collect_bounty($playerinfo['ship_id'], $targetinfo['ship_id']);
     } else {
-        playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
+        playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
         db_kill_player($targetinfo['ship_id']);
         collect_bounty($playerinfo['ship_id'], $targetinfo['ship_id']);
     }
@@ -400,7 +401,7 @@ if ($targetarmor < 1) {
 
             if ($rating_change > 0) {
                 $rating_change = 0 - $rating_change;
-                playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
+                playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, [$playerinfo['character_name'], 'N']);
                 collect_bounty($playerinfo['ship_id'], $targetinfo['ship_id']);
                 db_kill_player($targetinfo['ship_id']);
             }
@@ -480,7 +481,7 @@ if ($targetarmor < 1) {
         $playerinfo['turns_used'] += 1;
         $playerinfo['rating'] -= $rating_change;
 
-        ShipUpdateDAO::call($container, $playerinfo);
+        ShipUpdateDAO::call($container, $playerinfo, $playerinfo['ship_id']);
 
         $messages[] = implode(' ', [$l_att_ylost, $armor_lost, $l_armorpts, $fighters_lost, ',', $l_fighters, $l_att_andused, $playertorpnum, $l_torps]);
     }
@@ -491,13 +492,13 @@ if ($targetarmor < 1) {
     $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
     $fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
 
-    playerlog($targetinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_ATTACKED_WIN, [$playerinfo['character_name'], $armor_lost, $fighters_lost]);
+    playerlog($targetinfo['ship_id'], LogTypeConstants::LOG_ATTACKED_WIN, [$playerinfo['character_name'], $armor_lost, $fighters_lost]);
 
     $targetinfo['ship_fighters'] -= $fighters_lost;
     $targetinfo['armor_pts'] -= $armor_lost;
     $targetinfo['torps'] -= $targettorpnum;
 
-    ShipUpdateDAO::call($container, $targetinfo);
+    ShipUpdateDAO::call($container, $targetinfo, $targetinfo['ship_id']);
 
     $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
     $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
@@ -510,7 +511,7 @@ if ($targetarmor < 1) {
     $playerinfo['turns_used'] += 1;
     $playerinfo['rating'] -= $rating_change;
 
-    ShipUpdateDAO::call($container, $playerinfo);
+    ShipUpdateDAO::call($container, $playerinfo, $playerinfo['ship_id']);
 
     $messages[] = implode(' ', [$l_att_ylost, $armor_lost, $l_armorpts, $fighters_lost, $l_fighters, ',', $l_att_andused, $playertorpnum, $l_torps]);
 }
@@ -604,7 +605,7 @@ if ($playerarmor < 1) {
         $targetinfo['armor_pts'] -= $armor_lost;
         $targetinfo['torps'] -= $targettorpnum;
 
-        ShipUpdateDAO::call($container, $targetinfo);
+        ShipUpdateDAO::call($container, $targetinfo, $targetinfo['ship_id']);
     }
 }
 

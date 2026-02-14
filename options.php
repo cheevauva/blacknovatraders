@@ -21,7 +21,7 @@ switch (requestMethod()) {
             if (in_array($newlang, array_keys(languages()), true)) {
                 $playerinfo['lang'] = $newlang;
 
-                ShipUpdateDAO::call($container, $playerinfo);
+                ShipUpdateDAO::call($container, $playerinfo, $playerinfo['ship_id']);
             }
 
             if (!empty($newpass1) || !empty($newpass2)) {
@@ -36,7 +36,7 @@ switch (requestMethod()) {
 
                     $playerinfo['password'] = md5($newpass1);
 
-                    ShipUpdateDAO::call($container, $playerinfo);
+                    ShipUpdateDAO::call($container, $playerinfo, $playerinfo['ship_id']);
 
                     if (!$shipUpdated) {
                         throw new \Exception($l_opt2_passchangeerr);

@@ -9,7 +9,7 @@ use BNT\Ship\DAO\ShipUpdateDAO;
 class ShipEscapepodServant extends \UUA\Servant
 {
 
-    public $ship;
+    public array $ship;
 
     #[\Override]
     public function serve(): void
@@ -47,6 +47,6 @@ class ShipEscapepodServant extends \UUA\Servant
         $ship['cleared_defences'] = '';
         $ship['dev_lssd'] = 'N';
 
-        ShipUpdateDAO::call($this->container, $ship);
+        ShipUpdateDAO::call($this->container, $ship, $ship['ship_id']);
     }
 }
