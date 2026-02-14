@@ -26,6 +26,10 @@ trait DatabaseRowCreateTrait
 
         $this->db()->q(sprintf('INSERT INTO %s SET %s', $table, implode(', ', $sets)), $parameters);
 
-        return $this->db()->lastInsertId() ?: throw new \Exception('insert into ' . $table . ' - failed, ' . $this->db()->ErrorMsg());
+        if ($this->db()->ErrorMsg()) {
+            throw new \Exception($this->db()->ErrorMsg());
+        }
+        
+        return $this->db()->lastInsertId();
     }
 }

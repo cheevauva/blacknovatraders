@@ -34,7 +34,13 @@ class SectorUpdateDAO extends \UUA\DAO
         $this->db()->q(sprintf('UPDATE universe SET %s WHERE sector_id = :sector_id', implode(', ', $values)), $parameters);
     }
 
-    public static function call(ContainerInterface $container, string $sector, int $id): self
+    /**
+     * @param ContainerInterface $container
+     * @param array<string, mixed> $sector
+     * @param int $id
+     * @return self
+     */
+    public static function call(ContainerInterface $container, array $sector, int $id): self
     {
         $self = self::new($container);
         $self->sector = $sector;

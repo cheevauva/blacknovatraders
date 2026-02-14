@@ -27,13 +27,13 @@ class EntryPointMainServant extends \UUA\Servant
     /**
      * @var array<string, mixed>
      */
-    public array $sector;
-    public $planets;
-    public $sectorDefences;
-    public $zone;
-    public $traderoutes;
-    public $ships;
-    public $messages = [];
+    public array $sector = [];
+    public array $planets = [];
+    public array $sectorDefences = [];
+    public array $zone = [];
+    public array $traderoutes  = [];
+    public array $ships = [];
+    public array $messages = [];
 
     #[\Override]
     public function serve(): void
@@ -60,7 +60,7 @@ class EntryPointMainServant extends \UUA\Servant
         }
 
         $sector = SectorByIdDAO::call($this->container, $this->playerinfo['sector'])->sector;
-
+ 
         if (!$sector) {
             return;
         }

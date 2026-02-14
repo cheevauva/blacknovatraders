@@ -12,8 +12,9 @@ include 'config.php';
 $title = "Create Universe";
 
 $step = fromPOST('step');
+$swordfish = fromPOST('swordfish');
 
-if ($adminpass != fromPOST('swordfish')) {
+if ($adminpass != $swordfish) {
     $step = 0;
 }
 
