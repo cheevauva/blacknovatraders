@@ -18,20 +18,24 @@ function xenobetoship($ship_id)
     global $upgrade_factor;
     global $sector_max;
     global $xenobeisdead;
-    global $db;
     global $container;
 
-    $resultt = $db->adoExecute("SELECT * FROM ships WHERE ship_id='$ship_id'");
-    $targetinfo = $resultt->fields;
+    $targetinfo = db()->fetch("SELECT * FROM ships WHERE ship_id = :ship_id", [
+        'ship_id' => $ship_id
+    ]);
 
     if (strstr($targetinfo['email'], '@xenobe')) {
         return;
     }
 
-    $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$targetinfo[sector]'");
-    $sectrow = $sectres->fields;
-    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
-    $zonerow = $zoneres->fields;
+    $sectrow = db()->fetch("SELECT sector_id,zone_id FROM universe WHERE sector_id = :sector_id", [
+        'sector_id' => $targetinfo['sector']
+    ]);
+
+    $zonerow = db()->fetch("SELECT zone_id,allow_attack FROM zones WHERE zone_id = :zone_id", [
+        'zone_id' => $sectrow['zone_id']
+    ]);
+
     if ($zonerow['allow_attack'] == "N") {
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Attack failed, you are in a sector that prohibits attacks.");
         return;
@@ -40,7 +44,10 @@ function xenobetoship($ship_id)
     if ($targetinfo['dev_emerwarp'] > 0) {
         LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_EWD, "Xenobe $playerinfo[character_name]");
         $dest_sector = rand(0, $sector_max);
-        $result_warp = $db->adoExecute("UPDATE ships SET sector=$dest_sector, dev_emerwarp=dev_emerwarp-1 WHERE ship_id=$targetinfo[ship_id]");
+        db()->q("UPDATE ships SET sector = :sector, dev_emerwarp = dev_emerwarp - 1 WHERE ship_id = :ship_id", [
+            'sector' => $dest_sector,
+            'ship_id' => $targetinfo['ship_id']
+        ]);
         return;
     }
 
@@ -241,7 +248,10 @@ function xenobetoship($ship_id)
     if (!$targetarmor > 0) {
         if ($targetinfo['dev_escapepod'] == "Y") {
             $rating = round($targetinfo['rating'] / 2);
-            $db->adoExecute("UPDATE ships SET hull=0, engines=0, power=0, computer=0,sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', planet_id=0, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', rating='$rating',dev_lssd='N' where ship_id=$targetinfo[ship_id]");
+            db()->q("UPDATE ships SET hull=0, engines=0, power=0, computer=0,sensors=0, beams=0, torp_launchers=0, torps=0, armor=0, armor_pts=100, cloak=0, shields=0, sector=0, ship_ore=0, ship_organics=0, ship_energy=1000, ship_colonists=0, ship_goods=0, ship_fighters=100, ship_damage=0, on_planet='N', planet_id=0, dev_warpedit=0, dev_genesis=0, dev_beacon=0, dev_emerwarp=0, dev_escapepod='N', dev_fuelscoop='N', dev_minedeflector=0, ship_destroyed='N', rating=:rating, dev_lssd='N' WHERE ship_id = :ship_id", [
+                'rating' => $rating,
+                'ship_id' => $targetinfo['ship_id']
+            ]);
             LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|Y");
         } else {
             LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, "Xenobe $playerinfo[character_name]|N");
@@ -284,11 +294,24 @@ function xenobetoship($ship_id)
             $ship_salvage_rate = rand(10, 20);
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Attack successful, $targetinfo[character_name] was defeated and salvaged for $ship_salvage credits.");
-            $db->adoExecute("UPDATE ships SET ship_ore=ship_ore+$salv_ore, ship_organics=ship_organics+$salv_organics, ship_goods=ship_goods+$salv_goods, credits=credits+$ship_salvage WHERE ship_id=$playerinfo[ship_id]");
+            db()->q("UPDATE ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods, credits=credits+:ship_salvage WHERE ship_id = :ship_id", [
+                'salv_ore' => $salv_ore,
+                'salv_organics' => $salv_organics,
+                'salv_goods' => $salv_goods,
+                'ship_salvage' => $ship_salvage,
+                'ship_id' => $playerinfo['ship_id']
+            ]);
             $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
             $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
             $energy = $playerinfo['ship_energy'];
-            $db->adoExecute("UPDATE ships SET ship_energy=$energy,ship_fighters=ship_fighters-$fighters_lost, torps=torps-$attackertorps,armor_pts=armor_pts-$armor_lost, rating=rating-$rating_change WHERE ship_id=$playerinfo[ship_id]");
+            db()->q("UPDATE ships SET ship_energy=:energy,ship_fighters=ship_fighters-:fighters_lost, torps=torps-:attackertorps,armor_pts=armor_pts-:armor_lost, rating=rating-:rating_change WHERE ship_id = :ship_id", [
+                'energy' => $energy,
+                'fighters_lost' => $fighters_lost,
+                'attackertorps' => $attackertorps,
+                'armor_lost' => $armor_lost,
+                'rating_change' => $rating_change,
+                'ship_id' => $playerinfo['ship_id']
+            ]);
         }
     }
 
@@ -303,8 +326,22 @@ function xenobetoship($ship_id)
         $target_energy = $targetinfo['ship_energy'];
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Attack failed, $targetinfo[character_name] survived.");
         LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$target_armor_lost|$target_fighters_lost");
-        $db->adoExecute("UPDATE ships SET ship_energy=$energy,ship_fighters=ship_fighters-$fighters_lost, torps=torps-$attackertorps,armor_pts=armor_pts-$armor_lost, rating=rating-$rating_change WHERE ship_id=$playerinfo[ship_id]");
-        $db->adoExecute("UPDATE ships SET ship_energy=$target_energy,ship_fighters=ship_fighters-$target_fighters_lost, armor_pts=armor_pts-$target_armor_lost, torps=torps-$targettorpnum, rating=$target_rating_change WHERE ship_id=$targetinfo[ship_id]");
+        db()->q("UPDATE ships SET ship_energy=:energy,ship_fighters=ship_fighters-:fighters_lost, torps=torps-:attackertorps,armor_pts=armor_pts-:armor_lost, rating=rating-:rating_change WHERE ship_id = :ship_id", [
+            'energy' => $energy,
+            'fighters_lost' => $fighters_lost,
+            'attackertorps' => $attackertorps,
+            'armor_lost' => $armor_lost,
+            'rating_change' => $rating_change,
+            'ship_id' => $playerinfo['ship_id']
+        ]);
+        db()->q("UPDATE ships SET ship_energy=:target_energy,ship_fighters=ship_fighters-:target_fighters_lost, armor_pts=armor_pts-:target_armor_lost, torps=torps-:targettorpnum, rating=:target_rating_change WHERE ship_id = :ship_id", [
+            'target_energy' => $target_energy,
+            'target_fighters_lost' => $target_fighters_lost,
+            'target_armor_lost' => $target_armor_lost,
+            'targettorpnum' => $targettorpnum,
+            'target_rating_change' => $target_rating_change,
+            'ship_id' => $targetinfo['ship_id']
+        ]);
     }
 
     if (!$attackerarmor > 0) {
@@ -349,11 +386,24 @@ function xenobetoship($ship_id)
             $ship_salvage = $ship_value * $ship_salvage_rate / 100;
             LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_WIN, "Xenobe $playerinfo[character_name]|$armor_lost|$fighters_lost");
             LogPlayerDAO::call($container, $targetinfo['ship_id'], LogTypeConstants::LOG_RAW, "You destroyed the Xenobe ship and salvaged $salv_ore units of ore, $salv_organics units of organics, $salv_goods units of goods, and salvaged $ship_salvage_rate% of the ship for $ship_salvage credits.");
-            $db->adoExecute("UPDATE ships SET ship_ore=ship_ore+$salv_ore, ship_organics=ship_organics+$salv_organics, ship_goods=ship_goods+$salv_goods, credits=credits+$ship_salvage WHERE ship_id=$targetinfo[ship_id]");
+            db()->q("UPDATE ships SET ship_ore=ship_ore+:salv_ore, ship_organics=ship_organics+:salv_organics, ship_goods=ship_goods+:salv_goods, credits=credits+:ship_salvage WHERE ship_id = :ship_id", [
+                'salv_ore' => $salv_ore,
+                'salv_organics' => $salv_organics,
+                'salv_goods' => $salv_goods,
+                'ship_salvage' => $ship_salvage,
+                'ship_id' => $targetinfo['ship_id']
+            ]);
             $armor_lost = $targetinfo['armor_pts'] - $targetarmor;
             $fighters_lost = $targetinfo['ship_fighters'] - $targetfighters;
             $energy = $targetinfo['ship_energy'];
-            $db->adoExecute("UPDATE ships SET ship_energy=$energy,ship_fighters=ship_fighters-$fighters_lost, torps=torps-$targettorpnum,armor_pts=armor_pts-$armor_lost, rating=rating-$rating_change WHERE ship_id=$targetinfo[ship_id]");
+            db()->q("UPDATE ships SET ship_energy=:energy,ship_fighters=ship_fighters-:fighters_lost, torps=torps-:targettorpnum,armor_pts=armor_pts-:armor_lost, rating=rating-:rating_change WHERE ship_id = :ship_id", [
+                'energy' => $energy,
+                'fighters_lost' => $fighters_lost,
+                'targettorpnum' => $targettorpnum,
+                'armor_lost' => $armor_lost,
+                'rating_change' => $rating_change,
+                'ship_id' => $targetinfo['ship_id']
+            ]);
         }
     }
 }
@@ -369,30 +419,32 @@ function xenobetosecdef()
     global $l_chm_hewasdestroyedbyyourmines;
 
     global $xenobeisdead;
-    global $db;
     global $container;
 
     if ($targetlink > 0) {
-        $resultf = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='F' ORDER BY quantity DESC");
+        $defences = [];
+        $resultf = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :targetlink and defence_type = 'F' ORDER BY quantity DESC", [
+            'targetlink' => $targetlink
+        ]);
         $i = 0;
         $total_sector_fighters = 0;
-        if ($resultf > 0) {
-            while (!$resultf->EOF) {
-                $defences[$i] = $resultf->fields;
+        if (!empty($resultf)) {
+            foreach ($resultf as $row) {
+                $defences[$i] = $row;
                 $total_sector_fighters += $defences[$i]['quantity'];
                 $i++;
-                $resultf->MoveNext();
             }
         }
-        $resultm = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='M'");
+        $resultm = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :targetlink and defence_type = 'M'", [
+            'targetlink' => $targetlink
+        ]);
         $i = 0;
         $total_sector_mines = 0;
-        if ($resultm > 0) {
-            while (!$resultm->EOF) {
-                $defences[$i] = $resultm->fields;
+        if (!empty($resultm)) {
+            foreach ($resultm as $row) {
+                $defences[$i] = $row;
                 $total_sector_mines += $defences[$i]['quantity'];
                 $i++;
-                $resultm->MoveNext();
             }
         }
         if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) {
@@ -481,7 +533,13 @@ function xenobetosecdef()
             $armor_lost = $playerinfo['armor_pts'] - $playerarmor;
             $fighters_lost = $playerinfo['ship_fighters'] - $playerfighters;
             $energy = $playerinfo['ship_energy'];
-            $update1 = $db->adoExecute("UPDATE ships SET ship_energy=$energy,ship_fighters=ship_fighters-$fighters_lost, armor_pts=armor_pts-$armor_lost, torps=torps-$playertorpnum WHERE ship_id=$playerinfo[ship_id]");
+            db()->q("UPDATE ships SET ship_energy = :energy, ship_fighters = ship_fighters - :fighters_lost, armor_pts = armor_pts - :armor_lost, torps = torps - :playertorpnum WHERE ship_id = :ship_id", [
+                'energy' => $energy,
+                'fighters_lost' => $fighters_lost,
+                'armor_lost' => $armor_lost,
+                'playertorpnum' => $playertorpnum,
+                'ship_id' => $playerinfo['ship_id']
+            ]);
 
             if ($playerarmor < 1) {
                 $l_sf_sendlog2 = str_replace("[player]", "Xenobe " . $playerinfo['character_name'], $l_sf_sendlog2);
@@ -504,12 +562,18 @@ function xenobetosecdef()
                 $mines_left = $roll - $playerminedeflect;
 
                 if ($playershields >= $mines_left) {
-                    $update2 = $db->adoExecute("UPDATE ships set ship_energy=ship_energy-$mines_left where ship_id=$playerinfo[ship_id]");
+                    db()->q("UPDATE ships set ship_energy = ship_energy - :mines_left where ship_id = :ship_id", [
+                        'mines_left' => $mines_left,
+                        'ship_id' => $playerinfo['ship_id']
+                    ]);
                 } else {
                     $mines_left = $mines_left - $playershields;
 
                     if ($playerarmor >= $mines_left) {
-                        $update2 = $db->adoExecute("UPDATE ships set armor_pts=armor_pts-$mines_left,ship_energy=0 where ship_id=$playerinfo[ship_id]");
+                        db()->q("UPDATE ships set armor_pts = armor_pts - :mines_left, ship_energy = 0 where ship_id = :ship_id", [
+                            'mines_left' => $mines_left,
+                            'ship_id' => $playerinfo['ship_id']
+                        ]);
                     } else {
                         $l_chm_hewasdestroyedbyyourmines = str_replace("[chm_playerinfo_character_name]", "Xenobe " . $playerinfo['character_name'], $l_chm_hewasdestroyedbyyourmines);
                         $l_chm_hewasdestroyedbyyourmines = str_replace("[chm_sector]", $targetlink, $l_chm_hewasdestroyedbyyourmines);
@@ -538,27 +602,28 @@ function xenobemove()
     global $sector_max;
     global $targetlink;
     global $xenobeisdead;
-    global $db;
     global $container;
 
     if ($targetlink == $playerinfo['sector']) {
         $targetlink = 0;
     }
-    $linkres = $db->adoExecute("SELECT * FROM links WHERE link_start='$playerinfo[sector]'");
-    if ($linkres > 0) {
-        while (!$linkres->EOF) {
-            $row = $linkres->fields;
-            $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$row[link_dest]'");
-            $sectrow = $sectres->fields;
-            $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
-            $zonerow = $zoneres->fields;
+    $linkres = db()->fetchAll("SELECT * FROM links WHERE link_start = :sector", [
+        'sector' => $playerinfo['sector']
+    ]);
+    if (!empty($linkres)) {
+        foreach ($linkres as $row) {
+            $sectrow = db()->fetch("SELECT sector_id,zone_id FROM universe WHERE sector_id = :sector_id", [
+                'sector_id' => $row['link_dest']
+            ]);
+            $zonerow = db()->fetch("SELECT zone_id,allow_attack FROM zones WHERE zone_id = :zone_id", [
+                'zone_id' => $sectrow['zone_id']
+            ]);
             if ($zonerow['allow_attack'] == "Y") {
                 $setlink = rand(0, 2);
                 if ($setlink == 0 || !$targetlink > 0) {
                     $targetlink = $row['link_dest'];
                 }
             }
-            $linkres->MoveNext();
         }
     }
 
@@ -566,10 +631,12 @@ function xenobemove()
         $wormto = rand(1, ($sector_max - 15));
         $limitloop = 1;
         while (!$targetlink > 0 && $limitloop < 15) {
-            $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$wormto'");
-            $sectrow = $sectres->fields;
-            $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
-            $zonerow = $zoneres->fields;
+            $sectrow = db()->fetch("SELECT sector_id,zone_id FROM universe WHERE sector_id = :sector_id", [
+                'sector_id' => $wormto
+            ]);
+            $zonerow = db()->fetch("SELECT zone_id,allow_attack FROM zones WHERE zone_id = :zone_id", [
+                'zone_id' => $sectrow['zone_id']
+            ]);
             if ($zonerow['allow_attack'] == "Y") {
                 $targetlink = $wormto;
                 LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Used a wormhole to warp to a zone where attacks are allowed.");
@@ -581,26 +648,29 @@ function xenobemove()
     }
 
     if ($targetlink > 0) {
-        $resultf = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='F' ORDER BY quantity DESC");
+        $defences = [];
+        $resultf = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :targetlink and defence_type = 'F' ORDER BY quantity DESC", [
+            'targetlink' => $targetlink
+        ]);
         $i = 0;
         $total_sector_fighters = 0;
-        if ($resultf > 0) {
-            while (!$resultf->EOF) {
-                $defences[$i] = $resultf->fields;
+        if (!empty($resultf)) {
+            foreach ($resultf as $row) {
+                $defences[$i] = $row;
                 $total_sector_fighters += $defences[$i]['quantity'];
                 $i++;
-                $resultf->MoveNext();
             }
         }
-        $resultm = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='M'");
+        $resultm = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :targetlink and defence_type = 'M'", [
+            'targetlink' => $targetlink
+        ]);
         $i = 0;
         $total_sector_mines = 0;
-        if ($resultm > 0) {
-            while (!$resultm->EOF) {
-                $defences[$i] = $resultm->fields;
+        if (!empty($resultm)) {
+            foreach ($resultm as $row) {
+                $defences[$i] = $row;
                 $total_sector_mines += $defences[$i]['quantity'];
                 $i++;
-                $resultm->MoveNext();
             }
         }
         if ($total_sector_fighters > 0 || $total_sector_mines > 0 || ($total_sector_fighters > 0 && $total_sector_mines > 0)) {
@@ -616,10 +686,13 @@ function xenobemove()
 
     if ($targetlink > 0) {
         $stamp = date("Y-m-d H-i-s");
-        $query = "UPDATE ships SET last_login='$stamp', turns_used=turns_used+1, sector=$targetlink where ship_id=$playerinfo[ship_id]";
-        $move_result = $db->adoExecute("$query");
-        if (!$move_result) {
-            $error = $db->ErrorMsg();
+        $result = db()->q("UPDATE ships SET last_login = :stamp, turns_used = turns_used + 1, sector = :targetlink where ship_id = :ship_id", [
+            'stamp' => $stamp,
+            'targetlink' => $targetlink,
+            'ship_id' => $playerinfo['ship_id']
+        ]);
+        if (!$result) {
+            $error = db()->error();
             LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Move failed with error: $error ");
         }
     } else {
@@ -633,7 +706,6 @@ function xenoberegen()
     global $playerinfo;
     global $xen_unemployment;
     global $xenobeisdead;
-    global $db;
     global $container;
 
     $playerinfo['credits'] = $playerinfo['credits'] + $xen_unemployment;
@@ -682,8 +754,16 @@ function xenoberegen()
         }
     }
 
-    $db->adoExecute("UPDATE ships SET ship_energy=$playerinfo[ship_energy], armor_pts=$playerinfo[armor_pts], ship_fighters=$playerinfo[ship_fighters], torps=$playerinfo[torps], credits=$playerinfo[credits] WHERE ship_id=$playerinfo[ship_id]");
-    if (!$gene == '' || !$gena == '' || !$genf == '' || !$gent == '') {
+    db()->q("UPDATE ships SET ship_energy = :ship_energy, armor_pts = :armor_pts, ship_fighters = :ship_fighters, torps = :torps, credits = :credits WHERE ship_id = :ship_id", [
+        'ship_energy' => $playerinfo['ship_energy'],
+        'armor_pts' => $playerinfo['armor_pts'],
+        'ship_fighters' => $playerinfo['ship_fighters'],
+        'torps' => $playerinfo['torps'],
+        'credits' => $playerinfo['credits'],
+        'ship_id' => $playerinfo['ship_id']
+    ]);
+
+    if (!empty($gene) || !empty($gena) || !empty($genf) || !empty($gent)) {
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe $gene $gena $genf $gent and has been updated.");
     }
 }
@@ -702,18 +782,19 @@ function xenobetrade()
     global $organics_delta;
     global $organics_limit;
     global $xenobeisdead;
-    global $db;
     global $container;
 
     $ore_price = 11;
     $organics_price = 5;
     $goods_price = 15;
 
-    $sectres = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$playerinfo[sector]'");
-    $sectorinfo = $sectres->fields;
+    $sectorinfo = db()->fetch("SELECT * FROM universe WHERE sector_id = :sector_id", [
+        'sector_id' => $playerinfo['sector']
+    ]);
 
-    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack,allow_trade FROM zones WHERE zone_id='$sectorinfo[zone_id]'");
-    $zonerow = $zoneres->fields;
+    $zonerow = db()->fetch("SELECT zone_id,allow_attack,allow_trade FROM zones WHERE zone_id = :zone_id", [
+        'zone_id' => $sectorinfo['zone_id']
+    ]);
 
     if ($zonerow['allow_trade'] == "N") {
         return;
@@ -790,8 +871,19 @@ function xenobetrade()
         $newore = $playerinfo['ship_ore'] + $amount_ore;
         $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
         $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
-        $trade_result = $db->adoExecute("UPDATE ships SET rating=rating+1, credits=$newcredits, ship_ore=$newore, ship_organics=$neworganics, ship_goods=$newgoods where ship_id=$playerinfo[ship_id]");
-        $trade_result2 = $db->adoExecute("UPDATE universe SET port_ore=port_ore-$amount_ore, port_organics=port_organics+$amount_organics, port_goods=port_goods+$amount_goods where sector_id=$sectorinfo[sector_id]");
+        db()->q("UPDATE ships SET rating = rating + 1, credits = :newcredits, ship_ore = :newore, ship_organics = :neworganics, ship_goods = :newgoods where ship_id = :ship_id", [
+            'newcredits' => $newcredits,
+            'newore' => $newore,
+            'neworganics' => $neworganics,
+            'newgoods' => $newgoods,
+            'ship_id' => $playerinfo['ship_id']
+        ]);
+        db()->q("UPDATE universe SET port_ore = port_ore - :amount_ore, port_organics = port_organics + :amount_organics, port_goods = port_goods + :amount_goods where sector_id = :sector_id", [
+            'amount_ore' => $amount_ore,
+            'amount_organics' => $amount_organics,
+            'amount_goods' => $amount_goods,
+            'sector_id' => $sectorinfo['sector_id']
+        ]);
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
     }
     if ($sectorinfo['port_type'] == "organics") {
@@ -810,8 +902,19 @@ function xenobetrade()
         $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
         $neworganics = $playerinfo['ship_organics'] + $amount_organics;
         $newgoods = max(0, $playerinfo['ship_goods'] - $amount_goods);
-        $trade_result = $db->adoExecute("UPDATE ships SET rating=rating+1, credits=$newcredits, ship_ore=$newore, ship_organics=$neworganics, ship_goods=$newgoods where ship_id=$playerinfo[ship_id]");
-        $trade_result2 = $db->adoExecute("UPDATE universe SET port_ore=port_ore+$amount_ore, port_organics=port_organics-$amount_organics, port_goods=port_goods+$amount_goods where sector_id=$sectorinfo[sector_id]");
+        db()->q("UPDATE ships SET rating = rating + 1, credits = :newcredits, ship_ore = :newore, ship_organics = :neworganics, ship_goods = :newgoods where ship_id = :ship_id", [
+            'newcredits' => $newcredits,
+            'newore' => $newore,
+            'neworganics' => $neworganics,
+            'newgoods' => $newgoods,
+            'ship_id' => $playerinfo['ship_id']
+        ]);
+        db()->q("UPDATE universe SET port_ore = port_ore + :amount_ore, port_organics = port_organics - :amount_organics, port_goods = port_goods + :amount_goods where sector_id = :sector_id", [
+            'amount_ore' => $amount_ore,
+            'amount_organics' => $amount_organics,
+            'amount_goods' => $amount_goods,
+            'sector_id' => $sectorinfo['sector_id']
+        ]);
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
     }
     if ($sectorinfo['port_type'] == "goods") {
@@ -830,8 +933,19 @@ function xenobetrade()
         $newore = max(0, $playerinfo['ship_ore'] - $amount_ore);
         $neworganics = max(0, $playerinfo['ship_organics'] - $amount_organics);
         $newgoods = $playerinfo['ship_goods'] + $amount_goods;
-        $trade_result = $db->adoExecute("UPDATE ships SET rating=rating+1, credits=$newcredits, ship_ore=$newore, ship_organics=$neworganics, ship_goods=$newgoods where ship_id=$playerinfo[ship_id]");
-        $trade_result2 = $db->adoExecute("UPDATE universe SET port_ore=port_ore+$amount_ore, port_organics=port_organics+$amount_organics, port_goods=port_goods-$amount_goods where sector_id=$sectorinfo[sector_id]");
+        db()->q("UPDATE ships SET rating = rating + 1, credits = :newcredits, ship_ore = :newore, ship_organics = :neworganics, ship_goods = :newgoods where ship_id = :ship_id", [
+            'newcredits' => $newcredits,
+            'newore' => $newore,
+            'neworganics' => $neworganics,
+            'newgoods' => $newgoods,
+            'ship_id' => $playerinfo['ship_id']
+        ]);
+        db()->q("UPDATE universe SET port_ore = port_ore + :amount_ore, port_organics = port_organics + :amount_organics, port_goods = port_goods - :amount_goods where sector_id = :sector_id", [
+            'amount_ore' => $amount_ore,
+            'amount_organics' => $amount_organics,
+            'amount_goods' => $amount_goods,
+            'sector_id' => $sectorinfo['sector_id']
+        ]);
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
     }
 }
@@ -841,27 +955,25 @@ function xenobehunter()
     global $playerinfo;
     global $targetlink;
     global $xenobeisdead;
-    global $db;
     global $container;
 
-    $rescount = $db->adoExecute("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' and ship_id > 1");
-    $rowcount = $rescount->fields;
+    $rowcount = db()->fetch("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' and ship_id > 1");
     $topnum = min(10, $rowcount['num_players']);
 
     if ($topnum < 1) {
         return;
     }
 
-    $res = $db->adoExecute("SELECT * FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' and ship_id > 1 ORDER BY score DESC LIMIT $topnum");
+    $res = db()->fetchAll("SELECT * FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' and ship_id > 1 ORDER BY score DESC LIMIT " . intval($topnum));
 
     $i = 1;
     $targetnum = rand(1, $topnum);
-    while (!$res->EOF) {
+    $targetinfo = null;
+    foreach ($res as $row) {
         if ($i == $targetnum) {
-            $targetinfo = $res->fields;
+            $targetinfo = $row;
         }
         $i++;
-        $res->MoveNext();
     }
 
     if (!$targetinfo) {
@@ -869,41 +981,50 @@ function xenobehunter()
         return;
     }
 
-    $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$targetinfo[sector]'");
-    $sectrow = $sectres->fields;
-    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
-    $zonerow = $zoneres->fields;
+    $sectrow = db()->fetch("SELECT sector_id,zone_id FROM universe WHERE sector_id = :sector_id", [
+        'sector_id' => $targetinfo['sector']
+    ]);
+    $zonerow = db()->fetch("SELECT zone_id,allow_attack FROM zones WHERE zone_id = :zone_id", [
+        'zone_id' => $sectrow['zone_id']
+    ]);
+
     if ($zonerow['allow_attack'] == "Y") {
         $stamp = date("Y-m-d H-i-s");
-        $query = "UPDATE ships SET last_login='$stamp', turns_used=turns_used+1, sector=$targetinfo[sector] where ship_id=$playerinfo[ship_id]";
-        $move_result = $db->adoExecute("$query");
+        $move_result = db()->q("UPDATE ships SET last_login = :stamp, turns_used = turns_used + 1, sector = :sector where ship_id = :ship_id", [
+            'stamp' => $stamp,
+            'sector' => $targetinfo['sector'],
+            'ship_id' => $playerinfo['ship_id']
+        ]);
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Xenobe used a wormhole to warp to sector $targetinfo[sector] where he is hunting player $targetinfo[character_name].");
         if (!$move_result) {
-            $error = $db->ErrorMsg();
+            $error = db()->error();
             LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Move failed with error: $error ");
             return;
         }
 
-        $resultf = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id=$targetinfo[sector] and defence_type ='F' ORDER BY quantity DESC");
+        $defences = [];
+        $resultf = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :sector_id and defence_type = 'F' ORDER BY quantity DESC", [
+            'sector_id' => $targetinfo['sector']
+        ]);
         $i = 0;
         $total_sector_fighters = 0;
-        if ($resultf > 0) {
-            while (!$resultf->EOF) {
-                $defences[$i] = $resultf->fields;
+        if (!empty($resultf)) {
+            foreach ($resultf as $row) {
+                $defences[$i] = $row;
                 $total_sector_fighters += $defences[$i]['quantity'];
                 $i++;
-                $resultf->MoveNext();
             }
         }
-        $resultm = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id=$targetinfo[sector] and defence_type ='M'");
+        $resultm = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :sector_id and defence_type = 'M'", [
+            'sector_id' => $targetinfo['sector']
+        ]);
         $i = 0;
         $total_sector_mines = 0;
-        if ($resultm > 0) {
-            while (!$resultm->EOF) {
-                $defences[$i] = $resultm->fields;
+        if (!empty($resultm)) {
+            foreach ($resultm as $row) {
+                $defences[$i] = $row;
                 $total_sector_mines += $defences[$i]['quantity'];
                 $i++;
-                $resultm->MoveNext();
             }
         }
 
@@ -939,14 +1060,15 @@ function xenobetoplanet($planet_id)
     global $upgrade_factor;
     global $sector_max;
     global $xenobeisdead;
-    global $db;
     global $container;
 
-    $resultp = $db->adoExecute("SELECT * FROM planets WHERE planet_id='$planet_id'");
-    $planetinfo = $resultp->fields;
+    $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id = :planet_id", [
+        'planet_id' => $planet_id
+    ]);
 
-    $resulto = $db->adoExecute("SELECT * FROM ships WHERE ship_id='$planetinfo[owner]'");
-    $ownerinfo = $resulto->fields;
+    $ownerinfo = db()->fetch("SELECT * FROM ships WHERE ship_id = :ship_id", [
+        'ship_id' => $planetinfo['owner']
+    ]);
 
     $base_factor = ($planetinfo['base'] == 'Y') ? $basedefense : 0;
 
@@ -1136,38 +1258,63 @@ function xenobetoplanet($planet_id)
 
         LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
 
-        $db->adoExecute("UPDATE planets SET energy=$planetinfo[energy],fighters=fighters-$fighters_lost, torps=torps-$targettorps, ore=ore+$free_ore, goods=goods+$free_goods, organics=organics+$free_organics, credits=credits+$ship_salvage WHERE planet_id=$planetinfo[planet_id]");
+        db()->q("UPDATE planets SET energy = :energy, fighters = fighters - :fighters_lost, torps = torps - :targettorps, ore = ore + :free_ore, goods = goods + :free_goods, organics = organics + :free_organics, credits = credits + :ship_salvage WHERE planet_id = :planet_id", [
+            'energy' => $planetinfo['energy'],
+            'fighters_lost' => $fighters_lost,
+            'targettorps' => $targettorps,
+            'free_ore' => $free_ore,
+            'free_goods' => $free_goods,
+            'free_organics' => $free_organics,
+            'ship_salvage' => $ship_salvage,
+            'planet_id' => $planetinfo['planet_id']
+        ]);
     } else {
         $armor_lost = $playerinfo['armor_pts'] - $attackerarmor;
         $fighters_lost = $playerinfo['ship_fighters'] - $attackerfighters;
-        $target_fighters_lost = $planetinfo['ship_fighters'] - $targetfighters;
         LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Made it past defenses on planet $planetinfo[name]");
 
-        $db->adoExecute("UPDATE ships SET ship_energy=$playerinfo[ship_energy], ship_fighters=ship_fighters-$fighters_lost, torps=torps-$attackertorps, armor_pts=armor_pts-$armor_lost WHERE ship_id=$playerinfo[ship_id]");
+        db()->q("UPDATE ships SET ship_energy = :ship_energy, ship_fighters = ship_fighters - :fighters_lost, torps = torps - :attackertorps, armor_pts = armor_pts - :armor_lost WHERE ship_id = :ship_id", [
+            'ship_energy' => $playerinfo['ship_energy'],
+            'fighters_lost' => $fighters_lost,
+            'attackertorps' => $attackertorps,
+            'armor_lost' => $armor_lost,
+            'ship_id' => $playerinfo['ship_id']
+        ]);
         $playerinfo['ship_fighters'] = $attackerfighters;
         $playerinfo['torps'] = $attackertorps;
         $playerinfo['armor_pts'] = $attackerarmor;
 
-        $db->adoExecute("UPDATE planets SET energy=$planetinfo[energy], fighters=$targetfighters, torps=torps-$targettorps WHERE planet_id=$planetinfo[planet_id]");
+        db()->q("UPDATE planets SET energy = :energy, fighters = :targetfighters, torps = torps - :targettorps WHERE planet_id = :planet_id", [
+            'energy' => $planetinfo['energy'],
+            'targetfighters' => $targetfighters,
+            'targettorps' => $targettorps,
+            'planet_id' => $planetinfo['planet_id']
+        ]);
         $planetinfo['fighters'] = $targetfighters;
         $planetinfo['torps'] = $targettorps;
 
-        $resultps = $db->adoExecute("SELECT ship_id,ship_name FROM ships WHERE planet_id=$planetinfo[planet_id] AND on_planet='Y'");
-        $shipsonplanet = $resultps->RecordCount();
+        $resultps = db()->fetchAll("SELECT ship_id,ship_name FROM ships WHERE planet_id = :planet_id AND on_planet = 'Y'", [
+            'planet_id' => $planetinfo['planet_id']
+        ]);
+        $shipsonplanet = count($resultps);
         if ($shipsonplanet > 0) {
-            while (!$resultps->EOF && $xenobeisdead < 1) {
-                $onplanet = $resultps->fields;
+            foreach ($resultps as $onplanet) {
+                if ($xenobeisdead >= 1)
+                    break;
                 xenobetoship($onplanet['ship_id']);
-                $resultps->MoveNext();
             }
         }
-        $resultps = $db->adoExecute("SELECT ship_id,ship_name FROM ships WHERE planet_id=$planetinfo[planet_id] AND on_planet='Y'");
-        $shipsonplanet = $resultps->RecordCount();
+        $resultps = db()->fetchAll("SELECT ship_id,ship_name FROM ships WHERE planet_id = :planet_id AND on_planet = 'Y'", [
+            'planet_id' => $planetinfo['planet_id']
+        ]);
+        $shipsonplanet = count($resultps);
         if ($shipsonplanet == 0 && $xenobeisdead < 1) {
             LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "Defeated all ships on planet $planetinfo[name]");
             LogPlayerDAO::call($container, $planetinfo['owner'], LogTypeConstants::LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
-            $db->adoExecute("UPDATE planets SET fighters=0, torps=0, base='N', owner=0, corp=0 WHERE planet_id=$planetinfo[planet_id]");
+            db()->q("UPDATE planets SET fighters = 0, torps = 0, base = 'N', owner = 0, corp = 0 WHERE planet_id = :planet_id", [
+                'planet_id' => $planetinfo['planet_id']
+            ]);
             calc_ownership($planetinfo['sector_id']);
         } else {
             LogPlayerDAO::call($container, $playerinfo['ship_id'], LogTypeConstants::LOG_RAW, "We were KILLED by ships defending planet $planetinfo[name]");
