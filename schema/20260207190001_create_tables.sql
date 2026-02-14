@@ -186,7 +186,7 @@ CREATE TABLE IGB_transfers
 
 CREATE TABLE teams
 (
-    id int DEFAULT '0' NOT NULL,
+    id int NOT NULL auto_increment, 
     creator int DEFAULT '0',
     team_name tinytext,
     description tinytext,
