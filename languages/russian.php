@@ -16,6 +16,8 @@ $l_colonists = "Колонисты";
 $l_credits = "Кредиты";
 $l_units = "единиц ";
 $l_special = "Особый";
+$l_qty = "Количество";
+$l_device = "Устройство";
 
 $l_cargo = "Груз";
 $l_fighters = "Истребители ";

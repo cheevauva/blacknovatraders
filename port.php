@@ -2,97 +2,107 @@
 
 include 'config.php';
 
-
-
-
 $title = $l_title_port;
 include("header.php");
-
-
 
 if (checklogin()) {
     die();
 }
-
+require_once sprintf('languages/%s/bounty.php', $language);
 //-------------------------------------------------------------------------------------------------
 
-
-$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $res->fields;
+$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
+    'username' => $username
+]);
 
 // fix negative quantities, i guess theres a better way to do but i'm in a hurry
 // i dont know how the quantities acutally get negative ...
 
-if ($playerinfo[ship_ore] < 0) {
-        $fixres = $db->adoExecute("UPDATE ships set ship_ore=0 WHERE email='$username'");
-        $playerinfo[ship_ore] = 0;
+if ($playerinfo['ship_ore'] < 0) {
+    db()->q("UPDATE ships set ship_ore=0 WHERE email= :username", [
+        'username' => $username
+    ]);
+    $playerinfo['ship_ore'] = 0;
 }
 
-if ($playerinfo[ship_organics] < 0) {
-        $fixres = $db->adoExecute("UPDATE ships set ship_organics=0 WHERE email='$username'");
-        $playerinfo[ship_organics] = 0;
+if ($playerinfo['ship_organics'] < 0) {
+    db()->q("UPDATE ships set ship_organics=0 WHERE email= :username", [
+        'username' => $username
+    ]);
+    $playerinfo['ship_organics'] = 0;
 }
 
-if ($playerinfo[ship_energy] < 0) {
-        $fixres = $db->adoExecute("UPDATE ships set ship_energy=0 WHERE email='$username'");
-        $playerinfo[ship_energy] = 0;
+if ($playerinfo['ship_energy'] < 0) {
+    db()->q("UPDATE ships set ship_energy=0 WHERE email= :username", [
+        'username' => $username
+    ]);
+    $playerinfo['ship_energy'] = 0;
 }
 
-if ($playerinfo[ship_goods] < 0) {
-        $fixres = $db->adoExecute("UPDATE ships set ship_goods=0 WHERE email='$username'");
-        $playerinfo[ship_goods] = 0;
+if ($playerinfo['ship_goods'] < 0) {
+    db()->q("UPDATE ships set ship_goods=0 WHERE email= :username", [
+        'username' => $username
+    ]);
+    $playerinfo['ship_goods'] = 0;
 }
 
+$sectorinfo = db()->fetch("SELECT * FROM universe WHERE sector_id= :sector", [
+    'sector' => $playerinfo['sector']
+]);
 
-
-$res = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$playerinfo[sector]'");
-$sectorinfo = $res->fields;
-
-if ($sectorinfo[port_ore] < 0) {
-        $fixres = $db->adoExecute("UPDATE universe set port_ore=0 WHERE sector_id=$playerinfo[sector]");
-        $sectorinfo[port_ore] = 0;
+if ($sectorinfo['port_ore'] < 0) {
+    db()->q("UPDATE universe set port_ore=0 WHERE sector_id= :sector", [
+        'sector' => $playerinfo['sector']
+    ]);
+    $sectorinfo['port_ore'] = 0;
 }
 
-if ($sectorinfo[port_goods] < 0) {
-        $fixres = $db->adoExecute("UPDATE universe set port_goods=0 WHERE sector_id=$playerinfo[sector]");
-        $sectorinfo[port_goods] = 0;
+if ($sectorinfo['port_goods'] < 0) {
+    db()->q("UPDATE universe set port_goods=0 WHERE sector_id= :sector", [
+        'sector' => $playerinfo['sector']
+    ]);
+    $sectorinfo['port_goods'] = 0;
 }
 
-if ($sectorinfo[port_organics] < 0) {
-        $fixres = $db->adoExecute("UPDATE universe set port_organics=0 WHERE sector_id=$playerinfo[sector]");
-        $sectorinfo[port_organics] = 0;
+if ($sectorinfo['port_organics'] < 0) {
+    db()->q("UPDATE universe set port_organics=0 WHERE sector_id= :sector", [
+        'sector' => $playerinfo['sector']
+    ]);
+    $sectorinfo['port_organics'] = 0;
 }
 
-if ($sectorinfo[port_energy] < 0) {
-        $fixres = $db->adoExecute("UPDATE universe set port_energy=0 WHERE sector_id=$playerinfo[sector]");
-        $sectorinfo[port_energy] = 0;
+if ($sectorinfo['port_energy'] < 0) {
+    db()->q("UPDATE universe set port_energy=0 WHERE sector_id= :sector", [
+        'sector' => $playerinfo['sector']
+    ]);
+    $sectorinfo['port_energy'] = 0;
 }
 
+$zoneinfo = db()->fetch("SELECT * FROM zones WHERE zone_id= :zone_id", [
+    'zone_id' => $sectorinfo['zone_id']
+]);
 
-$res = $db->adoExecute("SELECT * FROM zones WHERE zone_id=$sectorinfo[zone_id]");
-
-$zoneinfo = $res->fields;
-
-if ($zoneinfo[zone_id] == 4) {
+if ($zoneinfo['zone_id'] == 4) {
     $title = $l_sector_war;
     bigtitle();
     echo "$l_war_info <p>";
     
     include("footer.php");
     die();
-} elseif ($zoneinfo[allow_trade] == 'N') {
+} elseif ($zoneinfo['allow_trade'] == 'N') {
     $title = "Trade forbidden";
     bigtitle();
     echo "$l_no_trade_info<p>";
     
     include("footer.php");
     die();
-} elseif ($zoneinfo[allow_trade] == 'L') {
-    if ($zoneinfo[corp_zone] == 'N') {
-        $res = $db->adoExecute("SELECT team FROM ships WHERE ship_id=$zoneinfo[owner]");
-        $ownerinfo = $res->fields;
+} elseif ($zoneinfo['allow_trade'] == 'L') {
+    if ($zoneinfo['corp_zone'] == 'N') {
+        $ownerinfo = db()->fetch("SELECT team FROM ships WHERE ship_id= :owner", [
+            'owner' => $zoneinfo['owner']
+        ]);
 
-        if ($playerinfo[ship_id] != $zoneinfo[owner] && $playerinfo[team] == 0 || $playerinfo[team] != $ownerinfo[team]) {
+        if ($playerinfo['ship_id'] != $zoneinfo['owner'] && $playerinfo['team'] == 0 || $playerinfo['team'] != $ownerinfo['team']) {
             $title = "Trade forbidden";
             bigtitle();
             echo "Trading at this port is not allowed for outsiders<p>";
@@ -101,7 +111,7 @@ if ($zoneinfo[zone_id] == 4) {
             die();
         }
     } else {
-        if ($playerinfo[team] != $zoneinfo[owner]) {
+        if ($playerinfo['team'] != $zoneinfo['owner']) {
             $title = $l_no_trade;
             bigtitle();
             echo "$l_no_trade_out<p>";
@@ -114,106 +124,106 @@ if ($zoneinfo[zone_id] == 4) {
 
 //-------------------------------------------------------------------------------------------------
 
-if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
+if ($sectorinfo['port_type'] != "none" && $sectorinfo['port_type'] != "special") {
     $title = $l_title_trade;
     bigtitle();
 
-    if ($sectorinfo[port_type] == "ore") {
-        $ore_price = $ore_price - $ore_delta * $sectorinfo[port_ore] / $ore_limit * $inventory_factor;
+    if ($sectorinfo['port_type'] == "ore") {
+        $ore_price = $ore_price - $ore_delta * $sectorinfo['port_ore'] / $ore_limit * $inventory_factor;
         $sb_ore = $l_selling;
     } else {
-        $ore_price = $ore_price + $ore_delta * $sectorinfo[port_ore] / $ore_limit * $inventory_factor;
+        $ore_price = $ore_price + $ore_delta * $sectorinfo['port_ore'] / $ore_limit * $inventory_factor;
         $sb_ore = $l_buying;
     }
-    if ($sectorinfo[port_type] == "organics") {
-        $organics_price = $organics_price - $organics_delta * $sectorinfo[port_organics] / $organics_limit * $inventory_factor;
+    if ($sectorinfo['port_type'] == "organics") {
+        $organics_price = $organics_price - $organics_delta * $sectorinfo['port_organics'] / $organics_limit * $inventory_factor;
         $sb_organics = $l_selling;
     } else {
-        $organics_price = $organics_price + $organics_delta * $sectorinfo[port_organics] / $organics_limit * $inventory_factor;
+        $organics_price = $organics_price + $organics_delta * $sectorinfo['port_organics'] / $organics_limit * $inventory_factor;
         $sb_organics = $l_buying;
     }
-    if ($sectorinfo[port_type] == "goods") {
-        $goods_price = $goods_price - $goods_delta * $sectorinfo[port_goods] / $goods_limit * $inventory_factor;
+    if ($sectorinfo['port_type'] == "goods") {
+        $goods_price = $goods_price - $goods_delta * $sectorinfo['port_goods'] / $goods_limit * $inventory_factor;
         $sb_goods = $l_selling;
     } else {
-        $goods_price = $goods_price + $goods_delta * $sectorinfo[port_goods] / $goods_limit * $inventory_factor;
+        $goods_price = $goods_price + $goods_delta * $sectorinfo['port_goods'] / $goods_limit * $inventory_factor;
         $sb_goods = $l_buying;
     }
-    if ($sectorinfo[port_type] == "energy") {
-        $energy_price = $energy_price - $energy_delta * $sectorinfo[port_energy] / $energy_limit * $inventory_factor;
+    if ($sectorinfo['port_type'] == "energy") {
+        $energy_price = $energy_price - $energy_delta * $sectorinfo['port_energy'] / $energy_limit * $inventory_factor;
         $sb_energy = $l_selling;
     } else {
-        $energy_price = $energy_price + $energy_delta * $sectorinfo[port_energy] / $energy_limit * $inventory_factor;
+        $energy_price = $energy_price + $energy_delta * $sectorinfo['port_energy'] / $energy_limit * $inventory_factor;
         $sb_energy = $l_buying;
     }
-  // establish default amounts for each commodity
+    // establish default amounts for each commodity
     if ($sb_ore == $l_buying) {
-        $amount_ore = $playerinfo[ship_ore];
+        $amount_ore = $playerinfo['ship_ore'];
     } else {
-        $amount_ore = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_colonists];
+        $amount_ore = NUM_HOLDS($playerinfo['hull']) - $playerinfo['ship_ore'] - $playerinfo['ship_colonists'];
     }
 
     if ($sb_organics == $l_buying) {
-        $amount_organics = $playerinfo[ship_organics];
+        $amount_organics = $playerinfo['ship_organics'];
     } else {
-        $amount_organics = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_organics] - $playerinfo[ship_colonists];
+        $amount_organics = NUM_HOLDS($playerinfo['hull']) - $playerinfo['ship_organics'] - $playerinfo['ship_colonists'];
     }
 
     if ($sb_goods == $l_buying) {
-        $amount_goods = $playerinfo[ship_goods];
+        $amount_goods = $playerinfo['ship_goods'];
     } else {
-        $amount_goods = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
+        $amount_goods = NUM_HOLDS($playerinfo['hull']) - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
     }
 
     if ($sb_energy == $l_buying) {
-        $amount_energy = $playerinfo[ship_energy];
+        $amount_energy = $playerinfo['ship_energy'];
     } else {
-        $amount_energy = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+        $amount_energy = NUM_ENERGY($playerinfo['power']) - $playerinfo['ship_energy'];
     }
 
-  // limit amounts to port quantities
-    $amount_ore = min($amount_ore, $sectorinfo[port_ore]);
-    $amount_organics = min($amount_organics, $sectorinfo[port_organics]);
-    $amount_goods = min($amount_goods, $sectorinfo[port_goods]);
-    $amount_energy = min($amount_energy, $sectorinfo[port_energy]);
+    // limit amounts to port quantities
+    $amount_ore = min($amount_ore, $sectorinfo['port_ore']);
+    $amount_organics = min($amount_organics, $sectorinfo['port_organics']);
+    $amount_goods = min($amount_goods, $sectorinfo['port_goods']);
+    $amount_energy = min($amount_energy, $sectorinfo['port_energy']);
 
-  // limit amounts to what the player can afford
+    // limit amounts to what the player can afford
     if ($sb_ore == $l_selling) {
-        $amount_ore = min($amount_ore, floor(($playerinfo[credits] + $amount_organics * $organics_price + $amount_goods * $goods_price + $amount_energy * $energy_price) / $ore_price));
+        $amount_ore = min($amount_ore, floor(($playerinfo['credits'] + $amount_organics * $organics_price + $amount_goods * $goods_price + $amount_energy * $energy_price) / $ore_price));
     }
     if ($sb_organics == $l_selling) {
-        $amount_organics = min($amount_organics, floor(($playerinfo[credits] + $amount_ore * $ore_price + $amount_goods * $goods_price + $amount_energy * $energy_price) / $organics_price));
+        $amount_organics = min($amount_organics, floor(($playerinfo['credits'] + $amount_ore * $ore_price + $amount_goods * $goods_price + $amount_energy * $energy_price) / $organics_price));
     }
     if ($sb_goods == $l_selling) {
-        $amount_goods = min($amount_goods, floor(($playerinfo[credits] + $amount_ore * $ore_price + $amount_organics * $organics_price + $amount_energy * $energy_price) / $goods_price));
+        $amount_goods = min($amount_goods, floor(($playerinfo['credits'] + $amount_ore * $ore_price + $amount_organics * $organics_price + $amount_energy * $energy_price) / $goods_price));
     }
     if ($sb_energy == $l_selling) {
-        $amount_energy = min($amount_energy, floor(($playerinfo[credits] + $amount_ore * $ore_price + $amount_organics * $organics_price + $amount_goods * $goods_price) / $energy_price));
+        $amount_energy = min($amount_energy, floor(($playerinfo['credits'] + $amount_ore * $ore_price + $amount_organics * $organics_price + $amount_goods * $goods_price) / $energy_price));
     }
 
     echo "<FORM ACTION=port2.php METHOD=POST>";
-    echo "<TABLE WIDTH=\"100%\" BORDER=0 CELLSPACING=0 CELLPADDING=0>";
-    echo "<TR BGCOLOR=\"$color_header\"><TD><B>$l_commodity</B></TD><TD><B>$l_buying/$l_selling</B></TD><TD><B>$l_amount</B></TD><TD><B>$l_price</B></TD><TD><B>$l_buy/$l_sell</B></TD><TD><B>$l_cargo</B></TD></TR>";
-    echo "<TR BGCOLOR=\"$color_line1\"><TD>$l_ore</TD><TD>$sb_ore</TD><TD>" . NUMBER($sectorinfo[port_ore]) . "</TD><TD>$ore_price</TD><TD><INPUT TYPE=TEXT NAME=trade_ore SIZE=10 MAXLENGTH=20 VALUE=$amount_ore></TD><TD>" . NUMBER($playerinfo[ship_ore]) . "</TD></TR>";
-    echo "<TR BGCOLOR=\"$color_line2\"><TD>$l_organics</TD><TD>$sb_organics</TD><TD>" . NUMBER($sectorinfo[port_organics]) . "</TD><TD>$organics_price</TD><TD><INPUT TYPE=TEXT NAME=trade_organics SIZE=10 MAXLENGTH=20 VALUE=$amount_organics></TD><TD>" . NUMBER($playerinfo[ship_organics]) . "</TD></TR>";
-    echo "<TR BGCOLOR=\"$color_line1\"><TD>$l_goods</TD><TD>$sb_goods</TD><TD>" . NUMBER($sectorinfo[port_goods]) . "</TD><TD>$goods_price</TD><TD><INPUT TYPE=TEXT NAME=trade_goods SIZE=10 MAXLENGTH=20 VALUE=$amount_goods></TD><TD>" . NUMBER($playerinfo[ship_goods]) . "</TD></TR>";
-    echo "<TR BGCOLOR=\"$color_line2\"><TD>$l_energy</TD><TD>$sb_energy</TD><TD>" . NUMBER($sectorinfo[port_energy]) . "</TD><TD>$energy_price</TD><TD><INPUT TYPE=TEXT NAME=trade_energy SIZE=10 MAXLENGTH=20 VALUE=$amount_energy></TD><TD>" . NUMBER($playerinfo[ship_energy]) . "</TD></TR>";
+    echo "<TABLE class=\"table\">";
+    echo "<TR><TH>$l_commodity</TH><TH>$l_buying/$l_selling</TH><TH>$l_amount</TH><TH>$l_price</TH><TH>$l_buy/$l_sell</TH><TH>$l_cargo</TH></TR>";
+    echo "<TR><TD>$l_ore</TD><TD>$sb_ore</TD><TD>" . NUMBER($sectorinfo['port_ore']) . "</TD><TD>$ore_price</TD><TD><INPUT TYPE=TEXT NAME=trade_ore SIZE=10 MAXLENGTH=20 VALUE=$amount_ore></TD><TD>" . NUMBER($playerinfo['ship_ore']) . "</TD></TR>";
+    echo "<TR><TD>$l_organics</TD><TD>$sb_organics</TD><TD>" . NUMBER($sectorinfo['port_organics']) . "</TD><TD>$organics_price</TD><TD><INPUT TYPE=TEXT NAME=trade_organics SIZE=10 MAXLENGTH=20 VALUE=$amount_organics></TD><TD>" . NUMBER($playerinfo['ship_organics']) . "</TD></TR>";
+    echo "<TR><TD>$l_goods</TD><TD>$sb_goods</TD><TD>" . NUMBER($sectorinfo['port_goods']) . "</TD><TD>$goods_price</TD><TD><INPUT TYPE=TEXT NAME=trade_goods SIZE=10 MAXLENGTH=20 VALUE=$amount_goods></TD><TD>" . NUMBER($playerinfo['ship_goods']) . "</TD></TR>";
+    echo "<TR><TD>$l_energy</TD><TD>$sb_energy</TD><TD>" . NUMBER($sectorinfo['port_energy']) . "</TD><TD>$energy_price</TD><TD><INPUT TYPE=TEXT NAME=trade_energy SIZE=10 MAXLENGTH=20 VALUE=$amount_energy></TD><TD>" . NUMBER($playerinfo['ship_energy']) . "</TD></TR>";
     echo "</TABLE><BR>";
     echo "<INPUT TYPE=SUBMIT VALUE=$l_trade>";
     echo "</FORM>";
 
-    $free_holds = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods] - $playerinfo[ship_colonists];
-    $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+    $free_holds = NUM_HOLDS($playerinfo['hull']) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'] - $playerinfo['ship_colonists'];
+    $free_power = NUM_ENERGY($playerinfo['power']) - $playerinfo['ship_energy'];
 
     $l_trade_st_info = str_replace("[free_holds]", NUMBER($free_holds), $l_trade_st_info);
     $l_trade_st_info = str_replace("[free_power]", NUMBER($free_power), $l_trade_st_info);
-    $l_trade_st_info = str_replace("[credits]", NUMBER($playerinfo[credits]), $l_trade_st_info);
+    $l_trade_st_info = str_replace("[credits]", NUMBER($playerinfo['credits']), $l_trade_st_info);
 
     echo $l_trade_st_info;
-} elseif ($sectorinfo[port_type] == "special") {
+} elseif ($sectorinfo['port_type'] == "special") {
     $title = $l_special_port;
     bigtitle();
-    if (isLoanPending($playerinfo[ship_id])) {
+    if (isLoanPending($playerinfo['ship_id'])) {
         echo "$l_port_loannotrade<p>";
         echo "<A HREF=igb.php>$l_igb_term</a><p>";
         
@@ -221,41 +231,47 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
         die();
     }
 
-    $res2 = $db->adoExecute("SELECT SUM(amount) as total_bounty FROM bounty WHERE placed_by = 0 AND bounty_on = $playerinfo[ship_id]");
-    if ($res2) {
-        $bty = $res2->fields;
-        if ($bty[total_bounty] > 0) {
+    $bty = db()->fetch("SELECT SUM(amount) as total_bounty FROM bounty WHERE placed_by = 0 AND bounty_on = :ship_id", [
+        'ship_id' => $playerinfo['ship_id']
+    ]);
+    if ($bty) {
+        if ($bty['total_bounty'] > 0) {
             if ($pay <> 1) {
                 echo $l_port_bounty;
-                $l_port_bounty2 = str_replace("[amount]", NUMBER($bty[total_bounty]), $l_port_bounty2);
+                $l_port_bounty2 = str_replace("[amount]", NUMBER($bty['total_bounty']), $l_port_bounty2);
                 echo $l_port_bounty2 . "<BR>";
                 echo "<A HREF=\"bounty.php\">$l_by_placebounty</A><BR><BR>";
                 
                 die();
             } else {
-                if ($playerinfo[credits] < $bty[total_bounty]) {
-                    $l_port_btynotenough = str_replace("[amount]", NUMBER($bty[total_bounty]), $l_port_btynotenough);
+                if ($playerinfo['credits'] < $bty['total_bounty']) {
+                    $l_port_btynotenough = str_replace("[amount]", NUMBER($bty['total_bounty']), $l_port_btynotenough);
                     echo $l_port_btynotenough;
                     
                     die();
                 } else {
-                    $db->adoExecute("UPDATE ships SET credits=credits-$bty[total_bounty] WHERE ship_id = $playerinfo[ship_id]");
-                    $db->adoExecute("DELETE from bounty WHERE bounty_on = $playerinfo[ship_id] AND placed_by = 0");
+                    db()->q("UPDATE ships SET credits=credits- :bounty WHERE ship_id = :ship_id", [
+                        'bounty' => $bty['total_bounty'],
+                        'ship_id' => $playerinfo['ship_id']
+                    ]);
+                    db()->q("DELETE from bounty WHERE bounty_on = :ship_id AND placed_by = 0", [
+                        'ship_id' => $playerinfo['ship_id']
+                    ]);
                     echo $l_port_bountypaid;
                     die();
                 }
             }
         }
     }
-    $emerwarp_free = $max_emerwarp - $playerinfo[dev_emerwarp];
-    $fighter_max = NUM_FIGHTERS($playerinfo[computer]);
-    $fighter_free = $fighter_max - $playerinfo[ship_fighters];
-    $torpedo_max = NUM_TORPEDOES($playerinfo[torp_launchers]);
-    $torpedo_free = $torpedo_max - $playerinfo[torps];
-    $armor_max = NUM_ARMOUR($playerinfo[armor]);
-    $armor_free = $armor_max - $playerinfo[armor_pts];
-    $colonist_max = NUM_HOLDS($playerinfo[hull]) - $playerinfo[ship_ore] - $playerinfo[ship_organics] - $playerinfo[ship_goods];
-    $colonist_free = $colonist_max - $playerinfo[ship_colonists];
+    $emerwarp_free = $max_emerwarp - $playerinfo['dev_emerwarp'];
+    $fighter_max = NUM_FIGHTERS($playerinfo['computer']);
+    $fighter_free = $fighter_max - $playerinfo['ship_fighters'];
+    $torpedo_max = NUM_TORPEDOES($playerinfo['torp_launchers']);
+    $torpedo_free = $torpedo_max - $playerinfo['torps'];
+    $armor_max = NUM_ARMOUR($playerinfo['armor']);
+    $armor_free = $armor_max - $playerinfo['armor_pts'];
+    $colonist_max = NUM_HOLDS($playerinfo['hull']) - $playerinfo['ship_ore'] - $playerinfo['ship_organics'] - $playerinfo['ship_goods'];
+    $colonist_free = $colonist_max - $playerinfo['ship_colonists'];
 
     echo "\n<SCRIPT LANGUAGE=\"JavaScript\">\n";
     echo "<!--\n";
@@ -339,13 +355,13 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     }
     echo "+ form.dev_warpedit_number.value * $dev_warpedit_price\n";
     echo "+ form.elements['dev_minedeflector_number'].value * $dev_minedeflector_price\n";
-    if ($playerinfo[dev_escapepod] == 'N') {
+    if ($playerinfo['dev_escapepod'] == 'N') {
         echo "+ (form.escapepod_purchase.checked ?  $dev_escapepod_price : 0)\n";
     }
-    if ($playerinfo[dev_fuelscoop] == 'N') {
+    if ($playerinfo['dev_fuelscoop'] == 'N') {
         echo "+ (form.fuelscoop_purchase.checked ?  $dev_fuelscoop_price : 0)\n";
     }
-    if ($playerinfo[dev_lssd] == 'N') {
+    if ($playerinfo['dev_lssd'] == 'N') {
         echo "+ (form.lssd_purchase.checked ?  $dev_lssd_price : 0)\n";
     }
 
@@ -360,16 +376,16 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "+ changeDelta(form.torp_launchers_upgrade.value,$playerinfo[torp_launchers])\n";
     echo "+ changeDelta(form.shields_upgrade.value,$playerinfo[shields])\n";
 
-    if ($playerinfo[ship_fighters] != $fighter_max) {
+    if ($playerinfo['ship_fighters'] != $fighter_max) {
         echo "+ form.fighter_number.value * $fighter_price ";
     }
-    if ($playerinfo[torps] != $torpedo_max) {
+    if ($playerinfo['torps'] != $torpedo_max) {
         echo "+ form.torpedo_number.value * $torpedo_price ";
     }
-    if ($playerinfo[armor_pts] != $armor_max) {
+    if ($playerinfo['armor_pts'] != $armor_max) {
         echo "+ form.armor_number.value * $armor_price ";
     }
-    if ($playerinfo[ship_colonists] != $colonist_max) {
+    if ($playerinfo['ship_colonists'] != $colonist_max) {
         echo "+ form.colonist_number.value * $colonist_price ";
     }
     echo ";\n";
@@ -404,7 +420,7 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     {
         global $onchange;
         $i = $current_value;
-        $dropdownvar = "<select size='1' name='$element_name'";
+        $dropdownvar = "<select name='$element_name'";
         $dropdownvar = "$dropdownvar $onchange>\n";
         while ($i < 60) {
             if ($current_value == $i) {
@@ -420,7 +436,7 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
 
 
     echo "<P>\n";
-    $l_creds_to_spend = str_replace("[credits]", NUMBER($playerinfo[credits]), $l_creds_to_spend);
+    $l_creds_to_spend = str_replace("[credits]", NUMBER($playerinfo['credits']), $l_creds_to_spend);
     echo "$l_creds_to_spend<BR>\n";
     if ($allow_ibank) {
         $igblink = "\n<A HREF=igb.php>$l_igb_term</a>";
@@ -431,50 +447,50 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "\n";
     echo "<A HREF=\"bounty.php\">$l_by_placebounty</A><BR>\n";
     echo " <FORM ACTION=port2.php METHOD=POST>\n";
-    echo "  <TABLE WIDTH=\"100%\" BORDER=0 CELLSPACING=0 CELLPADDING=0>\n";
-    echo "   <TR BGCOLOR=\"$color_header\">\n";
-    echo "    <TD><B>$l_device</B></TD>\n";
-    echo "    <TD><B>$l_cost</B></TD>\n";
-    echo "    <TD><B>$l_current</B></TD>\n";
-    echo "    <TD><B>$l_max</B></TD>\n";
-    echo "    <TD><B>$l_qty</B></TD>\n";
-    echo "    <TD><B>$l_ship_levels</B></TD>\n";
-    echo "    <TD><B>$l_cost</B></TD>\n";
-    echo "    <TD><B>$l_current</B></TD>\n";
-    echo "    <TD><B>$l_upgrade</B></TD>\n";
+    echo "  <TABLE class=\"table\">\n";
+    echo "   <TR>\n";
+    echo "    <TH>$l_device</TH>\n";
+    echo "    <TH>$l_cost</TH>\n";
+    echo "    <TH>$l_current</TH>\n";
+    echo "    <TH>$l_max</TH>\n";
+    echo "    <TH>$l_qty</TH>\n";
+    echo "    <TH>$l_ship_levels</TH>\n";
+    echo "    <TH>$l_cost</TH>\n";
+    echo "    <TH>$l_current</TH>\n";
+    echo "    <TH>$l_upgrade</TH>\n";
     echo "   </TR>\n";
-    echo "   <TR BGCOLOR=\"$color_line1\">\n";
+    echo "   <TR>\n";
     echo "    <TD>$l_genesis</TD>\n";
     echo "    <TD>" . NUMBER($dev_genesis_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[dev_genesis]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['dev_genesis']) . "</TD>\n";
     echo "    <TD>$l_unlimited</TD>\n";
     echo "    <TD><INPUT TYPE=TEXT NAME=dev_genesis_number SIZE=4 MAXLENGTH=4 VALUE=0 $onblur></TD>\n";
     echo "    <TD>$l_hull</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts1' name=hull_costper VALUE='0' tabindex='-1' $onblur></TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[hull]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['hull']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("hull_upgrade", $playerinfo[hull]);
+    echo dropdown("hull_upgrade", $playerinfo['hull']);
     echo "    </TD>\n";
     echo "   </TR>\n";
-    echo "   <TR BGCOLOR=\"$color_line2\">\n";
+    echo "   <TR>\n";
     echo "    <TD>$l_beacons</TD>\n";
     echo "    <TD>" . NUMBER($dev_beacon_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[dev_beacon]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['dev_beacon']) . "</TD>\n";
     echo "    <TD>$l_unlimited</TD>\n";
     echo "    <TD><INPUT TYPE=TEXT NAME=dev_beacon_number SIZE=4 MAXLENGTH=4 VALUE=0 $onblur></TD>\n";
     echo "    <TD>$l_engines</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts2' size=10 name=engine_costper VALUE='0' tabindex='-1' $onblur></TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[engines]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['engines']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("engine_upgrade", $playerinfo[engines]);
+    echo dropdown("engine_upgrade", $playerinfo['engines']);
     echo "    </TD>\n";
     echo "   </TR>\n";
-    echo "   <TR BGCOLOR=\"$color_line1\">\n";
+    echo "   <TR>\n";
     echo "    <TD>$l_ewd</TD>\n";
     echo "    <TD>" . NUMBER($dev_emerwarp_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[dev_emerwarp]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['dev_emerwarp']) . "</TD>\n";
     echo "    <TD>";
-    if ($playerinfo[dev_emerwarp] != $max_emerwarp) {
+    if ($playerinfo['dev_emerwarp'] != $max_emerwarp) {
         echo"<a href='#' onClick=\"MakeMax('dev_emerwarp_number', $emerwarp_free);countTotal();return false;\">";
         echo NUMBER($emerwarp_free) . "</a></TD>\n";
         echo"    <TD><INPUT TYPE=TEXT NAME=dev_emerwarp_number SIZE=4 MAXLENGTH=4 VALUE=0 $onblur>";
@@ -485,23 +501,23 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "</TD>\n";
     echo "    <TD>$l_power</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts1' name=power_costper VALUE='0' tabindex='-1' $onblur></td>\n";
-    echo "    <TD>" . NUMBER($playerinfo[power]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['power']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("power_upgrade", $playerinfo[power]);
+    echo dropdown("power_upgrade", $playerinfo['power']);
     echo "    </TD>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line2\">\n";
+    echo "  <TR>\n";
     echo "    <TD>$l_warpedit</TD>\n";
     echo "    <TD>" . NUMBER($dev_warpedit_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[dev_warpedit]) . "</TD><TD>$l_unlimited</TD><TD><INPUT TYPE=TEXT NAME=dev_warpedit_number SIZE=4 MAXLENGTH=4 VALUE=0 $onblur></TD>";
+    echo "    <TD>" . NUMBER($playerinfo['dev_warpedit']) . "</TD><TD>$l_unlimited</TD><TD><INPUT TYPE=TEXT NAME=dev_warpedit_number SIZE=4 MAXLENGTH=4 VALUE=0 $onblur></TD>";
     echo "    <TD>$l_computer</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts2' name=computer_costper VALUE='0' tabindex='-1' $onblur></TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[computer]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['computer']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("computer_upgrade", $playerinfo[computer]);
+    echo dropdown("computer_upgrade", $playerinfo['computer']);
     echo "    </TD>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line1\">\n";
+    echo "  <TR>\n";
     echo "    <TD>&nbsp;</TD>\n";
     echo "    <TD>&nbsp;</TD>\n";
     echo "    <TD>&nbsp;</TD>\n";
@@ -509,28 +525,28 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "    <TD>&nbsp;</TD>\n";
     echo "    <TD>$l_sensors</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts1' name=sensors_costper VALUE='0' tabindex='-1' $onblur></td>\n";
-    echo "    <TD>" . NUMBER($playerinfo[sensors]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['sensors']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("sensors_upgrade", $playerinfo[sensors]);
+    echo dropdown("sensors_upgrade", $playerinfo['sensors']);
     echo "    </TD>\n";
     echo "  </TR>";
-    echo "  <TR BGCOLOR=\"$color_line2\">\n";
+    echo "  <TR>\n";
     echo "    <TD>$l_deflect</TD>\n";
     echo "    <TD>" . NUMBER($dev_minedeflector_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[dev_minedeflector]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['dev_minedeflector']) . "</TD>\n";
     echo "    <TD>$l_unlimited</TD>\n";
     echo "    <TD><INPUT TYPE=TEXT NAME=dev_minedeflector_number SIZE=4 MAXLENGTH=10 VALUE=0 $onblur></TD>\n";
     echo "    <TD>$l_beams</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts2' name=beams_costper VALUE='0' tabindex='-1' $onblur></td>";
-    echo "    <TD>" . NUMBER($playerinfo[beams]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['beams']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("beams_upgrade", $playerinfo[beams]);
+    echo dropdown("beams_upgrade", $playerinfo['beams']);
     echo "    </TD>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line1\">\n";
+    echo "  <TR>\n";
     echo "    <TD>$l_escape_pod</TD>\n";
     echo "    <TD>" . NUMBER($dev_escapepod_price) . "</TD>\n";
-    if ($playerinfo[dev_escapepod] == "N") {
+    if ($playerinfo['dev_escapepod'] == "N") {
         echo "    <TD>$l_none</TD>\n";
         echo "    <TD>&nbsp;</TD>\n";
         echo "    <TD><INPUT TYPE=CHECKBOX NAME=escapepod_purchase VALUE=1 $onclick></TD>\n";
@@ -541,15 +557,15 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     }
     echo "    <TD>$l_armor</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts1' name=armor_costper VALUE='0' tabindex='-1' $onblur></TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[armor]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['armor']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("armor_upgrade", $playerinfo[armor]);
+    echo dropdown("armor_upgrade", $playerinfo['armor']);
     echo "    </TD>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line2\">\n";
+    echo "  <TR>\n";
     echo "    <TD>$l_fuel_scoop</TD>\n";
     echo "    <TD>" . NUMBER($dev_fuelscoop_price) . "</TD>\n";
-    if ($playerinfo[dev_fuelscoop] == "N") {
+    if ($playerinfo['dev_fuelscoop'] == "N") {
         echo "    <TD>$l_none</TD>\n";
         echo "    <TD>&nbsp;</TD>\n";
         echo "    <TD><INPUT TYPE=CHECKBOX NAME=fuelscoop_purchase VALUE=1 $onclick></TD>\n";
@@ -560,15 +576,15 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     }
     echo "    <TD>$l_cloak</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts2' name=cloak_costper VALUE='0' tabindex='-1' $onblur $onfocus></TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[cloak]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['cloak']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("cloak_upgrade", $playerinfo[cloak]);
+    echo dropdown("cloak_upgrade", $playerinfo['cloak']);
     echo "    </TD>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line1\">\n";
+    echo "  <TR>\n";
     echo "    <TD>$l_lssd</TD>\n";
     echo "    <TD>" . NUMBER($dev_lssd_price) . "</TD>\n";
-    if ($playerinfo[dev_lssd] == "N") {
+    if ($playerinfo['dev_lssd'] == "N") {
         echo "    <TD>$l_none</TD>\n";
         echo "    <TD>&nbsp;</TD>\n";
         echo "    <TD><INPUT TYPE=CHECKBOX NAME=lssd_purchase VALUE=1 $onclick></TD>\n";
@@ -579,12 +595,12 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     }
     echo "    <TD>$l_torp_launch</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts1' name=torp_launchers_costper VALUE='0' tabindex='-1' $onblur></TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[torp_launchers]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['torp_launchers']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("torp_launchers_upgrade", $playerinfo[torp_launchers]);
+    echo dropdown("torp_launchers_upgrade", $playerinfo['torp_launchers']);
     echo "    </TD>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line2\">\n";
+    echo "  <TR>\n";
     echo "    <TD>&nbsp;</TD>\n";
     echo "    <TD>&nbsp;</TD>\n";
     echo "    <TD>&nbsp;</TD>\n";
@@ -592,32 +608,32 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "    <TD>&nbsp;</TD>\n";
     echo "    <TD>$l_shields</TD>\n";
     echo "    <TD><input type=text readonly class='portcosts2' name=shields_costper VALUE='0' tabindex='-1' $onblur></TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[shields]) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['shields']) . "</TD>\n";
     echo "    <TD>\n       ";
-    echo dropdown("shields_upgrade", $playerinfo[shields]);
+    echo dropdown("shields_upgrade", $playerinfo['shields']);
     echo "    </TD>\n";
     echo "  </TR>\n";
     echo " </TABLE>\n";
     echo " <BR>\n";
-    echo " <TABLE WIDTH=\"100%\" BORDER=0 CELLSPACING=0 CELLPADDING=0>\n";
-    echo "  <TR BGCOLOR=\"$color_header\">\n";
-    echo "    <TD><B>$l_item</B></TD>\n";
-    echo "    <TD><B>$l_cost</B></TD>\n";
-    echo "    <TD><B>$l_current</B></TD>\n";
-    echo "    <TD><B>$l_max</B></TD>\n";
-    echo "    <TD><B>$l_qty</B></TD>\n";
-    echo "    <TD><B>$l_item</B></TD>\n";
-    echo "    <TD><B>$l_cost</B></TD>\n";
-    echo "    <TD><B>$l_current</B></TD>\n";
-    echo "    <TD><B>$l_max</B></TD>\n";
-    echo "    <TD><B>$l_qty</B></TD>\n";
+    echo " <TABLE class=\"table\">\n";
+    echo "  <TR>\n";
+    echo "    <TH>$l_item</TH>\n";
+    echo "    <TH>$l_cost</TH>\n";
+    echo "    <TH>$l_current</TH>\n";
+    echo "    <TH>$l_max</TH>\n";
+    echo "    <TH>$l_qty</TH>\n";
+    echo "    <TH>$l_item</TH>\n";
+    echo "    <TH>$l_cost</TH>\n";
+    echo "    <TH>$l_current</TH>\n";
+    echo "    <TH>$l_max</TH>\n";
+    echo "    <TH>$l_qty</TH>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line1\">\n";
+    echo "  <TR>\n";
     echo "    <TD>$l_fighters</TD>\n";
     echo "    <TD>" . NUMBER($fighter_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[ship_fighters]) . " / " . NUMBER($fighter_max) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['ship_fighters']) . " / " . NUMBER($fighter_max) . "</TD>\n";
     echo "    <TD>";
-    if ($playerinfo[ship_fighters] != $fighter_max) {
+    if ($playerinfo['ship_fighters'] != $fighter_max) {
         echo "<a href='#' onClick=\"MakeMax('fighter_number', $fighter_free);countTotal();return false;\"; $onblur>" . NUMBER($fighter_free) . "</a></TD>\n";
         echo "    <TD><INPUT TYPE=TEXT NAME=fighter_number SIZE=6 MAXLENGTH=10 VALUE=0 $onblur>";
     } else {
@@ -626,9 +642,9 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "    </TD>\n";
     echo "    <TD>$l_torps</TD>\n";
     echo "    <TD>" . NUMBER($torpedo_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[torps]) . " / " . NUMBER($torpedo_max) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['torps']) . " / " . NUMBER($torpedo_max) . "</TD>\n";
     echo "    <TD>";
-    if ($playerinfo[torps] != $torpedo_max) {
+    if ($playerinfo['torps'] != $torpedo_max) {
         echo "<a href='#' onClick=\"MakeMax('torpedo_number', $torpedo_free);countTotal();return false;\"; $onblur>" . NUMBER($torpedo_free) . "</a></TD>\n";
         echo "    <TD><INPUT TYPE=TEXT NAME=torpedo_number SIZE=6 MAXLENGTH=10 VALUE=0 $onblur>";
     } else {
@@ -636,12 +652,12 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     }
     echo "</TD>\n";
     echo "  </TR>\n";
-    echo "  <TR BGCOLOR=\"$color_line2\">\n";
+    echo "  <TR>\n";
     echo "    <TD>$l_armorpts</TD>\n";
     echo "    <TD>" . NUMBER($armor_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[armor_pts]) . " / " . NUMBER($armor_max) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['armor_pts']) . " / " . NUMBER($armor_max) . "</TD>\n";
     echo "    <TD>";
-    if ($playerinfo[armor_pts] != $armor_max) {
+    if ($playerinfo['armor_pts'] != $armor_max) {
         echo "<a href='#' onClick=\"MakeMax('armor_number', $armor_free);countTotal();return false;\"; $onblur>" . NUMBER($armor_free) . "</a></TD>\n";
         echo "    <TD><INPUT TYPE=TEXT NAME=armor_number SIZE=6 MAXLENGTH=10 VALUE=0 $onblur>";
     } else {
@@ -650,9 +666,9 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "</TD>\n";
     echo "    <TD>$l_colonists</TD>\n";
     echo "    <TD>" . NUMBER($colonist_price) . "</TD>\n";
-    echo "    <TD>" . NUMBER($playerinfo[ship_colonists]) . " / " . NUMBER($colonist_max) . "</TD>\n";
+    echo "    <TD>" . NUMBER($playerinfo['ship_colonists']) . " / " . NUMBER($colonist_max) . "</TD>\n";
     echo "    <TD>";
-    if ($playerinfo[ship_colonists] != $colonist_max) {
+    if ($playerinfo['ship_colonists'] != $colonist_max) {
         echo "<a href='#' onClick=\"MakeMax('colonist_number', $colonist_free);countTotal();return false;\"; $onblur>" . NUMBER($colonist_free) . "</a></TD>\n";
         echo "    <TD><INPUT TYPE=TEXT NAME=colonist_number SIZE=6 MAXLENGTH=10 VALUE=0 $onblur>";
     } else {
@@ -661,10 +677,10 @@ if ($sectorinfo[port_type] != "none" && $sectorinfo[port_type] != "special") {
     echo "    </TD>\n";
     echo "  </TR>\n";
     echo " </TABLE><BR>\n";
-    echo " <TABLE WIDTH=\"100%\" BORDER=0 CELLSPACING=0 CELLPADDING=0>\n";
+    echo " <TABLE class=\"table\">\n";
     echo "  <TR>\n";
     echo "    <TD><INPUT TYPE=SUBMIT VALUE=$l_buy $onclick></TD>\n";
-    echo "    <TD ALIGN=RIGHT>$l_totalcost: <INPUT TYPE=TEXT style=\"text-align:right\" NAME=total_cost SIZE=22 VALUE=0 $onfocus $onblur $onchange $onclick></td>\n";
+    echo "    <TD>$l_totalcost: <INPUT TYPE=TEXT style=\"text-align:right\" NAME=total_cost SIZE=22 VALUE=0 $onfocus $onblur $onchange $onclick></td>\n";
     echo "  </TR>\n";
     echo " </TABLE>\n";
     echo "</FORM>\n";
