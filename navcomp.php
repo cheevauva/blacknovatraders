@@ -28,7 +28,7 @@ if (!$allow_navcomp) {
     $current_sector = $playerinfo['sector'];
     $computer_tech  = $playerinfo['computer'];
 
-    $result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$current_sector'");
+    $result2 = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$current_sector'");
     $sectorinfo = $result2->fields;
 
 if ($state == 0) {
@@ -53,10 +53,10 @@ if ($state == 0) {
         for ($i = 2; $i <= $search_depth; $i++) {
             $search_query = $search_query . "	,a" . $i . ".link_dest \n";
         }
-        $search_query = $search_query . "FROM\n	 $dbtables[links] AS a1 \n";
+        $search_query = $search_query . "FROM\n	 links AS a1 \n";
 
         for ($i = 2; $i <= $search_depth; $i++) {
-            $search_query = $search_query . "	,$dbtables[links] AS a" . $i . " \n";
+            $search_query = $search_query . "	,links AS a" . $i . " \n";
         }
         $search_query = $search_query . "WHERE \n	    a1.link_start = $current_sector \n";
 

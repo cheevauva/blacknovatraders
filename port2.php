@@ -20,10 +20,10 @@ if (checklogin()) {
 $result     = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $result->fields;
 
-$result2    = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
+$result2    = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$playerinfo[sector]'");
 $sectorinfo = $result2->fields;
 
-$res = $db->adoExecute("SELECT * FROM $dbtables[zones] WHERE zone_id=$sectorinfo[zone_id]");
+$res = $db->adoExecute("SELECT * FROM zones WHERE zone_id=$sectorinfo[zone_id]");
 $zoneinfo = $res->fields;
 
 if ($zoneinfo[allow_trade] == 'N') {
@@ -492,7 +492,7 @@ if ($playerinfo[turns] < 1) {
 
 
          /* Decrease supply and demand on port */
-            $trade_result2    = $db->adoExecute("UPDATE $dbtables[universe] SET port_ore=port_ore-$trade_ore, port_organics=port_organics-$trade_organics, port_goods=port_goods-$trade_goods, port_energy=port_energy-$trade_energy where sector_id=$sectorinfo[sector_id]");
+            $trade_result2    = $db->adoExecute("UPDATE universe SET port_ore=port_ore-$trade_ore, port_organics=port_organics-$trade_organics, port_goods=port_goods-$trade_goods, port_energy=port_energy-$trade_energy where sector_id=$sectorinfo[sector_id]");
 
             echo "$l_trade_complete.<BR><BR>";
         }

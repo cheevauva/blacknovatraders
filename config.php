@@ -7,7 +7,6 @@ define('COUNT_CLASS_CORE', count(get_declared_classes()));
 //ini_set('display_errors', 0);
 date_default_timezone_set('UTC');
 
-$gameroot = __DIR__;
 $gamedomain = "";
 $gamepath = "";
 //
@@ -241,6 +240,9 @@ $xen_unemployment = 100000;   // Amount of credits each xenobe receive on each x
 $xen_aggression = 100;                // Percent of xenobe that are aggressive or hostile - rjordan
 $xen_planets = 5;                     //Percent of created xenobe that will own planets. Recommended to keep at small percentage - rjordan
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
+
+$disableRegisterGlobalFix = false;
+$disableAutoLogin = false;
 
 require_once 'bootstrap.php';
 require_once 'global_funcs.php';

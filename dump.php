@@ -16,7 +16,7 @@ if (checklogin()) {
     $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
     $playerinfo = $result->fields;
 
-    $result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+    $result2 = $db->adoExecute("SELECT * FROM universe WHERE sector_id=$playerinfo[sector]");
     $sectorinfo = $result2->fields;
         bigtitle();
 

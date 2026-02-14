@@ -23,7 +23,7 @@ if (!isset($defence_id)) {
 
 $res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
-$res = $db->adoExecute("SELECT * from $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+$res = $db->adoExecute("SELECT * from universe WHERE sector_id=$playerinfo[sector]");
 $sectorinfo = $res->fields;
 
 if ($playerinfo[turns] < 1) {
@@ -33,7 +33,7 @@ if ($playerinfo[turns] < 1) {
     die();
 }
 
-$result3 = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE defence_id=$defence_id ");
+$result3 = $db->adoExecute("SELECT * FROM sector_defence WHERE defence_id=$defence_id ");
 //Put the defence information into the array "defenceinfo"
 
 if ($result3 == 0) {
@@ -77,13 +77,13 @@ switch ($response) {
         }
         $sector = $playerinfo[sector] ;
         if ($defenceinfo['defence_type'] == 'F') {
-            $countres = $db->adoExecute("SELECT SUM(quantity) as totalfighters FROM $dbtables[sector_defence] where sector_id = $sector and defence_type = 'F'");
+            $countres = $db->adoExecute("SELECT SUM(quantity) as totalfighters FROM sector_defence where sector_id = $sector and defence_type = 'F'");
             $ttl = $countres->fields;
             $total_sector_fighters = $ttl['totalfighters'];
             include("sector_fighters.php");
         } else {
             // Attack mines goes here
-            $countres = $db->adoExecute("SELECT SUM(quantity) as totalmines FROM $dbtables[sector_defence] where sector_id = $sector and defence_type = 'M'");
+            $countres = $db->adoExecute("SELECT SUM(quantity) as totalmines FROM sector_defence where sector_id = $sector and defence_type = 'M'");
             $ttl = $countres->fields;
             $total_sector_mines = $ttl['totalmines'];
             $playerbeams = NUM_BEAMS($playerinfo[beams]);
@@ -133,13 +133,13 @@ switch ($response) {
         }
         $ship_id = $playerinfo[ship_id];
         if ($quantity > 0) {
-            $db->adoExecute("UPDATE $dbtables[sector_defence] SET quantity=quantity - $quantity WHERE defence_id = $defence_id");
+            $db->adoExecute("UPDATE sector_defence SET quantity=quantity - $quantity WHERE defence_id = $defence_id");
             if ($defenceinfo['defence_type'] == 'M') {
                 $db->adoExecute("UPDATE ships set torps=torps + $quantity where ship_id = $ship_id");
             } else {
                 $db->adoExecute("UPDATE ships set ship_fighters=ship_fighters + $quantity where ship_id = $ship_id");
             }
-            $db->adoExecute("DELETE FROM $dbtables[sector_defence] WHERE quantity <= 0");
+            $db->adoExecute("DELETE FROM sector_defence WHERE quantity <= 0");
         }
         $stamp = date("Y-m-d H-i-s");
 
@@ -157,7 +157,7 @@ switch ($response) {
             include("footer.php");
             die();
         }
-        $db->adoExecute("UPDATE $dbtables[sector_defence] SET fm_setting = '$mode' where defence_id = $defence_id");
+        $db->adoExecute("UPDATE sector_defence SET fm_setting = '$mode' where defence_id = $defence_id");
         $stamp = date("Y-m-d H-i-s");
         $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, sector=$playerinfo[sector] where ship_id=$playerinfo[ship_id]");
         if ($mode == 'attack') {

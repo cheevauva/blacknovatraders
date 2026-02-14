@@ -67,7 +67,6 @@ function standard_report()
     global $db;
     global $res;
     global $playerinfo;
-    global $dbtables;
     global $username;
     global $sort;
     global $query;
@@ -86,7 +85,7 @@ function standard_report()
     }
 
 
-    $query = "SELECT * FROM $dbtables[planets] WHERE owner=$playerinfo[ship_id]";
+    $query = "SELECT * FROM planets WHERE owner=$playerinfo[ship_id]";
 
     if (!empty($sort)) {
         $query .= " ORDER BY";
@@ -240,7 +239,6 @@ function planet_production_change()
     global $db;
     global $res;
     global $playerinfo;
-    global $dbtables;
     global $username;
     global $sort;
     global $query;
@@ -249,7 +247,7 @@ function planet_production_change()
     global $l_sector, $l_name, $l_unnamed, $l_ore, $l_organics, $l_goods, $l_energy, $l_colonists, $l_credits, $l_fighters, $l_torps, $l_base, $l_selling, $l_pr_totals, $l_yes, $l_no;
 
 
-    $query = "SELECT * FROM $dbtables[planets] WHERE owner=$playerinfo[ship_id] AND base='Y'";
+    $query = "SELECT * FROM planets WHERE owner=$playerinfo[ship_id] AND base='Y'";
 
     echo "Planetary report <B><A HREF=planet_report.php?PRepType=0>menu</A></B><BR>" .
        "<BR>" .

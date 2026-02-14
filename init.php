@@ -5,9 +5,10 @@ declare(strict_types=1);
 use BNT\Config\DAO\ConfigReadDAO;
 use BNT\Ship\DAO\ShipByTokenDAO;
 use UUA\Container\Container;
+use Psr\Container\ContainerInterface;
 use BNT\ADODB\ADOPDO;
 
-if (empty($disableRegisterGlobalFix)) {
+if (constant('DISABLE_REGISTER_GLOBAL_FIX')) {
     foreach ($_POST as $k => $v) {
         if (!isset($GLOBALS[$k])) {
             ${$k} = $v;
@@ -26,6 +27,10 @@ if (empty($disableRegisterGlobalFix)) {
     }
 }
 
+global $db;
+global $container;
+
+
 $db = new ADOPDO(sprintf("%s:host=%s;port=%s;dbname=%s;charset=utf8mb4", $db_type, $dbhost, $dbport, $dbname), $dbuname, $dbpass, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -34,6 +39,8 @@ $db = new ADOPDO(sprintf("%s:host=%s;port=%s;dbname=%s;charset=utf8mb4", $db_typ
 $container = new Container(fn($c) => [
     'db' => $db,
 ]);
+
+
 
 if (empty($disableConfigRewrite)) {
     try {

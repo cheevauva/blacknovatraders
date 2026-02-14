@@ -29,9 +29,9 @@ if (isset($destination)) {
     $destination = round(abs($destination));
 }
 
-  $result2 = $db->adoExecute("SELECT angle1,angle2,distance FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+  $result2 = $db->adoExecute("SELECT angle1,angle2,distance FROM universe WHERE sector_id=$playerinfo[sector]");
   $start = $result2->fields;
-  $result3 = $db->adoExecute("SELECT angle1,angle2,distance FROM $dbtables[universe] WHERE sector_id=$destination");
+  $result3 = $db->adoExecute("SELECT angle1,angle2,distance FROM universe WHERE sector_id=$destination");
   $finish = $result3->fields;
   $sa1 = $start[angle1] * $deg;
   $sa2 = $start[angle2] * $deg;

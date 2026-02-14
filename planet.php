@@ -19,12 +19,12 @@ if (checklogin()) {
 $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $result->fields;
 
-$result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+$result2 = $db->adoExecute("SELECT * FROM universe WHERE sector_id=$playerinfo[sector]");
 $sectorinfo = $result2->fields;
 
 $planet_id = stripnum($planet_id);
 
-$result3 = $db->adoExecute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
+$result3 = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planet_id");
 if ($result3) {
     $planetinfo = $result3->fields;
 }
@@ -76,7 +76,7 @@ if (!empty($planetinfo)) {
                 echo "<A HREF=planet.php?planet_id=$planet_id>no!</A><BR><br>";
             } elseif ($destroy == 2 && $allow_genesis_destroy) {
                 if ($playerinfo[dev_genesis] > 0) {
-                    $update = $db->adoExecute("delete from $dbtables[planets] where planet_id=$planet_id");
+                    $update = $db->adoExecute("delete from planets where planet_id=$planet_id");
                     $update2 = $db->adoExecute("UPDATE ships SET turns_used=turns_used+1, turns=turns-1,dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]");
                     $update3 = $db->adoExecute("UPDATE ships SET on_planet='N' WHERE planet_id=$planet_id");
                     calc_ownership($playerinfo[sector]);
@@ -202,10 +202,10 @@ if (!empty($planetinfo)) {
             if ($planetinfo[sells] == "Y") {
                 /* set planet to not sell */
                 echo "$l_planet_nownosell<BR>";
-                $result4 = $db->adoExecute("UPDATE $dbtables[planets] SET sells='N' WHERE planet_id=$planet_id");
+                $result4 = $db->adoExecute("UPDATE planets SET sells='N' WHERE planet_id=$planet_id");
             } else {
                 echo "$l_planet_nowsell<BR>";
-                $result4b = $db->adoExecute("UPDATE $dbtables[planets] SET sells='Y' WHERE planet_id=$planet_id");
+                $result4b = $db->adoExecute("UPDATE planets SET sells='Y' WHERE planet_id=$planet_id");
             }
         } elseif ($command == "name") {
           /* name menu */
@@ -217,7 +217,7 @@ if (!empty($planetinfo)) {
         } elseif ($command == "cname") {
           /* name2 menu */
             $new_name = trim(strip_tags($new_name));
-            $result5 = $db->adoExecute("UPDATE $dbtables[planets] SET name='$new_name' WHERE planet_id=$planet_id");
+            $result5 = $db->adoExecute("UPDATE planets SET name='$new_name' WHERE planet_id=$planet_id");
             $new_name = stripslashes($new_name);
             echo "$l_planet_cname $new_name.";
         } elseif ($command == "land") {
@@ -253,11 +253,11 @@ if (!empty($planetinfo)) {
           /* build a base */
             if ($planetinfo[ore] >= $base_ore && $planetinfo[organics] >= $base_organics && $planetinfo[goods] >= $base_goods && $planetinfo[credits] >= $base_credits) {
             // ** Create The Base
-                $update1 = $db->adoExecute("UPDATE $dbtables[planets] SET base='Y', ore=$planetinfo[ore]-$base_ore, organics=$planetinfo[organics]-$base_organics, goods=$planetinfo[goods]-$base_goods, credits=$planetinfo[credits]-$base_credits WHERE planet_id=$planet_id");
+                $update1 = $db->adoExecute("UPDATE planets SET base='Y', ore=$planetinfo[ore]-$base_ore, organics=$planetinfo[organics]-$base_organics, goods=$planetinfo[goods]-$base_goods, credits=$planetinfo[credits]-$base_credits WHERE planet_id=$planet_id");
             // ** Update User Turns
                 $update1b = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 where ship_id=$playerinfo[ship_id]");
             // ** Refresh Plant Info
-                $result3 = $db->adoExecute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
+                $result3 = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planet_id");
                 $planetinfo = $result3->fields;
             // ** Notify User Of Base Results
                 echo "$l_planet_bbuild<BR><BR>";
@@ -282,7 +282,7 @@ if (!empty($planetinfo)) {
             } elseif (($porganics + $pore + $pgoods + $penergy + $pfighters + $ptorp) > 100.0) {
                 echo "$l_planet_p_over<BR><BR>";
             } else {
-                $db->adoExecute("UPDATE $dbtables[planets] SET prod_ore=$pore,prod_organics=$porganics,prod_goods=$pgoods,prod_energy=$penergy,prod_fighters=$pfighters,prod_torp=$ptorp WHERE planet_id=$planet_id");
+                $db->adoExecute("UPDATE planets SET prod_ore=$pore,prod_organics=$porganics,prod_goods=$pgoods,prod_energy=$penergy,prod_fighters=$pfighters,prod_torp=$ptorp WHERE planet_id=$planet_id");
                 echo "$l_planet_p_changed<BR><BR>";
             }
         } else {
@@ -508,7 +508,7 @@ if (!empty($planetinfo)) {
             $update = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 WHERE ship_id=$playerinfo[ship_id]");
         } elseif ($command == "capture" &&  $planetinfo[owner] == 0) {
             echo "$l_planet_captured<BR>";
-            $update = $db->adoExecute("UPDATE $dbtables[planets] SET corp=null, owner=$playerinfo[ship_id], base='N', defeated='N' WHERE planet_id=$planet_id");
+            $update = $db->adoExecute("UPDATE planets SET corp=null, owner=$playerinfo[ship_id], base='N', defeated='N' WHERE planet_id=$planet_id");
             $ownership = calc_ownership($playerinfo[sector]);
 
             if (!empty($ownership)) {
@@ -529,7 +529,7 @@ if (!empty($planetinfo)) {
             playerlog($playerinfo[player_id], \BNT\Log\LogTypeConstants::LOG_PLANET_CAPTURED, "$planetinfo[colonists]|$planetinfo[credits]|$planetowner");
         } elseif ($command == "capture" &&  ($planetinfo[owner] == 0 || $planetinfo[defeated] == 'Y')) {
             echo "$l_planet_notdef<BR>";
-            $db->adoExecute("UPDATE $dbtables[planets] SET defeated='N' WHERE planet_id=$planetinfo[planet_id]");
+            $db->adoExecute("UPDATE planets SET defeated='N' WHERE planet_id=$planetinfo[planet_id]");
         } else {
             echo "$l_command_no<BR>";
         }

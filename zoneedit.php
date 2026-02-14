@@ -4,7 +4,7 @@ use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Zone\DAO\ZoneUpdateDAO;
 use BNT\Team\DAO\TeamByIdDAO;
 
-include 'config.php';
+require_once 'config.php';
 
 if (checklogin()) {
     die();

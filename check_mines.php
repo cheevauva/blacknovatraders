@@ -8,13 +8,13 @@ if (preg_match("/check_mines.php/i", $PHP_SELF)) {
 
 //Put the sector information into the array "sectorinfo"
 
-$result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$sector'");
+$result2 = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$sector'");
 
 $sectorinfo = $result2->fields;
 
 //Put the defence information into the array "defenceinfo"
 
-$result3 = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] 
+$result3 = $db->adoExecute("SELECT * FROM sector_defence 
 WHERE sector_id='$sector' and defence_type ='M'");
 
 // Correct the targetship bug to reflect the player info

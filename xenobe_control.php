@@ -124,7 +124,7 @@ if ($swordfish != $adminpass) {
             echo "<FORM ACTION=xenobe_control.php METHOD=POST>";
             if (empty($user)) {
                 echo "<SELECT SIZE=20 NAME=user>";
-                $res = $db->adoExecute("SELECT email,character_name,ship_destroyed,active,sector FROM ships JOIN $dbtables[xenobe] WHERE email=xenobe_id ORDER BY sector");
+                $res = $db->adoExecute("SELECT email,character_name,ship_destroyed,active,sector FROM ships JOIN xenobe WHERE email=xenobe_id ORDER BY sector");
                 while (!$res->EOF) {
                     $row = $res->fields;
                     $charnamelist = sprintf("%-20s", $row['character_name']);
@@ -147,7 +147,7 @@ if ($swordfish != $adminpass) {
                 echo "&nbsp;<INPUT TYPE=SUBMIT VALUE=Edit>";
             } else {
                 if (empty($operation)) {
-                    $res = $db->adoExecute("SELECT * FROM ships JOIN $dbtables[xenobe] WHERE email=xenobe_id AND email='$user'");
+                    $res = $db->adoExecute("SELECT * FROM ships JOIN xenobe WHERE email=xenobe_id AND email='$user'");
                     $row = $res->fields;
                     echo "<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=5>";
                     echo "<TR><TD>Xenobe name</TD><TD><INPUT TYPE=TEXT NAME=character_name VALUE=\"$row[character_name]\"></TD></TR>";
@@ -243,7 +243,7 @@ if ($swordfish != $adminpass) {
                     echo "<HR>";
                     echo "<span style=\"font-family : courier, monospace; font-size: 12pt; color: #00FF00;\">Log Data For This Xenobe</span><BR>";
 
-                    $logres = $db->adoExecute("SELECT * FROM $dbtables[logs] WHERE ship_id=$row[ship_id] ORDER BY time DESC, type DESC");
+                    $logres = $db->adoExecute("SELECT * FROM logs WHERE ship_id=$row[ship_id] ORDER BY time DESC, type DESC");
                     while (!$logres->EOF) {
                             $logrow = $logres->fields;
                             $logtype = "";
@@ -274,7 +274,7 @@ if ($swordfish != $adminpass) {
                         echo $db->ErrorMsg() . "<br>";
                     } else {
                         echo "Changes to Xenobe ship record have been saved.<BR><BR>";
-                        $result2 = $db->adoExecute("UPDATE $dbtables[xenobe] SET active='$_active',orders='$orders',aggression='$aggression' WHERE xenobe_id='$user'");
+                        $result2 = $db->adoExecute("UPDATE xenobe SET active='$_active',orders='$orders',aggression='$aggression' WHERE xenobe_id='$user'");
                         if (!$result2) {
                             echo "Changes to Xenobe activity record have FAILED Due to the following Error:<BR><BR>";
                             echo $db->ErrorMsg() . "<br>";
@@ -311,11 +311,11 @@ if ($swordfish != $adminpass) {
                 echo "deleted.<BR>";
               // Drop xenobe table
                 echo "Dropping xenobe table...<BR>";
-                $db->adoExecute("DROP TABLE IF EXISTS $dbtables[xenobe]");
+                $db->adoExecute("DROP TABLE IF EXISTS xenobe");
                 echo "dropped.<BR>";
               // Create xenobe table
                 echo "Re-Creating table: xenobe...<BR>";
-                $db->adoExecute("CREATE TABLE $dbtables[xenobe](" .
+                $db->adoExecute("CREATE TABLE xenobe(" .
                 "xenobe_id char(40) NOT NULL," .
                 "active enum('Y','N') DEFAULT 'Y' NOT NULL," .
                 "aggression smallint(5) DEFAULT '0' NOT NULL," .
@@ -347,7 +347,7 @@ if ($swordfish != $adminpass) {
                 $res = $db->adoExecute("SELECT email,ship_id FROM ships WHERE email LIKE '%@xenobe'");
                 while (!$res->EOF) {
                     $row = $res->fields;
-                    $db->adoExecute("DELETE FROM $dbtables[logs] WHERE ship_id=$row[ship_id]");
+                    $db->adoExecute("DELETE FROM logs WHERE ship_id=$row[ship_id]");
                     echo "Log for ship_id $row[ship_id] cleared.<BR>";
                     $res->MoveNext();
                 }
@@ -485,7 +485,7 @@ if ($swordfish != $adminpass) {
                         echo "Password has been set.<BR><BR>";
                         echo "Ship Records have been updated.<BR><BR>";
                     }
-                    $result3 = $db->adoExecute("INSERT INTO $dbtables[xenobe] (xenobe_id,active,aggression,orders) VALUES('$emailname','$_active','$aggression','$orders')");
+                    $result3 = $db->adoExecute("INSERT INTO xenobe (xenobe_id,active,aggression,orders) VALUES('$emailname','$_active','$aggression','$orders')");
                     if (!$result3) {
                         echo $db->ErrorMsg() . "<br>";
                     } else {

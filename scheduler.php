@@ -67,7 +67,7 @@ if ($swordfish != $adminpass) {
 } else {
     $starttime = time();
 
-    $sched_res = $db->adoExecute("SELECT * FROM $dbtables[scheduler]");
+    $sched_res = $db->adoExecute("SELECT * FROM scheduler");
     if ($sched_res) {
         while (!$sched_res->EOF) {
             $event = $sched_res->fields;
@@ -81,12 +81,12 @@ if ($swordfish != $adminpass) {
                 }
 
                 if ($event[spawn] - $multiplier == 0) {
-                    $db->adoExecute("DELETE FROM $dbtables[scheduler] WHERE sched_id=$event[sched_id]");
+                    $db->adoExecute("DELETE FROM scheduler WHERE sched_id=$event[sched_id]");
                 } else {
-                    $db->adoExecute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left, spawn=spawn-$multiplier WHERE sched_id=$event[sched_id]");
+                    $db->adoExecute("UPDATE scheduler SET ticks_left=$ticks_left, spawn=spawn-$multiplier WHERE sched_id=$event[sched_id]");
                 }
             } else {
-                $db->adoExecute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left WHERE sched_id=$event[sched_id]");
+                $db->adoExecute("UPDATE scheduler SET ticks_left=$ticks_left WHERE sched_id=$event[sched_id]");
             }
 
             $sched_var_id = $event[sched_id];
@@ -105,5 +105,5 @@ if ($swordfish != $adminpass) {
     echo "<p>The scheduler took $runtime seconds to execute.<p>";
 
     include("footer.php");
-    $db->adoExecute("UPDATE $dbtables[scheduler] SET last_run=" . TIME());
+    $db->adoExecute("UPDATE scheduler SET last_run=" . TIME());
 }

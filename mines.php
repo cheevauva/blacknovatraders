@@ -19,9 +19,9 @@ if (checklogin()) {
 
 $res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
-$res = $db->adoExecute("SELECT * from $dbtables[universe] WHERE sector_id=$playerinfo[sector]");
+$res = $db->adoExecute("SELECT * from universe WHERE sector_id=$playerinfo[sector]");
 $sectorinfo = $res->fields;
-$result3 = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id=$playerinfo[sector] ");
+$result3 = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id=$playerinfo[sector] ");
 //Put the defence information into the array "defenceinfo"
 $i = 0;
 $total_sector_fighters = 0;
@@ -69,7 +69,7 @@ if ($playerinfo[turns] < 1) {
     include("footer.php");
     die();
 }
-$res = $db->adoExecute("SELECT allow_defenses,$dbtables[universe].zone_id,owner FROM $dbtables[zones],$dbtables[universe] WHERE sector_id=$playerinfo[sector] AND $dbtables[zones].zone_id=$dbtables[universe].zone_id");
+$res = $db->adoExecute("SELECT allow_defenses,universe.zone_id,owner FROM zones,universe WHERE sector_id=$playerinfo[sector] AND zones.zone_id=universe.zone_id");
 $zoneinfo = $res->fields;
 if ($zoneinfo[allow_defenses] == 'N') {
     echo "$l_mines_nopermit<BR><BR>";
@@ -154,17 +154,17 @@ if ($zoneinfo[allow_defenses] == 'N') {
         $stamp = date("Y-m-d H-i-s");
         if ($numfighters > 0) {
             if ($fighter_id != 0) {
-                $update = $db->adoExecute("UPDATE $dbtables[sector_defence] set quantity=quantity + $numfighters,fm_setting = '$mode' where defence_id = $fighter_id");
+                $update = $db->adoExecute("UPDATE sector_defence set quantity=quantity + $numfighters,fm_setting = '$mode' where defence_id = $fighter_id");
             } else {
-                $update = $db->adoExecute("INSERT INTO $dbtables[sector_defence] (ship_id,sector_id,defence_type,quantity,fm_setting) values ($playerinfo[ship_id],$playerinfo[sector],'F',$numfighters,'$mode')");
+                $update = $db->adoExecute("INSERT INTO sector_defence (ship_id,sector_id,defence_type,quantity,fm_setting) values ($playerinfo[ship_id],$playerinfo[sector],'F',$numfighters,'$mode')");
                 echo $db->ErrorMsg();
             }
         }
         if ($nummines > 0) {
             if ($mine_id != 0) {
-                $update = $db->adoExecute("UPDATE $dbtables[sector_defence] set quantity=quantity + $nummines,fm_setting = '$mode' where defence_id = $mine_id");
+                $update = $db->adoExecute("UPDATE sector_defence set quantity=quantity + $nummines,fm_setting = '$mode' where defence_id = $mine_id");
             } else {
-                $update = $db->adoExecute("INSERT INTO $dbtables[sector_defence] (ship_id,sector_id,defence_type,quantity,fm_setting) values ($playerinfo[ship_id],$playerinfo[sector],'M',$nummines,'$mode')");
+                $update = $db->adoExecute("INSERT INTO sector_defence (ship_id,sector_id,defence_type,quantity,fm_setting) values ($playerinfo[ship_id],$playerinfo[sector],'M',$nummines,'$mode')");
             }
         }
 

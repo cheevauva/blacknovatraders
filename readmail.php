@@ -18,15 +18,15 @@ $res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $res->fields;
 
 if ($action == "delete") {
-    $db->adoExecute("DELETE FROM $dbtables[messages] WHERE ID='" . $ID . "' AND recp_id='" . $playerinfo[ship_id] . "'");
+    $db->adoExecute("DELETE FROM messages WHERE ID='" . $ID . "' AND recp_id='" . $playerinfo[ship_id] . "'");
 } elseif ($action == "delete_all") {
-    $db->adoExecute("DELETE FROM $dbtables[messages] WHERE recp_id='" . $playerinfo[ship_id] . "'");
+    $db->adoExecute("DELETE FROM messages WHERE recp_id='" . $playerinfo[ship_id] . "'");
 }
 
 $cur_D = date("Y-m-d");
 $cur_T = date("H:i:s");
 
-$res = $db->adoExecute("SELECT * FROM $dbtables[messages] WHERE recp_id='" . $playerinfo[ship_id] . "' ORDER BY sent DESC");
+$res = $db->adoExecute("SELECT * FROM messages WHERE recp_id='" . $playerinfo[ship_id] . "' ORDER BY sent DESC");
 ?>
 <div align="center">
   <table border="0" cellspacing="0" width="70%" bgcolor="silver" cellpadding="0">

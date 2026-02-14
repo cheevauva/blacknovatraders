@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="5"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    autoload="config.php"
+    findUnusedCode="true"
+>
+    <projectFiles>
+        <directory name="./" />
+        <ignoreFiles>
+            
+        </ignoreFiles>
+    </projectFiles>
+    <globals>
+        <var name="container" type="Psr\Container\ContainerInterface" />
+        <var name="playerinfo" type="array|null"/>
+        <var name="disableRegisterGlobalFix" type="bool"/>
+        <var name="l_zi_nexist" type="string"/>
+        <var name="l_ze_allow" type="string"/>
+        <var name="l_ze_notowner" type="string"/>
+        <var name="l_warp_unlinked" type="string"/>
+        <var name="l_warp_forbidtwo" type="string"/>
+    </globals>
+    <issueHandlers>
+        <UnusedVariable errorLevel="suppress" />
+    </issueHandlers>
+</psalm>

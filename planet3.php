@@ -15,7 +15,7 @@ if (checklogin()) {
     $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
     $playerinfo = $result->fields;
 
-    $result2 = $db->adoExecute("SELECT * FROM $dbtables[planets] WHERE planet_id=$planet_id");
+    $result2 = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planet_id");
 if ($result2) {
     $planetinfo = $result2->fields;
 }
@@ -83,7 +83,7 @@ if ($planetinfo[sells] == 'Y') {
         /* Update ship cargo, credits and turns */
         $trade_result = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, credits=credits-$total_cost, ship_ore=ship_ore+$trade_ore, ship_organics=ship_organics+$trade_organics, ship_goods=ship_goods+$trade_goods, ship_energy=ship_energy+$trade_energy where ship_id=$playerinfo[ship_id]");
 
-        $trade_result2 = $db->adoExecute("UPDATE $dbtables[planets] SET ore=ore-$trade_ore, organics=organics-$trade_organics, goods=goods-$trade_goods, energy=energy-$trade_energy, credits=credits+$total_cost WHERE planet_id=$planet_id");
+        $trade_result2 = $db->adoExecute("UPDATE planets SET ore=ore-$trade_ore, organics=organics-$trade_organics, goods=goods-$trade_goods, energy=energy-$trade_energy, credits=credits+$total_cost WHERE planet_id=$planet_id");
         echo "$l_trade_complete<BR><BR>";
     }
 }

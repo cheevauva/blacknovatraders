@@ -18,12 +18,12 @@ function xenobetoship($ship_id)
     global $upgrade_factor;
     global $sector_max;
     global $xenobeisdead;
-    global $db, $dbtables;
+    global $db;
 
   // *********************************
   // *** LOOKUP TARGET DETAILS    ****
   // *********************************
-    $db->adoExecute("LOCK TABLES ships WRITE, $dbtables[universe] WRITE, $dbtables[zones] READ, $dbtables[planets] READ, $dbtables[news] WRITE, $dbtables[logs] WRITE");
+    $db->adoExecute("LOCK TABLES ships WRITE, universe WRITE, zones READ, planets READ, news WRITE, logs WRITE");
     $resultt = $db->adoExecute("SELECT * FROM ships WHERE ship_id='$ship_id'");
     $targetinfo = $resultt->fields;
 
@@ -39,9 +39,9 @@ function xenobetoship($ship_id)
   // *********************************
   // ** VERIFY SECTOR ALLOWS ATTACK **
   // *********************************
-    $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM $dbtables[universe] WHERE sector_id='$targetinfo[sector]'");
+    $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$targetinfo[sector]'");
     $sectrow = $sectres->fields;
-    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM $dbtables[zones] WHERE zone_id=$sectrow[zone_id]");
+    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
     $zonerow = $zoneres->fields;
     if ($zonerow[allow_attack] == "N") {                        //*** DEST LINK MUST ALLOW ATTACKING ***
         playerlog($playerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_RAW, "Attack failed, you are in a sector that prohibits attacks.");
@@ -424,13 +424,13 @@ function xenobetosecdef()
     global $l_chm_hewasdestroyedbyyourmines;
 
     global $xenobeisdead;
-    global $db, $dbtables;
+    global $db;
 
   // *********************************
   // *** CHECK FOR SECTOR DEFENCE ****
   // *********************************
     if ($targetlink > 0) {
-        $resultf = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$targetlink' and defence_type ='F' ORDER BY quantity DESC");
+        $resultf = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='F' ORDER BY quantity DESC");
         $i = 0;
         $total_sector_fighters = 0;
         if ($resultf > 0) {
@@ -441,7 +441,7 @@ function xenobetosecdef()
                 $resultf->MoveNext();
             }
         }
-        $resultm = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$targetlink' and defence_type ='M'");
+        $resultm = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='M'");
         $i = 0;
         $total_sector_mines = 0;
         if ($resultm > 0) {
@@ -621,7 +621,7 @@ function xenobemove()
     global $sector_max;
     global $targetlink;
     global $xenobeisdead;
-    global $db, $dbtables;
+    global $db;
 
   // *********************************
   // ***** OBTAIN A TARGET LINK ******
@@ -629,14 +629,14 @@ function xenobemove()
     if ($targetlink == $playerinfo[sector]) {
         $targetlink = 0;
     }
-    $linkres = $db->adoExecute("SELECT * FROM $dbtables[links] WHERE link_start='$playerinfo[sector]'");
+    $linkres = $db->adoExecute("SELECT * FROM links WHERE link_start='$playerinfo[sector]'");
     if ($linkres > 0) {
         while (!$linkres->EOF) {
             $row = $linkres->fields;
           // *** OBTAIN SECTOR INFORMATION ***
-            $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM $dbtables[universe] WHERE sector_id='$row[link_dest]'");
+            $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$row[link_dest]'");
             $sectrow = $sectres->fields;
-            $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM $dbtables[zones] WHERE zone_id=$sectrow[zone_id]");
+            $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
             $zonerow = $zoneres->fields;
             if ($zonerow[allow_attack] == "Y") {                        //*** DEST LINK MUST ALLOW ATTACKING ***
                 $setlink = rand(0, 2);                        //*** 33% CHANCE OF REPLACING DEST LINK WITH THIS ONE ***
@@ -659,9 +659,9 @@ function xenobemove()
         $limitloop = 1;                        // *** LIMIT THE NUMBER OF LOOPS ***
         while (!$targetlink > 0 && $limitloop < 15) {
           // *** OBTAIN SECTOR INFORMATION ***
-            $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM $dbtables[universe] WHERE sector_id='$wormto'");
+            $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$wormto'");
             $sectrow = $sectres->fields;
-            $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM $dbtables[zones] WHERE zone_id=$sectrow[zone_id]");
+            $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
             $zonerow = $zoneres->fields;
             if ($zonerow[allow_attack] == "Y") {
                 $targetlink = $wormto;
@@ -677,7 +677,7 @@ function xenobemove()
   // *** CHECK FOR SECTOR DEFENCE ****
   // *********************************
     if ($targetlink > 0) {
-        $resultf = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$targetlink' and defence_type ='F' ORDER BY quantity DESC");
+        $resultf = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='F' ORDER BY quantity DESC");
         $i = 0;
         $total_sector_fighters = 0;
         if ($resultf > 0) {
@@ -688,7 +688,7 @@ function xenobemove()
                 $resultf->MoveNext();
             }
         }
-        $resultm = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id='$targetlink' and defence_type ='M'");
+        $resultm = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id='$targetlink' and defence_type ='M'");
         $i = 0;
         $total_sector_mines = 0;
         if ($resultm > 0) {
@@ -740,7 +740,7 @@ function xenoberegen()
     global $playerinfo;
     global $xen_unemployment;
     global $xenobeisdead;
-    global $db, $dbtables;
+    global $db;
   // ************************************
   // *** Xenobe Unempoyment Check  ****
   // ************************************
@@ -833,7 +833,7 @@ function xenobetrade()
     global $organics_delta;
     global $organics_limit;
     global $xenobeisdead;
-    global $db, $dbtables;
+    global $db;
   // We need to get rid of this.. the bug causing it needs to be identified and squashed. In the meantime, we want functional xen's. :)
     $ore_price = 11;
     $organics_price = 5;
@@ -842,13 +842,13 @@ function xenobetrade()
   // *********************************
   // *** OBTAIN SECTOR INFORMATION ***
   // *********************************
-    $sectres = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
+    $sectres = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$playerinfo[sector]'");
     $sectorinfo = $sectres->fields;
 
   // *********************************
   // **** OBTAIN ZONE INFORMATION ****
   // *********************************
-    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack,allow_trade FROM $dbtables[zones] WHERE zone_id='$sectorinfo[zone_id]'");
+    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack,allow_trade FROM zones WHERE zone_id='$sectorinfo[zone_id]'");
     $zonerow = $zoneres->fields;
 
   // Debug info
@@ -963,7 +963,7 @@ function xenobetrade()
         $neworganics = max(0, $playerinfo[ship_organics] - $amount_organics);
         $newgoods = max(0, $playerinfo[ship_goods] - $amount_goods);
         $trade_result = $db->adoExecute("UPDATE ships SET rating=rating+1, credits=$newcredits, ship_ore=$newore, ship_organics=$neworganics, ship_goods=$newgoods where ship_id=$playerinfo[ship_id]");
-        $trade_result2 = $db->adoExecute("UPDATE $dbtables[universe] SET port_ore=port_ore-$amount_ore, port_organics=port_organics+$amount_organics, port_goods=port_goods+$amount_goods where sector_id=$sectorinfo[sector_id]");
+        $trade_result2 = $db->adoExecute("UPDATE universe SET port_ore=port_ore-$amount_ore, port_organics=port_organics+$amount_organics, port_goods=port_goods+$amount_goods where sector_id=$sectorinfo[sector_id]");
         playerlog($playerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_organics Organics Sold $amount_goods Goods Bought $amount_ore Ore Cost $total_cost");
     }
     if ($sectorinfo[port_type] == "organics") {
@@ -996,7 +996,7 @@ function xenobetrade()
         $neworganics = $playerinfo[ship_organics] + $amount_organics;
         $newgoods = max(0, $playerinfo[ship_goods] - $amount_goods);
         $trade_result = $db->adoExecute("UPDATE ships SET rating=rating+1, credits=$newcredits, ship_ore=$newore, ship_organics=$neworganics, ship_goods=$newgoods where ship_id=$playerinfo[ship_id]");
-        $trade_result2 = $db->adoExecute("UPDATE $dbtables[universe] SET port_ore=port_ore+$amount_ore, port_organics=port_organics-$amount_organics, port_goods=port_goods+$amount_goods where sector_id=$sectorinfo[sector_id]");
+        $trade_result2 = $db->adoExecute("UPDATE universe SET port_ore=port_ore+$amount_ore, port_organics=port_organics-$amount_organics, port_goods=port_goods+$amount_goods where sector_id=$sectorinfo[sector_id]");
         playerlog($playerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_goods Goods Sold $amount_ore Ore Bought $amount_organics Organics Cost $total_cost");
     }
     if ($sectorinfo[port_type] == "goods") {
@@ -1029,7 +1029,7 @@ function xenobetrade()
         $neworganics = max(0, $playerinfo[ship_organics] - $amount_organics);
         $newgoods = $playerinfo[ship_goods] + $amount_goods;
         $trade_result = $db->adoExecute("UPDATE ships SET rating=rating+1, credits=$newcredits, ship_ore=$newore, ship_organics=$neworganics, ship_goods=$newgoods where ship_id=$playerinfo[ship_id]");
-        $trade_result2 = $db->adoExecute("UPDATE $dbtables[universe] SET port_ore=port_ore+$amount_ore, port_organics=port_organics+$amount_organics, port_goods=port_goods-$amount_goods where sector_id=$sectorinfo[sector_id]");
+        $trade_result2 = $db->adoExecute("UPDATE universe SET port_ore=port_ore+$amount_ore, port_organics=port_organics+$amount_organics, port_goods=port_goods-$amount_goods where sector_id=$sectorinfo[sector_id]");
         playerlog($playerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_RAW, "Xenobe Trade Results: Sold $amount_ore Ore Sold $amount_organics Organics Bought $amount_goods Goods Cost $total_cost");
     }
 }
@@ -1042,7 +1042,7 @@ function xenobehunter()
     global $playerinfo;
     global $targetlink;
     global $xenobeisdead;
-    global $db, $dbtables;
+    global $db;
 
     $rescount = $db->adoExecute("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe' and ship_id > 1");
     $rowcount = $rescount->fields;
@@ -1075,9 +1075,9 @@ function xenobehunter()
   // *********************************
   // *** WORM HOLE TO TARGET SECTOR **
   // *********************************
-    $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM $dbtables[universe] WHERE sector_id='$targetinfo[sector]'");
+    $sectres = $db->adoExecute("SELECT sector_id,zone_id FROM universe WHERE sector_id='$targetinfo[sector]'");
     $sectrow = $sectres->fields;
-    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM $dbtables[zones] WHERE zone_id=$sectrow[zone_id]");
+    $zoneres = $db->adoExecute("SELECT zone_id,allow_attack FROM zones WHERE zone_id=$sectrow[zone_id]");
     $zonerow = $zoneres->fields;
   // *** ONLY WORM HOLM TO TARGET IF WE CAN ATTACK IN TARGET SECTOR ***
     if ($zonerow[allow_attack] == "Y") {
@@ -1093,7 +1093,7 @@ function xenobehunter()
     // *********************************
     // *** CHECK FOR SECTOR DEFENCE ****
     // *********************************
-        $resultf = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id=$targetinfo[sector] and defence_type ='F' ORDER BY quantity DESC");
+        $resultf = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id=$targetinfo[sector] and defence_type ='F' ORDER BY quantity DESC");
         $i = 0;
         $total_sector_fighters = 0;
         if ($resultf > 0) {
@@ -1104,7 +1104,7 @@ function xenobehunter()
                 $resultf->MoveNext();
             }
         }
-        $resultm = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] WHERE sector_id=$targetinfo[sector] and defence_type ='M'");
+        $resultm = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id=$targetinfo[sector] and defence_type ='M'");
         $i = 0;
         $total_sector_mines = 0;
         if ($resultm > 0) {
@@ -1162,15 +1162,15 @@ function xenobetoplanet($planet_id)
     global $upgrade_factor;
     global $sector_max;
     global $xenobeisdead;
-    global $db, $dbtables;
+    global $db;
 
   // *** LOCKING TABLES ****
-    $db->adoExecute("LOCK TABLES ships WRITE, $dbtables[universe] WRITE, $dbtables[planets] WRITE, $dbtables[news] WRITE, $dbtables[logs] WRITE");
+    $db->adoExecute("LOCK TABLES ships WRITE, universe WRITE, planets WRITE, news WRITE, logs WRITE");
 
   // ********************************
   // *** LOOKUP PLANET DETAILS   ****
   // ********************************
-    $resultp = $db->adoExecute("SELECT * FROM $dbtables[planets] WHERE planet_id='$planet_id'");
+    $resultp = $db->adoExecute("SELECT * FROM planets WHERE planet_id='$planet_id'");
     $planetinfo = $resultp->fields;
 
   // ********************************
@@ -1395,7 +1395,7 @@ function xenobetoplanet($planet_id)
         playerlog($planetinfo[owner], \BNT\Log\LogTypeConstants::LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|Xenobe $playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
 
       // *** UPDATE PLANET ***
-        $db->adoExecute("UPDATE $dbtables[planets] SET energy=$planetinfo[energy],fighters=fighters-$fighters_lost, torps=torps-$targettorps, ore=ore+$free_ore, goods=goods+$free_goods, organics=organics+$free_organics, credits=credits+$ship_salvage WHERE planet_id=$planetinfo[planet_id]");
+        $db->adoExecute("UPDATE planets SET energy=$planetinfo[energy],fighters=fighters-$fighters_lost, torps=torps-$targettorps, ore=ore+$free_ore, goods=goods+$free_goods, organics=organics+$free_organics, credits=credits+$ship_salvage WHERE planet_id=$planetinfo[planet_id]");
     }
   // **********************************************
   // *** MUST HAVE MADE IT PAST PLANET DEFENSES ***
@@ -1414,7 +1414,7 @@ function xenobetoplanet($planet_id)
 
 
       // *** UPDATE PLANET ***
-        $db->adoExecute("UPDATE $dbtables[planets] SET energy=$planetinfo[energy], fighters=$targetfighters, torps=torps-$targettorps WHERE planet_id=$planetinfo[planet_id]");
+        $db->adoExecute("UPDATE planets SET energy=$planetinfo[energy], fighters=$targetfighters, torps=torps-$targettorps WHERE planet_id=$planetinfo[planet_id]");
         $planetinfo[fighters] = $targetfighters;
         $planetinfo[torps] = $targettorps;
 
@@ -1437,7 +1437,7 @@ function xenobetoplanet($planet_id)
             playerlog($planetinfo[owner], \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
 
           // *** UPDATE PLANET ***
-            $db->adoExecute("UPDATE $dbtables[planets] SET fighters=0, torps=0, base='N', owner=0, corp=0 WHERE planet_id=$planetinfo[planet_id]");
+            $db->adoExecute("UPDATE planets SET fighters=0, torps=0, base='N', owner=0, corp=0 WHERE planet_id=$planetinfo[planet_id]");
             calc_ownership($planetinfo[sector_id]);
         } else {
           // *** MUST HAVE DIED TRYING ***

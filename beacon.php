@@ -4,7 +4,6 @@ use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Sector\DAO\SectorUpdateDAO;
-use BNT\Zone\DAO\ZoneByIdDAO;
 
 $disableRegisterGlobalFix = true;
 

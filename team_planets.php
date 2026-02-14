@@ -31,7 +31,7 @@ if ($playerinfo[team] == 0) {
 }
 
 
-$query = "SELECT * FROM $dbtables[planets] WHERE corp=$playerinfo[team]";
+$query = "SELECT * FROM planets WHERE corp=$playerinfo[team]";
 if (!empty($sort)) {
     $query .= " ORDER BY";
     if ($sort == "name") {

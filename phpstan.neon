@@ -6,4 +6,4 @@ parameters:
         - config.php
         - languages/english.php
     paths:
-        - ./BNT
+        - ./

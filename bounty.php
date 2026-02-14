@@ -27,7 +27,7 @@ $playerinfo = $res->fields;
 switch ($response) {
     case "display":
         bigtitle();
-        $res5 = $db->adoExecute("SELECT * FROM ships,$dbtables[bounty] WHERE bounty_on = ship_id AND bounty_on = $bounty_on");
+        $res5 = $db->adoExecute("SELECT * FROM ships,bounty WHERE bounty_on = ship_id AND bounty_on = $bounty_on");
         $j = 0;
         if ($res5) {
             while (!$res5->EOF) {
@@ -85,7 +85,7 @@ switch ($response) {
             die();
         }
 
-        $res = $db->adoExecute("SELECT * from $dbtables[bounty] WHERE bounty_id = $bid");
+        $res = $db->adoExecute("SELECT * from bounty WHERE bounty_id = $bid");
         if (!res) {
             echo "$l_by_nobounty<BR><BR>";
             
@@ -99,7 +99,7 @@ switch ($response) {
             include("footer.php");
             die();
         }
-        $del = $db->adoExecute("DELETE FROM $dbtables[bounty] WHERE bounty_id = $bid");
+        $del = $db->adoExecute("DELETE FROM bounty WHERE bounty_id = $bid");
         $stamp = date("Y-m-d H-i-s");
         $refund = $bty['amount'];
         $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, credits=credits+$refund where ship_id=$playerinfo[ship_id]");
@@ -166,7 +166,7 @@ switch ($response) {
                 die();
             }
         }
-        $insert = $db->adoExecute("INSERT INTO $dbtables[bounty] (bounty_on,placed_by,amount) values ($bounty_on, $playerinfo[ship_id] ,$amount)");
+        $insert = $db->adoExecute("INSERT INTO bounty (bounty_on,placed_by,amount) values ($bounty_on, $playerinfo[ship_id] ,$amount)");
         $stamp = date("Y-m-d H-i-s");
         $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, credits=credits-$amount where ship_id=$playerinfo[ship_id]");
         echo "$l_by_placed<BR>";
@@ -198,7 +198,7 @@ switch ($response) {
         echo "</FORM>";
 
 
-        $result3 = $db->adoExecute("SELECT bounty_on, SUM(amount) as total_bounty FROM $dbtables[bounty] GROUP BY bounty_on");
+        $result3 = $db->adoExecute("SELECT bounty_on, SUM(amount) as total_bounty FROM bounty GROUP BY bounty_on");
 
         $i = 0;
         if ($result3) {

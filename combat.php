@@ -9,7 +9,7 @@ function calcplanetbeams()
     global $sectorinfo;
     global $basedefense;
     global $planetinfo;
-    global $db, $dbtables;
+    global $db;
 
     $energy_available = $planetinfo['energy'];
     $base_factor = ($planetinfo['base'] == 'Y') ? $basedefense : 0;
@@ -44,7 +44,7 @@ function calcplanettorps()
     global $level_factor;
     global $basedefense;
     global $planetinfo;
-    global $db, $dbtables;
+    global $db;
 
     $base_factor = ($planetinfo['base'] == 'Y') ? $basedefense : 0;
 
@@ -75,7 +75,7 @@ function calcplanetshields()
     global $sectorinfo;
     global $basedefense;
     global $planetinfo;
-    global $db, $dbtables;
+    global $db;
 
 
     $base_factor = ($planetinfo[base] == 'Y') ? $basedefense : 0;
@@ -107,7 +107,7 @@ function planetbombing()
     global $planettorps;
     global $torp_dmg_rate;
     global $l_cmb_atleastoneturn;
-    global $db, $dbtables;
+    global $db;
     global $l_bombsaway;
     global $l_bigfigs;
     global $l_bigbeams;
@@ -122,7 +122,7 @@ function planetbombing()
         die();
     }
 
-    $res = $db->adoExecute("LOCK TABLES ships WRITE, $dbtables[planets] WRITE");
+    $res = $db->adoExecute("LOCK TABLES ships WRITE, planets WRITE");
 
     echo "$l_bombsaway<br><br>\n";
 
@@ -198,7 +198,7 @@ function planetbombing()
     playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_BOMBED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$beamsused|$planettorps|$planetfighterslost");
 
     $res = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, ship_fighters=ship_fighters-$attackerfighters WHERE ship_id=$playerinfo[ship_id]");
-    $res = $db->adoExecute("UPDATE $dbtables[planets] SET energy=energy-$beamsused,fighters=fighters-$planetfighterslost, torps=torps-$planettorps WHERE planet_id=$planetinfo[planet_id]");
+    $res = $db->adoExecute("UPDATE planets SET energy=energy-$beamsused,fighters=fighters-$planetfighterslost, torps=torps-$planettorps WHERE planet_id=$planetinfo[planet_id]");
     $res = $db->adoExecute("UNLOCK TABLES");
 }
 
@@ -247,7 +247,7 @@ function planetcombat()
     global $l_cmb_finalcombatstats, $l_cmb_youlostfighters, $l_cmb_youlostarmorpoints, $l_cmb_energyused, $l_cmb_planetdefeated;
     global $l_cmb_citizenswanttodie, $l_cmb_youmaycapture, $l_cmb_youmaycapture2, $l_cmb_planetnotdefeated, $l_cmb_planetstatistics;
     global $l_cmb_fighterloststat, $l_cmb_energyleft;
-    global $db, $dbtables;
+    global $db;
     //$debug = true;
 
 
@@ -627,7 +627,7 @@ function planetcombat()
             //            echo "playerscore $playerscore, planetscore $planetscore";
             if ($playerscore < $planetscore) {
                 echo "<CENTER>$l_cmb_citizenswanttodie</CENTER><BR><BR>";
-                $db->adoExecute("DELETE FROM $dbtables[planets] WHERE planet_id=$planetinfo[planet_id]");
+                $db->adoExecute("DELETE FROM planets WHERE planet_id=$planetinfo[planet_id]");
                 playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED_D, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETDEL, "$playerinfo[character_name]|$ownerinfo[character_name]|$playerinfo[sector]");
                 gen_score($ownerinfo[ship_id]);
@@ -636,14 +636,14 @@ function planetcombat()
                 echo "<CENTER><font color=red>$l_cmb_youmaycapture</font></CENTER><BR><BR>";
                 playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
                 gen_score($ownerinfo[ship_id]);
-                $update7a = $db->adoExecute("UPDATE $dbtables[planets] SET owner=0, fighters=0, torps=torps-$planettorps, base='N', defeated='Y' WHERE planet_id=$planetinfo[planet_id]");
+                $update7a = $db->adoExecute("UPDATE planets SET owner=0, fighters=0, torps=torps-$planettorps, base='N', defeated='Y' WHERE planet_id=$planetinfo[planet_id]");
             }
         } else {
             $l_cmb_youmaycapture2 = str_replace("[cmb_planetinfo_planet_id]", $planetinfo[planet_id], $l_cmb_youmaycapture2);
             echo "<CENTER>$l_cmb_youmaycapture2</CENTER><BR><BR>";
             playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]");
             gen_score($ownerinfo[ship_id]);
-            $update7a = $db->adoExecute("UPDATE $dbtables[planets] SET owner=0,fighters=0, torps=torps-$planettorps, base='N', defeated='Y' WHERE planet_id=$planetinfo[planet_id]");
+            $update7a = $db->adoExecute("UPDATE planets SET owner=0,fighters=0, torps=torps-$planettorps, base='N', defeated='Y' WHERE planet_id=$planetinfo[planet_id]");
         }
         calc_ownership($planetinfo[sector_id]);
     } else {
@@ -664,7 +664,7 @@ function planetcombat()
         }
         playerlog($ownerinfo[ship_id], \BNT\Log\LogTypeConstants::LOG_PLANET_NOT_DEFEATED, "$planetinfo[name]|$playerinfo[sector]|$playerinfo[character_name]|$free_ore|$free_organics|$free_goods|$ship_salvage_rate|$ship_salvage");
         gen_score($ownerinfo[ship_id]);
-        $update7b = $db->adoExecute("UPDATE $dbtables[planets] SET energy=$energy,fighters=fighters-$fighters_lost, torps=torps-$planettorps, ore=ore+$free_ore, goods=goods+$free_goods, organics=organics+$free_organics, credits=credits+$ship_salvage WHERE planet_id=$planetinfo[planet_id]");
+        $update7b = $db->adoExecute("UPDATE planets SET energy=$energy,fighters=fighters-$fighters_lost, torps=torps-$planettorps, ore=ore+$free_ore, goods=goods+$free_goods, organics=organics+$free_organics, credits=credits+$ship_salvage WHERE planet_id=$planetinfo[planet_id]");
         if ($debug) {
             echo "<BR>Set: energy=$energy, fighters lost=$fighters_lost, torps=$planetinfo[torps], sectorid=$sectorinfo[sector_id]<BR>";
         }
@@ -697,9 +697,9 @@ function shiptoship($ship_id)
     global $l_cmb_younofightersattackleft, $l_cmb_youbreachedarmorwithfighters, $l_cmb_youhitarmordmgfighters, $l_cmb_youhavenofighterstoarmor;
     global $l_cmb_hasbreachedarmorfighters, $l_cmb_yourarmorishitfordmgby, $l_cmb_nofightersleftheforyourarmor, $l_cmb_hehasbeendestroyed;
     global $l_cmb_escapepodlaunched, $l_cmb_yousalvaged, $l_cmb_youdidntdestroyhim, $l_cmb_shiptoshipcombatstats;
-    global $db, $dbtables;
+    global $db;
 
-    $db->adoExecute("LOCK TABLES ships WRITE, $dbtables[universe] WRITE, $dbtables[zones] READ");
+    $db->adoExecute("LOCK TABLES ships WRITE, universe WRITE, zones READ");
 
     $result2 = $db->adoExecute("SELECT * FROM ships WHERE ship_id='$ship_id'");
     $targetinfo = $result2->fields;

@@ -1,6 +1,5 @@
 <?php
 
-use BNT\Request;
 use BNT\EntryPoint\Servant\EntryPointZoneinfoServant;
 
 $disableRegisterGlobalFix = true;
@@ -23,4 +22,4 @@ $zoneinfo = $entryPointZoneInfo->zoneinfo;
 $isAllowChangeZone = $entryPointZoneInfo->isAllowChangeZone;
 $ownername = $entryPointZoneInfo->ownername;
 
-include 'tpls/zoneinfo.tpl.php';
+require_once 'tpls/zoneinfo.tpl.php';

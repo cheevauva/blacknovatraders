@@ -19,7 +19,7 @@ bigtitle();
 
 if (empty($content)) {
     $res = $db->adoExecute("SELECT character_name FROM ships WHERE email NOT LIKE '%@Xenobe' ORDER BY character_name ASC");
-    $res2 = $db->adoExecute("SELECT team_name FROM $dbtables[teams] ORDER BY team_name ASC");
+    $res2 = $db->adoExecute("SELECT team_name FROM teams ORDER BY team_name ASC");
     echo "<FORM ACTION=mailto2.php METHOD=POST>";
     echo "<TABLE>";
     echo "<TR><TD>$l_sendm_to:</TD><TD><SELECT NAME=to>";
@@ -57,21 +57,21 @@ if (empty($content)) {
         $target_info = $res->fields;
         $content = htmlspecialchars($content);
         $subject = htmlspecialchars($subject);
-        $db->adoExecute("INSERT INTO $dbtables[messages] (sender_id, recp_id, sent, subject, message) VALUES ('" . $playerinfo[ship_id] . "', '" . $target_info[ship_id] . "', '" . $timestamp . "', '" . $subject . "', '" . $content . "')");
+        $db->adoExecute("INSERT INTO messages (sender_id, recp_id, sent, subject, message) VALUES ('" . $playerinfo[ship_id] . "', '" . $target_info[ship_id] . "', '" . $timestamp . "', '" . $subject . "', '" . $content . "')");
     } else {
         $timestamp = date("Y\-m\-d H\:i\:s");
 
          $to = str_replace($l_sendm_ally, "", $to);
          $to = trim($to);
          $to = addslashes($to);
-         $res = $db->adoExecute("SELECT id FROM $dbtables[teams] WHERE team_name='$to'");
+         $res = $db->adoExecute("SELECT id FROM teams WHERE team_name='$to'");
          $row = $res->fields;
 
          $res2 = $db->adoExecute("SELECT * FROM ships where team='$row[id]'");
 
         while (!$res2->EOF) {
             $row2 = $res2->fields;
-            $db->adoExecute("INSERT INTO $dbtables[messages] (sender_id, recp_id, sent, subject, message) VALUES ('" . $playerinfo[ship_id] . "', '" . $row2[ship_id] . "', '" . $timestamp . "', '" . $subject . "', '" . $content . "')");
+            $db->adoExecute("INSERT INTO messages (sender_id, recp_id, sent, subject, message) VALUES ('" . $playerinfo[ship_id] . "', '" . $row2[ship_id] . "', '" . $timestamp . "', '" . $subject . "', '" . $content . "')");
             $res2->MoveNext();
         }
     }

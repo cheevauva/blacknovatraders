@@ -21,7 +21,7 @@ if (preg_match("/sched_furangee.php/i", $PHP_SELF)) {
   // **** MAKE FURANGEE SELECTION ****
   // *********************************
   $furcount = $furcount0 = $furcount0a = $furcount1 = $furcount1a = $furcount2 = $furcount2a = $furcount3 = $furcount3a = $furcount3h = 0;
-  $res = $db->adoExecute("SELECT * FROM $dbtables[players] JOIN $dbtables[furangee] LEFT JOIN ships ON $dbtables[players].currentship=ships.ship_id WHERE email=furangee_id and active='Y' AND destroyed='N' ORDER BY sector_id");
+  $res = $db->adoExecute("SELECT * FROM players JOIN furangee LEFT JOIN ships ON players.currentship=ships.ship_id WHERE email=furangee_id and active='Y' AND destroyed='N' ORDER BY sector_id");
   echo $db->ErrorMsg() . "<BR>";
 while (!$res->EOF) {
     $furangeeisdead = 0;
@@ -43,7 +43,7 @@ while (!$res->EOF) {
             $targetlink = $playerinfo[sector_id];
           // ****** FIND A TARGET ******
           // ****** IN MY SECTOR, NOT MYSELF, NOT ON A PLANET ******
-            $reso0 = $db->adoExecute("SELECT * FROM ships LEFT JOIN $dbtables[players] USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' AND planet_id=0 AND $dbtables[players].player_id > 1");
+            $reso0 = $db->adoExecute("SELECT * FROM ships LEFT JOIN players USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' AND planet_id=0 AND players.player_id > 1");
             if (!$reso0->EOF) {
                 $rowo0 = $reso0->fields;
                 if ($playerinfo[aggression] == 0) {            // ****** O = 0 & AGRESSION = 0 PEACEFUL ******
@@ -84,7 +84,7 @@ while (!$res->EOF) {
             }
           // ****** FIND A TARGET ******
           // ****** IN MY SECTOR, NOT MYSELF ******
-            $reso1 = $db->adoExecute("SELECT * FROM ships LEFT JOIN $dbtables[players] USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' and $dbtables[players].player_id > 1");
+            $reso1 = $db->adoExecute("SELECT * FROM ships LEFT JOIN players USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' and players.player_id > 1");
             if (!$reso1->EOF) {
                 $rowo1 = $reso1->fields;
                 if ($playerinfo[aggression] == 0) {            // ****** O = 1 & AGRESSION = 0 PEACEFUL ******
@@ -131,7 +131,7 @@ while (!$res->EOF) {
             furangeetrade();
           // ****** FIND A TARGET ******
           // ****** IN MY SECTOR, NOT MYSELF ******
-            $reso2 = $db->adoExecute("SELECT * FROM ships LEFT JOIN $dbtables[players] USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' and $dbtables[players].player_id > 1");
+            $reso2 = $db->adoExecute("SELECT * FROM ships LEFT JOIN players USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' and players.player_id > 1");
             if (!$reso2->EOF) {
                 $rowo2 = $reso2->fields;
                 if ($playerinfo[aggression] == 0) {            // ****** O = 2 & AGRESSION = 0 PEACEFUL ******
@@ -188,7 +188,7 @@ while (!$res->EOF) {
                 }
               // ****** FIND A TARGET ******
               // ****** IN MY SECTOR, NOT MYSELF ******
-                $reso3 = $db->adoExecute("SELECT * FROM ships LEFT JOIN $dbtables[players] USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' and $dbtables[players].player_id > 1");
+                $reso3 = $db->adoExecute("SELECT * FROM ships LEFT JOIN players USING(player_id) WHERE sector_id=$targetlink and email!='$playerinfo[email]' and players.player_id > 1");
                 if (!$reso3->EOF) {
                     $rowo3 = $reso3->fields;
                     if ($playerinfo[aggression] == 0) {            // ****** O = 3 & AGRESSION = 0 PEACEFUL ******

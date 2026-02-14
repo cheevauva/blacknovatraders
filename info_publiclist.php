@@ -10,7 +10,7 @@ $info["GAMENAME"] = $game_name;
 $info["GAMEID"] = md5($game_name . $bnt_ls_key);
 
 
-    $xsql = "SELECT UNIX_TIMESTAMP(time) as x FROM $dbtables[movement_log] WHERE event_id = 1";
+    $xsql = "SELECT UNIX_TIMESTAMP(time) as x FROM movement_log WHERE event_id = 1";
     $res = $db->adoExecute($xsql);
     $row = $res->fields;
 $info["START-DATE"] = $row[x];

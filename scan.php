@@ -54,7 +54,7 @@ if ($targetinfo[sector] != $playerinfo[sector]) {
 
           // Get total bounty on this player, if any
             $btyamount = 0;
-            $hasbounty = $db->adoExecute("SELECT SUM(amount) AS btytotal FROM $dbtables[bounty] WHERE bounty_on = $targetinfo[ship_id]");
+            $hasbounty = $db->adoExecute("SELECT SUM(amount) AS btytotal FROM bounty WHERE bounty_on = $targetinfo[ship_id]");
 
             if ($hasbounty) {
                 $resx = $hasbounty->fields;
@@ -64,7 +64,7 @@ if ($targetinfo[sector] != $playerinfo[sector]) {
                     echo $l_scan_bounty . "<BR>";
                     $btyamount = 0;
                    // Check for Federation bounty
-                    $hasfedbounty = $db->adoExecute("SELECT SUM(amount) AS btytotal FROM $dbtables[bounty] WHERE bounty_on = $targetinfo[ship_id] AND placed_by = 0");
+                    $hasfedbounty = $db->adoExecute("SELECT SUM(amount) AS btytotal FROM bounty WHERE bounty_on = $targetinfo[ship_id] AND placed_by = 0");
                     if ($hasfedbounty) {
                         $resy = $hasfedbounty->fields;
                         if ($resy[btytotal] > 0) {

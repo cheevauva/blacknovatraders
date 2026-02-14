@@ -14,16 +14,16 @@ if (checklogin()) {
     die();
 }
 //adding db lock to prevent more than 5 planets in a sector - rjordan
-$db->adoExecute("LOCK TABLES ships WRITE, $dbtables[planets] WRITE, $dbtables[universe] READ, $dbtables[zones] READ");
+$db->adoExecute("LOCK TABLES ships WRITE, planets WRITE, universe READ, zones READ");
 
 //-------------------------------------------------------------------------------------------------
 $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
 $playerinfo = $result->fields;
 
-$result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$playerinfo[sector]'");
+$result2 = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$playerinfo[sector]'");
 $sectorinfo = $result2->fields;
 
-$result3 = $db->adoExecute("SELECT planet_id FROM $dbtables[planets] WHERE sector_id='$playerinfo[sector]'");
+$result3 = $db->adoExecute("SELECT planet_id FROM planets WHERE sector_id='$playerinfo[sector]'");
 $num_planets = $result3->RecordCount();
 
 // Generate Planetname
@@ -60,7 +60,7 @@ elseif($sectorinfo[planet] == "Y")
       if($playerinfo[dev_genesis] > 0)
       {
         $deltarating=$sectorinfo[planet_colonists];
-        $update = $db->Execute("UPDATE $dbtables[universe] SET planet_name=NULL, planet_organics=0, planet_energy=0, planet_ore=0, planet_goods=0, planet_colonists=0, planet_credits=0, planet_fighters=0, planet_owner=null, planet_corp=null, base='N',base_sells='N', base_torp=0, planet_defeated='N', planet='N' WHERE sector_id=$playerinfo[sector]");
+        $update = $db->Execute("UPDATE universe SET planet_name=NULL, planet_organics=0, planet_energy=0, planet_ore=0, planet_goods=0, planet_colonists=0, planet_credits=0, planet_fighters=0, planet_owner=null, planet_corp=null, base='N',base_sells='N', base_torp=0, planet_defeated='N', planet='N' WHERE sector_id=$playerinfo[sector]");
         $update2=$db->Execute("UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1, rating=rating-$deltarating WHERE ship_id=$playerinfo[ship_id]");
         echo "<BR>Errr, there was one with $deltarating colonists here....<BR>";
       }
@@ -94,7 +94,7 @@ elseif($sectorinfo[planet] == "Y")
 elseif ($playerinfo[dev_genesis] < 1) {
     echo "$l_gns_nogenesis";
 } else {
-    $res = $db->adoExecute("SELECT allow_planet, corp_zone, owner FROM $dbtables[zones] WHERE zone_id='$sectorinfo[zone_id]'");
+    $res = $db->adoExecute("SELECT allow_planet, corp_zone, owner FROM zones WHERE zone_id='$sectorinfo[zone_id]'");
     $zoneinfo = $res->fields;
     if ($zoneinfo[allow_planet] == 'N') {
         echo "$l_gns_forbid";
@@ -108,7 +108,7 @@ elseif ($playerinfo[dev_genesis] < 1) {
                 if ($ownerinfo[team] != $playerinfo[team]) {
                     echo $l_gns_bforbid;
                 } else {
-                    $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
+                    $query1 = "INSERT INTO planets VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
                     $update1 = $db->adoExecute($query1);
                     $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
                     $update2 = $db->adoExecute($query2);
@@ -118,14 +118,14 @@ elseif ($playerinfo[dev_genesis] < 1) {
         } elseif ($playerinfo[team] != $zoneinfo[owner]) {
             echo $l_gns_bforbid;
         } else {
-            $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
+            $query1 = "INSERT INTO planets VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
             $update1 = $db->adoExecute($query1);
             $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
             $update2 = $db->adoExecute($query2);
             echo $l_gns_pcreate;
         }
     } else {
-        $query1 = "INSERT INTO $dbtables[planets] VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
+        $query1 = "INSERT INTO planets VALUES(NULL, $playerinfo[sector], '$planetname', 0, 0, 0, 0, 0, 0, 0, 0, $playerinfo[ship_id], 0, 'N', 'N', $default_prod_organics, $default_prod_ore, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp, 'N')";
         $update1 = $db->adoExecute($query1);
         $query2 = "UPDATE ships SET turns_used=turns_used+1, turns=turns-1, dev_genesis=dev_genesis-1 WHERE ship_id=$playerinfo[ship_id]";
         $update2 = $db->adoExecute($query2);

@@ -10,7 +10,7 @@ if (preg_match("/sched_igb.php/i", $PHP_SELF)) {
 
   echo "<B>IBANK</B><p>";
 
-  $ibank_result = $db->Execute("UPDATE $dbtables[ibank_accounts] SET balance=balance * $exponinter, loan=loan * $expoloan");
+  $ibank_result = $db->Execute("UPDATE ibank_accounts SET balance=balance * $exponinter, loan=loan * $expoloan");
   echo "All IGB accounts updated ($multiplier times).<p>";
 
   $multiplier = 0;

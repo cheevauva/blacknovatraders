@@ -16,7 +16,7 @@ function QUERYOK($res)
 
 function get_player_name($userid)
 {
-    global $db, $dbtables;
+    global $db;
 
     $query = $db->adoExecute("select character_name from ships where ship_id='$userid'");
     $name = $query->fields;
