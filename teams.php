@@ -114,7 +114,7 @@ function DISPLAY_ALL_ALLIANCES()
         echo "<TR BGCOLOR=\"$color\">";
         echo "<TD><a href=teams.php?teamwhat=1&whichteam=" . $row['id'] . ">" . $row['team_name'] . "</A></TD>";
         echo "<TD>" . $row['number_of_members'] . "</TD>";
-        
+
         $row2 = db()->fetch("SELECT character_name FROM ships WHERE ship_id = :creator", [
             'creator' => $row['creator']
         ]);
@@ -210,7 +210,15 @@ switch ($teamwhat) {
         break;
     case 2: // LEAVE
         if (!$confirmleave) {
-            echo "$l_team_confirmleave <B>" . $team['team_name'] . "</B> ? <a href=\"teams.php?teamwhat=$teamwhat&confirmleave=1&whichteam=$whichteam\">$l_yes</a> - <A HREF=\"teams.php\">$l_no</A><BR><BR>";
+            echo sprintf(...[
+                "%s <B>%s</B> ? <a href=\"teams.php?teamwhat=%s&confirmleave=1&whichteam=%s\">%s</a> - <A HREF=\"teams.php\">%s</A><BR><BR>",
+                $l_team_confirmleave,
+                $team['team_name'],
+                $teamwhat,
+                $whichteam,
+                $l_yes,
+                $l_no
+            ]);
         } elseif ($confirmleave == 1) {
             if ($team['number_of_members'] == 1) {
                 db()->q("DELETE FROM teams WHERE id= :whichteam", [
@@ -247,7 +255,12 @@ switch ($teamwhat) {
                 playerlog($playerinfo['ship_id'], LogTypeConstants::LOG_TEAM_LEAVE, $team['team_name']);
             } else {
                 if ($team['creator'] == $playerinfo['ship_id']) {
-                    echo "$l_team_youarecoord <B>" . $team['team_name'] . "</B>. $l_team_relinq<BR><BR>";
+                    echo sprintf(...[
+                        "%s <B>%s</B>. %s<BR><BR>",
+                        $l_team_youarecoord,
+                        $team['team_name'],
+                        $l_team_relinq
+                    ]);
                     echo "<FORM ACTION='teams.php' METHOD=POST>";
                     echo "<TABLE><INPUT TYPE=hidden name=teamwhat value=$teamwhat><INPUT TYPE=hidden name=confirmleave value=2><INPUT TYPE=hidden name=whichteam value=$whichteam>";
                     echo "<TR><TD>$l_team_newc</TD><TD><SELECT NAME=newcreator>";
@@ -288,7 +301,11 @@ switch ($teamwhat) {
                         }
                     }
 
-                    echo "$l_team_youveleft <B>" . $team['team_name'] . "</B>.<BR><BR>";
+                    echo sprintf(...[
+                        "%s <B>%s</B>.<BR><BR>",
+                        $l_team_youveleft,
+                        $team['team_name']
+                    ]);
                     defence_vs_defence($playerinfo['ship_id']);
                     kick_off_planet($playerinfo['ship_id'], $whichteam);
                     playerlog($playerinfo['ship_id'], LogTypeConstants::LOG_TEAM_LEAVE, $team['team_name']);
@@ -299,7 +316,13 @@ switch ($teamwhat) {
             $newcreatorname = db()->fetch("SELECT character_name FROM ships WHERE ship_id= :newcreator", [
                 'newcreator' => $newcreator
             ]);
-            echo "$l_team_youveleft <B>" . $team['team_name'] . "</B> $l_team_relto " . $newcreatorname['character_name'] . ".<BR><BR>";
+            echo sprintf(...[
+                "%s <B>%s</B> %s %s.<BR><BR>",
+                $l_team_youveleft,
+                $team['team_name'],
+                $l_team_relto,
+                $newcreatorname['character_name']
+            ]);
             db()->q("UPDATE ships SET team='0' WHERE ship_id= :ship_id", [
                 'ship_id' => $playerinfo['ship_id']
             ]);
@@ -329,7 +352,7 @@ switch ($teamwhat) {
                 }
             }
 
-            playerlog($playerinfo['ship_id'], LogTypeConstants::LOG_TEAM_NEWLEAD, $team['team_name'] . "|" . $newcreatorname['character_name']);
+            playerlog($playerinfo['ship_id'], LogTypeConstants::LOG_TEAM_NEWLEAD, sprintf("%s|%s", $team['team_name'], $newcreatorname['character_name']));
             playerlog($newcreator, LogTypeConstants::LOG_TEAM_LEAD, $team['team_name']);
         }
 
@@ -347,9 +370,13 @@ switch ($teamwhat) {
                 db()->q("UPDATE teams SET number_of_members=number_of_members+1 WHERE id= :whichteam", [
                     'whichteam' => $whichteam
                 ]);
-                echo "$l_team_welcome <B>" . $team['team_name'] . "</B>.<BR><BR>";
+                echo sprintf(...[
+                    "%s <B>%s</B>.<BR><BR>",
+                    $l_team_welcome,
+                    $team['team_name']
+                ]);
                 playerlog($playerinfo['ship_id'], LogTypeConstants::LOG_TEAM_JOIN, $team['team_name']);
-                playerlog($team['creator'], LogTypeConstants::LOG_TEAM_NEWMEMBER, $team['team_name'] . "|" . $playerinfo['character_name']);
+                playerlog($team['creator'], LogTypeConstants::LOG_TEAM_NEWMEMBER, sprintf("%s|%s", $team['team_name'], $playerinfo['character_name']));
             } else {
                 echo "$l_team_noinviteto<BR>";
             }
@@ -376,7 +403,15 @@ switch ($teamwhat) {
                 'who' => $who
             ]);
             if (!$confirmed) {
-                echo "$l_team_ejectsure " . $whotoexpel['character_name'] . "? <A HREF=\"teams.php?teamwhat=$teamwhat&confirmed=1&who=$who\">$l_yes</A> - <a href=\"teams.php\">$l_no</a><BR>";
+                echo sprintf(...[
+                    "%s %s? <A HREF=\"teams.php?teamwhat=%s&confirmed=1&who=%s\">%s</A> - <a href=\"teams.php\">%s</a><BR>",
+                    $l_team_ejectsure,
+                    $whotoexpel['character_name'],
+                    $teamwhat,
+                    $who,
+                    $l_yes,
+                    $l_no
+                ]);
             } else {
                 db()->q("UPDATE planets SET corp='0' WHERE owner= :who", [
                     'who' => $who
@@ -429,13 +464,13 @@ switch ($teamwhat) {
                 'teamdesc' => $teamdesc
             ]);
             db()->q("INSERT INTO zones VALUES(NULL, :zone_name, :ship_id, 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 0)", [
-                'zone_name' => $teamname . "'s Empire",
+                'zone_name' => sprintf("%s's Empire", $teamname),
                 'ship_id' => $playerinfo['ship_id']
             ]);
             db()->q("UPDATE ships SET team= :ship_id WHERE ship_id= :ship_id", [
                 'ship_id' => $playerinfo['ship_id']
             ]);
-            echo "$l_team_alliance <B>$teamname</B> $l_team_hcreated.<BR><BR>";
+            echo sprintf("%s <B>%s</B> %s<BR><BR>", $l_team_alliance, $teamname, $l_team_hcreated);
             playerlog($playerinfo['ship_id'], LogTypeConstants::LOG_TEAM_CREATE, $teamname);
         }
         LINK_BACK();
@@ -480,11 +515,11 @@ switch ($teamwhat) {
         echo "<BR><BR><a href=\"teams.php\">$l_clickme</a> $l_team_menu<BR><BR>";
         break;
     case 8: // REFUSE invitation
-        echo "$l_team_refuse <B>" . $invite_info['team_name'] . "</B>.<BR><BR>";
+        echo sprintf("%s <B>%s</B>.<BR><BR>", $l_team_refuse, $invite_info['team_name']);
         db()->q("UPDATE ships SET team_invite=0 WHERE ship_id= :ship_id", [
             'ship_id' => $playerinfo['ship_id']
         ]);
-        playerlog($team['creator'], LogTypeConstants::LOG_TEAM_REJECT, $playerinfo['character_name'] . "|" . $invite_info['team_name']);
+        playerlog($team['creator'], LogTypeConstants::LOG_TEAM_REJECT, sprintf("%s|%s", $playerinfo['character_name'], $invite_info['team_name']));
         LINK_BACK();
         break;
     case 9: // Edit Team
@@ -524,7 +559,7 @@ switch ($teamwhat) {
                     'teamdesc' => $teamdesc,
                     'whichteam' => $whichteam
                 ]);
-                echo "$l_team_alliance <B>$teamname</B> $l_team_hasbeenr<BR><BR>";
+                echo sprintf("%s <B>%s</B> %s<BR><BR>", $l_team_alliance, $teamname, $l_team_hasbeenr);
                 /*
                   Adding a log entry to all members of the renamed alliance
                  */
@@ -554,7 +589,7 @@ switch ($teamwhat) {
                 $whichteam = db()->fetch("SELECT * FROM teams WHERE id= :team", [
                     'team' => $playerinfo['team']
                 ]);
-                echo "$l_team_urejected <B>" . $whichteam['team_name'] . "</B><BR><BR>";
+                echo sprintf("%s <B>%s</B><BR><BR>", $l_team_urejected, $whichteam['team_name']);
                 LINK_BACK();
                 break;
             }
