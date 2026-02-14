@@ -14,7 +14,6 @@ if (checklogin()) {
     die();
 }
 //adding db lock to prevent more than 5 planets in a sector - rjordan
-$db->adoExecute("LOCK TABLES ships WRITE, planets WRITE, universe READ, zones READ");
 
 //-------------------------------------------------------------------------------------------------
 $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
@@ -134,7 +133,6 @@ elseif ($playerinfo[dev_genesis] < 1) {
 }
 
 //-------------------------------------------------------------------------------------------------
-$db->adoExecute("UNLOCK TABLES");
 
 echo "<BR><BR>";
 

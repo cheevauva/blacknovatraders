@@ -122,7 +122,6 @@ function planetbombing()
         die();
     }
 
-    $res = $db->adoExecute("LOCK TABLES ships WRITE, planets WRITE");
 
     echo "$l_bombsaway<br><br>\n";
 
@@ -199,7 +198,6 @@ function planetbombing()
 
     $res = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, ship_fighters=ship_fighters-$attackerfighters WHERE ship_id=$playerinfo[ship_id]");
     $res = $db->adoExecute("UPDATE planets SET energy=energy-$beamsused,fighters=fighters-$planetfighterslost, torps=torps-$planettorps WHERE planet_id=$planetinfo[planet_id]");
-    $res = $db->adoExecute("UNLOCK TABLES");
 }
 
 
@@ -699,7 +697,6 @@ function shiptoship($ship_id)
     global $l_cmb_escapepodlaunched, $l_cmb_yousalvaged, $l_cmb_youdidntdestroyhim, $l_cmb_shiptoshipcombatstats;
     global $db;
 
-    $db->adoExecute("LOCK TABLES ships WRITE, universe WRITE, zones READ");
 
     $result2 = $db->adoExecute("SELECT * FROM ships WHERE ship_id='$ship_id'");
     $targetinfo = $result2->fields;
@@ -1057,5 +1054,4 @@ function shiptoship($ship_id)
     echo "$l_cmb_attackerarmor: $attackerarmor<BR>";
     echo "$l_cmb_attackertorpdamage: $attackertorpdamage<BR>";
     echo "_+_+_+_+_+_+<BR>";
-    $db->adoExecute("UNLOCK TABLES");
 }

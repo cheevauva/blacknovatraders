@@ -237,4 +237,3 @@ while (!$res->EOF) {
   // ***** END OF FURANGEE TURNS *****
   // *********************************
 
-  $db->adoExecute("UNLOCK TABLES"); //some unsafe returns in funcs
