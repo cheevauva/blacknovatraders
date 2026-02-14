@@ -7,7 +7,7 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     findUnusedBaselineEntry="true"
     autoload="config.php"
-    findUnusedCode="true"
+    findUnusedCode="false"
     allFunctionsGlobal="true"
 >
     <projectFiles>

@@ -2,13 +2,9 @@
 
 include 'config.php';
 
-
-
 $title = $l_pr_title;
 
 include("header.php");
-
-
 
 if (checklogin()) {
     die();
@@ -22,84 +18,87 @@ bigtitle();
 echo "<BR>";
 echo "Click <A HREF=planet_report.php>here</A> to return to report menu<br>";
 
-if (isset($HTTP_POST_VARS["TPCreds"])) {
-    collect_credits($HTTP_POST_VARS["TPCreds"]);
+if (isset($_POST["TPCreds"])) {
+    collect_credits($_POST["TPCreds"]);
 } elseif (isset($buildp) and isset($builds)) {
     go_build_base($buildp, $builds);
 } else {
-    change_planet_production($HTTP_POST_VARS);
+    change_planet_production($_POST);
 }
 
 echo "<BR><BR>";
 
-
-
 function go_build_base($planet_id, $sector_id)
 {
-    global $db;
     global $base_ore, $base_organics, $base_goods, $base_credits;
     global $l_planet_bbuild;
-    global $username;
 
     echo "<BR>Click <A HREF=planet_report.php?PRepType=1>here</A> to return to the Planet Status Report<BR><BR>";
 
-    $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-    $playerinfo = $result->fields;
+    $playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
+        'username' => $GLOBALS['username']
+    ]);
 
-    $result2 = $db->adoExecute("SELECT * FROM universe WHERE sector_id=$playerinfo[sector]");
-    $sectorinfo = $result2->fields;
+    $sectorinfo = db()->fetch("SELECT * FROM universe WHERE sector_id= :sector", [
+        'sector' => $playerinfo['sector']
+    ]);
 
-    $result3 = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planet_id");
-    if ($result3) {
-        $planetinfo = $result3->fields;
-    }
+    $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id= :planet_id", [
+        'planet_id' => $planet_id
+    ]);
 
     Real_Space_Move($sector_id);
 
-
     echo "<BR>Click <A HREF=planet.php?planet_id=$planet_id>here</A> to go to the Planet Menu<BR><BR>";
 
+    // build a base
+    if ($planetinfo['ore'] >= $base_ore && $planetinfo['organics'] >= $base_organics && $planetinfo['goods'] >= $base_goods && $planetinfo['credits'] >= $base_credits) {
+        // ** Create The Base
+        db()->q("UPDATE planets SET base='Y', ore=ore- :base_ore, organics=organics- :base_organics, goods=goods- :base_goods, credits=credits- :base_credits WHERE planet_id= :planet_id", [
+            'base_ore' => $base_ore,
+            'base_organics' => $base_organics,
+            'base_goods' => $base_goods,
+            'base_credits' => $base_credits,
+            'planet_id' => $planet_id
+        ]);
 
-  // build a base
-    if ($planetinfo[ore] >= $base_ore && $planetinfo[organics] >= $base_organics && $planetinfo[goods] >= $base_goods && $planetinfo[credits] >= $base_credits) {
-      // ** Create The Base
-        $update1 = $db->adoExecute("UPDATE planets SET base='Y', ore=$planetinfo[ore]-$base_ore, organics=$planetinfo[organics]-$base_organics, goods=$planetinfo[goods]-$base_goods, credits=$planetinfo[credits]-$base_credits WHERE planet_id=$planet_id");
-      // ** Update User Turns
-        $update1b = $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 where ship_id=$playerinfo[ship_id]");
-      // ** Refresh Plant Info
-        $result3 = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planet_id");
-        $planetinfo = $result3->fields;
-      // ** Notify User Of Base Results
+        // ** Update User Turns
+        db()->q("UPDATE ships SET turns=turns-1, turns_used=turns_used+1 where ship_id= :ship_id", [
+            'ship_id' => $playerinfo['ship_id']
+        ]);
+
+        // ** Refresh Plant Info
+        $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id= :planet_id", [
+            'planet_id' => $planet_id
+        ]);
+
+        // ** Notify User Of Base Results
         echo "$l_planet_bbuild<BR><BR>";
-      // ** Calc Ownership and Notify User Of Results
-        $ownership = calc_ownership($playerinfo[sector]);
+
+        // ** Calc Ownership and Notify User Of Results
+        $ownership = calc_ownership($playerinfo['sector']);
         if (!empty($ownership)) {
             echo "$ownership<p>";
         }
     }
 }
 
-
 function collect_credits($planetarray)
 {
-    global $db, $username;
-
     $CS = "GO"; // Current State
-
-  // create an array of sector -> planet pairs
+    // create an array of sector -> planet pairs
+    $s_p_pair = array();
     for ($i = 0; $i < count($planetarray); $i++) {
-        $res = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planetarray[$i]");
-        $s_p_pair[$i] = array($res->fields["sector_id"], $planetarray[$i]);
+        $planet = db()->fetch("SELECT * FROM planets WHERE planet_id= :planet_id", [
+            'planet_id' => $planetarray[$i]
+        ]);
+        $s_p_pair[$i] = array($planet["sector_id"], $planetarray[$i]);
     }
 
-  // Sort the array so that it is in order of sectors, lowest number first, not closest
+    // Sort the array so that it is in order of sectors, lowest number first, not closest
     sort($s_p_pair);
-    reset($s_p_pair);
 
-  // run through the list of sector planet pairs realspace moving to each sector and then performing the transfer.
-  // Based on the way realspace works we don't need a sub loop -- might add a subloop to clean things up later.
-
-
+    // run through the list of sector planet pairs realspace moving to each sector and then performing the transfer.
     for ($i = 0; $i < count($planetarray) && $CS == "GO"; $i++) {
         echo "<BR>";
         $CS = Real_space_move($s_p_pair[$i][0]);
@@ -122,187 +121,222 @@ function collect_credits($planetarray)
     echo "Click <A HREF=planet_report.php?PRepType=1>here</A> to return to the Planet Status Report<br>";
 }
 
-
 function change_planet_production($prodpercentarray)
 {
-// **************************************************
-// **  NOTES on what this function does and how
-// **  Declares some global variables so they are accessable
-// **    $db, $dbtables and default production values from the config.php file
-// **
-// **  We need to track what the player_id is and what corp they belong to if they belong to a corp,
-// **    these two values are not passed in as arrays
-// **    ship_id = the owner of the planet          ($ship_id = $prodpercentarray[ship_id])
-// **    team_id = the corperation creators ship_id ($team_id = $prodpercentarray[team_id])
-// **
-// **  First we generate a list of values based on the commodity
-// **    (ore, organics, goods, energy, fighters, torps, corp, team, sells)
-// **
-// **  Second we generate a second list of values based on the planet_id
-// **  Because team and ship_id are not arrays we do not pass them through the second list command.
-// **  When we write the ore production percent we also clear the selling and corp values out of the db
-// **  When we pass through the corp array we set the value to $team we grabbed out of the array.
-// **  in the sells and corp the prodpercent = the planet_id.
-// **
-// **  We run through the database checking to see if any planet production is greater than 100, or possibly negative
-// **    if so we set the planet to the default values and report it to the player.
-// **
-// **  There has got to be a better way, but at this time I am not sure how to do it.
-// **  Off the top of my head if we could sort the data passed in, in order of planets we could check before we do the writes
-// **    This would save us from having to run through the database a second time checking our work.
-// **
-
-// **
-// **  This should patch the game from being hack with planet Hack.
-// **  Patched by TMD [TheMightyDude]
-// **
-
-    global $db;
     global $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp;
-    global $username;
+    global $username, $l_unnamed;
 
-    $result = $db->adoExecute("SELECT ship_id,team FROM ships WHERE email='$username'");
-    $ship_id = $result->fields[ship_id];
-    $team_id = $result->fields[team];
+    $player = db()->fetch("SELECT ship_id,team FROM ships WHERE email= :username", [
+        'username' => $username
+    ]);
+    $ship_id = $player['ship_id'];
+    $team_id = $player['team'];
 
     echo "Click <A HREF=planet_report.php?PRepType=2>here</A> to return to the Change Planet Production Report<br><br>";
 
-    while (list($commod_type, $valarray) = each($prodpercentarray)) {
-        if ($commod_type != "team_id" && $commod_type != "ship_id") {
-            while (list($planet_id, $prodpercent) = each($valarray)) {
+    $planet_hack = false;
+
+    foreach ($prodpercentarray as $commod_type => $valarray) {
+        if ($commod_type != "team_id" && $commod_type != "ship_id" && is_array($valarray)) {
+            foreach ($valarray as $planet_id => $prodpercent) {
                 if ($commod_type == "prod_ore" || $commod_type == "prod_organics" || $commod_type == "prod_goods" || $commod_type == "prod_energy" || $commod_type == "prod_fighters" || $commod_type == "prod_torp") {
-                    $res = $db->adoExecute("SELECT COUNT(*) AS owned_planet FROM planets WHERE planet_id=$planet_id AND owner = $ship_id");
-                    if ($res->fields['owned_planet'] == 0) {
+                    $owned = db()->fetch("SELECT COUNT(*) as owned_planet FROM planets WHERE planet_id= :planet_id AND owner = :ship_id", [
+                        'planet_id' => $planet_id,
+                        'ship_id' => $ship_id
+                    ]);
+
+                    if ($owned['owned_planet'] == 0) {
                         $planet_hack = true;
-            ##          adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETCHEAT_1,$_SERVER["REMOTE_ADDR"]."|$planet_id");
                     }
 
-                    $db->adoExecute("UPDATE planets SET $commod_type=$prodpercent WHERE planet_id=$planet_id AND owner = $ship_id");
-                    $db->adoExecute("UPDATE planets SET sells='N' WHERE planet_id=$planet_id AND owner = $ship_id");
-                    $db->adoExecute("UPDATE planets SET corp=0 WHERE planet_id=$planet_id AND owner = $ship_id");
+                    db()->q("UPDATE planets SET $commod_type= :prodpercent WHERE planet_id= :planet_id AND owner = :ship_id", [
+                        'prodpercent' => $prodpercent,
+                        'planet_id' => $planet_id,
+                        'ship_id' => $ship_id
+                    ]);
+
+                    db()->q("UPDATE planets SET sells='N' WHERE planet_id= :planet_id AND owner = :ship_id", [
+                        'planet_id' => $planet_id,
+                        'ship_id' => $ship_id
+                    ]);
+
+                    db()->q("UPDATE planets SET corp=0 WHERE planet_id= :planet_id AND owner = :ship_id", [
+                        'planet_id' => $planet_id,
+                        'ship_id' => $ship_id
+                    ]);
                 } elseif ($commod_type == "sells") {
-                    $db->adoExecute("UPDATE planets SET sells='Y' WHERE planet_id=$prodpercent AND owner = $ship_id");
+                    db()->q("UPDATE planets SET sells='Y' WHERE planet_id= :planet_id AND owner = :ship_id", [
+                        'planet_id' => $prodpercent,
+                        'ship_id' => $ship_id
+                    ]);
                 } elseif ($commod_type == "corp") {
-                  /* Compare entered team_id and one in the db */
-                  /* If different then use one from db */
-                    $res = $db->adoExecute("SELECT ships.team as owner FROM ships, planets WHERE ( ships.ship_id = planets.owner ) AND ( planets.planet_id ='$prodpercent')");
-                    if ($res) {
-                        $team_id = $res->fields["owner"];
+                    /* Compare entered team_id and one in the db */
+                    /* If different then use one from db */
+                    $owner_team = db()->fetch("SELECT ships.team as owner FROM ships, planets WHERE ( ships.ship_id = planets.owner ) AND ( planets.planet_id = :planet_id)", [
+                        'planet_id' => $prodpercent
+                    ]);
+
+                    if ($owner_team) {
+                        $team_id = $owner_team["owner"];
                     } else {
                         $team_id = 0;
                     }
 
-                    $db->adoExecute("UPDATE planets SET corp=$team_id WHERE planet_id=$prodpercent AND owner = $ship_id");
-                    if ($prodpercentarray[team_id] <> $team_id) {
-                    /* Oh dear they are different so send admin a log */
+                    db()->q("UPDATE planets SET corp= :team_id WHERE planet_id= :planet_id AND owner = :ship_id", [
+                        'team_id' => $team_id,
+                        'planet_id' => $prodpercent,
+                        'ship_id' => $ship_id
+                    ]);
+
+                    if ($prodpercentarray['team_id'] != $team_id) {
+                        /* Oh dear they are different so send admin a log */
                         $planet_hack = true;
-        ##          adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETCHEAT_2,$_SERVER["REMOTE_ADDR"]."|$prodpercent");
                     }
                 } else {
                     $planet_hack = true;
-        ##        adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_PLANETCHEAT_3,$_SERVER["REMOTE_ADDR"]."|$planet_id");
                 }
             }
         }
     }
 
     if ($planet_hack) {
-        echo "<font color=\"red\"><B>Your Cheat has been logged to the admin.</B></font><br>\n";
+        echo "<span style=\"color: red;\"><strong>Your Cheat has been logged to the admin.</strong></span><br>\n";
     }
 
     echo "<BR>";
     echo "Production Percentages Updated <BR><BR>";
     echo "Checking Values for excess of 100% and negative production values <BR><BR>";
 
-    $res = $db->adoExecute("SELECT * FROM planets WHERE owner=$ship_id ORDER BY sector_id");
-    $i = 0;
-    if ($res) {
-        while (!$res->EOF) {
-            $planets[$i] = $res->fields;
-            $i++;
-            $res->MoveNext();
+    $planets = db()->fetchAll("SELECT * FROM planets WHERE owner= :ship_id ORDER BY sector_id", [
+        'ship_id' => $ship_id
+    ]);
+
+    foreach ($planets as $planet) {
+        if (empty($planet['name'])) {
+            $planet['name'] = $l_unnamed;
         }
 
-        foreach ($planets as $planet) {
-            if (empty($planet[name])) {
-                $planet[name] = $l_unnamed;
-            }
+        $needs_reset = false;
 
-            if ($planet[prod_ore] < 0) {
-                $planet[prod_ore] = 110;
-            }
-            if ($planet[prod_organics] < 0) {
-                $planet[prod_organics] = 110;
-            }
-            if ($planet[prod_goods] < 0) {
-                $planet[prod_goods] = 110;
-            }
-            if ($planet[prod_energy] < 0) {
-                $planet[prod_energy] = 110;
-            }
-            if ($planet[prod_fighters] < 0) {
-                $planet[prod_fighters] = 110;
-            }
-            if ($planet[prod_torp] < 0) {
-                $planet[prod_torp] = 110;
-            }
+        if ($planet['prod_ore'] < 0) {
+            $planet['prod_ore'] = 110;
+            $needs_reset = true;
+        }
+        if ($planet['prod_organics'] < 0) {
+            $planet['prod_organics'] = 110;
+            $needs_reset = true;
+        }
+        if ($planet['prod_goods'] < 0) {
+            $planet['prod_goods'] = 110;
+            $needs_reset = true;
+        }
+        if ($planet['prod_energy'] < 0) {
+            $planet['prod_energy'] = 110;
+            $needs_reset = true;
+        }
+        if ($planet['prod_fighters'] < 0) {
+            $planet['prod_fighters'] = 110;
+            $needs_reset = true;
+        }
+        if ($planet['prod_torp'] < 0) {
+            $planet['prod_torp'] = 110;
+            $needs_reset = true;
+        }
 
-            if ($planet[prod_ore] + $planet[prod_organics] + $planet[prod_goods] + $planet[prod_energy] + $planet[prod_fighters] + $planet[prod_torp] > 100) {
-                echo "Planet $planet[name] in sector $planet[sector_id] has a negative production value or exceeds 100% production.  Resetting to default production values<BR>";
-                $db->adoExecute("UPDATE planets SET prod_ore=$default_prod_ore           WHERE planet_id=$planet[planet_id]");
-                $db->adoExecute("UPDATE planets SET prod_organics=$default_prod_organics WHERE planet_id=$planet[planet_id]");
-                $db->adoExecute("UPDATE planets SET prod_goods=$default_prod_goods       WHERE planet_id=$planet[planet_id]");
-                $db->adoExecute("UPDATE planets SET prod_energy=$default_prod_energy     WHERE planet_id=$planet[planet_id]");
-                $db->adoExecute("UPDATE planets SET prod_fighters=$default_prod_fighters WHERE planet_id=$planet[planet_id]");
-                $db->adoExecute("UPDATE planets SET prod_torp=$default_prod_torp         WHERE planet_id=$planet[planet_id]");
-            }
+        if ($planet['prod_ore'] + $planet['prod_organics'] + $planet['prod_goods'] + $planet['prod_energy'] + $planet['prod_fighters'] + $planet['prod_torp'] > 100) {
+            $needs_reset = true;
+        }
+
+        if ($needs_reset) {
+            echo "Planet " . $planet['name'] . " in sector " . $planet['sector_id'] . " has a negative production value or exceeds 100% production. Resetting to default production values<BR>";
+
+            db()->q("UPDATE planets SET prod_ore= :prod_ore WHERE planet_id= :planet_id", [
+                'prod_ore' => $default_prod_ore,
+                'planet_id' => $planet['planet_id']
+            ]);
+
+            db()->q("UPDATE planets SET prod_organics= :prod_organics WHERE planet_id= :planet_id", [
+                'prod_organics' => $default_prod_organics,
+                'planet_id' => $planet['planet_id']
+            ]);
+
+            db()->q("UPDATE planets SET prod_goods= :prod_goods WHERE planet_id= :planet_id", [
+                'prod_goods' => $default_prod_goods,
+                'planet_id' => $planet['planet_id']
+            ]);
+
+            db()->q("UPDATE planets SET prod_energy= :prod_energy WHERE planet_id= :planet_id", [
+                'prod_energy' => $default_prod_energy,
+                'planet_id' => $planet['planet_id']
+            ]);
+
+            db()->q("UPDATE planets SET prod_fighters= :prod_fighters WHERE planet_id= :planet_id", [
+                'prod_fighters' => $default_prod_fighters,
+                'planet_id' => $planet['planet_id']
+            ]);
+
+            db()->q("UPDATE planets SET prod_torp= :prod_torp WHERE planet_id= :planet_id", [
+                'prod_torp' => $default_prod_torp,
+                'planet_id' => $planet['planet_id']
+            ]);
         }
     }
-} // <== Moved from line 215 to fix Invalid argument supplied for foreach().
+}
 
 function Take_Credits($sector_id, $planet_id)
 {
-    global $db, $username;
+    global $username, $l_unnamed;
 
-  // Get basic Database information (ship and planet)
-    $res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-    $playerinfo = $res->fields;
-    $res = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planet_id");
-    $planetinfo = $res->fields;
+    // Get basic Database information (ship and planet)
+    $playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
+        'username' => $username
+    ]);
 
-  // Set the name for unamed planets to be "unnamed"
-    if (empty($planetinfo[name])) {
-        $planet[name] = $l_unnamed;
+    $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id= :planet_id", [
+        'planet_id' => $planet_id
+    ]);
+
+    // Set the name for unamed planets to be "unnamed"
+    if (empty($planetinfo['name'])) {
+        $planetinfo['name'] = $l_unnamed;
     }
 
-  //verify player is still in same sector as the planet
-    if ($playerinfo[sector] == $planetinfo[sector_id]) {
-        if ($playerinfo[turns] >= 1) {
-          // verify player owns the planet to take credits from
-            if ($planetinfo[owner] == $playerinfo[ship_id]) {
+    //verify player is still in same sector as the planet
+    if ($playerinfo['sector'] == $planetinfo['sector_id']) {
+        if ($playerinfo['turns'] >= 1) {
+            // verify player owns the planet to take credits from
+            if ($planetinfo['owner'] == $playerinfo['ship_id']) {
                 // get number of credits from the planet and current number player has on ship
-                $CreditsTaken = $planetinfo[credits];
-                $CreditsOnShip = $playerinfo[credits];
+                $CreditsTaken = $planetinfo['credits'];
+                $CreditsOnShip = $playerinfo['credits'];
                 $NewShipCredits = $CreditsTaken + $CreditsOnShip;
 
                 // update the planet record for credits
-                $res = $db->adoExecute("UPDATE planets SET credits=0 WHERE planet_id=$planetinfo[planet_id]");
+                db()->q("UPDATE planets SET credits=0 WHERE planet_id= :planet_id", [
+                    'planet_id' => $planetinfo['planet_id']
+                ]);
 
                 // update the player record
                 // credits
-                $res = $db->adoExecute("UPDATE ships SET credits=$NewShipCredits WHERE email='$username'");
-                // turns
-                $res = $db->adoExecute("UPDATE ships SET turns=turns-1 WHERE email='$username'");
+                db()->q("UPDATE ships SET credits= :credits WHERE email= :username", [
+                    'credits' => $NewShipCredits,
+                    'username' => $username
+                ]);
 
-                echo "Took " . NUMBER($CreditsTaken) . " Credits from planet $planetinfo[name]. <BR>";
-                echo "Your ship - " . $playerinfo[ship_name] . " - now has " . NUMBER($NewShipCredits) . " onboard. <BR>";
+                // turns
+                db()->q("UPDATE ships SET turns=turns-1 WHERE email= :username", [
+                    'username' => $username
+                ]);
+
+                echo "Took " . NUMBER($CreditsTaken) . " Credits from planet " . $planetinfo['name'] . ". <BR>";
+                echo "Your ship - " . $playerinfo['ship_name'] . " - now has " . NUMBER($NewShipCredits) . " onboard. <BR>";
                 $retval = "GO";
             } else {
-                echo "<BR><BR>You do not own planet $planetinfo[name]<BR><BR>";
+                echo "<BR><BR>You do not own planet " . $planetinfo['name'] . "<BR><BR>";
                 $retval = "GO";
             }
         } else {
-            echo "<BR><BR>You do not have enough turns to take credits from $planetinfo[name] in sector $planetinfo[sector_id]<BR><BR>";
+            echo "<BR><BR>You do not have enough turns to take credits from " . $planetinfo['name'] . " in sector " . $planetinfo['sector_id'] . "<BR><BR>";
             $retval = "BREAK-TURNS";
         }
     } else {
@@ -314,111 +348,118 @@ function Take_Credits($sector_id, $planet_id)
 
 function Real_Space_Move($destination)
 {
-    global $db;
     global $level_factor;
     global $username;
 
-    $res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-    $playerinfo = $res->fields;
+    $playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
+        'username' => $username
+    ]);
 
-    $result2 = $db->adoExecute("SELECT angle1,angle2,distance FROM universe WHERE sector_id=$playerinfo[sector]");
-    $start = $result2->fields;
-    $result3 = $db->adoExecute("SELECT angle1,angle2,distance FROM universe WHERE sector_id=$destination");
-    $finish = $result3->fields;
-    $sa1 = $start[angle1] * $deg;
-    $sa2 = $start[angle2] * $deg;
-    $fa1 = $finish[angle1] * $deg;
-    $fa2 = $finish[angle2] * $deg;
-    $x = ($start[distance] * sin($sa1) * cos($sa2)) - ($finish[distance] * sin($fa1) * cos($fa2));
-    $y = ($start[distance] * sin($sa1) * sin($sa2)) - ($finish[distance] * sin($fa1) * sin($fa2));
-    $z = ($start[distance] * cos($sa1)) - ($finish[distance] * cos($fa1));
+    $start = db()->fetch("SELECT angle1,angle2,distance FROM universe WHERE sector_id= :sector", [
+        'sector' => $playerinfo['sector']
+    ]);
+
+    $finish = db()->fetch("SELECT angle1,angle2,distance FROM universe WHERE sector_id= :destination", [
+        'destination' => $destination
+    ]);
+
+    $sa1 = $start['angle1'] * $GLOBALS['deg'];
+    $sa2 = $start['angle2'] * $GLOBALS['deg'];
+    $fa1 = $finish['angle1'] * $GLOBALS['deg'];
+    $fa2 = $finish['angle2'] * $GLOBALS['deg'];
+
+    $x = ($start['distance'] * sin($sa1) * cos($sa2)) - ($finish['distance'] * sin($fa1) * cos($fa2));
+    $y = ($start['distance'] * sin($sa1) * sin($sa2)) - ($finish['distance'] * sin($fa1) * sin($fa2));
+    $z = ($start['distance'] * cos($sa1)) - ($finish['distance'] * cos($fa1));
     $distance = round(sqrt(mypw($x, 2) + mypw($y, 2) + mypw($z, 2)));
-    $shipspeed = mypw($level_factor, $playerinfo[engines]);
+    $shipspeed = mypw($level_factor, $playerinfo['engines']);
     $triptime = round($distance / $shipspeed);
 
-    if ($triptime == 0 && $destination != $playerinfo[sector]) {
+    if ($triptime == 0 && $destination != $playerinfo['sector']) {
         $triptime = 1;
     }
 
-    if ($playerinfo[dev_fuelscoop] == "Y") {
+    if ($playerinfo['dev_fuelscoop'] == "Y") {
         $energyscooped = $distance * 100;
     } else {
         $energyscooped = 0;
     }
 
-    if ($playerinfo[dev_fuelscoop] == "Y" && $energyscooped == 0 && $triptime == 1) {
+    if ($playerinfo['dev_fuelscoop'] == "Y" && $energyscooped == 0 && $triptime == 1) {
         $energyscooped = 100;
     }
-    $free_power = NUM_ENERGY($playerinfo[power]) - $playerinfo[ship_energy];
+    $free_power = NUM_ENERGY($playerinfo['power']) - $playerinfo['ship_energy'];
 
-  // amount of energy that can be stored is less than amount scooped amount scooped is set to what can be stored
+    // amount of energy that can be stored is less than amount scooped amount scooped is set to what can be stored
     if ($free_power < $energyscooped) {
         $energyscooped = $free_power;
     }
 
-  // make sure energyscooped is not null
+    // make sure energyscooped is not null
     if (!isset($energyscooped)) {
         $energyscooped = "0";
     }
 
-  // make sure energyscooped not negative, or decimal
+    // make sure energyscooped not negative, or decimal
     if ($energyscooped < 1) {
         $energyscooped = 0;
     }
 
-  // check to see if already in that sector
-    if ($destination == $playerinfo[sector]) {
+    // check to see if already in that sector
+    if ($destination == $playerinfo['sector']) {
         $triptime = 0;
         $energyscooped = 0;
     }
 
-    if ($triptime > $playerinfo[turns]) {
-        $l_rs_movetime = str_replace("[triptime]", NUMBER($triptime), $l_rs_movetime);
+    if ($triptime > $playerinfo['turns']) {
+        $l_rs_movetime = str_replace("[triptime]", NUMBER($triptime), $GLOBALS['l_rs_movetime']);
         echo "$l_rs_movetime<BR><BR>";
-        echo "$l_rs_noturns";
-        $db->adoExecute("UPDATE ships SET cleared_defences=' ' where ship_id=$playerinfo[ship_id]");
+        echo $GLOBALS['l_rs_noturns'];
+
+        db()->q("UPDATE ships SET cleared_defences=' ' where ship_id= :ship_id", [
+            'ship_id' => $playerinfo['ship_id']
+        ]);
 
         $retval = "BREAK-TURNS";
     } else {
-  // modified from traderoute.php
-  // ********************************
-  // ***** Sector Defense Check *****
-  // ********************************
+        // ***** Sector Defense Check *****
         $hostile = 0;
 
-        $result99 = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id = $destination AND ship_id <> $playerinfo[ship_id]");
-        if (!$result99->EOF) {
-             $fighters_owner = $result99->fields;
-             $nsresult = $db->adoExecute("SELECT * from ships where ship_id=$fighters_owner[ship_id]");
-             $nsfighters = $nsresult->fields;
-            if ($nsfighters[team] != $playerinfo[team] || $playerinfo[team] == 0) {
+        $defences = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :destination AND ship_id <> :ship_id", [
+            'destination' => $destination,
+            'ship_id' => $playerinfo['ship_id']
+        ]);
+
+        foreach ($defences as $defence) {
+            $owner = db()->fetch("SELECT * from ships where ship_id= :ship_id", [
+                'ship_id' => $defence['ship_id']
+            ]);
+
+            if ($owner['team'] != $playerinfo['team'] || $playerinfo['team'] == 0) {
                 $hostile = 1;
+                break;
             }
         }
 
-        $result98 = $db->adoExecute("SELECT * FROM sector_defence WHERE sector_id = $destination AND ship_id <> $playerinfo[ship_id]");
-        if (!$result98->EOF) {
-            $fighters_owner = $result98->fields;
-            $nsresult = $db->adoExecute("SELECT * from ships where ship_id=$fighters_owner[ship_id]");
-            $nsfighters = $nsresult->fields;
-            if ($nsfighters[team] != $playerinfo[team] || $playerinfo[team] == 0) {
-                $hostile = 1;
-            }
-        }
-
-        if (($hostile > 0) && ($playerinfo[hull] > $mine_hullsize)) {
+        if (($hostile > 0) && ($playerinfo['hull'] > $GLOBALS['mine_hullsize'])) {
             $retval = "HOSTILE";
-          // need to add a language value for this
             echo "CANNOT MOVE TO SECTOR $destination THROUGH HOSTILE DEFENSES<br>";
         } else {
-             $stamp = date("Y-m-d H-i-s");
-             $update = $db->adoExecute("UPDATE ships SET last_login='$stamp',sector=$destination,ship_energy=ship_energy+$energyscooped,turns=turns-$triptime,turns_used=turns_used+$triptime WHERE ship_id=$playerinfo[ship_id]");
-             $l_rs_ready = str_replace("[sector]", $destination, $l_rs_ready);
+            $stamp = date("Y-m-d H-i-s");
 
-             $l_rs_ready = str_replace("[triptime]", NUMBER($triptime), $l_rs_ready);
-             $l_rs_ready = str_replace("[energy]", NUMBER($energyscooped), $l_rs_ready);
-             echo "$l_rs_ready<BR>";
-             $retval = "GO";
+            db()->q("UPDATE ships SET last_login= :stamp, sector= :destination, ship_energy=ship_energy+ :energyscooped, turns=turns- :triptime, turns_used=turns_used+ :triptime WHERE ship_id= :ship_id", [
+                'stamp' => $stamp,
+                'destination' => $destination,
+                'energyscooped' => $energyscooped,
+                'triptime' => $triptime,
+                'ship_id' => $playerinfo['ship_id']
+            ]);
+
+            $l_rs_ready = str_replace("[sector]", $destination, $GLOBALS['l_rs_ready']);
+            $l_rs_ready = str_replace("[triptime]", NUMBER($triptime), $l_rs_ready);
+            $l_rs_ready = str_replace("[energy]", NUMBER($energyscooped), $l_rs_ready);
+            echo "$l_rs_ready<BR>";
+            $retval = "GO";
         }
     }
     return($retval);
