@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\EntryPoint\Servant;
+namespace BNT\Game\Servant;
 
 use BNT\Ship\DAO\ShipCreateDAO;
 use BNT\Sector\DAO\SectorGenerateDAO;
@@ -20,7 +20,7 @@ use BNT\Game\Servant\GameCalculateStartParamsServant;
 use BNT\Zone\DAO\ZoneCreateDAO;
 use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
-class EntryPointCreateUniverseStep2Servant extends \UUA\Servant
+class GameUniverseDeployServant extends \UUA\Servant
 {
 
     public int $sectorMax;
@@ -93,24 +93,24 @@ class EntryPointCreateUniverseStep2Servant extends \UUA\Servant
         SchedulersDefaultGenerateDAO::call($this->container);
 
         $shipAdminId = ShipCreateDAO::call($this->container, [
-            'ship_name' => 'WebMaster',
-            'character_name' => 'WebMaster',
-            'password' => md5($admin_pass),
-            'email' => $admin_mail,
-            'armor_pts' => $start_armor,
-            'credits' => $start_credits,
-            'ship_energy' => $start_energy,
-            'ship_fighters' => $start_fighters,
-            'turns' => $start_turns,
-            'last_login' => date('Y-m-d H:i:s'),
-            'lang' => $language,
-            'role' => 'admin'
-        ])->id;
+                    'ship_name' => 'WebMaster',
+                    'character_name' => 'WebMaster',
+                    'password' => md5($admin_pass),
+                    'email' => $admin_mail,
+                    'armor_pts' => $start_armor,
+                    'credits' => $start_credits,
+                    'ship_energy' => $start_energy,
+                    'ship_fighters' => $start_fighters,
+                    'turns' => $start_turns,
+                    'last_login' => date('Y-m-d H:i:s'),
+                    'lang' => $language,
+                    'role' => 'admin'
+                ])->id;
 
         ZoneCreateDAO::call($this->container, [
-            'zone_name' => 'WebMaster\'s Territory',
-            'owner' => $shipAdminId,
-        ])->id;
+                    'zone_name' => 'WebMaster\'s Territory',
+                    'owner' => $shipAdminId,
+                ])->id;
         IBankAccountCreateDAO::call($this->container, [
             'ship_id' => $shipAdminId,
         ]);

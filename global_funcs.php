@@ -31,7 +31,7 @@ function responseJsonByMessages(array $messages)
         'success' => true,
         'type' => 'messages',
         'messages' => array_values($messages),
-    ], JSON_UNESCAPED_UNICODE);
+            ], JSON_UNESCAPED_UNICODE);
 }
 
 function responseJsonByException(\Exception $ex)
@@ -41,7 +41,7 @@ function responseJsonByException(\Exception $ex)
         'type' => 'exception',
         'error' => $ex->getMessage(),
         'code' => $ex->getCode(),
-    ], JSON_UNESCAPED_UNICODE);
+            ], JSON_UNESCAPED_UNICODE);
 }
 
 function requestMethod()
@@ -71,6 +71,16 @@ function fromRequest($name, $default = null)
     }
 
     return fromPOST($name, $default);
+}
+
+function include_footer(): void
+{
+    include "footer.php";
+}
+
+function include_header(): void
+{    
+    include "header.php";
 }
 
 function fromPOST($name, $default = null)
@@ -979,17 +989,17 @@ function sensorsCloakSuccess($sensors, $cloak)
 function shipScore($ship)
 {
     return array_sum([
-        $ship['hull'],
-        $ship['engines'],
-        $ship['power'],
-        $ship['computer'],
-        $ship['sensors'],
-        $ship['armor'],
-        $ship['shields'],
-        $ship['beams'],
-        $ship['torp_launchers'],
-        $ship['cloak']
-    ]) / 10;
+                $ship['hull'],
+                $ship['engines'],
+                $ship['power'],
+                $ship['computer'],
+                $ship['sensors'],
+                $ship['armor'],
+                $ship['shields'],
+                $ship['beams'],
+                $ship['torp_launchers'],
+                $ship['cloak']
+            ]) / 10;
 }
 
 function planetLevel($score)

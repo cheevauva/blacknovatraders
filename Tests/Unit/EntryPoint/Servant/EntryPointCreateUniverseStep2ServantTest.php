@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\EntryPoint\Servant;
 
 use BNT\Game\Servant\GameCalculateStartParamsServant;
-use BNT\EntryPoint\Servant\EntryPointCreateUniverseStep2Servant;
+use BNT\EntryPoint\Servant\GameUniverseDeployServant;
 use BNT\Sector\DAO\SectorGenerateDAO;
 use BNT\Zone\DAO\ZonesSetMaxHullDAO;
 use BNT\Sector\DAO\SectorsAssignZoneDAO;
@@ -56,7 +56,7 @@ class EntryPointCreateUniverseStep2ServantTest extends \Tests\UnitTestCase
         $startParams->sectorMax = 500;
         $startParams->serve();
 
-        $entryPoint = EntryPointCreateUniverseStep2Servant::new(self::$container);
+        $entryPoint = GameUniverseDeployServant::new(self::$container);
         $entryPoint->sectorMax = 500;
         $entryPoint->universeSize = 200;
         $entryPoint->startParams = $startParams;

@@ -1,3 +1,6 @@
+<?php
+global $l_footer_until_update, $l_footer_players_on_1, $l_footer_players_on_2;
+?>
 <div class="bg-body-tertiary">
     <div id="footer_metrics">
         <span class="myx">-</span> <?php echo $l_footer_until_update; ?> |

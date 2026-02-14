@@ -1,4 +1,7 @@
 <?php
+global $l_news_title, $l_rankings, $l_settings_game, $l_help, $l_faq, $l_emailus, $l_forums, $link_forums;
+global $admin_mail;
+
 $shiptypes = [];
 $shiptypes[0] = "tinyship.gif";
 $shiptypes[1] = "smallship.gif";
@@ -43,7 +46,7 @@ function options($options, $selected)
                 e.preventDefault();
 
                 const formData = new FormData(e.target);
-                
+
                 const response = await fetch(e.target.getAttribute('action'), {
                     method: e.target.getAttribute('method'),
                     body: formData

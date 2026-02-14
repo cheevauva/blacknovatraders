@@ -45,7 +45,9 @@ $container = new Container(fn($c) => [
 if (empty($disableConfigRewrite)) {
     try {
         foreach (ConfigReadDAO::call($container)->config as $name => $value) {
+            $tmpType = gettype($$name);
             $$name = $value;
+            settype($$name, $tmpType);
         }
     } catch (\Exception $ex) {
         
