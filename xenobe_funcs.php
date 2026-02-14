@@ -19,6 +19,8 @@ function xenobetoship($ship_id)
     global $sector_max;
     global $xenobeisdead;
     global $container;
+    global $torp_dmg_rate;
+    global $level_factor;
 
     $targetinfo = db()->fetch("SELECT * FROM ships WHERE ship_id = :ship_id", [
         'ship_id' => $ship_id
@@ -417,10 +419,13 @@ function xenobetosecdef()
     global $l_sf_sendlog2;
     global $l_chm_hehitminesinsector;
     global $l_chm_hewasdestroyedbyyourmines;
+    global $l_sf_destfightall;
 
     global $xenobeisdead;
     global $container;
-
+    global $torp_dmg_rate;
+    global $level_factor;
+   
     if ($targetlink > 0) {
         $defences = [];
         $resultf = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id = :targetlink and defence_type = 'F' ORDER BY quantity DESC", [
@@ -1055,6 +1060,7 @@ function xenobetoplanet($planet_id)
     global $sector_max;
     global $xenobeisdead;
     global $container;
+    global $basedefense;
 
     $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id = :planet_id", [
         'planet_id' => $planet_id
