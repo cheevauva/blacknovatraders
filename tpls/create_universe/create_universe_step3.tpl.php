@@ -1,11 +1,12 @@
-<?php include "header.php"; ?>
+<?php $self = \BNT\Controller\CreateUniverseController::as($this); ?>
+<?php include_header(); ?>
 <div class="mb-5">
     <h4 class="mb-4">Configuring game scheduler — Stage 7</h4>
 
     <div class="mb-4">
         <div class="row mb-3">
             <div class="col-md-9">
-                Update ticks will occur every <?php echo $sched_ticks; ?> minutes.
+                Update ticks will occur every <?php echo $self->sched_ticks; ?> minutes.
             </div>
             <div class="col-md-3 text-center">
                 <span class="badge bg-info">Already Set</span>
@@ -13,22 +14,22 @@
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Turns will occur every <?php echo $sched_turns; ?> minutes</div>
+            <div class="col-md-9">Turns will occur every <?php echo $self->sched_turns; ?> minutes</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Defenses will be checked every <?php echo $sched_turns; ?> minutes</div>
+            <div class="col-md-9">Defenses will be checked every <?php echo $self->sched_turns; ?> minutes</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Xenobes will play every <?php echo $sched_turns; ?> minutes.</div>
+            <div class="col-md-9">Xenobes will play every <?php echo $self->sched_turns; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Interests on IGB accounts will be accumulated every <?php echo $sched_IGB; ?> minutes.</div>
+            <div class="col-md-9">Interests on IGB accounts will be accumulated every <?php echo $self->sched_igb; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
@@ -112,4 +113,5 @@
         Click <a href="login.php" class="btn btn-success btn-lg">here</a> to return to the login screen.
     </p>
 </div>
-<?php include "footer.php"; ?>
+<?php include_footer(); ?>
+

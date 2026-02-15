@@ -6,6 +6,7 @@ namespace BNT\Game\Servant;
 
 class GameCalculateStartParamsServant extends \UUA\Servant
 {
+
     public int $sectorMax;
     public int $special;
     public int $ore;
@@ -17,22 +18,22 @@ class GameCalculateStartParamsServant extends \UUA\Servant
     public float $sellCommod;
     public float $buyCommod;
     //
-    public protected(set) int $specialSectorsCount;
-    public protected(set) int $oreSectorsCount;
-    public protected(set) int $goodsSectorsCount;
-    public protected(set) int $energySectorsCount;
-    public protected(set) int $organicsSectorsCount;
-    public protected(set) int $fedSectorsCount;
-    public protected(set) int $emptySectorsCount;
-    public protected(set) int $unownedPlanetsCount;
-    public protected(set) int $initSellOre;
-    public protected(set) int $initSellOrganics;
-    public protected(set) int $initSellGoods;
-    public protected(set) int $initSellEnergy;
-    public protected(set) int $initBuyOre;
-    public protected(set) int $initBuyOrganics;
-    public protected(set) int $initBuyGoods;
-    public protected(set) int $initBuyEnergy;
+    public int $specialSectorsCount;
+    public int $oreSectorsCount;
+    public int $goodsSectorsCount;
+    public int $energySectorsCount;
+    public int $organicsSectorsCount;
+    public int $fedSectorsCount;
+    public int $emptySectorsCount;
+    public int $unownedPlanetsCount;
+    public int $initSellOre;
+    public int $initSellOrganics;
+    public int $initSellGoods;
+    public int $initSellEnergy;
+    public int $initBuyOre;
+    public int $initBuyOrganics;
+    public int $initBuyGoods;
+    public int $initBuyEnergy;
 
     #[\Override]
     public function serve(): void

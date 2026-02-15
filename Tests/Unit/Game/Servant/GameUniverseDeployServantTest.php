@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\EntryPoint\Servant;
+namespace Tests\Unit\Game\Servant;
 
 use BNT\Game\Servant\GameCalculateStartParamsServant;
-use BNT\EntryPoint\Servant\GameUniverseDeployServant;
+use BNT\Game\Servant\GameUniverseDeployServant;
 use BNT\Sector\DAO\SectorGenerateDAO;
 use BNT\Zone\DAO\ZonesSetMaxHullDAO;
 use BNT\Sector\DAO\SectorsAssignZoneDAO;
@@ -21,9 +21,11 @@ use BNT\Ship\DAO\ShipCreateDAO;
 use BNT\Zone\DAO\ZoneCreateDAO;
 use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
-class EntryPointCreateUniverseStep2ServantTest extends \Tests\UnitTestCase
+class GameUniverseDeployServantTest extends \Tests\UnitTestCase
 {
+
     public static ?array $shipData;
+    public static ?array $zoneData;
 
     #[\Override]
     protected function setUp(): void
@@ -31,16 +33,13 @@ class EntryPointCreateUniverseStep2ServantTest extends \Tests\UnitTestCase
         parent::setUp();
 
         self::$shipData = null;
+        self::$zoneData = null;
     }
 
     public function testMain()
     {
-        global $admin_pass;
-        global $admin_mail;
         global $fed_max_hull;
 
-        $admin_mail = 'admin@mail.ru';
-        $admin_pass = 'admin_pass';
         $fed_max_hull = 10;
 
         $startParams = GameCalculateStartParamsServant::new(self::$container);
@@ -56,103 +55,136 @@ class EntryPointCreateUniverseStep2ServantTest extends \Tests\UnitTestCase
         $startParams->sectorMax = 500;
         $startParams->serve();
 
-        $entryPoint = GameUniverseDeployServant::new(self::$container);
-        $entryPoint->sectorMax = 500;
-        $entryPoint->universeSize = 200;
-        $entryPoint->startParams = $startParams;
-        $entryPoint->serve();
+        $universeDeploy = GameUniverseDeployServant::new(self::$container);
+        $universeDeploy->admin_mail = 'admin@mail.ru';
+        $universeDeploy->admin_pass = 'admin_pass';
+        $universeDeploy->sectorMax = 500;
+        $universeDeploy->universeSize = 200;
+        $universeDeploy->startParams = $startParams;
+        $universeDeploy->serve();
 
         self::assertNotEmpty(self::$shipData);
+        self::assertNotEmpty(self::$zoneData);
     }
 
     #[\Override]
     protected function stubs(): array
     {
         return [
-            SectorGenerateDAO::class => fn($c) => new class ($c) extends SectorGenerateDAO {
+            SectorGenerateDAO::class => fn($c) => new class($c) extends SectorGenerateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            ZonesSetMaxHullDAO::class => fn($c) => new class ($c) extends ZonesSetMaxHullDAO {
+            ZonesSetMaxHullDAO::class => fn($c) => new class($c) extends ZonesSetMaxHullDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            SectorsAssignZoneDAO::class => fn($c) => new class ($c) extends SectorsAssignZoneDAO {
+            SectorsAssignZoneDAO::class => fn($c) => new class($c) extends SectorsAssignZoneDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            SectorsReassignSpecialPortsDAO::class => fn($c) => new class ($c) extends SectorsReassignSpecialPortsDAO {
+            SectorsReassignSpecialPortsDAO::class => fn($c) => new class($c) extends SectorsReassignSpecialPortsDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            SectorsReassignResourcesPortsDAO::class => fn($c) => new class ($c) extends SectorsReassignResourcesPortsDAO {
+            SectorsReassignResourcesPortsDAO::class => fn($c) => new class($c) extends SectorsReassignResourcesPortsDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            PlanetsGenerateDAO::class => fn($c) => new class ($c) extends PlanetsGenerateDAO {
+            PlanetsGenerateDAO::class => fn($c) => new class($c) extends PlanetsGenerateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            LinksTwoWayGenerateDAO::class => fn($c) => new class ($c) extends LinksTwoWayGenerateDAO {
+            LinksTwoWayGenerateDAO::class => fn($c) => new class($c) extends LinksTwoWayGenerateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            LinksTwoWayGenerateRandomDAO::class => fn($c) => new class ($c) extends LinksTwoWayGenerateRandomDAO {
+            LinksTwoWayGenerateRandomDAO::class => fn($c) => new class($c) extends LinksTwoWayGenerateRandomDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            LinksOneWayGenerateDAO::class => fn($c) => new class ($c) extends LinksOneWayGenerateDAO {
+            LinksOneWayGenerateDAO::class => fn($c) => new class($c) extends LinksOneWayGenerateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            LinksTwoWayBackGenerateDAO::class => fn($c) => new class ($c) extends LinksTwoWayBackGenerateDAO {
+            LinksTwoWayBackGenerateDAO::class => fn($c) => new class($c) extends LinksTwoWayBackGenerateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            SchedulersDefaultGenerateDAO::class => fn($c) => new class ($c) extends SchedulersDefaultGenerateDAO {
+            SchedulersDefaultGenerateDAO::class => fn($c) => new class($c) extends SchedulersDefaultGenerateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
-            ShipCreateDAO::class => fn($c) => new class ($c) extends ShipCreateDAO {
+            ShipCreateDAO::class => fn($c) => new class($c) extends ShipCreateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
-                    EntryPointCreateUniverseStep2ServantTest::$shipData = $this->ship;
+                    GameUniverseDeployServantTest::$shipData = $this->ship;
+
                     $this->id = 1;
                 }
             },
-            ZoneCreateDAO::class => fn($c) => new class ($c) extends ZoneCreateDAO {
+            ZoneCreateDAO::class => fn($c) => new class($c) extends ZoneCreateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    GameUniverseDeployServantTest::$zoneData = $this->zone;
+
+                    $this->id = 1;
                 }
             },
-            IBankAccountCreateDAO::class => fn($c) => new class ($c) extends IBankAccountCreateDAO {
+            IBankAccountCreateDAO::class => fn($c) => new class($c) extends IBankAccountCreateDAO {
+
                 #[\Override]
                 public function serve(): void
                 {
+                    
                 }
             },
         ];

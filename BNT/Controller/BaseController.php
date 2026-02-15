@@ -12,8 +12,10 @@ abstract class BaseController extends \UUA\Unit
     use \UUA\Traits\ContainerTrait;
     use \UUA\Traits\BuildTrait;
 
-    public array $_POST;
-    public array $_GET;
+    public string $template;
+    public string $requestMethod;
+    public array $parsedBody;
+    public array $queryParams;
     public protected(set) string $location;
     public string $title = 'BlackNova Traders';
 
@@ -26,11 +28,6 @@ abstract class BaseController extends \UUA\Unit
         }
 
         return fromPOST($name, $default);
-    }
-
-    protected function method(): string
-    {
-        return $_SERVER['REQUEST_METHOD'];
     }
 
     protected function redirectTo($location)
@@ -50,27 +47,39 @@ abstract class BaseController extends \UUA\Unit
 
     protected function render(string $template): void
     {
-        global $title;
-        
-        $l = new Language();
-        $title = $this->title;
-
-        include $template;
+        $this->template = $template;
     }
 
     #[\Override]
     public function serve(): void
     {
-        $this->_GET ??= $_GET;
-        $this->_POST ??= $_POST;
+        $this->requestMethod ??= $_SERVER['REQUEST_METHOD'];
+        $this->queryParams ??= $_GET;
+        $this->parsedBody ??= $_POST;
 
-        if ($this->method() === 'GET') {
-            $this->processGet();
+        switch ($this->requestMethod) {
+            case 'GET':
+                $this->processGet();
+                break;
+            case 'POST':
+                $this->processPost();
+                break;
         }
 
-        if ($this->method() === 'POST') {
-            $this->processPost();
+        $this->prepareResponse();
+    }
+
+    protected function prepareResponse(): void
+    {
+        if (!empty($this->template)) {
+            global $title;
+
+            $l = new Language();
+            $title = $this->title;
+
+            include $this->template;
         }
+
         if (!empty($this->location)) {
             header('Location: ' . $this->location, true, 302);
         }

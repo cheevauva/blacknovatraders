@@ -11,6 +11,13 @@ use BNT\Game\Servant\GameUniverseDeployServant;
 class CreateUniverseController extends BaseController
 {
 
+    public const STEP_1 = 1;
+    public const STEP_2 = 2;
+    public const STEP_3 = 3;
+
+    public int $sched_ticks;
+    public int $sched_turns;
+    public int $sched_igb;
     public int $sector_max;
     public int $universe_size;
     public float $initscommod = 100;
@@ -29,19 +36,28 @@ class CreateUniverseController extends BaseController
     public int $step = 0;
     public ?GameCalculateStartParamsServant $startParams;
     public ?string $swordfish = null;
+    public string $admin_mail;
+    public string $admin_pass;
 
     #[\Override]
     protected function init(): void
     {
+        global $admin_mail;
+        global $admin_pass;
         global $sector_max;
         global $universe_size;
         global $ore_limit;
         global $organics_limit;
         global $energy_limit;
         global $goods_limit;
+        global $sched_ticks;
+        global $sched_turns;
+        global $sched_igb;
 
         parent::init();
 
+        $this->admin_mail = $admin_mail;
+        $this->admin_pass = $admin_pass;
         $this->sector_max = $sector_max;
         $this->universe_size = $universe_size;
         $this->fedsecs = intval($sector_max / 200);
@@ -50,6 +66,9 @@ class CreateUniverseController extends BaseController
         $this->energy_limit = $energy_limit;
         $this->ore_limit = $ore_limit;
         $this->startParams = null;
+        $this->sched_ticks = $sched_ticks;
+        $this->sched_turns = $sched_turns;
+        $this->sched_igb = $sched_igb;
         $this->title = "Create Universe";
     }
 
@@ -61,23 +80,28 @@ class CreateUniverseController extends BaseController
 
     protected function prepareInput(): void
     {
-        $this->sector_max = intval($this->_POST['sector_max'] ?? $this->sector_max);
-        $this->initscommod = floatval($this->_POST['initscommod'] ?? $this->initscommod);
-        $this->initbcommod = floatval($this->_POST['initbcommod'] ?? $this->initbcommod);
-        $this->universe_size = intval($this->_POST['universe_size'] ?? $this->universe_size);
-        $this->special = intval($this->_POST['special'] ?? $this->special);
-        $this->ore = intval($this->_POST['ore'] ?? $this->organics);
-        $this->organics = intval($this->_POST['organics'] ?? $this->organics);
-        $this->goods = intval($this->_POST['goods'] ?? $this->goods);
-        $this->energy = intval($this->_POST['energy'] ?? $this->energy);
-        $this->planets = intval($this->_POST['planets'] ?? $this->planets);
-        $this->fedsecs = intval($this->_POST['fedsecs'] ?? $this->fedsecs);
-        $this->swordfish = $this->_POST['swordfish'] ?? null;
-        $this->organics_limit = intval($this->_POST['organics_limit'] ?? $this->organics_limit);
-        $this->goods_limit = intval($this->_POST['goods_limit'] ?? $this->goods_limit);
-        $this->energy_limit = intval($this->_POST['energy_limit'] ?? $this->energy_limit);
-        $this->ore_limit = intval($this->_POST['ore_limit'] ?? $this->ore_limit);
-        $this->step = intval($this->_POST['step'] ?? $this->step);
+        $this->step = intval($this->parsedBody['step'] ?? $this->step);
+        $this->swordfish = $this->parsedBody['swordfish'] ?? null;
+        $this->sector_max = intval($this->parsedBody['sector_max'] ?? $this->sector_max);
+        $this->admin_mail = strval($this->parsedBody['admin_mail'] ?? $this->admin_mail);
+        $this->admin_pass = strval($this->parsedBody['admin_pass'] ?? $this->admin_pass);
+        $this->initscommod = floatval($this->parsedBody['initscommod'] ?? $this->initscommod);
+        $this->initbcommod = floatval($this->parsedBody['initbcommod'] ?? $this->initbcommod);
+        $this->universe_size = intval($this->parsedBody['universe_size'] ?? $this->universe_size);
+        $this->special = intval($this->parsedBody['special'] ?? $this->special);
+        $this->ore = intval($this->parsedBody['ore'] ?? $this->ore);
+        $this->organics = intval($this->parsedBody['organics'] ?? $this->organics);
+        $this->goods = intval($this->parsedBody['goods'] ?? $this->goods);
+        $this->energy = intval($this->parsedBody['energy'] ?? $this->energy);
+        $this->planets = intval($this->parsedBody['planets'] ?? $this->planets);
+        $this->fedsecs = intval($this->parsedBody['fedsecs'] ?? $this->fedsecs);
+        $this->organics_limit = intval($this->parsedBody['organics_limit'] ?? $this->organics_limit);
+        $this->goods_limit = intval($this->parsedBody['goods_limit'] ?? $this->goods_limit);
+        $this->energy_limit = intval($this->parsedBody['energy_limit'] ?? $this->energy_limit);
+        $this->ore_limit = intval($this->parsedBody['ore_limit'] ?? $this->ore_limit);
+        $this->sched_ticks = intval($this->parsedBody['sched_ticks'] ?? $this->sched_ticks);
+        $this->sched_turns = intval($this->parsedBody['sched_turns'] ?? $this->sched_turns);
+        $this->sched_igb = intval($this->parsedBody['sched_igb'] ?? $this->sched_igb);
     }
 
     #[\Override]
@@ -93,13 +117,13 @@ class CreateUniverseController extends BaseController
             $step = 0;
         }
 
-        $this->startParams = $this->calculateStartParams();
-
         switch ($step) {
-            case 1:
+            case self::STEP_1:
                 $this->render('tpls/create_universe/create_universe_step1.tpl.php');
                 break;
-            case 2:
+            case self::STEP_2:
+                $this->startParams = $this->calculateStartParams();
+
                 $configUpdate = ConfigUpdateDAO::new($this->container);
                 $configUpdate->config = [
                     'sector_max' => $this->sector_max,
@@ -108,17 +132,25 @@ class CreateUniverseController extends BaseController
                     'goods_limit' => $this->goods_limit,
                     'ore_limit' => $this->ore_limit,
                     'energy_limit' => $this->energy_limit,
+                    'sched_ticks' => $this->sched_ticks,
+                    'sched_turns' => $this->sched_turns,
+                    'sched_igb' => $this->sched_igb,
                 ];
                 $configUpdate->serve();
 
                 $this->render('tpls/create_universe/create_universe_step2.tpl.php');
-                return;
-            case 3:
-                $entryPointCreateUniverseStep2 = GameUniverseDeployServant::new($this->container);
-                $entryPointCreateUniverseStep2->startParams = $this->startParams;
-                $entryPointCreateUniverseStep2->sectorMax = $this->sector_max;
-                $entryPointCreateUniverseStep2->universeSize = $this->universe_size;
-                $entryPointCreateUniverseStep2->serve();
+                break;
+            case self::STEP_3:
+                $this->startParams = $this->calculateStartParams();
+
+                $universeDeploy = GameUniverseDeployServant::new($this->container);
+                $universeDeploy->admin_mail = $this->admin_mail;
+                $universeDeploy->admin_pass = $this->admin_pass;
+                $universeDeploy->startParams = $this->startParams;
+                $universeDeploy->sectorMax = $this->sector_max;
+                $universeDeploy->universeSize = $this->universe_size;
+                $universeDeploy->serve();
+
                 $this->render('tpls/create_universe/create_universe_step3.tpl.php');
                 break;
             default:
