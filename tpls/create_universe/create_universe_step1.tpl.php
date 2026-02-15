@@ -1,7 +1,23 @@
 <?php $self = \BNT\Controller\CreateUniverseController::as($this); ?>
 <?php include "header.php"; ?>
 <form action="create_universe.php" method="post" class="form-container">
-
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Admin options</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col mb-2">
+                    <label class="form-label">Email</label>
+                    <input type="text" class="form-control" name="admin_mail" size="10" maxlength="10" value="<?php echo htmlspecialchars($self->admin_mail); ?>" required>
+                </div>
+                <div class="col mb-2">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="admin_password" size="10" maxlength="10" value="<?php echo htmlspecialchars($self->admin_pass); ?>" required>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card mb-4">
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0">Create Universe [Base/Planet Setup]</h5>

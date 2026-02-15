@@ -12,6 +12,17 @@
 
 <form action="create_universe.php" method="post" class="form-container">
     <input type="hidden" name="step" value="3">
+    <input type="hidden" name="admin_mail" value="<?php echo htmlspecialchars($self->admin_mail); ?>">
+    <input type="hidden" name="admin_pass" value="<?php echo htmlspecialchars($self->admin_pass); ?>">
+    <input type="hidden" name="sched_ticks" value="<?php echo $self->sched_ticks; ?>">
+    <input type="hidden" name="sched_turns" value="<?php echo $self->sched_turns; ?>">
+    <input type="hidden" name="sched_igb" value="<?php echo $self->sched_igb; ?>">
+    <input type="hidden" name="sched_news" value="<?php echo $self->sched_news; ?>">
+    <input type="hidden" name="sched_planets" value="<?php echo $self->sched_planets; ?>">
+    <input type="hidden" name="sched_ports" value="<?php echo $self->sched_ports; ?>">
+    <input type="hidden" name="sched_degrade" value="<?php echo $self->sched_degrade; ?>">
+    <input type="hidden" name="sched_apocalypse" value="<?php echo $self->sched_apocalypse; ?>">
+    <input type="hidden" name="sched_ranking" value="<?php echo $self->sched_ranking; ?>">
     <input type="hidden" name="universe_size" value="<?php echo $self->universe_size; ?>">
     <input type="hidden" name="sector_max" value="<?php echo $self->sector_max; ?>">
     <input type="hidden" name="energy_limit" value="<?php echo $self->energy_limit; ?>">
@@ -30,7 +41,12 @@
     <input type="hidden" name="swordfish" value="<?php echo htmlspecialchars($self->swordfish); ?>">
     <div class="mb-4">
         <h4 class="mb-3">Configuration Summary</h4>
-
+        
+        <div class="row mb-2">
+            <div class="col-md-6 fw-bold">Admin Email</div>
+            <div class="col-md-6"><?php echo htmlspecialchars($self->admin_mail); ?></div>
+        </div>
+        
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Universe size</div>
             <div class="col-md-6"><?php echo (int) $self->universe_size; ?></div>

@@ -6,6 +6,7 @@ namespace BNT\Sector\DAO;
 
 class SectorGenerateDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $sectorMax;

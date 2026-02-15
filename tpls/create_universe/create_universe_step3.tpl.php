@@ -34,37 +34,37 @@
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">News will be generated every <?php echo $sched_news; ?> minutes.</div>
+            <div class="col-md-9">News will be generated every <?php echo $self->sched_news; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Planets will generate production every <?php echo $sched_planets; ?> minutes.</div>
+            <div class="col-md-9">Planets will generate production every <?php echo $self->sched_planets; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Ports will regenerate every <?php echo $sched_ports; ?> minutes.</div>
+            <div class="col-md-9">Ports will regenerate every <?php echo $self->sched_ports; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Ships will be towed from fed sectors every <?php echo $sched_turns; ?> minutes.</div>
+            <div class="col-md-9">Ships will be towed from fed sectors every <?php echo $self->sched_turns; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Rankings will be generated every <?php echo $sched_ranking; ?> minutes.</div>
+            <div class="col-md-9">Rankings will be generated every <?php echo $self->sched_ranking; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-2">
-            <div class="col-md-9">Sector Defences will degrade every <?php echo $sched_degrade; ?> minutes.</div>
+            <div class="col-md-9">Sector Defences will degrade every <?php echo $self->sched_degrade; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-9">The planetary apocalypse will occur every <?php echo $sched_apocalypse; ?> minutes.</div>
+            <div class="col-md-9">The planetary apocalypse will occur every <?php echo $this->sched_apocalypse; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 
@@ -87,8 +87,7 @@
 
         <div class="alert alert-info mb-3">
             <strong>Admins login Information:</strong><br>
-            Username: '<?php echo $admin_mail; ?>'<br>
-            Password: '<?php echo $admin_pass; ?>'
+            Username: <?php echo $self->admin_mail; ?><br>
         </div>
 
         <div class="row mb-2">

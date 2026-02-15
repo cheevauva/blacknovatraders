@@ -7,6 +7,8 @@ namespace BNT\Controller;
 use BNT\Config\DAO\ConfigUpdateDAO;
 use BNT\Game\Servant\GameCalculateStartParamsServant;
 use BNT\Game\Servant\GameUniverseDeployServant;
+use BNT\Ship\Servant\ShipNewServant;
+use BNT\Scheduler\Servant\SchedulersDeployServant;
 
 class CreateUniverseController extends BaseController
 {
@@ -18,6 +20,12 @@ class CreateUniverseController extends BaseController
     public int $sched_ticks;
     public int $sched_turns;
     public int $sched_igb;
+    public int $sched_news;
+    public int $sched_planets;
+    public int $sched_ports;
+    public int $sched_degrade;
+    public int $sched_apocalypse;
+    public int $sched_ranking;
     public int $sector_max;
     public int $universe_size;
     public float $initscommod = 100;
@@ -53,6 +61,12 @@ class CreateUniverseController extends BaseController
         global $sched_ticks;
         global $sched_turns;
         global $sched_igb;
+        global $sched_news;
+        global $sched_planets;
+        global $sched_ports;
+        global $sched_degrade;
+        global $sched_apocalypse;
+        global $sched_ranking;
 
         parent::init();
 
@@ -69,6 +83,13 @@ class CreateUniverseController extends BaseController
         $this->sched_ticks = $sched_ticks;
         $this->sched_turns = $sched_turns;
         $this->sched_igb = $sched_igb;
+        $this->sched_news = $sched_news;
+        $this->sched_planets = $sched_planets;
+        $this->sched_ports = $sched_ports;
+        $this->sched_degrade = $sched_degrade;
+        $this->sched_apocalypse = $sched_apocalypse;
+        $this->sched_ranking = $sched_ranking;
+
         $this->title = "Create Universe";
     }
 
@@ -102,6 +123,12 @@ class CreateUniverseController extends BaseController
         $this->sched_ticks = intval($this->parsedBody['sched_ticks'] ?? $this->sched_ticks);
         $this->sched_turns = intval($this->parsedBody['sched_turns'] ?? $this->sched_turns);
         $this->sched_igb = intval($this->parsedBody['sched_igb'] ?? $this->sched_igb);
+        $this->sched_news = intval($this->parsedBody['sched_news'] ?? $this->sched_news);
+        $this->sched_planets = intval($this->parsedBody['sched_planets'] ?? $this->sched_planets);
+        $this->sched_ports = intval($this->parsedBody['sched_ports'] ?? $this->sched_ports);
+        $this->sched_degrade = intval($this->parsedBody['sched_degrade'] ?? $this->sched_degrade);
+        $this->sched_apocalypse = intval($this->parsedBody['sched_apocalypse'] ?? $this->sched_apocalypse);
+        $this->sched_ranking = intval($this->parsedBody['sched_ranking'] ?? $this->sched_ranking);
     }
 
     #[\Override]
@@ -126,6 +153,7 @@ class CreateUniverseController extends BaseController
 
                 $configUpdate = ConfigUpdateDAO::new($this->container);
                 $configUpdate->config = [
+                    'admin_mail' => $this->admin_mail,
                     'sector_max' => $this->sector_max,
                     'universe_size' => $this->universe_size,
                     'organics_limit' => $this->organics_limit,
@@ -135,6 +163,12 @@ class CreateUniverseController extends BaseController
                     'sched_ticks' => $this->sched_ticks,
                     'sched_turns' => $this->sched_turns,
                     'sched_igb' => $this->sched_igb,
+                    'sched_news' => $this->sched_news,
+                    'sched_planets' => $this->sched_planets,
+                    'sched_ports' => $this->sched_ports,
+                    'sched_degrade' => $this->sched_degrade,
+                    'sched_apocalypse' => $this->sched_apocalypse,
+                    'sched_ranking' => $this->sched_ranking,
                 ];
                 $configUpdate->serve();
 
@@ -150,6 +184,25 @@ class CreateUniverseController extends BaseController
                 $universeDeploy->sectorMax = $this->sector_max;
                 $universeDeploy->universeSize = $this->universe_size;
                 $universeDeploy->serve();
+
+                $schedulersDeploy = SchedulersDeployServant::new($this->container);
+                $schedulersDeploy->sched_apocalypse = $this->sched_apocalypse;
+                $schedulersDeploy->sched_degrade = $this->sched_degrade;
+                $schedulersDeploy->sched_igb = $this->sched_igb;
+                $schedulersDeploy->sched_news = $this->sched_news;
+                $schedulersDeploy->sched_planets = $this->sched_planets;
+                $schedulersDeploy->sched_ports = $this->sched_ports;
+                $schedulersDeploy->sched_ranking = $this->sched_ranking;
+                $schedulersDeploy->sched_turns = $this->sched_turns;
+                $schedulersDeploy->serve();
+
+                $newShip = ShipNewServant::new($this->container);
+                $newShip->email = $this->admin_mail;
+                $newShip->password = $this->admin_pass;
+                $newShip->character = 'WebMaster';
+                $newShip->shipname = 'WebMaster';
+                $newShip->role = 'admin';
+                $newShip->serve();
 
                 $this->render('tpls/create_universe/create_universe_step3.tpl.php');
                 break;

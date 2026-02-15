@@ -7,6 +7,7 @@ use BNT\Ship\DAO\ShipByTokenDAO;
 use UUA\Container\Container;
 use Psr\Container\ContainerInterface;
 use BNT\ADODB\ADOPDO;
+use BNT\Config\Servant\ConfigReloadGlobalVarsServant;
 
 if (empty($disableRegisterGlobalFix)) {
     foreach ($_POST as $k => $v) {
@@ -30,7 +31,6 @@ if (empty($disableRegisterGlobalFix)) {
 global $db;
 global $container;
 
-
 $db = new ADOPDO(sprintf("%s:host=%s;port=%s;dbname=%s;charset=utf8mb4", $db_type, $dbhost, $dbport, $dbname), $dbuname, $dbpass, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -40,19 +40,7 @@ $container = new Container(fn($c) => [
     'db' => $db,
 ]);
 
-
-
-if (empty($disableConfigRewrite)) {
-    try {
-        foreach (ConfigReadDAO::call($container)->config as $name => $value) {
-            $tmpType = gettype($$name);
-            $$name = $value;
-            settype($$name, $tmpType);
-        }
-    } catch (\Exception $ex) {
-        
-    }
-}
+ConfigReloadGlobalVarsServant::new($container)->serve();
 
 $playerinfo = null;
 $token = $_COOKIE['token'] ?? uuidv7();

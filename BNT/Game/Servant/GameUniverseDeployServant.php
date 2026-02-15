@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BNT\Game\Servant;
 
-use BNT\Ship\DAO\ShipCreateDAO;
 use BNT\Sector\DAO\SectorGenerateDAO;
 use BNT\Zone\DAO\ZonesSetMaxHullDAO;
 use BNT\Sector\DAO\SectorsReassignSpecialPortsDAO;
@@ -13,12 +12,9 @@ use BNT\Link\DAO\LinksTwoWayGenerateDAO;
 use BNT\Link\DAO\LinksTwoWayGenerateRandomDAO;
 use BNT\Link\DAO\LinksOneWayGenerateDAO;
 use BNT\Link\DAO\LinksTwoWayBackGenerateDAO;
-use BNT\Scheduler\DAO\SchedulersDefaultGenerateDAO;
 use BNT\Planet\DAO\PlanetsGenerateDAO;
 use BNT\Sector\DAO\SectorsAssignZoneDAO;
 use BNT\Game\Servant\GameCalculateStartParamsServant;
-use BNT\Zone\DAO\ZoneCreateDAO;
-use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
 
 class GameUniverseDeployServant extends \UUA\Servant
 {
@@ -28,17 +24,13 @@ class GameUniverseDeployServant extends \UUA\Servant
     public int $sectorMax;
     public int $universeSize;
     public GameCalculateStartParamsServant $startParams;
+    public array $messages;
+    public bool $success = false;
 
     #[\Override]
     public function serve(): void
     {
         global $fed_max_hull;
-        global $start_armor;
-        global $start_credits;
-        global $start_energy;
-        global $start_fighters;
-        global $start_turns;
-        global $language;
 
         $startParams = $this->startParams;
 
@@ -90,29 +82,7 @@ class GameUniverseDeployServant extends \UUA\Servant
         $linkOneWayGenerate->serve();
 
         LinksTwoWayBackGenerateDAO::call($this->container);
-        SchedulersDefaultGenerateDAO::call($this->container);
-
-        $shipAdminId = ShipCreateDAO::call($this->container, [
-            'ship_name' => 'WebMaster',
-            'character_name' => 'WebMaster',
-            'password' => md5($this->admin_pass),
-            'email' => $this->admin_mail,
-            'armor_pts' => $start_armor,
-            'credits' => $start_credits,
-            'ship_energy' => $start_energy,
-            'ship_fighters' => $start_fighters,
-            'turns' => $start_turns,
-            'last_login' => date('Y-m-d H:i:s'),
-            'lang' => $language,
-            'role' => 'admin'
-        ])->id;
-
-        ZoneCreateDAO::call($this->container, [
-            'zone_name' => 'WebMaster\'s Territory',
-            'owner' => $shipAdminId,
-        ])->id;
-        IBankAccountCreateDAO::call($this->container, [
-            'ship_id' => $shipAdminId,
-        ]);
+        
+        $this->success = true;
     }
 }

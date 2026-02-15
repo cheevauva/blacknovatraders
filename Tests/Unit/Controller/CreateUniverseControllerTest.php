@@ -7,10 +7,18 @@ namespace Tests\Unit\Controller;
 use BNT\Controller\CreateUniverseController;
 use BNT\Config\DAO\ConfigUpdateDAO;
 use BNT\Game\Servant\GameUniverseDeployServant;
+use BNT\Scheduler\Servant\SchedulersDeployServant;
+use BNT\Ship\Servant\ShipNewServant;
 
 class CreateUniverseControllerTest extends \Tests\UnitTestCase
 {
 
+    public static int $sched_news = 658;
+    public static int $sched_planets = 659;
+    public static int $sched_ports = 660;
+    public static int $sched_degrade = 661;
+    public static int $sched_apocalypse = 662;
+    public static int $sched_ranking = 663;
     public static int $sched_igb = 664;
     public static int $sched_turns = 665;
     public static int $sched_ticks = 666;
@@ -24,6 +32,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public static string $admin_pass = 'admin_pass';
     public static string $adminpass = 'adminpass';
     public static ?array $configData;
+    public static ?array $shipData;
 
     #[\Override]
     protected function setUp(): void
@@ -40,6 +49,12 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         global $sched_ticks;
         global $sched_turns;
         global $sched_igb;
+        global $sched_news;
+        global $sched_planets;
+        global $sched_ports;
+        global $sched_degrade;
+        global $sched_apocalypse;
+        global $sched_ranking;
 
         parent::setUp();
 
@@ -55,21 +70,15 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         $sched_ticks = self::$sched_ticks;
         $sched_turns = self::$sched_turns;
         $sched_igb = self::$sched_igb;
+        $sched_news = self::$sched_news;
+        $sched_planets = self::$sched_planets;
+        $sched_ports = self::$sched_ports;
+        $sched_degrade = self::$sched_degrade;
+        $sched_apocalypse = self::$sched_apocalypse;
+        $sched_ranking = self::$sched_ranking;
 
         self::$configData = null;
-    }
-
-    public function testInit(): void
-    {
-        $createUniverse = CreateUniverseController::new(self::$container);
-
-        self::assertEquals(1000, $createUniverse->ore_limit);
-        self::assertEquals(1000, $createUniverse->organics_limit);
-        self::assertEquals(1000, $createUniverse->goods_limit);
-        self::assertEquals(1000, $createUniverse->energy_limit);
-        self::assertEquals(1000, $createUniverse->sector_max);
-        self::assertEquals(200, $createUniverse->universe_size);
-        self::assertEquals(5, $createUniverse->fedsecs);
+        self::$shipData = null;
     }
 
     public function testPrepareInputDefauts(): void
@@ -82,12 +91,20 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         self::assertEquals(self::$sched_igb, $createUniverse->sched_igb);
         self::assertEquals(self::$sched_turns, $createUniverse->sched_turns);
         self::assertEquals(self::$sched_ticks, $createUniverse->sched_ticks);
+        self::assertEquals(self::$sched_news, $createUniverse->sched_news);
+        self::assertEquals(self::$sched_planets, $createUniverse->sched_planets);
+        self::assertEquals(self::$sched_ports, $createUniverse->sched_ports);
+        self::assertEquals(self::$sched_ranking, $createUniverse->sched_ranking);
+        self::assertEquals(self::$sched_degrade, $createUniverse->sched_degrade);
+        self::assertEquals(self::$sched_apocalypse, $createUniverse->sched_apocalypse);
         self::assertEquals(self::$ore_limit, $createUniverse->ore_limit);
         self::assertEquals(self::$organics_limit, $createUniverse->organics_limit);
         self::assertEquals(self::$goods_limit, $createUniverse->goods_limit);
         self::assertEquals(self::$energy_limit, $createUniverse->energy_limit);
         self::assertEquals(self::$sector_max, $createUniverse->sector_max);
         self::assertEquals(self::$universe_size, $createUniverse->universe_size);
+        self::assertEquals(self::$admin_mail, $createUniverse->admin_mail);
+        self::assertEquals(self::$admin_pass, $createUniverse->admin_pass);
         self::assertEquals(5, $createUniverse->fedsecs);
         self::assertEquals(1, $createUniverse->special);
         self::assertEquals(15, $createUniverse->ore);
@@ -95,7 +112,6 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         self::assertEquals(15, $createUniverse->goods);
         self::assertEquals(10, $createUniverse->energy);
         self::assertEquals(10, $createUniverse->planets);
-        self::assertEquals(0, $createUniverse->step);
         self::assertEquals('tpls/create_universe/create_universe_login.tpl.php', $createUniverse->template);
     }
 
@@ -104,6 +120,12 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         $createUniverse = CreateUniverseController::new(self::$container);
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
+            'sched_news' => 221,
+            'sched_planets' => 222,
+            'sched_ports' => 223,
+            'sched_degrade' => 224,
+            'sched_apocalypse' => 225,
+            'sched_ranking' => 226,
             'sched_igb' => 228,
             'sched_turns' => 229,
             'sched_ticks' => 330,
@@ -122,9 +144,17 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
             'planets' => 343,
             'step' => 344,
             'swordfish' => 'swordfish',
+            'admin_mail' => 'am',
+            'admin_pass' => 'ap',
         ];
         $createUniverse->serve();
 
+        self::assertEquals(221, $createUniverse->sched_news);
+        self::assertEquals(222, $createUniverse->sched_planets);
+        self::assertEquals(223, $createUniverse->sched_ports);
+        self::assertEquals(224, $createUniverse->sched_degrade);
+        self::assertEquals(225, $createUniverse->sched_apocalypse);
+        self::assertEquals(226, $createUniverse->sched_ranking);
         self::assertEquals(228, $createUniverse->sched_igb);
         self::assertEquals(229, $createUniverse->sched_turns);
         self::assertEquals(330, $createUniverse->sched_ticks);
@@ -142,6 +172,8 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         self::assertEquals(342, $createUniverse->energy);
         self::assertEquals(343, $createUniverse->planets);
         self::assertEquals(344, $createUniverse->step);
+        self::assertEquals('am', $createUniverse->admin_mail);
+        self::assertEquals('ap', $createUniverse->admin_pass);
         self::assertEquals('swordfish', $createUniverse->swordfish);
         self::assertEquals('tpls/create_universe/create_universe_login.tpl.php', $createUniverse->template);
     }
@@ -201,6 +233,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         self::assertNotEmpty($createUniverse->startParams);
         self::assertEquals('tpls/create_universe/create_universe_step2.tpl.php', $createUniverse->template);
         self::assertEquals([
+            'admin_mail' => self::$admin_mail,
             'sector_max' => self::$sector_max,
             'universe_size' => self::$universe_size,
             'organics_limit' => self::$organics_limit,
@@ -210,6 +243,12 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
             'sched_igb' => self::$sched_igb,
             'sched_ticks' => self::$sched_ticks,
             'sched_turns' => self::$sched_turns,
+            'sched_planets' => self::$sched_planets,
+            'sched_ports' => self::$sched_ports,
+            'sched_news' => self::$sched_news,
+            'sched_ranking' => self::$sched_ranking,
+            'sched_degrade' => self::$sched_degrade,
+            'sched_apocalypse' => self::$sched_apocalypse,
         ], self::$configData);
     }
 
@@ -223,6 +262,12 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         ];
         $createUniverse->serve();
 
+        self::assertEquals('WebMaster', self::$shipData['ship_name']);
+        self::assertEquals('WebMaster', self::$shipData['character_name']);
+        self::assertEquals('english', self::$shipData['lang']);
+        self::assertEquals('admin', self::$shipData['role']);
+        self::assertEquals(self::$admin_mail, self::$shipData['email']);
+        self::assertEquals('7adc785be4a31eff6783871ff63e18f1', self::$shipData['password']);
         self::assertNotEmpty($createUniverse->startParams);
         self::assertEquals('tpls/create_universe/create_universe_step3.tpl.php', $createUniverse->template);
     }
@@ -253,6 +298,24 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
                 public function serve(): void
                 {
                     
+                }
+            },
+            SchedulersDeployServant::class => fn($c) => new class($c) extends SchedulersDeployServant {
+
+                #[\Override]
+                public function serve(): void
+                {
+                    
+                }
+            },
+            ShipNewServant::class => fn($c) => new class($c) extends ShipNewServant {
+
+                #[\Override]
+                public function serve(): void
+                {
+                    CreateUniverseControllerTest::$shipData = $this->newShip();
+
+                    $this->id = 1;
                 }
             },
         ];
