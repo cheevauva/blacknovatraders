@@ -73,6 +73,51 @@
             </div>
         </div>
     </div>
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Schedulers</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <label class="form-label">Ranking</label>
+                    <input type="number" class="form-control" name="sched_ranking" size="3" maxlength="2" value="<?php echo $self->sched_ranking; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">Ticks</label>
+                    <input type="number" class="form-control" name="sched_ticks" size="3" maxlength="2" value="<?php echo $self->sched_ticks; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">Turns</label>
+                    <input type="number" class="form-control" name="sched_turns" size="3" maxlength="2" value="<?php echo $self->sched_turns; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">IGB</label>
+                    <input type="number" class="form-control" name="sched_igb" size="3" maxlength="2" value="<?php echo $self->sched_igb; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">News</label>
+                    <input type="number" class="form-control" name="sched_news" size="3" maxlength="2" value="<?php echo $self->sched_news; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">Planets</label>
+                    <input type="number" class="form-control" name="sched_planets" size="3" maxlength="2" value="<?php echo $self->sched_planets; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">Ports</label>
+                    <input type="number" class="form-control" name="sched_ports" size="3" maxlength="2" value="<?php echo $self->sched_ports; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">Degrade</label>
+                    <input type="number" class="form-control" name="sched_degrade" size="3" maxlength="2" value="<?php echo $self->sched_degrade; ?>" required>
+                </div>
+                <div class="col">
+                    <label class="form-label">Apocalypse</label>
+                    <input type="number" class="form-control" name="sched_apocalypse" size="3" maxlength="2" value="<?php echo $self->sched_apocalypse; ?>" required>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <div class="mb-4">

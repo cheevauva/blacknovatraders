@@ -41,12 +41,12 @@
     <input type="hidden" name="swordfish" value="<?php echo htmlspecialchars($self->swordfish); ?>">
     <div class="mb-4">
         <h4 class="mb-3">Configuration Summary</h4>
-        
+
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Admin Email</div>
             <div class="col-md-6"><?php echo htmlspecialchars($self->admin_mail); ?></div>
         </div>
-        
+
         <div class="row mb-2">
             <div class="col-md-6 fw-bold">Universe size</div>
             <div class="col-md-6"><?php echo (int) $self->universe_size; ?></div>
@@ -104,6 +104,25 @@
             <div class="col-md-6 fw-bold">Unowned planets</div>
             <div class="col-md-6"><?php echo $self->startParams->unownedPlanetsCount; ?></div>
         </div>
+
+        <hr class="my-3">
+
+        <div class="row mb-3">
+            <div class="col-md-6 fw-bold">Scheduler settings</div>
+            <div class="col-md-6">
+                <?php echo $self->sched_ticks; ?> | 
+                <?php echo $self->sched_turns; ?> | 
+                <?php echo $self->sched_igb; ?> | 
+                <?php echo $self->sched_news; ?> | 
+                <?php echo $self->sched_planets; ?> | 
+                <?php echo $self->sched_ports; ?> | 
+                <?php echo $self->sched_degrade; ?> | 
+                <?php echo $self->sched_apocalypse; ?> | 
+                <?php echo $self->sched_ranking; ?> 
+            </div>
+        </div>
+
+
     </div>
 
     <div class="d-grid gap-2 d-md-flex  mb-4">
