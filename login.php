@@ -1,36 +1,10 @@
 <?php
 
-use BNT\EntryPoint\Servant\EntryPointLoginServant;
+use BNT\Controller\LoginController;
 
 $disableRegisterGlobalFix = true;
 
 include 'config.php';
 
-try {
-    switch (requestMethod()) {
-        case 'POST':
-            $email = fromPOST('email');
-            $pass = fromPOST('pass');
-
-            $entryPointLogin = EntryPointLoginServant::new($container);
-            $entryPointLogin->email = $email;
-            $entryPointLogin->password = $pass;
-            $entryPointLogin->serve();
-
-            setcookie('token', $entryPointLogin->ship['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-            redirectTo('main.php?id=' . $entryPointLogin->ship['ship_id']);
-            break;
-        case 'GET':
-            include 'tpls/login.tpl.php';
-            break;
-    }
-} catch (\Exception $ex) {
-    switch (requestMethod()) {
-        case 'POST':
-            echo responseJsonByException($ex);
-            break;
-        case 'GET':
-            include 'tpls/login.tpl.php';
-            break;
-    }
-}
+$loginController = LoginController::new($container);
+$loginController->serve();

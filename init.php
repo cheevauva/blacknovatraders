@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-use BNT\Config\DAO\ConfigReadDAO;
 use BNT\Ship\DAO\ShipByTokenDAO;
 use UUA\Container\Container;
-use Psr\Container\ContainerInterface;
 use BNT\ADODB\ADOPDO;
 use BNT\Config\Servant\ConfigReloadGlobalVarsServant;
 

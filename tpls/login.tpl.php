@@ -1,5 +1,12 @@
-<?php $title = $l_login_title; ?>
-<?php include("header.php"); ?>
+<?php 
+global $l_login_title;
+global $l_login_newp;
+global $l_login_pw;
+global $l_login_email;
+
+$title = $l_login_title;
+?>
+<?php include_header();?>
 <?php bigtitle(); ?>
 <?php if (!empty($ex)) : ?>  
     <div class="alert alert-danger">
@@ -28,4 +35,4 @@
     </script>
 <?php endif; ?>
 
-<?php include("footer.php"); ?>
+<?php include_footer();?>

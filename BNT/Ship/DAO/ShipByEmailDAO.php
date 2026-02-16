@@ -17,8 +17,8 @@ class ShipByEmailDAO extends \UUA\DAO
     #[\Override]
     public function serve(): void
     {
-        $this->ship = $this->db()->fetch("SELECT * FROM ships WHERE email = :username LIMIT 1", [
-            'username' => $this->email,
+        $this->ship = $this->db()->fetch("SELECT * FROM ships WHERE email = :email LIMIT 1", [
+            'email' => $this->email,
         ]) ?: null;
     }
 

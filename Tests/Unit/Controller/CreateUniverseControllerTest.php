@@ -85,6 +85,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     {
         $createUniverse = CreateUniverseController::new(self::$container);
         $createUniverse->requestMethod = 'POST';
+        $createUniverse->disablePrepareResponse = true;
         $createUniverse->parsedBody = [];
         $createUniverse->serve();
 
@@ -118,6 +119,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testPrepareInputFromParsedBody(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->disablePrepareResponse = true;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
             'sched_news' => 221,
@@ -181,6 +183,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testWrongPassword(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->disablePrepareResponse = true;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
             'step' => 1,
@@ -195,6 +198,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testWrongStep(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->disablePrepareResponse = true;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
             'step' => 111,
@@ -209,6 +213,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testStep1(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->disablePrepareResponse = true;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
             'step' => CreateUniverseController::STEP_1,
@@ -223,6 +228,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testStep2(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->disablePrepareResponse = true;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
             'step' => CreateUniverseController::STEP_2,
@@ -255,6 +261,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testStep3(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->disablePrepareResponse = true;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
             'step' => CreateUniverseController::STEP_3,
@@ -276,14 +283,6 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     protected function stubs(): array
     {
         return [
-            CreateUniverseController::class => fn($c) => new class($c) extends CreateUniverseController {
-
-                #[\Override]
-                protected function prepareResponse(): void
-                {
-                    
-                }
-            },
             ConfigUpdateDAO::class => fn($c) => new class($c) extends ConfigUpdateDAO {
 
                 #[\Override]

@@ -10,6 +10,7 @@ use UUA\Container\Container;
 
 class UnitTestCase extends TestCase
 {
+
     public static ContainerInterface $container;
 
     protected function setUp(): void
@@ -19,7 +20,7 @@ class UnitTestCase extends TestCase
 
     protected function container(): ContainerInterface
     {
-        return new \UUA\Container\Container(fn($c) => $this->stubs($c));
+        return new Container(fn($c) => $this->stubs($c));
     }
 
     /**
