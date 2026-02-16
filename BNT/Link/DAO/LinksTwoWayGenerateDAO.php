@@ -8,7 +8,7 @@ class LinksTwoWayGenerateDAO extends \UUA\DAO
 {
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $sectorMax;
+    public int $limit;
 
     #[\Override]
     public function serve(): void
@@ -26,13 +26,13 @@ class LinksTwoWayGenerateDAO extends \UUA\DAO
             information_schema.tables t2
         CROSS JOIN 
             information_schema.tables t3
-        LIMIT :sector_max
+        LIMIT :limit
         ";
 
         $this->db()->q($sql, [
-            'sector_max' => (int) $this->sectorMax,
+            'limit' => $this->limit,
         ], [
-            'sector_max' => \PDO::PARAM_INT,
+            'limit' => \PDO::PARAM_INT,
         ]);
     }
 }

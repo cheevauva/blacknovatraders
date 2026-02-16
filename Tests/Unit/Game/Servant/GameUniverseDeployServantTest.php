@@ -27,7 +27,6 @@ class GameUniverseDeployServantTest extends \Tests\UnitTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
     }
 
     public function testMain()
@@ -50,13 +49,11 @@ class GameUniverseDeployServantTest extends \Tests\UnitTestCase
         $startParams->serve();
 
         $universeDeploy = GameUniverseDeployServant::new(self::$container);
-        $universeDeploy->admin_mail = 'admin@mail.ru';
-        $universeDeploy->admin_pass = 'admin_pass';
         $universeDeploy->sectorMax = 500;
         $universeDeploy->universeSize = 200;
         $universeDeploy->startParams = $startParams;
         $universeDeploy->serve();
-        
+
         self::assertTrue($universeDeploy->success);
     }
 
@@ -69,7 +66,7 @@ class GameUniverseDeployServantTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->numbersOfCreatedSectors = $this->sectorMax;
+                    $this->numbersOfCreatedSectors = $this->limit;
                 }
             },
             ZonesSetMaxHullDAO::class => fn($c) => new class($c) extends ZonesSetMaxHullDAO {

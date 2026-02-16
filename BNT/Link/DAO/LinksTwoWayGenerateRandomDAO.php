@@ -8,7 +8,7 @@ class LinksTwoWayGenerateRandomDAO extends \UUA\DAO
 {
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $sectorMax;
+    public int $limit;
 
     #[\Override]
     public function serve(): void
@@ -16,8 +16,8 @@ class LinksTwoWayGenerateRandomDAO extends \UUA\DAO
         $sql = "
         INSERT INTO links (link_start, link_dest, link_type)
         SELECT 
-            ROUND(RAND() * :sector_max + 1) - 1 AS link_start,
-            ROUND(RAND() * :sector_max + 1) - 1 AS link_dest,
+            ROUND(RAND() * :limit + 1) - 1 AS link_start,
+            ROUND(RAND() * :limit + 1) - 1 AS link_dest,
             2 AS link_type
         FROM 
             information_schema.tables t1
@@ -25,13 +25,13 @@ class LinksTwoWayGenerateRandomDAO extends \UUA\DAO
             information_schema.tables t2
         CROSS JOIN 
             information_schema.tables t3
-        LIMIT :sector_max
+        LIMIT :limit
         ";
 
         $this->db()->q($sql, [
-            'sector_max' => (int) $this->sectorMax,
+            'limit' =>  $this->limit,
         ], [
-            'sector_max' => \PDO::PARAM_INT,
+            'limit' => \PDO::PARAM_INT,
         ]);
     }
 }

@@ -8,7 +8,8 @@ class SectorsReassignSpecialPortsDAO extends \UUA\DAO
 {
     use \BNT\Traits\DatabaseMainTrait;
 
-    public int $specialSectorsCount;
+    public int $zone;
+    public int $limit;
 
     #[\Override]
     public function serve(): void
@@ -17,7 +18,7 @@ class SectorsReassignSpecialPortsDAO extends \UUA\DAO
         UPDATE 
             universe 
         SET 
-            zone_id = 3,
+            zone_id = :zone,
             port_type = 'special' 
         WHERE 
             port_type = 'none' AND 
@@ -34,15 +35,16 @@ class SectorsReassignSpecialPortsDAO extends \UUA\DAO
                             port_type = 'none' 
                         ORDER BY 
                             rand() DESC 
-                        LIMIT :spp
+                        LIMIT :limit
                     ) AS s
             )
         ";
 
         $this->db()->q($sql, [
-            'spp' => (int) $this->specialSectorsCount,
+            'zone' => $this->zone,
+            'limit' => (int) $this->limit,
         ], [
-            'spp' => \PDO::PARAM_INT,
+            'limit' => \PDO::PARAM_INT,
         ]);
     }
 }

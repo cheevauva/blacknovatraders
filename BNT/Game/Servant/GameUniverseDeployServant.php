@@ -15,16 +15,14 @@ use BNT\Link\DAO\LinksTwoWayBackGenerateDAO;
 use BNT\Planet\DAO\PlanetsGenerateDAO;
 use BNT\Sector\DAO\SectorsAssignZoneDAO;
 use BNT\Game\Servant\GameCalculateStartParamsServant;
+use BNT\Zone\ZoneConstants;
 
 class GameUniverseDeployServant extends \UUA\Servant
 {
 
-    public string $admin_mail;
-    public string $admin_pass;
     public int $sectorMax;
     public int $universeSize;
     public GameCalculateStartParamsServant $startParams;
-    public array $messages;
     public bool $success = false;
 
     #[\Override]
@@ -34,55 +32,60 @@ class GameUniverseDeployServant extends \UUA\Servant
 
         $startParams = $this->startParams;
 
+        $setMaxHullForZone = ZonesSetMaxHullDAO::new($this->container);
+        $setMaxHullForZone->zone = ZoneConstants::ZONE_ID_FEDERATION_SPACE;
+        $setMaxHullForZone->fedMaxHull = $fed_max_hull;
+        $setMaxHullForZone->serve();
+        
         $sectorsGenerate = SectorGenerateDAO::new($this->container);
-        $sectorsGenerate->zone = 1;
-        $sectorsGenerate->sectorMax = $this->sectorMax;
+        $sectorsGenerate->zone = ZoneConstants::ZONE_ID_UNCHARTERED_SPACE;
+        $sectorsGenerate->limit = $this->sectorMax;
         $sectorsGenerate->universe_size = $this->universeSize;
         $sectorsGenerate->serve();
 
-        $zonesSetMaxHullInZone2 = ZonesSetMaxHullDAO::new($this->container);
-        $zonesSetMaxHullInZone2->zone = 2;
-        $zonesSetMaxHullInZone2->fedMaxHull = $fed_max_hull;
-        $zonesSetMaxHullInZone2->serve();
-
         $assignZone = SectorsAssignZoneDAO::new($this->container);
-        $assignZone->zone = 2;
+        $assignZone->zone = ZoneConstants::ZONE_ID_FEDERATION_SPACE;
         $assignZone->lessThanSector = $startParams->fedSectorsCount;
         $assignZone->serve();
 
         $reassignSpecialPorts = SectorsReassignSpecialPortsDAO::new($this->container);
-        $reassignSpecialPorts->specialSectorsCount = $startParams->specialSectorsCount;
+        $reassignSpecialPorts->zone = ZoneConstants::ZONE_ID_FREE_TRADE_SPACE;
+        $reassignSpecialPorts->limit = $startParams->specialSectorsCount;
         $reassignSpecialPorts->serve();
 
         $reassignResourcePorts = SectorsReassignResourcesPortsDAO::new($this->container);
-        $reassignResourcePorts->energySectorsCount = $startParams->energySectorsCount;
-        $reassignResourcePorts->goodsSectorsCount = $startParams->goodsSectorsCount;
-        $reassignResourcePorts->organicsSectorsCount = $startParams->organicsSectorsCount;
-        $reassignResourcePorts->oreSectorsCount = $startParams->oreSectorsCount;
+        $reassignResourcePorts->energySectorsLimit = $startParams->energySectorsCount;
+        $reassignResourcePorts->goodsSectorsLimit = $startParams->goodsSectorsCount;
+        $reassignResourcePorts->organicsSectorsLimit = $startParams->organicsSectorsCount;
+        $reassignResourcePorts->oreSectorsLimit = $startParams->oreSectorsCount;
         $reassignResourcePorts->buyGoods = $startParams->initBuyGoods;
         $reassignResourcePorts->buyOre = $startParams->initBuyOre;
         $reassignResourcePorts->buyOrganics = $startParams->initBuyOrganics;
         $reassignResourcePorts->buyEnergy = $startParams->initBuyEnergy;
+        $reassignResourcePorts->sellGoods = $startParams->initSellGoods;
+        $reassignResourcePorts->sellOre = $startParams->initSellOre;
+        $reassignResourcePorts->sellOrganics = $startParams->initSellOrganics;
+        $reassignResourcePorts->sellEnergy = $startParams->initSellEnergy;
         $reassignResourcePorts->serve();
 
         $planetsGenerate = PlanetsGenerateDAO::new($this->container);
-        $planetsGenerate->unownedPlanetsCount = $startParams->unownedPlanetsCount;
+        $planetsGenerate->limit = $startParams->unownedPlanetsCount;
         $planetsGenerate->serve();
 
         $linkTwoWayGenerate = LinksTwoWayGenerateDAO::new($this->container);
-        $linkTwoWayGenerate->sectorMax = $this->sectorMax;
+        $linkTwoWayGenerate->limit = $this->sectorMax;
         $linkTwoWayGenerate->serve();
 
         $linkTwoWayRandomGenerate = LinksTwoWayGenerateRandomDAO::new($this->container);
-        $linkTwoWayRandomGenerate->sectorMax = $this->sectorMax;
+        $linkTwoWayRandomGenerate->limit = $this->sectorMax;
         $linkTwoWayRandomGenerate->serve();
 
         $linkOneWayGenerate = LinksOneWayGenerateDAO::new($this->container);
-        $linkOneWayGenerate->sectorMax = $this->sectorMax;
+        $linkOneWayGenerate->limit = $this->sectorMax;
         $linkOneWayGenerate->serve();
 
         LinksTwoWayBackGenerateDAO::call($this->container);
-        
+
         $this->success = true;
     }
 }

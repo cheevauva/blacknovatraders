@@ -9,7 +9,7 @@ class SectorGenerateDAO extends \UUA\DAO
 
     use \BNT\Traits\DatabaseMainTrait;
 
-    public int $sectorMax;
+    public int $limit;
     public int $universe_size;
     public int $zone;
 
@@ -35,7 +35,7 @@ class SectorGenerateDAO extends \UUA\DAO
 
         $this->db()->q($sql, [
             'zone_id' => $this->zone,
-            'sector_max' => $this->sectorMax,
+            'sector_max' => $this->limit,
             'universe_size' => $this->universe_size,
         ], [
             'sector_max' => \PDO::PARAM_INT,

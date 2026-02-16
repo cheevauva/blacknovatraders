@@ -6,9 +6,10 @@ namespace BNT\Planet\DAO;
 
 class PlanetsGenerateDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $unownedPlanetsCount;
+    public int $limit;
 
     #[\Override]
     public function serve(): void
@@ -39,7 +40,7 @@ class PlanetsGenerateDAO extends \UUA\DAO
             information_schema.tables t2
         CROSS JOIN 
             information_schema.tables t3
-        LIMIT :nump
+        LIMIT :limit
         ";
 
         $this->db()->q($planetsSql, [
@@ -49,9 +50,9 @@ class PlanetsGenerateDAO extends \UUA\DAO
             'default_prod_energy' => $default_prod_energy,
             'default_prod_fighters' => $default_prod_fighters,
             'default_prod_torp' => $default_prod_torp,
-            'nump' => (int) $this->unownedPlanetsCount,
+            'limit' => (int) $this->limit,
         ], [
-            'nump' => \PDO::PARAM_INT,
+            'limit' => \PDO::PARAM_INT,
         ]);
     }
 }

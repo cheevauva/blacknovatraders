@@ -14,7 +14,7 @@ class ZonesSetMaxHullDAO extends \UUA\DAO
     #[\Override]
     public function serve(): void
     {
-        $this->db()->q("UPDATE zones SET max_hull = :fed_max_hull WHERE zone_id = :zone_id", [
+        $this->db()->q('UPDATE zones SET max_hull = :fed_max_hull WHERE zone_id = :zone_id', [
             'fed_max_hull' => $this->fedMaxHull,
             'zone_id' => $this->zone,
         ]);

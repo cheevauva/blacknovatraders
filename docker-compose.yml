@@ -20,3 +20,9 @@ services:
       MYSQL_USER: bnt
       MYSQL_PASSWORD: bnt
     command: --sql-mode=""
+  adminer:
+    image: adminer:latest
+    ports:
+      - 8081:8080
+    environment:
+      ADMINER_DEFAULT_SERVER: db

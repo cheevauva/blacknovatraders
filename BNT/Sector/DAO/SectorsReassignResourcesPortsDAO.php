@@ -6,28 +6,39 @@ namespace BNT\Sector\DAO;
 
 class SectorsReassignResourcesPortsDAO extends \UUA\DAO
 {
+
     use \BNT\Traits\DatabaseMainTrait;
 
-    public int $oreSectorsCount;
-    public int $organicsSectorsCount;
-    public int $goodsSectorsCount;
-    public int $energySectorsCount;
+    public int $oreSectorsLimit;
+    public int $organicsSectorsLimit;
+    public int $goodsSectorsLimit;
+    public int $energySectorsLimit;
     public int $buyOre;
     public int $buyOrganics;
     public int $buyGoods;
     public int $buyEnergy;
+    public int $sellOre;
+    public int $sellOrganics;
+    public int $sellGoods;
+    public int $sellEnergy;
 
     #[\Override]
     public function serve(): void
     {
         $portTypes = [
-            'ore' => $this->oreSectorsCount,
-            'organics' => $this->organicsSectorsCount,
-            'goods' => $this->goodsSectorsCount,
-            'energy' => $this->energySectorsCount,
+            'ore' => [$this->oreSectorsLimit, $this->sellOre, $this->buyOrganics, $this->buyGoods, $this->buyEnergy],
+            'organics' => [$this->organicsSectorsLimit, $this->buyOre, $this->sellOrganics, $this->buyGoods, $this->buyEnergy],
+            'goods' => [$this->goodsSectorsLimit, $this->buyOre, $this->buyOrganics, $this->sellGoods, $this->buyEnergy],
+            'energy' => [$this->energySectorsLimit, $this->buyOre, $this->buyOrganics, $this->buyGoods, $this->sellEnergy],
         ];
 
-        foreach ($portTypes as $portType => $limit) {
+        foreach ($portTypes as $portType => $resources) {
+            $limit = $resources[0];
+            $portOre = $resources[1];
+            $portOrganics = $resources[2];
+            $portGoods = $resources[3];
+            $portEnergy = $resources[4];
+
             $sql = "
             UPDATE 
                 universe 
@@ -59,10 +70,10 @@ class SectorsReassignResourcesPortsDAO extends \UUA\DAO
             $this->db()->q($sql, [
                 'limit' => (int) $limit,
                 'port_type' => $portType,
-                'port_ore' => $this->buyOre,
-                'port_organics' => $this->buyOrganics,
-                'port_goods' => $this->buyGoods,
-                'port_energy' => $this->buyEnergy,
+                'port_ore' => $portOre,
+                'port_organics' => $portOrganics,
+                'port_goods' => $portGoods,
+                'port_energy' => $portEnergy,
             ], [
                 'limit' => \PDO::PARAM_INT,
             ]);
