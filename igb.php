@@ -11,9 +11,6 @@ if (checklogin()) {
     die();
 }
 
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-    'username' => $username
-]);
 
 $account = db()->fetch("SELECT * FROM ibank_accounts WHERE ship_id= :ship_id", [
     'ship_id' => $playerinfo['ship_id']

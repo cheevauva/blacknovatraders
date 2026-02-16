@@ -12,8 +12,7 @@ if (checklogin()) {
 }
 
 
-    $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-    $playerinfo = $result->fields;
+
 
     $result2 = $db->adoExecute("SELECT * FROM planets WHERE planet_id=$planet_id");
 if ($result2) {

@@ -23,8 +23,6 @@ if (!$allow_navcomp) {
     die();
 }
 
-    $result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-    $playerinfo = $result->fields;
     $current_sector = $playerinfo['sector'];
     $computer_tech  = $playerinfo['computer'];
 

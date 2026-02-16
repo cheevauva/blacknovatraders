@@ -13,8 +13,7 @@ if (checklogin()) {
     die();
 }
 
-$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $res->fields;
+
 
 $query = "SELECT * FROM sector_defence WHERE ship_id=$playerinfo[ship_id]";
 if (!empty($sort)) {

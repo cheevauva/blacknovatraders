@@ -2,7 +2,7 @@
 
 use BNT\ADODB\ADOPDO;
 use BNT\Log\LogTypeConstants;
-use BNT\Ship\Servant\ShipEscapepodServant;
+use BNT\Ship\Servant\ShipRestoreFromEscapePodServant;
 
 preg_match("/global_funcs.php/i", $_SERVER['PHP_SELF']) ? die("You can not access this file directly!") : null;
 
@@ -125,6 +125,7 @@ function checklogin($return = true)
     global $username, $playerinfo, $l_global_needlogin, $l_global_died;
     global $l_login_died, $l_die_please;
     global $server_closed, $l_login_closed_message;
+    global $container;
 
     if ($server_closed) {
         echo $return ? $l_login_closed_message : '';
@@ -141,7 +142,7 @@ function checklogin($return = true)
         return false;
     }
     if ($playerinfo['dev_escapepod'] == "Y") {
-        $escapepod = ShipEscapepodServant::new($this->container);
+        $escapepod = ShipRestoreFromEscapePodServant::new($container);
         $escapepod->ship = $playerinfo;
         $escapepod->serve();
         echo $return ? $l_login_died : '';
@@ -797,7 +798,7 @@ function calc_ownership($sector)
     }
 }
 
-function player_insignia_name($a_username)
+function player_insignia_name($ship_id)
 {
 
 // Somewhat inefficient, but I think this is the best way to do this.
@@ -805,8 +806,8 @@ function player_insignia_name($a_username)
     global $db, $username, $player_insignia;
     global $l_insignia;
 
-    $row = db()->fetch("SELECT score FROM ships WHERE email=:email", [
-        'email' => $a_username,
+    $row = db()->fetch("SELECT score FROM ships WHERE ships.ship_id=:ship_id", [
+        'ship_id' => $ship_id,
     ]);
     $playerinfo = $row;
     $score_array = array('1000', '3000', '6000', '9000', '12000', '15000', '20000', '40000', '60000', '80000', '100000', '120000', '160000', '200000', '250000', '300000', '350000', '400000', '450000', '500000');

@@ -25,8 +25,8 @@ $testing = false; // set to false to get rid of password when creating new allia
 $playerinfo = db()->fetch("SELECT ships.*, teams.team_name, teams.description, teams.creator, teams.id
                         FROM ships
                         LEFT JOIN teams ON ships.team = teams.id
-                        WHERE ships.email= :username", [
-    'username' => $username
+                        WHERE ships.ship_id= :ship_id", [
+    'ship_id' => $playerinfo['ship_id']
 ]);
 
 /*
@@ -38,8 +38,8 @@ if ($playerinfo['team_invite'] != "") {
     $invite_info = db()->fetch(" SELECT ships.ship_id, ships.team_invite, teams.team_name,teams.id
                         FROM ships
                         LEFT JOIN teams ON ships.team_invite = teams.id
-                        WHERE ships.email= :username", [
-        'username' => $username
+                        WHERE ships.ship_id= :ship_id", [
+        'ship_id' => $playerinfo['ship_id']
     ]);
 }
 $whichteam = fromRequest('whichteam');

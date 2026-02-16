@@ -9,9 +9,6 @@ if (checklogin()) {
     die();
 }
 
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-    'username' => $username
-]);
 
 $targetinfo = db()->fetch("SELECT * FROM ships WHERE ship_id= :ship_id", [
     'ship_id' => $ship_id

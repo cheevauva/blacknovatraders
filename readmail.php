@@ -14,8 +14,6 @@ if (checklogin()) {
     die();
 }
 
-$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $res->fields;
 
 if ($action == "delete") {
     $db->adoExecute("DELETE FROM messages WHERE ID='" . $ID . "' AND recp_id='" . $playerinfo[ship_id] . "'");

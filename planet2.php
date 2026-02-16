@@ -11,9 +11,7 @@ if (checklogin()) {
 
 //-------------------------------------------------------------------------------------------------
 
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-    'username' => $username
-]);
+
 
 $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id= :planet_id", [
     'planet_id' => $planet_id

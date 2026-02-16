@@ -31,13 +31,9 @@ echo "<BR><BR>";
 function go_build_base($planet_id, $sector_id)
 {
     global $base_ore, $base_organics, $base_goods, $base_credits;
-    global $l_planet_bbuild;
+    global $l_planet_bbuild, $playerinfo;
 
     echo "<BR>Click <A HREF=planet_report.php?PRepType=1>here</A> to return to the Planet Status Report<BR><BR>";
-
-    $playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-        'username' => $GLOBALS['username']
-    ]);
 
     $sectorinfo = db()->fetch("SELECT * FROM universe WHERE sector_id= :sector", [
         'sector' => $playerinfo['sector']
@@ -124,10 +120,10 @@ function collect_credits($planetarray)
 function change_planet_production($prodpercentarray)
 {
     global $default_prod_ore, $default_prod_organics, $default_prod_goods, $default_prod_energy, $default_prod_fighters, $default_prod_torp;
-    global $username, $l_unnamed;
+    global $playerinfo, $l_unnamed;
 
-    $player = db()->fetch("SELECT ship_id,team FROM ships WHERE email= :username", [
-        'username' => $username
+    $player = db()->fetch("SELECT ship_id,team FROM ships WHERE ships.ship_id= :ship_id", [
+        'ship_id' => $playerinfo['ship_id'],
     ]);
     $ship_id = $player['ship_id'];
     $team_id = $player['team'];
@@ -285,12 +281,7 @@ function change_planet_production($prodpercentarray)
 
 function Take_Credits($sector_id, $planet_id)
 {
-    global $username, $l_unnamed;
-
-    // Get basic Database information (ship and planet)
-    $playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-        'username' => $username
-    ]);
+    global  $l_unnamed, $playerinfo;
 
     $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id= :planet_id", [
         'planet_id' => $planet_id
@@ -318,14 +309,14 @@ function Take_Credits($sector_id, $planet_id)
 
                 // update the player record
                 // credits
-                db()->q("UPDATE ships SET credits= :credits WHERE email= :username", [
+                db()->q("UPDATE ships SET credits= :credits WHERE ship_id= :ship_id", [
                     'credits' => $NewShipCredits,
-                    'username' => $username
+                    'ship_id' => $playerinfo['ship_id']
                 ]);
 
                 // turns
-                db()->q("UPDATE ships SET turns=turns-1 WHERE email= :username", [
-                    'username' => $username
+                db()->q("UPDATE ships SET turns=turns-1 WHERE ship_id= :ship_id", [
+                    'ship_id' => $playerinfo['ship_id']
                 ]);
 
                 echo "Took " . NUMBER($CreditsTaken) . " Credits from planet " . $planetinfo['name'] . ". <BR>";
@@ -349,11 +340,8 @@ function Take_Credits($sector_id, $planet_id)
 function Real_Space_Move($destination)
 {
     global $level_factor;
-    global $username;
+    global $playerinfo;
 
-    $playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-        'username' => $username
-    ]);
 
     $start = db()->fetch("SELECT angle1,angle2,distance FROM universe WHERE sector_id= :sector", [
         'sector' => $playerinfo['sector']

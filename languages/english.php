@@ -1186,6 +1186,7 @@ $l_login_noone          = "No Such Player! - Create a new player <A HREF=new.php
 $l_login_lang = "Language";
 $l_login_settings = "Game Settings";
 $l_login_change = "Change";
+$l_login_you_have_die = 'You have died in a horrible incident, <a href=log.php>here</a> is the blackbox information that was retrieved from your ships wreckage.';
 
 // new.php new2.php
 $l_new_title            = "Create New Player";

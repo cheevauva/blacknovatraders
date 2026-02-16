@@ -40,6 +40,7 @@ class ShipsGetRankingDAO extends \UUA\DAO
 
         $query = "
         SELECT 
+            ships.ship_id,
             ships.email,
             ships.score,
             ships.character_name,

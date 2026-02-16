@@ -15,12 +15,12 @@ $title = $l_login_title;
 <?php else : ?>
     <form action="login.php" id="bntLoginForm" method="post">
         <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label"><?php echo $l_login_email; ?></label>
-            <input type="text" name="email" class="form-control" aria-describedby="emailHelp" required>
+            <label for="email" class="form-label"><?php echo $l_login_email; ?></label>
+            <input type="text" name="email" class="form-control" required>
             <div id="emailHelp" class="form-text"></div>
         </div>
         <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label"><?php echo $l_login_pw; ?></label>
+            <label for="pass" class="form-label"><?php echo $l_login_pw; ?></label>
             <input type="password" name="pass" class="form-control" required>
         </div>
         <div class="mb-3 row">

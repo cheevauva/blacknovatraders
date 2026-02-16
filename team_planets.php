@@ -9,9 +9,7 @@ if (checklogin()) {
     die();
 }
 
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-    'username' => $username
-]);
+
 
 if ($playerinfo['team'] == 0) {
     echo "<BR>$l_teamplanet_notally";

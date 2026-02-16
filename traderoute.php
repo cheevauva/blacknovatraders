@@ -15,10 +15,6 @@ if (checklogin()) {
 
 bigtitle();
 
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email=:username", [
-    'username' => $username,
-]);
-
 $traderoutes = db()->fetchAll("SELECT * FROM traderoutes WHERE owner=:owner", [
     'owner' => $playerinfo['ship_id'],
 ]);
@@ -81,8 +77,8 @@ if ($command == 'new') {   //displays new trade route form
 } elseif (isset($engage)) { //performs trade route
     $i = $tr_repeat;
     while ($i > 0) {
-        $playerinfo = db()->fetch("SELECT * FROM ships WHERE email=:username", [
-            'username' => $username,
+        $playerinfo = db()->fetch("SELECT * FROM ships WHERE ship_id=:ship_id", [
+            'ship_id' => $playerinfo['ship_id'],
         ]);
         //echo $i;
         traderoute_engage($i);

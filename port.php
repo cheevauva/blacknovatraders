@@ -11,37 +11,35 @@ if (checklogin()) {
 require_once sprintf('languages/%s/bounty.php', $language);
 //-------------------------------------------------------------------------------------------------
 
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-    'username' => $username
-]);
+
 
 // fix negative quantities, i guess theres a better way to do but i'm in a hurry
 // i dont know how the quantities acutally get negative ...
 
 if ($playerinfo['ship_ore'] < 0) {
-    db()->q("UPDATE ships set ship_ore=0 WHERE email= :username", [
-        'username' => $username
+    db()->q("UPDATE ships set ship_ore=0 WHERE ship_id= :ship_id", [
+        'ship_id' => $playerinfo['ship_id']
     ]);
     $playerinfo['ship_ore'] = 0;
 }
 
 if ($playerinfo['ship_organics'] < 0) {
-    db()->q("UPDATE ships set ship_organics=0 WHERE email= :username", [
-        'username' => $username
+    db()->q("UPDATE ships set ship_organics=0 WHERE ship_id= :ship_id", [
+        'ship_id' => $playerinfo['ship_id']
     ]);
     $playerinfo['ship_organics'] = 0;
 }
 
 if ($playerinfo['ship_energy'] < 0) {
-    db()->q("UPDATE ships set ship_energy=0 WHERE email= :username", [
-        'username' => $username
+    db()->q("UPDATE ships set ship_energy=0 WHERE ship_id= :ship_id", [
+        'ship_id' => $playerinfo['ship_id']
     ]);
     $playerinfo['ship_energy'] = 0;
 }
 
 if ($playerinfo['ship_goods'] < 0) {
-    db()->q("UPDATE ships set ship_goods=0 WHERE email= :username", [
-        'username' => $username
+    db()->q("UPDATE ships set ship_goods=0 WHERE ship_id= :ship_id", [
+        'ship_id' => $playerinfo['ship_id']
     ]);
     $playerinfo['ship_goods'] = 0;
 }

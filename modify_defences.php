@@ -21,8 +21,7 @@ if (!isset($defence_id)) {
     die();
 }
 
-$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $res->fields;
+
 $res = $db->adoExecute("SELECT * from universe WHERE sector_id=$playerinfo[sector]");
 $sectorinfo = $res->fields;
 

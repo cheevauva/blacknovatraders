@@ -16,8 +16,6 @@ if (checklogin()) {
 //-------------------------------------------------------------------------------------------------
 
 
-$res = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $res->fields;
 
 
 

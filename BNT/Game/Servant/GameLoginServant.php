@@ -10,7 +10,7 @@ use BNT\Log\LogTypeConstants;
 use BNT\Ship\DAO\ShipByEmailDAO;
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Ship\Servant\ShipCheckNewbieServant;
-use BNT\Ship\Servant\ShipEscapepodServant;
+use BNT\Ship\Servant\ShipRestoreFromEscapePodServant;
 use BNT\Ship\Servant\ShipRestoreAsNewbieServant;
 use Exception;
 
@@ -19,7 +19,7 @@ class GameLoginServant extends \UUA\Servant
 
     public string $email;
     public string $password;
-    public array $ship;
+    public ?array $ship;
 
     #[\Override]
     public function serve(): void
@@ -30,6 +30,7 @@ class GameLoginServant extends \UUA\Servant
         global $l_login_newbie;
         global $l_login_newlife;
         global $l_login_4gotpw1;
+        global $l_login_you_have_die;
         global $ip;
         global $newbie_nice;
 
@@ -46,30 +47,22 @@ class GameLoginServant extends \UUA\Servant
         }
 
         if ($ship['ship_destroyed'] == 'N') {
-            $token = UUID::v7();
-
-            $ship['token'] = $token;
-            $ship['last_login'] = gmdate('Y-m-d H:i:s');
-
-            LogPlayerDAO::call($this->container, $ship['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
-            ShipUpdateDAO::call($this->container, $ship, $ship['ship_id']);
-
-            $this->ship = $ship;
+            $this->tokenToShip($ship);
             return;
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $ship['dev_escapepod'] == 'Y') {
-            $escapepod = ShipEscapepodServant::new($this->container);
+            $escapepod = ShipRestoreFromEscapePodServant::new($this->container);
             $escapepod->ship = $ship;
             $escapepod->serve();
+
+            $this->tokenToShip($escapepod->ship);
 
             throw new Exception($l_login_died);
         }
 
-        $youHaveDied = "You have died in a horrible incident, <a href=log.php>here</a> is the blackbox information that was retrieved from your ships wreckage.";
-
         if ($ship['ship_destroyed'] == 'Y' && $newbie_nice !== 'YES') {
-            throw new Exception($youHaveDied . ' ' . $l_login_looser);
+            throw new Exception($l_login_you_have_die . ' ' . $l_login_looser);
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $newbie_nice == 'YES') {
@@ -78,14 +71,29 @@ class GameLoginServant extends \UUA\Servant
             $checkNewbie->serve();
 
             if (!$checkNewbie->isNewbie) {
-                throw new Exception($youHaveDied . ' ' . $l_login_looser);
+                throw new Exception($l_login_you_have_die . ' ' . $l_login_looser);
             }
 
             $restore = ShipRestoreAsNewbieServant::new($this->container);
             $restore->ship = $ship;
             $restore->serve();
 
-            throw new Exception($youHaveDied . ' ' . $l_login_newbie . ' ' . $l_login_newlife);
+            $this->tokenToShip($escapepod->ship);
+
+            throw new Exception($l_login_you_have_die . ' ' . $l_login_newbie . ' ' . $l_login_newlife);
         }
+    }
+
+    protected function tokenToShip(array $ship): void
+    {
+        global $ip;
+
+        $ship['token'] = UUID::v7();
+        $ship['last_login'] = gmdate('Y-m-d H:i:s');
+
+        LogPlayerDAO::call($this->container, $ship['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
+        ShipUpdateDAO::call($this->container, $ship, $ship['ship_id']);
+
+        $this->ship = $ship;
     }
 }

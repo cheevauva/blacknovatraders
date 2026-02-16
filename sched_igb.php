@@ -1,6 +1,6 @@
 <?php
 
-if (preg_match("/sched_igb.php/i", $PHP_SELF)) {
+if (preg_match("/sched_igb.php/i", $_SERVER['PHP_SELF'])) {
     echo "You can not access this file directly!";
     die();
 }

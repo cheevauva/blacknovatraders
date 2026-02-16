@@ -14,8 +14,6 @@ if (checklogin()) {
     die();
 }
 
-$result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $result->fields;
 
 bigtitle();
 

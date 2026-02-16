@@ -19,9 +19,6 @@ srand((double)microtime() * 1000000);
 //-------------------------------------------------------------------------------------------------
 
 
-// get user info
-$result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $result->fields;
 
 if ($sector == "*") {
     if (!$allow_fullscan) {

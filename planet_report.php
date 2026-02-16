@@ -11,9 +11,7 @@ if (checklogin()) {
 }
 
 // Get data about planets
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-    'username' => $username
-]);
+
 
 // determine what type of report is displayed and display it's title
 if ($PRepType == 1 || !isset($PRepType)) { // display the commodities on the planets

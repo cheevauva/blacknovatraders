@@ -9,9 +9,6 @@ if (checklogin()) {
     die();
 }
 
-$playerinfo = db()->fetch("SELECT * FROM ships WHERE email= :username", [
-    'username' => $username
-]);
 
 $explored_sectors = db()->fetchAll("SELECT DISTINCT movement_log.sector_id, universe.port_type 
                                    FROM movement_log, universe 

@@ -15,8 +15,7 @@ if (checklogin()) {
 }
 
 //------------------------------------
-$result = $db->adoExecute("SELECT * FROM ships WHERE email='$username'");
-$playerinfo = $result->fields;
+
 
 $planet_id = stripnum($planet_id);
 
