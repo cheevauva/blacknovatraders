@@ -53,7 +53,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
         ]);
 
         self::assertNotEmpty($login->responseCookies['token'] ?? null);
-        self::assertEquals('main.php?id=123', $login->location);
+        self::assertEquals('main.php', $login->location);
     }
 
     public function testLoginClosed(): void
@@ -119,7 +119,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->ship = [
+                    $this->user = [
                         'token' => 'token',
                         'ship_id' => 123,
                     ];

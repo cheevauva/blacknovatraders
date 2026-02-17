@@ -31,6 +31,8 @@ class ShipNewServant extends \UUA\Servant
         IBankAccountCreateDAO::call($this->container, [
             'ship_id' => $shipId,
         ]);
+        
+        $this->ship = $ship;
     }
 
     /**
@@ -73,6 +75,7 @@ class ShipNewServant extends \UUA\Servant
             'trade_energy' => 'Y',
             'cleared_defences' => null,
             'dev_lssd' => (int) 'N',
+            'user_id' => $this->userId,
         ];
     }
 

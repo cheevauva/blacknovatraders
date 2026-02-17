@@ -15,7 +15,8 @@ class GameLoginServantTest extends \Tests\UnitTestCase
 {
 
     public static array $logs;
-    public static ?array $ship = null;
+    public static ?array $ship;
+    public static ?array $user;
 
     #[\Override]
     protected function setUp(): void
@@ -23,13 +24,15 @@ class GameLoginServantTest extends \Tests\UnitTestCase
         parent::setUp();
 
         self::$logs = [];
-        self::$ship = [
-            'ship_id' => 1,
+        self::$user = [
+            'id' => 444,
             'email' => 'e@a.com',
             'password' => md5('pass'),
             'token' => UUID::v7(),
             'ship_destroyed' => 'N',
+            'ship_id' => 555,
         ];
+        self::$ship = null;
     }
 
     public function testLoginSuccess(): void
@@ -43,14 +46,14 @@ class GameLoginServantTest extends \Tests\UnitTestCase
         $login->password = 'pass';
         $login->serve();
 
-        self::assertEquals([LogTypeConstants::LOG_LOGIN, 1, 1], self::$logs[0] ?? null);
+        self::assertEquals([LogTypeConstants::LOG_LOGIN, 555, 1], self::$logs[0] ?? null);
     }
 
     public function testEmailNotFound(): void
     {
         global $l_login_noone;
 
-        self::$ship = null;
+        self::$user = null;
 
         $this->expectExceptionMessage($l_login_noone);
 
@@ -75,7 +78,7 @@ class GameLoginServantTest extends \Tests\UnitTestCase
             $login->password = 'pass1';
             $login->serve();
         } catch (\Exception $ex) {
-            self::assertEquals([LogTypeConstants::LOG_BADLOGIN, 1, 1], self::$logs[0] ?? null);
+            self::assertEquals([LogTypeConstants::LOG_BADLOGIN, 555, 1], self::$logs[0] ?? null);
             throw $ex;
         }
     }
@@ -105,7 +108,7 @@ class GameLoginServantTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->ship = GameLoginServantTest::$ship;
+                    $this->user = GameLoginServantTest::$user;
                 }
             },
         ];

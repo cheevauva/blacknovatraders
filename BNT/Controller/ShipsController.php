@@ -47,6 +47,6 @@ class ShipsController extends BaseController
             'ship_id' => $shipId,
         ], $userinfo['id']);
 
-        $this->redirectTo('main.php?id=' . $shipId);
+        $this->redirectTo('main.php');
     }
 }

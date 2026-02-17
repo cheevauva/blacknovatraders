@@ -47,7 +47,7 @@ class LoginController extends BaseController
             $login->serve();
 
             $this->setCookie('token', $login->user['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-            $this->redirectTo('main.php?id=' . $login->user['ship_id']);
+            $this->redirectTo('main.php');
         } catch (\Exception $ex) {
             $this->responseJsonByException($ex);
         }

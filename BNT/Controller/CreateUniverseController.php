@@ -10,6 +10,7 @@ use BNT\Game\Servant\GameUniverseDeployServant;
 use BNT\Ship\Servant\ShipNewServant;
 use BNT\Scheduler\Servant\SchedulersDeployServant;
 use BNT\User\Servant\UserNewServant;
+use BNT\User\DAO\UserUpdateDAO;
 
 class CreateUniverseController extends BaseController
 {
@@ -196,18 +197,24 @@ class CreateUniverseController extends BaseController
                 $schedulersDeploy->sched_ranking = $this->sched_ranking;
                 $schedulersDeploy->sched_turns = $this->sched_turns;
                 $schedulersDeploy->serve();
-                
+
                 $newUser = UserNewServant::new($this->container);
-                $newUser->email = $this->admin_mail; 
+                $newUser->email = $this->admin_mail;
                 $newUser->password = $this->admin_pass;
                 $newUser->role = 'admin';
                 $newUser->serve();
+                
+                $user = $newUser->user;
 
                 $newShip = ShipNewServant::new($this->container);
-                $newShip->user_id = $newUser->user['id'];
+                $newShip->userId = $user['id'];
                 $newShip->character = 'WebMaster';
                 $newShip->shipname = 'WebMaster';
                 $newShip->serve();
+                
+                $user['ship_id'] = $newShip->ship['ship_id'];
+
+                UserUpdateDAO::call($this->container, $user, $user['id']);
 
                 $this->render('tpls/create_universe/create_universe_step3.tpl.php');
                 break;

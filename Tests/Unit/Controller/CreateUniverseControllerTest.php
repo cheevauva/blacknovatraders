@@ -10,6 +10,7 @@ use BNT\Game\Servant\GameUniverseDeployServant;
 use BNT\Scheduler\Servant\SchedulersDeployServant;
 use BNT\Ship\Servant\ShipNewServant;
 use BNT\User\Servant\UserNewServant;
+use BNT\User\DAO\UserUpdateDAO;
 
 class CreateUniverseControllerTest extends \Tests\UnitTestCase
 {
@@ -274,8 +275,10 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
 
         self::assertEquals('WebMaster', self::$shipData['ship_name']);
         self::assertEquals('WebMaster', self::$shipData['character_name']);
+        self::assertEquals(321, self::$shipData['user_id']);
         self::assertEquals('english', self::$userData['lang']);
         self::assertEquals('admin', self::$userData['role']);
+        self::assertEquals(123, self::$userData['ship_id']);
         self::assertEquals(self::$admin_mail, self::$userData['email']);
         self::assertEquals('7adc785be4a31eff6783871ff63e18f1', self::$userData['password']);
         self::assertNotEmpty($createUniverse->startParams);
@@ -315,7 +318,10 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    CreateUniverseControllerTest::$shipData = $this->newShip();
+                    $this->ship = $this->newShip();
+                    $this->ship['ship_id'] = 123;
+
+                    CreateUniverseControllerTest::$shipData = $this->ship;
                 }
             },
             UserNewServant::class => fn($c) => new class($c) extends UserNewServant {
@@ -324,8 +330,16 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
                 public function serve(): void
                 {
                     $this->user = $this->newUser();
-                    $this->user['id'] = 1;
-                    
+                    $this->user['id'] = 321;
+
+                    CreateUniverseControllerTest::$userData = $this->user;
+                }
+            },
+            UserUpdateDAO::class => fn($c) => new class($c) extends UserUpdateDAO {
+
+                #[\Override]
+                public function serve(): void
+                {
                     CreateUniverseControllerTest::$userData = $this->user;
                 }
             },
