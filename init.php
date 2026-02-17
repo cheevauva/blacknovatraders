@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-use BNT\Ship\DAO\ShipByTokenDAO;
+use BNT\UUID;
+use BNT\Ship\DAO\ShipByIdDAO;
+use BNT\User\DAO\UserByTokenDAO;
 use UUA\Container\Container;
 use BNT\ADODB\ADOPDO;
 use BNT\Config\Servant\ConfigReloadGlobalVarsServant;
@@ -41,10 +43,14 @@ $container = new Container(fn($c) => [
 ConfigReloadGlobalVarsServant::new($container)->serve();
 
 $playerinfo = null;
-$token = $_COOKIE['token'] ?? uuidv7();
+$token = $_COOKIE['token'] ?? UUID::v7();
 
 if (empty($disableAutoLogin) && !empty($token)) {
-    $playerinfo = ShipByTokenDAO::call($container, (string) $token)->ship;
+    $userinfo = UserByTokenDAO::call($container, (string) $token)->user;
+    
+    if (!empty($userinfo['ship_id'])) {
+        $playerinfo = ShipByIdDAO::call($container, $userinfo['ship_id'])->ship;
+    }
 }
 
 $language = $default_lang;

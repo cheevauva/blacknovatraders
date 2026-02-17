@@ -9,7 +9,7 @@ include 'config.php';
 
 $title = $l_log_title;
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

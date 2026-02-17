@@ -61,7 +61,7 @@ function shipDevBeaconSub($ship, $beacon)
 
 function shipTurn($shipId, $turns)
 {
-    return db()->q('UPDATE ships SET last_login = NOW(), turns = turns - :turns, turns_used = turns_used + :turns WHERE ship_id = :shipId', [
+    return db()->q('UPDATE ships SET turns = turns - :turns, turns_used = turns_used + :turns WHERE ship_id = :shipId', [
         'turns' => $turns,
         'shipId' => $shipId,
     ]);
@@ -69,7 +69,7 @@ function shipTurn($shipId, $turns)
 
 function shipCreditsAdd($shipId, $credits)
 {
-    db()->q("UPDATE ships SET last_login = NOW(), credits = credits + :credits WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET credits = credits + :credits WHERE ship_id = :shipId", [
         'credits' => $credits,
         'shipId' => $shipId,
     ]);
@@ -77,7 +77,7 @@ function shipCreditsAdd($shipId, $credits)
 
 function shipCreditsSub($shipId, $credits)
 {
-    db()->q("UPDATE ships SET last_login = NOW(), credits = credits - :credits WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET credits = credits - :credits WHERE ship_id = :shipId", [
         'credits' => $credits,
         'shipId' => $shipId,
     ]);
@@ -85,7 +85,7 @@ function shipCreditsSub($shipId, $credits)
 
 function shipToSector($shipId, $sector)
 {
-    db()->q("UPDATE ships SET last_login=NOW(), sector=:sector WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET sector=:sector WHERE ship_id = :shipId", [
         'sector' => $sector,
         'shipId' => $shipId,
     ]);
@@ -93,7 +93,7 @@ function shipToSector($shipId, $sector)
 
 function shipRetreatToSector($shipId, $sector)
 {
-    db()->q("UPDATE ships SET last_login=NOW(), turns=turns - 2, turns_used = turns_used + 2, sector=:sector where ship_id = :shipId", [
+    db()->q("UPDATE ships SET turns=turns - 2, turns_used = turns_used + 2, sector=:sector where ship_id = :shipId", [
         'sector' => $sector,
         'shipId' => $shipId,
     ]);
@@ -101,14 +101,14 @@ function shipRetreatToSector($shipId, $sector)
 
 function shipResetClearedDefences($shipId)
 {
-    db()->q("UPDATE ships SET last_login = NOW(), cleared_defences = '' WHERE ship_id= :shipId", [
+    db()->q("UPDATE ships SET cleared_defences = '' WHERE ship_id= :shipId", [
         'shipId' => $shipId,
     ]);
 }
 
 function shipSetClearedDefences($shipId, $cleared_defences)
 {
-    db()->q("UPDATE ships SET last_login = NOW(), cleared_defences = :cleared_defences WHERE ship_id= :shipId", [
+    db()->q("UPDATE ships SET cleared_defences = :cleared_defences WHERE ship_id= :shipId", [
         'shipId' => $shipId,
         'cleared_defences' => $cleared_defences,
     ]);
@@ -116,7 +116,7 @@ function shipSetClearedDefences($shipId, $cleared_defences)
 
 function shipMoveToSector($shipId, $sector)
 {
-    db()->q("UPDATE ships SET last_login = NOW(), turns=turns - 1, turns_used = turns_used + 1, sector=:sector WHERE ship_id = :shipId", [
+    db()->q("UPDATE ships SET turns=turns - 1, turns_used = turns_used + 1, sector=:sector WHERE ship_id = :shipId", [
         'sector' => $sector,
         'shipId' => $shipId,
     ]);

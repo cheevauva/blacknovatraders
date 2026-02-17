@@ -6,7 +6,7 @@ include 'config.php';
 $title = $l_tdr_title;
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

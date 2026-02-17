@@ -553,8 +553,8 @@ if ($swordfish != $adminpass) {
                     // *****************************************************************************
                     // *** ADD Xenobe RECORD TO ships TABLE ... MODIFY IF ships SCHEMA CHANGES ***
                     // *****************************************************************************
-                    $thesql = "INSERT INTO ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `last_login` , `rating` , `score` , `team` , `team_invite` , `interface` , `token` , `planet_id` , `preset1` , `preset2` , `preset3` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defences` , `lang` , `dhtml` , `dev_lssd` )
-                                    VALUES (NULL, :shipname, 'N', :character, :makepass, :emailname, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :maxtorps, :xenlevel, :xenlevel, :maxarmor, :xenlevel, :start_credits, :sector, 0,0,0, :maxenergy, 0, :maxfighters, 0, :start_turns, 'N', 0,0,0,0, 'N', 'N', 0,0, :stamp, 0,0,0,0, 'N', NULL, 0,0,0,0, 'Y', 'N', 'N', 'Y', NULL, :default_lang, 'N', 'Y')";
+                    $thesql = "INSERT INTO ships ( `ship_id` , `ship_name` , `ship_destroyed` , `character_name` , `password` , `email` , `hull` , `engines` , `power` , `computer` , `sensors` , `beams` , `torp_launchers` , `torps` , `shields` , `armor` , `armor_pts` , `cloak` , `credits` , `sector` , `ship_ore` , `ship_organics` , `ship_goods` , `ship_energy` , `ship_colonists` , `ship_fighters` , `ship_damage` , `turns` , `on_planet` , `dev_warpedit` , `dev_genesis` , `dev_beacon` , `dev_emerwarp` , `dev_escapepod` , `dev_fuelscoop` , `dev_minedeflector` , `turns_used` , `rating` , `score` , `team` , `team_invite` , `interface` , `token` , `planet_id` , `preset1` , `preset2` , `preset3` , `trade_colonists` , `trade_fighters` , `trade_torps` , `trade_energy` , `cleared_defences` , `lang` , `dhtml` , `dev_lssd` )
+                                    VALUES (NULL, :shipname, 'N', :character, :makepass, :emailname, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :xenlevel, :maxtorps, :xenlevel, :xenlevel, :maxarmor, :xenlevel, :start_credits, :sector, 0,0,0, :maxenergy, 0, :maxfighters, 0, :start_turns, 'N', 0,0,0,0, 'N', 'N', 0,0, 0,0,0,0, 'N', NULL, 0,0,0,0, 'Y', 'N', 'N', 'Y', NULL, :default_lang, 'N', 'Y')";
 
                     $result2 = db()->q($thesql, [
                         'shipname' => $shipname,
@@ -569,7 +569,6 @@ if ($swordfish != $adminpass) {
                         'maxenergy' => $maxenergy,
                         'maxfighters' => $maxfighters,
                         'start_turns' => $start_turns,
-                        'stamp' => $stamp,
                         'default_lang' => $default_lang,
                     ]);
 

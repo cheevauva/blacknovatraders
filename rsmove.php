@@ -11,7 +11,7 @@ include("header.php");
 
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
@@ -116,7 +116,7 @@ if (!isset($destination)) {
         include("check_fighters.php");
         if ($ok > 0) {
             $stamp = date("Y-m-d H-i-s");
-            $update = $db->adoExecute("UPDATE ships SET last_login='$stamp',sector=$destination,ship_energy=ship_energy+$energyscooped,turns=turns-$triptime,turns_used=turns_used+$triptime WHERE ship_id=$playerinfo[ship_id]");
+            $update = $db->adoExecute("UPDATE ships SET sector=$destination,ship_energy=ship_energy+$energyscooped,turns=turns-$triptime,turns_used=turns_used+$triptime WHERE ship_id=$playerinfo[ship_id]");
             log_move($playerinfo[ship_id], $destination);
             $l_rs_ready = str_replace("[sector]", $destination, $l_rs_ready);
             $l_rs_ready = str_replace("[triptime]", NUMBER($triptime), $l_rs_ready);

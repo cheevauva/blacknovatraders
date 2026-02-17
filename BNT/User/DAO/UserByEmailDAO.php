@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship\DAO;
+namespace BNT\User\DAO;
 
 use Psr\Container\ContainerInterface;
 
-class ShipByEmailDAO extends \UUA\DAO
+class UserByEmailDAO extends \UUA\DAO
 {
 
     use \BNT\Traits\DatabaseMainTrait;
 
     public string $email;
-    public ?array $ship;
+    public ?array $user;
 
     #[\Override]
     public function serve(): void
     {
-        $this->ship = $this->db()->fetch("SELECT * FROM ships WHERE email = :email LIMIT 1", [
+        $this->user = $this->db()->fetch("SELECT * FROM users WHERE email = :email LIMIT 1", [
             'email' => $this->email,
         ]) ?: null;
     }

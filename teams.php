@@ -7,7 +7,7 @@ include 'config.php';
 $title = $l_team_title;
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 bigtitle();

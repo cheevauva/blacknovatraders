@@ -685,8 +685,7 @@ function xenobemove()
 
     if ($targetlink > 0) {
         $stamp = date("Y-m-d H-i-s");
-        $result = db()->q("UPDATE ships SET last_login = :stamp, turns_used = turns_used + 1, sector = :targetlink where ship_id = :ship_id", [
-            'stamp' => $stamp,
+        $result = db()->q("UPDATE ships SET turns_used = turns_used + 1, sector = :targetlink where ship_id = :ship_id", [
             'targetlink' => $targetlink,
             'ship_id' => $playerinfo['ship_id']
         ]);
@@ -989,8 +988,7 @@ function xenobehunter()
 
     if ($zonerow['allow_attack'] == "Y") {
         $stamp = date("Y-m-d H-i-s");
-        $move_result = db()->q("UPDATE ships SET last_login = :stamp, turns_used = turns_used + 1, sector = :sector where ship_id = :ship_id", [
-            'stamp' => $stamp,
+        $move_result = db()->q("UPDATE ships SET turns_used = turns_used + 1, sector = :sector where ship_id = :ship_id", [
             'sector' => $targetinfo['sector'],
             'ship_id' => $playerinfo['ship_id']
         ]);

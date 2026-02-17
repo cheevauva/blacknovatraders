@@ -120,27 +120,46 @@ function bigtitle()
     echo "<h1>$title</h1>";
 }
 
-function checklogin($return = true)
+function checkuser($return = true)
 {
-    global $username, $playerinfo, $l_global_needlogin, $l_global_died;
-    global $l_login_died, $l_die_please;
-    global $server_closed, $l_login_closed_message;
-    global $container;
+    global $l_global_needlogin;
+    global $server_closed;
+    global $l_login_closed_message;
+    global $userinfo;
 
     if ($server_closed) {
         echo $return ? $l_login_closed_message : '';
         return true;
     }
+    
+    if (empty($userinfo)) {
+        echo $return ? $l_global_needlogin : '';
+        return true;
+    }
+    
+    return false;
+}
+
+function checkship($return = true)
+{
+    global $playerinfo, $l_global_died, $l_global_needchooseship;
+    global $l_login_died, $l_die_please;
+    global $container;
+
+
+    if (checkuser($return)) {
+        return true;
+    }
 
     if (empty($playerinfo)) {
-        echo $return ? $l_global_needlogin : '';
+        echo $return ? $l_global_needchooseship : '';
         return true;
     }
 
     if ($playerinfo['ship_destroyed'] == "N") {
-        $username = $playerinfo['email'];
         return false;
     }
+    
     if ($playerinfo['dev_escapepod'] == "Y") {
         $escapepod = ShipRestoreFromEscapePodServant::new($container);
         $escapepod->ship = $playerinfo;

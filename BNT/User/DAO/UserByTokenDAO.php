@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship\DAO;
+namespace BNT\User\DAO;
 
 use Psr\Container\ContainerInterface;
 
-class ShipByTokenDAO extends \UUA\DAO
+class UserByTokenDAO extends \UUA\DAO
 {
 
     use \BNT\Traits\DatabaseMainTrait;
@@ -16,12 +16,12 @@ class ShipByTokenDAO extends \UUA\DAO
     /**
      * @var array<string, mixed>|null
      */
-    public protected(set) ?array $ship;
+    public protected(set) ?array $user;
 
     #[\Override]
     public function serve(): void
     {
-        $this->ship = $this->db()->fetch("SELECT * FROM ships WHERE token = :token LIMIT 1", [
+        $this->user = $this->db()->fetch("SELECT * FROM users WHERE token = :token LIMIT 1", [
             'token' => $this->token,
         ]);
     }

@@ -6,7 +6,7 @@ use BNT\Team\DAO\TeamByIdDAO;
 
 require_once 'config.php';
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

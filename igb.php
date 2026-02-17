@@ -7,7 +7,7 @@ $title = $l_igb_title;
 $no_body = 1;
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

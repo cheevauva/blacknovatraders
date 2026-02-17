@@ -9,7 +9,7 @@ include("header.php");
 
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
@@ -100,7 +100,7 @@ switch ($response) {
         $del = $db->adoExecute("DELETE FROM bounty WHERE bounty_id = $bid");
         $stamp = date("Y-m-d H-i-s");
         $refund = $bty['amount'];
-        $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, credits=credits+$refund where ship_id=$playerinfo[ship_id]");
+        $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, credits=credits+$refund where ship_id=$playerinfo[ship_id]");
         echo "$l_by_canceled<BR>";
         
         die();
@@ -166,7 +166,7 @@ switch ($response) {
         }
         $insert = $db->adoExecute("INSERT INTO bounty (bounty_on,placed_by,amount) values ($bounty_on, $playerinfo[ship_id] ,$amount)");
         $stamp = date("Y-m-d H-i-s");
-        $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, credits=credits-$amount where ship_id=$playerinfo[ship_id]");
+        $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, credits=credits-$amount where ship_id=$playerinfo[ship_id]");
         echo "$l_by_placed<BR>";
         
         die();

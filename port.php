@@ -5,7 +5,7 @@ include 'config.php';
 $title = $l_title_port;
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 require_once sprintf('languages/%s/bounty.php', $language);

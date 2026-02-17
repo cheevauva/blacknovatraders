@@ -9,7 +9,7 @@ include("header.php");
 
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
@@ -142,7 +142,7 @@ switch ($response) {
         }
         $stamp = date("Y-m-d H-i-s");
 
-        $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, sector=$playerinfo[sector] where ship_id=$playerinfo[ship_id]");
+        $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, sector=$playerinfo[sector] where ship_id=$playerinfo[ship_id]");
         bigtitle();
         echo "$l_md_retr $quantity $defence_type.<BR>";
         
@@ -158,7 +158,7 @@ switch ($response) {
         }
         $db->adoExecute("UPDATE sector_defence SET fm_setting = '$mode' where defence_id = $defence_id");
         $stamp = date("Y-m-d H-i-s");
-        $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1, turns_used=turns_used+1, sector=$playerinfo[sector] where ship_id=$playerinfo[ship_id]");
+        $db->adoExecute("UPDATE ships SET turns=turns-1, turns_used=turns_used+1, sector=$playerinfo[sector] where ship_id=$playerinfo[ship_id]");
         if ($mode == 'attack') {
             $mode = $l_md_attack;
         } else {

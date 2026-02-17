@@ -6,7 +6,7 @@ $disableRegisterGlobalFix = false;
 
 include 'config.php';
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

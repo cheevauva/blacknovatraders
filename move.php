@@ -6,7 +6,7 @@ use BNT\Sector\DAO\SectorByIdDAO;
 
 include 'config.php';
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

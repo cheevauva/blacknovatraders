@@ -10,7 +10,7 @@ include("header.php");
 
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
@@ -167,7 +167,7 @@ if ($zoneinfo[allow_defenses] == 'N') {
             }
         }
 
-        $update = $db->adoExecute("UPDATE ships SET last_login='$stamp',turns=turns-1,turns_used=turns_used+1,ship_fighters=ship_fighters-$numfighters,torps=torps-$nummines WHERE ship_id=$playerinfo[ship_id]");
+        $update = $db->adoExecute("UPDATE ships SET turns=turns-1,turns_used=turns_used+1,ship_fighters=ship_fighters-$numfighters,torps=torps-$nummines WHERE ship_id=$playerinfo[ship_id]");
     }
 }
 

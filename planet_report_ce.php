@@ -6,7 +6,7 @@ $title = $l_pr_title;
 
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
@@ -435,7 +435,7 @@ function Real_Space_Move($destination)
         } else {
             $stamp = date("Y-m-d H-i-s");
 
-            db()->q("UPDATE ships SET last_login= :stamp, sector= :destination, ship_energy=ship_energy+ :energyscooped, turns=turns- :triptime, turns_used=turns_used+ :triptime WHERE ship_id= :ship_id", [
+            db()->q("UPDATE ships SET sector= :destination, ship_energy=ship_energy+ :energyscooped, turns=turns- :triptime, turns_used=turns_used+ :triptime WHERE ship_id= :ship_id", [
                 'stamp' => $stamp,
                 'destination' => $destination,
                 'energyscooped' => $energyscooped,

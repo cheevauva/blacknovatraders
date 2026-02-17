@@ -4,7 +4,7 @@ use BNT\EntryPoint\Servant\EntryPointNewServant;
 
 include 'config.php';
 
-if (!checklogin(false)) {
+if (!checkship(false)) {
     redirectTo('index.php');
     return;
 }

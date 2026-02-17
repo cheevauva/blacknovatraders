@@ -5,7 +5,7 @@ use BNT\EntryPoint\Exception\EntryPointMainShipOnPlanetException;
 
 include 'config.php';
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

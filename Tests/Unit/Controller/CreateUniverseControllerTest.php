@@ -9,6 +9,7 @@ use BNT\Config\DAO\ConfigUpdateDAO;
 use BNT\Game\Servant\GameUniverseDeployServant;
 use BNT\Scheduler\Servant\SchedulersDeployServant;
 use BNT\Ship\Servant\ShipNewServant;
+use BNT\User\Servant\UserNewServant;
 
 class CreateUniverseControllerTest extends \Tests\UnitTestCase
 {
@@ -33,6 +34,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public static string $adminpass = 'adminpass';
     public static ?array $configData;
     public static ?array $shipData;
+    public static ?array $userData;
 
     #[\Override]
     protected function setUp(): void
@@ -79,6 +81,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
 
         self::$configData = null;
         self::$shipData = null;
+        self::$userData = null;
     }
 
     public function testPrepareInputDefauts(): void
@@ -271,10 +274,10 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
 
         self::assertEquals('WebMaster', self::$shipData['ship_name']);
         self::assertEquals('WebMaster', self::$shipData['character_name']);
-        self::assertEquals('english', self::$shipData['lang']);
-        self::assertEquals('admin', self::$shipData['role']);
-        self::assertEquals(self::$admin_mail, self::$shipData['email']);
-        self::assertEquals('7adc785be4a31eff6783871ff63e18f1', self::$shipData['password']);
+        self::assertEquals('english', self::$userData['lang']);
+        self::assertEquals('admin', self::$userData['role']);
+        self::assertEquals(self::$admin_mail, self::$userData['email']);
+        self::assertEquals('7adc785be4a31eff6783871ff63e18f1', self::$userData['password']);
         self::assertNotEmpty($createUniverse->startParams);
         self::assertEquals('tpls/create_universe/create_universe_step3.tpl.php', $createUniverse->template);
     }
@@ -313,8 +316,17 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
                 public function serve(): void
                 {
                     CreateUniverseControllerTest::$shipData = $this->newShip();
+                }
+            },
+            UserNewServant::class => fn($c) => new class($c) extends UserNewServant {
 
-                    $this->id = 1;
+                #[\Override]
+                public function serve(): void
+                {
+                    $this->user = $this->newUser();
+                    $this->user['id'] = 1;
+                    
+                    CreateUniverseControllerTest::$userData = $this->user;
                 }
             },
         ];

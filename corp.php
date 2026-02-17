@@ -10,7 +10,7 @@ $title = $l_corpm_title;
 include("header.php");
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

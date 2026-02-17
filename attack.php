@@ -12,7 +12,7 @@ include 'config.php';
 $title = $l_att_title;
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

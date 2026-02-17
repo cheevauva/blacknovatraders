@@ -8,7 +8,7 @@ $title = $l_lrs_title;
 include("header.php");
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

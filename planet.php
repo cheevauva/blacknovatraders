@@ -6,7 +6,7 @@ include("combat.php");
 $title = $l_planet_title;
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 //-------------------------------------------------------------------------------------------------

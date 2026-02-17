@@ -7,17 +7,13 @@ namespace BNT\Ship\Servant;
 use BNT\Ship\DAO\ShipCreateDAO;
 use BNT\Zone\DAO\ZoneCreateDAO;
 use BNT\IBankAccount\DAO\IBankAccountCreateDAO;
-use BNT\UUID;
 
 class ShipNewServant extends \UUA\Servant
 {
-
-    public string $language = 'english';
+    public int $userId;
     public string $shipname;
-    public string $email;
     public string $character;
-    public string $password;
-    public string $role = 'user';
+ 
     public array $ship;
     public ?int $start_turns;
 
@@ -58,13 +54,10 @@ class ShipNewServant extends \UUA\Servant
             'ship_name' => $this->shipname,
             'ship_destroyed' => 'N',
             'character_name' => $this->character,
-            'password' => md5($this->password),
-            'email' => $this->email,
             'armor_pts' => $start_armor,
             'credits' => $start_credits,
             'ship_energy' => $start_energy,
             'ship_fighters' => $start_fighters,
-            'role' => $this->role,
             'turns' => $this->start_turns ?? $start_turns, //(int) $this->mturnsMax(),
             'on_planet' => 'N',
             'dev_warpedit' => 0,
@@ -74,15 +67,11 @@ class ShipNewServant extends \UUA\Servant
             'dev_escapepod' => 'N',
             'dev_fuelscoop' => 'N',
             'dev_minedeflector' => 0,
-            'last_login' => date('Y-m-d H:i:s'),
-            'interface' => 'N',
-            'token' => UUID::v7(),
             'trade_colonists' => 'Y',
             'trade_fighters' => 'N',
             'trade_torps' => 'N',
             'trade_energy' => 'Y',
             'cleared_defences' => null,
-            'lang' => $this->language,
             'dev_lssd' => (int) 'N',
         ];
     }

@@ -10,7 +10,7 @@ include("header.php");
 
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

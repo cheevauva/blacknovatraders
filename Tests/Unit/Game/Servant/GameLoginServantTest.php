@@ -7,8 +7,8 @@ namespace Tests\Unit\Game\Servant;
 use BNT\Log\LogTypeConstants;
 use BNT\Log\DAO\LogPlayerDAO;
 use BNT\Game\Servant\GameLoginServant;
-use BNT\Ship\DAO\ShipByEmailDAO;
-use BNT\Ship\DAO\ShipUpdateDAO;
+use BNT\User\DAO\UserByEmailDAO;
+use BNT\User\DAO\UserUpdateDAO;
 use BNT\UUID;
 
 class GameLoginServantTest extends \Tests\UnitTestCase
@@ -84,7 +84,7 @@ class GameLoginServantTest extends \Tests\UnitTestCase
     protected function stubs(): array
     {
         return [
-            ShipUpdateDAO::class => fn($c) => new class($c) extends ShipUpdateDAO {
+            UserUpdateDAO::class => fn($c) => new class($c) extends UserUpdateDAO {
 
                 #[\Override]
                 public function serve(): void
@@ -100,7 +100,7 @@ class GameLoginServantTest extends \Tests\UnitTestCase
                     GameLoginServantTest::$logs[] = [$this->type, $this->ship, $this->data];
                 }
             },
-            ShipByEmailDAO::class => fn($c) => new class($c) extends ShipByEmailDAO {
+            UserByEmailDAO::class => fn($c) => new class($c) extends UserByEmailDAO {
 
                 #[\Override]
                 public function serve(): void

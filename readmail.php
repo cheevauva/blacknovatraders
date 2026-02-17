@@ -10,7 +10,7 @@ bigtitle();
 
 
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 

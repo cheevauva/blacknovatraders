@@ -5,7 +5,7 @@ include 'config.php';
 $title = $l_scan_title;
 include("header.php");
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
