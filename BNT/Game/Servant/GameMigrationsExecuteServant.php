@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BNT\EntryPoint\Servant;
+namespace BNT\Game\Servant;
 
 use BNT\Migration\DAO\MigrationsCreateTableDAO;
 use BNT\Migration\DAO\MigrationsFindExcecutedDAO;
 use BNT\Migration\DAO\MigrationsFindAllDAO;
 use BNT\Migration\DAO\MigrationExecuteDAO;
 
-class EntryPointSchemaServant extends \UUA\Servant
+class GameMigrationsExecuteServant extends \UUA\Servant
 {
 
     use \BNT\Traits\UnitSimpleCallTrait;
 
-    public $messages;
+    public array $messages;
 
     #[\Override]
     public function serve(): void

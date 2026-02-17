@@ -1,6 +1,6 @@
 <?php
 
-use BNT\EntryPoint\Servant\EntryPointNewServant;
+use BNT\Controller\NewController;
 
 include 'config.php';
 
@@ -9,35 +9,5 @@ if (!checkship(false)) {
     return;
 }
 
-try {
-    if ($account_creation_closed) {
-        throw new \Exception($l_new_closed_message);
-    }
-
-    switch (requestMethod()) {
-        case 'POST':
-            $entryPointNew = EntryPointNewServant::new($container);
-            $entryPointNew->username = fromPOST('username', new \Exception($l_new_username . ' ' . $l_is_required));
-            $entryPointNew->character = fromPOST('character', new \Exception($l_new_character . ' ' . $l_is_required));
-            $entryPointNew->shipname = fromPOST('shipname', new \Exception($l_new_shipname . ' ' . $l_is_required));
-            $entryPointNew->password = fromPOST('password', new \Exception($l_new_password . ' ' . $l_is_required));
-            $entryPointNew->serve();
-
-            setcookie('token', $entryPointNew->ship['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-            redirectTo('main.php?id=' . $entryPointNew->ship['ship_id']);
-            break;
-        case 'GET':
-            include 'tpls/new.tpl.php';
-            break;
-    }
-} catch (\Exception $ex) {
-    switch (requestMethod()) {
-        case 'POST':
-            echo responseJsonByException($ex);
-            break;
-        case 'GET':
-            include 'tpls/new.tpl.php';
-
-            break;
-    }
-}
+$newController = NewController::new($container);
+$newController->serve();

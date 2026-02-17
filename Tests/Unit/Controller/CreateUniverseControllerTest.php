@@ -8,9 +8,7 @@ use BNT\Controller\CreateUniverseController;
 use BNT\Config\DAO\ConfigUpdateDAO;
 use BNT\Game\Servant\GameUniverseDeployServant;
 use BNT\Scheduler\Servant\SchedulersDeployServant;
-use BNT\Ship\Servant\ShipNewServant;
-use BNT\User\Servant\UserNewServant;
-use BNT\User\DAO\UserUpdateDAO;
+use BNT\User\Servant\UserWithShipNewServant;
 
 class CreateUniverseControllerTest extends \Tests\UnitTestCase
 {
@@ -34,8 +32,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public static string $admin_pass = 'admin_pass';
     public static string $adminpass = 'adminpass';
     public static ?array $configData;
-    public static ?array $shipData;
-    public static ?array $userData;
+    public static ?UserWithShipNewServant $userWithShip;
 
     #[\Override]
     protected function setUp(): void
@@ -81,8 +78,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         $sched_ranking = self::$sched_ranking;
 
         self::$configData = null;
-        self::$shipData = null;
-        self::$userData = null;
+        self::$userWithShip = null;
     }
 
     public function testPrepareInputDefauts(): void
@@ -273,14 +269,12 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
         ];
         $createUniverse->serve();
 
-        self::assertEquals('WebMaster', self::$shipData['ship_name']);
-        self::assertEquals('WebMaster', self::$shipData['character_name']);
-        self::assertEquals(321, self::$shipData['user_id']);
-        self::assertEquals('english', self::$userData['lang']);
-        self::assertEquals('admin', self::$userData['role']);
-        self::assertEquals(123, self::$userData['ship_id']);
-        self::assertEquals(self::$admin_mail, self::$userData['email']);
-        self::assertEquals('7adc785be4a31eff6783871ff63e18f1', self::$userData['password']);
+        self::assertEquals('WebMaster', self::$userWithShip->shipname);
+        self::assertEquals('WebMaster', self::$userWithShip->character);
+        self::assertEquals('english', self::$userWithShip->language);
+        self::assertEquals('admin', self::$userWithShip->role);
+        self::assertEquals(self::$admin_mail, self::$userWithShip->email);
+        self::assertEquals(self::$admin_pass, self::$userWithShip->password);
         self::assertNotEmpty($createUniverse->startParams);
         self::assertEquals('tpls/create_universe/create_universe_step3.tpl.php', $createUniverse->template);
     }
@@ -313,34 +307,12 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
                     
                 }
             },
-            ShipNewServant::class => fn($c) => new class($c) extends ShipNewServant {
+            UserWithShipNewServant::class => fn($c) => new class($c) extends UserWithShipNewServant {
 
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->ship = $this->newShip();
-                    $this->ship['ship_id'] = 123;
-
-                    CreateUniverseControllerTest::$shipData = $this->ship;
-                }
-            },
-            UserNewServant::class => fn($c) => new class($c) extends UserNewServant {
-
-                #[\Override]
-                public function serve(): void
-                {
-                    $this->user = $this->newUser();
-                    $this->user['id'] = 321;
-
-                    CreateUniverseControllerTest::$userData = $this->user;
-                }
-            },
-            UserUpdateDAO::class => fn($c) => new class($c) extends UserUpdateDAO {
-
-                #[\Override]
-                public function serve(): void
-                {
-                    CreateUniverseControllerTest::$userData = $this->user;
+                    CreateUniverseControllerTest::$userWithShip = $this;
                 }
             },
         ];

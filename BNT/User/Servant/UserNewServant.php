@@ -14,6 +14,7 @@ class UserNewServant extends \UUA\Servant
     public string $password;
     public string $role = 'user';
     public array $user;
+    public string $language = 'english';
 
     #[\Override]
     public function serve(): void
@@ -35,7 +36,7 @@ class UserNewServant extends \UUA\Servant
             'role' => $this->role,
             'last_login' => date('Y-m-d H:i:s'),
             'token' => UUID::v7(),
-            'lang' => 'english',
+            'lang' => $this->language,
         ];
     }
 }

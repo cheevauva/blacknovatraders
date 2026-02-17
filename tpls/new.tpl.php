@@ -1,5 +1,16 @@
-<?php $title = $l_new_title; ?>
-<?php include("header.php"); ?>
+<?php 
+global $l_new_title;
+global $l_new_username;
+global $l_new_shipname;
+global $l_new_pname;
+global $l_new_password;
+global $l_submit;
+global $l_reset;
+global $l_new_info;
+$title = $l_new_title;
+$self = \BNT\Controller\NewController::as($this);
+?>
+<?php include_header();?>
 <?php bigtitle(); ?>
 <?php if (!empty($ex)) : ?>  
     <div class="alert alert-danger">
@@ -40,4 +51,4 @@
         bntForm('bntNewForm');
     </script>
 <?php endif; ?>
-<?php include("footer.php"); ?>
+<?php include_footer();?>
