@@ -24,7 +24,7 @@ class ShipNewServant extends \UUA\Servant
         $ship['ship_id'] = $shipId = ShipCreateDAO::call($this->container, $ship)->id;
 
         ZoneCreateDAO::call($this->container, [
-            'zone_name' => 'WebMaster\'s Territory',
+            'zone_name' => sprintf("%s's Territory", $this->shipname),
             'owner' => $shipId,
         ])->id;
 

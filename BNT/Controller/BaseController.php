@@ -21,18 +21,9 @@ abstract class BaseController extends \UUA\Unit
     public array $responseCookies = [];
     public ?\ArrayObject $responseJson = null;
     public bool $disablePrepareResponse = false;
+    public bool $processedPost = false;
+    public bool $processedGet = false;
     public ?\Throwable $exception = null;
-
-    protected function fromRequest($name, $default = null)
-    {
-        $fromGet = fromGET($name);
-
-        if ($fromGet) {
-            return $fromGet;
-        }
-
-        return fromPOST($name, $default);
-    }
 
     protected function redirectTo($location): void
     {
@@ -80,9 +71,11 @@ abstract class BaseController extends \UUA\Unit
         switch ($this->requestMethod) {
             case 'GET':
                 $this->processGet();
+                $this->processedGet = true;
                 break;
             case 'POST':
                 $this->processPost();
+                $this->processedPost = false;
                 break;
         }
 

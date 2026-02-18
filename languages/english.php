@@ -1191,6 +1191,7 @@ $l_login_you_have_die = 'You have died in a horrible incident, <a href=log.php>h
 // new.php new2.php
 $l_new_title            = "Create New Player";
 $l_new_title2           = "Create New Player Phase Two";
+$l_new_username = 'Username';
 $l_new_shipname         = "Ship Name";
 $l_new_pname            = "Player Character Name";
 $l_new_info         = "We promise not to give out (or sell) your e-mail address to anyone.  It is required though.";

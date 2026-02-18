@@ -27,7 +27,7 @@ class SchemaController extends BaseController
         global $l_is_wrong;
 
         try {
-            $password = strval($this->parsedBody['password'] ?? '') ?: throw new \Exception($l_schema_password . ' ' . $l_is_required);
+            $password = strval($this->parsedBody['password'] ?? '') ?: throw new Exception($l_schema_password . ' ' . $l_is_required);
             if ($password !== $adminpass) {
                 throw new \Exception($l_schema_password . ' ' . $l_is_wrong);
             }

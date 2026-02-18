@@ -28,7 +28,7 @@ try {
     $module = fromGet('module');
     $operation = fromGet('operation');
 
-    if ($playerinfo['role'] !== 'admin') {
+    if ($userinfo['role'] !== 'admin') {
         throw new \Exception('You not admin');
     }
 
