@@ -11,9 +11,19 @@ class NewController extends BaseController
 {
 
     #[\Override]
+    protected function init(): void
+    {
+        $this->enableCheckAuth = false;
+    }
+
+    #[\Override]
     protected function processGet(): void
     {
-        $this->render('tpls/new.tpl.php');
+        if (empty($this->userinfo)) {
+            $this->render('tpls/new.tpl.php');
+        } else {
+            $this->redirectTo('index.php');
+        }
     }
 
     #[\Override]
@@ -29,6 +39,11 @@ class NewController extends BaseController
         global $l_new_password;
         global $l_is_required;
         global $l_is_invalid;
+
+        if (!empty($this->userinfo)) {
+            $this->redirectTo('index.php');
+            return;
+        }
 
         try {
             if ($account_creation_closed) {

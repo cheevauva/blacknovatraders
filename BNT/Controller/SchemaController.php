@@ -13,6 +13,12 @@ class SchemaController extends BaseController
     public array $messages = [];
 
     #[\Override]
+    protected function init(): void
+    {
+        $this->enableCheckAuth = false;
+    }
+    
+    #[\Override]
     protected function processGet(): void
     {
         $this->render('tpls/schema/schema_login.tpl.php');

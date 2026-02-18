@@ -11,9 +11,19 @@ class LoginController extends BaseController
 {
 
     #[\Override]
+    protected function init(): void
+    {
+        $this->enableCheckAuth = false;
+    }
+
+    #[\Override]
     protected function processGet(): void
     {
-        $this->render('tpls/login.tpl.php');
+        if (!empty($this->userinfo)) {
+            $this->redirectTo('index.php');
+        } else {
+            $this->render('tpls/login.tpl.php');
+        }
     }
 
     #[\Override]
@@ -27,6 +37,11 @@ class LoginController extends BaseController
         global $l_login_pw;
         global $l_is_required;
         global $l_is_invalid;
+
+        if (!empty($this->playerinfo)) {
+            $this->redirectTo('index.php');
+            return;
+        }
 
         try {
             if ($server_closed) {

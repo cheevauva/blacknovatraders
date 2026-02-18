@@ -69,7 +69,8 @@ class CreateUniverseController extends BaseController
         global $sched_ranking;
 
         parent::init();
-
+        
+        $this->enableCheckAuth = false;
         $this->admin_mail = $admin_mail;
         $this->admin_pass = $admin_pass;
         $this->sector_max = $sector_max;

@@ -6,7 +6,6 @@ namespace Tests\Unit\Controller;
 
 use BNT\Controller\NewController;
 use BNT\Game\Servant\GameNewServant;
-use Exception;
 
 class NewControllerTest extends \Tests\UnitTestCase
 {

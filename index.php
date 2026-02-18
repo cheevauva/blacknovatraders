@@ -2,8 +2,4 @@
 
 include 'config.php';
 
-if (checkuser(false)) {
-    redirectTo('login.php');
-} else {
-    redirectTo('main.php');
-}
+BNT\Controller\IndexController::new($container)->serve();

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BNT\Game\Servant;
+namespace BNT\Ship\Servant;
 
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Ship\Servant\ShipCheckNewbieServant;
 use BNT\Ship\Servant\ShipRestoreFromEscapePodServant;
 use BNT\Ship\Servant\ShipRestoreAsNewbieServant;
 
-class GameChooseShipServant extends \UUA\Servant
+class ShipDestructorServitor extends \UUA\Servant
 {
 
     public array $ship;
@@ -29,7 +29,6 @@ class GameChooseShipServant extends \UUA\Servant
         if ($ship['ship_destroyed'] == 'N') {
             return;
         }
-
 
         if ($ship['ship_destroyed'] == 'Y' && $ship['dev_escapepod'] == 'Y') {
             $escapepod = ShipRestoreFromEscapePodServant::new($this->container);

@@ -9,7 +9,7 @@ use BNT\Controller\BaseController;
 class BaseControllerTest extends \Tests\UnitTestCase
 {
 
-    protected BaseController $controller;
+    public static BaseController $controller;
     public static bool $processGetCalled;
     public static bool $processPostCalled;
     public static bool $prepareResponseCalled;
@@ -19,30 +19,27 @@ class BaseControllerTest extends \Tests\UnitTestCase
     {
         parent::setUp();
 
-        $this->controller = BaseController::new(self::$container);
-        $this->controller->disablePrepareResponse = true;
-
-        self::$prepareResponseCalled = false;
-        self::$processGetCalled = false;
-        self::$processPostCalled = false;
+        self::$controller = BaseController::new(self::$container);
+        self::$controller->enableCheckAuth = false;
+        self::$controller->disablePrepareResponse = true;
     }
 
     public function testServeSetsDefaultRequestMethod(): void
     {
         unset($_SERVER['REQUEST_METHOD']);
 
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertEquals('GET', $this->controller->requestMethod);
+        self::assertEquals('GET', self::$controller->requestMethod);
     }
 
     public function testServeUsesServerRequestMethod(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertEquals('POST', $this->controller->requestMethod);
+        self::assertEquals('POST', self::$controller->requestMethod);
     }
 
     public function testServeSetsQueryParamsFromGet(): void
@@ -52,9 +49,9 @@ class BaseControllerTest extends \Tests\UnitTestCase
             'sort' => 'asc'
         ];
 
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertEquals($_GET, $this->controller->queryParams);
+        self::assertEquals($_GET, self::$controller->queryParams);
     }
 
     public function testServeSetsParsedBodyFromPost(): void
@@ -64,81 +61,82 @@ class BaseControllerTest extends \Tests\UnitTestCase
             'password' => '123'
         ];
 
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertEquals($_POST, $this->controller->parsedBody);
+        self::assertEquals($_POST, self::$controller->parsedBody);
     }
 
     public function testServeCallsProcessGetForGetRequest(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertTrue(self::$processGetCalled);
-        self::assertFalse(self::$processPostCalled);
+        self::assertTrue(self::$controller->processedGet);
+        self::assertFalse(self::$controller->processedPost);
     }
 
     public function testServeCallsProcessPostForPostRequest(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $this->controller->serve();
+        
+        self::$controller->serve();
 
-        self::assertFalse(self::$processGetCalled);
-        self::assertTrue(self::$processPostCalled);
+        self::assertFalse(self::$controller->processedGet);
+        self::assertTrue(self::$controller->processedPost);
     }
 
     public function testServeDoesNotCallPrepareResponseWhenDisabled(): void
     {
-        $this->controller->disablePrepareResponse = true;
-        $this->controller->serve();
+        self::$controller->disablePrepareResponse = true;
+        self::$controller->serve();
 
-        self::assertFalse(self::$prepareResponseCalled);
+        self::assertFalse(self::$controller->processedPrepareResponse);
     }
 
     public function testServeCallsPrepareResponseWhenEnabled(): void
     {
-        $this->controller->disablePrepareResponse = false;
-        $this->controller->serve();
+        self::$controller->disablePrepareResponse = false;
+        self::$controller->serve();
 
-        self::assertTrue(self::$prepareResponseCalled);
+        self::assertTrue(self::$controller->processedPrepareResponse);
     }
 
     public function testRedirectToSetsLocation(): void
     {
-        $this->controller->requestMethod = 'GET';
-        $this->controller->queryParams = [
+        self::$controller->requestMethod = 'GET';
+        self::$controller->queryParams = [
             'testRedirectToSetsLocation' => true
         ];
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertEquals('main.php', $this->controller->location);
+        self::assertEquals('main.php', self::$controller->location);
     }
 
     public function testSetCookieAddsToResponseCookies(): void
     {
-        $this->controller->requestMethod = 'GET';
-        $this->controller->queryParams = [
+        self::$controller->requestMethod = 'GET';
+        self::$controller->queryParams = [
             'testSetCookieAddsToResponseCookies' => true
         ];
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertArrayHasKey('token', $this->controller->responseCookies);
-        self::assertEquals(['abc123', 3600, '/', 'example.com', true, true], $this->controller->responseCookies['token']);
+        self::assertArrayHasKey('token', self::$controller->responseCookies);
+        self::assertEquals(['abc123', 3600, '/', 'example.com', true, true], self::$controller->responseCookies['token']);
     }
 
     public function testResponseJsonByExceptionSetsExceptionAndJson(): void
     {
-        $this->controller->requestMethod = 'GET';
-        $this->controller->queryParams = [
+        self::$controller->requestMethod = 'GET';
+        self::$controller->queryParams = [
             'testResponseJsonByExceptionSetsExceptionAndJson' => true
         ];
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertNotNull($this->controller->exception);
-        self::assertNotNull($this->controller->responseJson);
+        self::assertNotNull(self::$controller->exception);
+        self::assertNotNull(self::$controller->responseJson);
 
-        $json = $this->controller->responseJson->getArrayCopy();
+        $json = self::$controller->responseJson->getArrayCopy();
 
         self::assertFalse($json['success']);
         self::assertEquals('exception', $json['type']);
@@ -148,38 +146,32 @@ class BaseControllerTest extends \Tests\UnitTestCase
 
     public function testRenderSetsTemplate(): void
     {
-        $this->controller->requestMethod = 'GET';
-        $this->controller->queryParams = [
+        self::$controller->requestMethod = 'GET';
+        self::$controller->queryParams = [
             'testRenderSetsTemplate' => true
         ];
-        $this->controller->serve();
+        self::$controller->serve();
 
-        self::assertEquals('test.tpl.php', $this->controller->template);
+        self::assertEquals('test.tpl.php', self::$controller->template);
     }
 
     public function testPrepareResponse(): void
     {
-        $this->controller->disablePrepareResponse = false;
-        $this->controller->serve();
+        self::$controller->disablePrepareResponse = false;
+        self::$controller->serve();
 
-        self::assertTrue(self::$prepareResponseCalled);
+        self::assertTrue(self::$controller->processedPrepareResponse);
     }
-    
+
     #[\Override]
     protected function stubs(): array
     {
         return [
             BaseController::class => fn($c) => new class($c) extends BaseController {
 
-                public bool $processGetCalled = false;
-                public bool $processPostCalled = false;
-                public bool $prepareResponseCalled = false;
-
                 #[\Override]
                 protected function processGet(): void
                 {
-                    BaseControllerTest::$processGetCalled = true;
-
                     if (!empty($this->queryParams['testRedirectToSetsLocation'])) {
                         $this->redirectTo('main.php');
                     }
@@ -197,20 +189,6 @@ class BaseControllerTest extends \Tests\UnitTestCase
                     }
 
                     parent::processGet();
-                }
-
-                #[\Override]
-                protected function processPost(): void
-                {
-                    BaseControllerTest::$processPostCalled = true;
-
-                    parent::processPost();
-                }
-
-                #[\Override]
-                protected function prepareResponse(): void
-                {
-                    BaseControllerTest::$prepareResponseCalled = true;
                 }
             },
         ];

@@ -167,7 +167,7 @@ function checkship($return = true)
         echo $return ? $l_login_died : '';
         return true;
     }
-
+    
     echo $return ? $l_global_died . $l_die_please : '';
 
     return true;

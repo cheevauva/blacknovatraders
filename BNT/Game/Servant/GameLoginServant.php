@@ -9,6 +9,7 @@ use BNT\Log\DAO\LogPlayerDAO;
 use BNT\Log\LogTypeConstants;
 use BNT\User\DAO\UserUpdateDAO;
 use BNT\User\DAO\UserByEmailDAO;
+use BNT\Ship\DAO\ShipByIdDAO;
 use Exception;
 
 class GameLoginServant extends \UUA\Servant
@@ -32,10 +33,6 @@ class GameLoginServant extends \UUA\Servant
         }
 
         if ($user['password'] !== md5($this->password)) {
-            if (!empty($user['ship_id'])) {
-                LogPlayerDAO::call($this->container, $user['ship_id'], LogTypeConstants::LOG_BADLOGIN, $ip);
-            }
-
             throw new Exception($l_login_4gotpw1);
         }
 
@@ -43,7 +40,13 @@ class GameLoginServant extends \UUA\Servant
         $user['last_login'] = gmdate('Y-m-d H:i:s');
 
         if (!empty($user['ship_id'])) {
-            LogPlayerDAO::call($this->container, $user['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
+            $ship = ShipByIdDAO::call($this->container, $user['ship_id'])->ship;
+
+            if ($ship['ship_destroyed'] == 'Y') {
+                $user['ship_id'] = null;
+            } else {
+                LogPlayerDAO::call($this->container, $user['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
+            }
         }
 
         UserUpdateDAO::call($this->container, $user, $user['id']);

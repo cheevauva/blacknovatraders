@@ -9,6 +9,7 @@ use BNT\Log\DAO\LogPlayerDAO;
 use BNT\Game\Servant\GameLoginServant;
 use BNT\User\DAO\UserByEmailDAO;
 use BNT\User\DAO\UserUpdateDAO;
+use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\UUID;
 
 class GameLoginServantTest extends \Tests\UnitTestCase
@@ -29,10 +30,12 @@ class GameLoginServantTest extends \Tests\UnitTestCase
             'email' => 'e@a.com',
             'password' => md5('pass'),
             'token' => UUID::v7(),
-            'ship_destroyed' => 'N',
             'ship_id' => 555,
         ];
-        self::$ship = null;
+        self::$ship = [
+            'ship_id' => 555,
+            'ship_destroyed' => 'N',
+        ];
     }
 
     public function testLoginSuccess(): void
@@ -72,15 +75,10 @@ class GameLoginServantTest extends \Tests\UnitTestCase
 
         $this->expectExceptionMessage($l_login_4gotpw1);
 
-        try {
-            $login = GameLoginServant::new(self::$container);
-            $login->email = 'e@a.com';
-            $login->password = 'pass1';
-            $login->serve();
-        } catch (\Exception $ex) {
-            self::assertEquals([LogTypeConstants::LOG_BADLOGIN, 555, 1], self::$logs[0] ?? null);
-            throw $ex;
-        }
+        $login = GameLoginServant::new(self::$container);
+        $login->email = 'e@a.com';
+        $login->password = 'pass1';
+        $login->serve();
     }
 
     #[\Override]
@@ -109,6 +107,14 @@ class GameLoginServantTest extends \Tests\UnitTestCase
                 public function serve(): void
                 {
                     $this->user = GameLoginServantTest::$user;
+                }
+            },
+            ShipByIdDAO::class => fn($c) => new class($c) extends ShipByIdDAO {
+
+                #[\Override]
+                public function serve(): void
+                {
+                    $this->ship = GameLoginServantTest::$ship;
                 }
             },
         ];

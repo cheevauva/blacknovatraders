@@ -1,7 +1,5 @@
 <?php
 
-;
-
 declare(strict_types=1);
 
 namespace BNT\Controller;
@@ -13,11 +11,14 @@ class ShipsController extends BaseController
 
     public array $ships;
 
+    #[\Override]
     protected function init(): void
     {
         global $userinfo;
 
         parent::init();
+
+        $this->enableCheckShip = false;
 
         $this->ships = db()->fetchAllKeyValue('SELECT ship_id, ship_name FROM ships WHERE user_id = :user_id', [
             'user_id' => $userinfo['id'],
@@ -27,8 +28,6 @@ class ShipsController extends BaseController
     #[\Override]
     protected function processGet(): void
     {
-        global $playerinfo;
-
         $this->render('tpls/ships.tpl.php');
     }
 

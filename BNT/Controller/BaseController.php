@@ -12,7 +12,7 @@ abstract class BaseController extends \UUA\Unit
     use \UUA\Traits\ContainerTrait;
     use \UUA\Traits\BuildTrait;
 
-    public string $template;
+    public ?string $template = null;
     public string $requestMethod;
     public array $parsedBody;
     public array $queryParams;
@@ -21,9 +21,15 @@ abstract class BaseController extends \UUA\Unit
     public array $responseCookies = [];
     public ?\ArrayObject $responseJson = null;
     public bool $disablePrepareResponse = false;
+    public bool $enableCheckAuth = true;
+    public bool $enableCheckShip = true;
+    public bool $enableCheckUser = true;
     public bool $processedPost = false;
     public bool $processedGet = false;
+    public bool $processedPrepareResponse = false;
     public ?\Throwable $exception = null;
+    public ?array $userinfo = null;
+    public ?array $playerinfo = null;
 
     protected function redirectTo($location): void
     {
@@ -64,9 +70,19 @@ abstract class BaseController extends \UUA\Unit
     #[\Override]
     public function serve(): void
     {
+        global $userinfo;
+        global $playerinfo;
+
+        $this->playerinfo ??= $playerinfo;
+        $this->userinfo ??= $userinfo;
         $this->requestMethod ??= $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $this->queryParams ??= $_GET ?? [];
         $this->parsedBody ??= $_POST ?? [];
+
+        if (!$this->auth()) {
+            $this->prepareResponse();
+            return;
+        }
 
         switch ($this->requestMethod) {
             case 'GET':
@@ -75,17 +91,44 @@ abstract class BaseController extends \UUA\Unit
                 break;
             case 'POST':
                 $this->processPost();
-                $this->processedPost = false;
+                $this->processedPost = true;
                 break;
         }
 
-        if (!$this->disablePrepareResponse) {
-            $this->prepareResponse();
+        $this->prepareResponse();
+    }
+
+    protected function auth(): bool
+    {
+        if (!$this->enableCheckAuth) {
+            return true;
         }
+
+        if ($this->enableCheckUser) {
+            if (empty($this->userinfo)) {
+                $this->redirectTo('login.php');
+                return false;
+            }
+        }
+
+        if ($this->enableCheckShip) {
+            if (empty($this->playerinfo)) {
+                $this->redirectTo('ships.php');
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected function prepareResponse(): void
     {
+        if ($this->disablePrepareResponse) {
+            return;
+        }
+        
+        $this->processedPrepareResponse = true;
+
         if (!empty($this->template)) {
             global $title;
 
