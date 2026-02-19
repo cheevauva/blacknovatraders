@@ -11,7 +11,7 @@ $picsperrow = 7;
 <table class="table">
     <tr>
         <td align="center" colspan=3>
-            <?php echo player_insignia_name($playerinfo['ship_id']); ?> <?php echo htmlspecialchars($playerinfo['character_name']); ?> <?php echo $l->abord ?> <a href="report.php"><?php echo htmlspecialchars($playerinfo['ship_name']); ?>
+            <?php echo player_insignia_name($playerinfo['ship_id']); ?> <?php echo htmlspecialchars($playerinfo['character_name']); ?> <?php echo $l->abord ?> <a href="ships.php"><?php echo htmlspecialchars($playerinfo['ship_name']); ?>
         </td>
     </tr>
     <tr>

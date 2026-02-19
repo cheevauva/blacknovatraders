@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BNT\Controller;
 
 use BNT\User\DAO\UserUpdateDAO;
+use BNT\Ship\DAO\ShipsByUserIdDAO;
+use BNT\Ship\DAO\ShipByIdDAO;
 
 class ShipsController extends BaseController
 {
@@ -14,37 +16,36 @@ class ShipsController extends BaseController
     #[\Override]
     protected function init(): void
     {
-        global $userinfo;
-
         parent::init();
 
         $this->enableCheckShip = false;
-
-        $this->ships = db()->fetchAllKeyValue('SELECT ship_id, ship_name FROM ships WHERE user_id = :user_id', [
-            'user_id' => $userinfo['id'],
-        ]);
     }
 
     #[\Override]
     protected function processGet(): void
     {
+        $this->loadShips();
         $this->render('tpls/ships.tpl.php');
+    }
+
+    protected function loadShips(): void
+    {
+        $this->ships = ShipsByUserIdDAO::call($this->container, $this->userinfo['id'])->ships;
     }
 
     #[\Override]
     protected function processPost(): void
     {
-        global $userinfo;
-
         $shipId = intval($this->parsedBody['ship_id'] ?? 0) ?: throw new \Exception('ship_id');
+        $ship = ShipByIdDAO::call($this->container, $shipId)->ship;
 
-        if (!isset($this->ships[$shipId])) {
+        if ($ship['user_id'] !== $this->userinfo['id']) {
             throw new \Exception('broken ship_id');
         }
 
         UserUpdateDAO::call($this->container, [
             'ship_id' => $shipId,
-        ], $userinfo['id']);
+        ], $this->userinfo['id']);
 
         $this->redirectTo('main.php');
     }

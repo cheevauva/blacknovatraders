@@ -1,6 +1,9 @@
 <?php
 
 include 'config.php';
+
+//BNT\Controller\PlanetController::new($container)->serve();die;
+
 include("combat.php");
 
 $title = $l_planet_title;
@@ -16,7 +19,8 @@ $sectorinfo = db()->fetch("SELECT * FROM universe WHERE sector_id= :sector", [
     'sector' => $playerinfo['sector']
 ]);
 
-$planet_id = stripnum($planet_id);
+$planet_id = intval($planet_id);
+$command = fromRequest('command');
 
 $planetinfo = db()->fetch("SELECT * FROM planets WHERE planet_id= :planet_id", [
     'planet_id' => $planet_id

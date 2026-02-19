@@ -29,7 +29,7 @@ class PlanetByIdDAO extends \UUA\DAO
     public static function call(ContainerInterface $container, int $planet): self
     {
         $self = self::new($container);
-        $self->planet = $planet;
+        $self->id = $planet;
         $self->serve();
 
         return $self;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BNT\EntryPoint\Servant;
+namespace BNT\Ship\Servant;
 
 use BNT\Planet\DAO\PlanetByIdDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
@@ -12,26 +12,26 @@ use BNT\SectorDefence\DAO\SectorDefencesBySectorDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Traderoute\DAO\TraderoutesBySectorAndShipDAO;
 use BNT\Ship\DAO\ShipsInSectorDAO;
-use BNT\EntryPoint\Exception\EntryPointMainShipOnPlanetException;
+use BNT\Ship\Exception\ShipExploreSectorNotAllowOnPlanetException;
 use BNT\Ship\DAO\ShipUpdateDAO;
 
-class EntryPointMainServant extends \UUA\Servant
+class ShipExploreSectorServant extends \UUA\Servant
 {
 
     /**
      * @var array<string, mixed>
      */
-    public array $playerinfo;
-    public $links;
+    public array $ship;
 
     /**
      * @var array<string, mixed>
      */
     public array $sector = [];
+    public $links;
     public array $planets = [];
     public array $sectorDefences = [];
     public array $zone = [];
-    public array $traderoutes  = [];
+    public array $traderoutes = [];
     public array $ships = [];
     public array $messages = [];
 
@@ -42,25 +42,22 @@ class EntryPointMainServant extends \UUA\Servant
 
         $this->messages = [];
 
-        if ($this->playerinfo['on_planet'] == 'Y') {
-            $planet = PlanetByIdDAO::call($this->container, $this->playerinfo['planet_id'])->planet;
-
+        if ($this->ship['on_planet'] == 'Y') {
+            $planet = PlanetByIdDAO::call($this->container, $this->ship['planet_id'])->planet;
+ 
             if ($planet) {
-                $shipOnPlanet = new EntryPointMainShipOnPlanetException();
-                $shipOnPlanet->planet = $this->playerinfo['planet_id'];
-
-                throw $shipOnPlanet;
+                throw new ShipExploreSectorNotAllowOnPlanetException($this->ship['planet_id']);
             } else {
-                $this->playerinfo['on_planet'] = 'N';
+                $this->ship['on_planet'] = 'N';
 
-                ShipUpdateDAO::call($this->container, $this->playerinfo, $this->playerinfo['ship_id']);
+                ShipUpdateDAO::call($this->container, $this->ship, $this->ship['ship_id']);
 
                 $this->messages[] = $l_nonexistant_pl;
             }
         }
 
-        $sector = SectorByIdDAO::call($this->container, $this->playerinfo['sector'])->sector;
- 
+        $sector = SectorByIdDAO::call($this->container, $this->ship['sector'])->sector;
+
         if (!$sector) {
             return;
         }
@@ -68,25 +65,25 @@ class EntryPointMainServant extends \UUA\Servant
         $this->sector = $sector;
 
         $linkByStart = LinksByStartDAO::new($this->container);
-        $linkByStart->start = $this->playerinfo['sector'];
+        $linkByStart->start = $this->ship['sector'];
         $linkByStart->serve();
 
         $planetsBySector = PlanetsBySectorDAO::new($this->container);
-        $planetsBySector->sector = $this->playerinfo['sector'];
+        $planetsBySector->sector = $this->ship['sector'];
         $planetsBySector->serve();
 
         $defencesBySector = SectorDefencesBySectorDAO::new($this->container);
-        $defencesBySector->sector = $this->playerinfo['sector'];
+        $defencesBySector->sector = $this->ship['sector'];
         $defencesBySector->serve();
 
         $traderoutesBySectorAndShip = TraderoutesBySectorAndShipDAO::new($this->container);
-        $traderoutesBySectorAndShip->sector = $this->playerinfo['sector'];
-        $traderoutesBySectorAndShip->ship = $this->playerinfo['ship_id'];
+        $traderoutesBySectorAndShip->sector = $this->ship['sector'];
+        $traderoutesBySectorAndShip->ship = $this->ship['ship_id'];
         $traderoutesBySectorAndShip->serve();
 
         $shipsInSector = ShipsInSectorDAO::new($this->container);
-        $shipsInSector->sector = $this->playerinfo['sector'];
-        $shipsInSector->excludeShip = $this->playerinfo['ship_id'];
+        $shipsInSector->sector = $this->ship['sector'];
+        $shipsInSector->excludeShip = $this->ship['ship_id'];
         $shipsInSector->serve();
 
         $this->zone = ZoneByIdDAO::call($this->container, $this->sector['zone_id'])->zone;

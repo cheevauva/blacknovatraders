@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace BNT\Controller;
 
 use Exception;
-use BNT\EntryPoint\Servant\EntryPointMainServant;
-use BNT\EntryPoint\Exception\EntryPointMainShipOnPlanetException;
+use BNT\Ship\Servant\ShipExploreSectorServant;
+use BNT\Ship\Exception\ShipExploreSectorNotAllowOnPlanetException;
 
 class MainController extends BaseController
 {
@@ -28,8 +28,8 @@ class MainController extends BaseController
         }
 
         try {
-            $entryPointMain = EntryPointMainServant::new($this->container);
-            $entryPointMain->playerinfo = $this->playerinfo;
+            $entryPointMain = ShipExploreSectorServant::new($this->container);
+            $entryPointMain->ship = $this->playerinfo;
             $entryPointMain->serve();
 
             $this->sectorinfo = $entryPointMain->sector;
@@ -54,7 +54,7 @@ class MainController extends BaseController
             }
 
             $this->render('tpls/main.tpl.php');
-        } catch (EntryPointMainShipOnPlanetException $ex) {
+        } catch (ShipExploreSectorNotAllowOnPlanetException $ex) {
             redirectTo('planet.php?planet_id=' . $ex->planet);
             return;
         } catch (Exception $ex) {

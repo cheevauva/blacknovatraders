@@ -49,6 +49,18 @@ function requestMethod()
     return $_SERVER['REQUEST_METHOD'];
 }
 
+function shipTypes(): array
+{
+    $shiptypes = [];
+    $shiptypes[0] = "tinyship.gif";
+    $shiptypes[1] = "smallship.gif";
+    $shiptypes[2] = "mediumship.gif";
+    $shiptypes[3] = "largeship.gif";
+    $shiptypes[4] = "hugeship.gif";
+
+    return $shiptypes;
+}
+
 function languages()
 {
     global $avail_lang;
@@ -131,12 +143,12 @@ function checkuser($return = true)
         echo $return ? $l_login_closed_message : '';
         return true;
     }
-    
+
     if (empty($userinfo)) {
         echo $return ? $l_global_needlogin : '';
         return true;
     }
-    
+
     return false;
 }
 
@@ -145,7 +157,6 @@ function checkship($return = true)
     global $playerinfo, $l_global_died, $l_global_needchooseship;
     global $l_login_died, $l_die_please;
     global $container;
-
 
     if (checkuser($return)) {
         return true;
@@ -159,7 +170,7 @@ function checkship($return = true)
     if ($playerinfo['ship_destroyed'] == "N") {
         return false;
     }
-    
+
     if ($playerinfo['dev_escapepod'] == "Y") {
         $escapepod = ShipRestoreFromEscapePodServant::new($container);
         $escapepod->ship = $playerinfo;
@@ -167,7 +178,7 @@ function checkship($return = true)
         echo $return ? $l_login_died : '';
         return true;
     }
-    
+
     echo $return ? $l_global_died . $l_die_please : '';
 
     return true;

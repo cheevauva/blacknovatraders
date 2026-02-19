@@ -16,6 +16,6 @@ class Language
         }
 
         return ${'l_' . $name};
-        ;
     }
+    
 }
