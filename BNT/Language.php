@@ -7,15 +7,39 @@ namespace BNT;
 class Language
 {
 
+    use \UUA\Traits\AsTrait;
+
+    protected array $mapping = [
+        'l_zi_' => 'zoneinfo.php',
+        'l_ze_' => 'zoneedit.php',
+    ];
+
     public function __get(string $name): mixed
     {
-        global ${'l_' . $name};
+        global $language;
 
-        if (!isset(${'l_' . $name})) {
-            return 'l_' . $name;
+        if (isset($GLOBALS['l_' . $name])) {
+            return $GLOBALS['l_' . $name];
         }
 
-        return ${'l_' . $name};
+        $slug = implode('_', array_slice(explode('_', 'l_' . $name, 3), 0, 2)) . '_';
+
+        if (!empty($this->mapping[$slug])) {
+            $languageSubFile = sprintf('languages/%s/%s', $language, $this->mapping[$slug]);
+
+            if (file_exists($languageSubFile)) {
+                include $languageSubFile;
+
+                foreach (get_defined_vars() as $var => $val) {
+                    $GLOBALS[$var] ??= $val;
+                }
+            }
+        }
+
+        if (isset($GLOBALS['l_' . $name])) {
+            return $GLOBALS['l_' . $name];
+        }
+
+        return 'l_' . $name;
     }
-    
 }

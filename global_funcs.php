@@ -61,6 +61,18 @@ function shipTypes(): array
     return $shiptypes;
 }
 
+function planetTypes(): array
+{
+    $planettypes = [];
+    $planettypes[0] = "tinyplanet.gif";
+    $planettypes[1] = "smallplanet.gif";
+    $planettypes[2] = "mediumplanet.gif";
+    $planettypes[3] = "largeplanet.gif";
+    $planettypes[4] = "hugeplanet.gif";
+
+    return $planettypes;
+}
+
 function languages()
 {
     global $avail_lang;
@@ -1065,4 +1077,21 @@ function shipLevel($score)
     else :
         return 4;
     endif;
+}
+
+function options($options, $selected)
+{
+    foreach ($options as $value => $label) {
+        $selectedAttr = '';
+
+        if (is_array($selected) && in_array($value, $selected)) {
+            $selectedAttr = 'selected';
+        }
+
+        if ($selected == $value) {
+            $selectedAttr = 'selected';
+        }
+
+        echo '<option value="', htmlspecialchars($value), '" ', $selectedAttr, '>', htmlspecialchars($label), '</option>';
+    }
 }

@@ -55,8 +55,8 @@ if (empty($disableAutoLogin) && !empty($token)) {
 
 $language = $default_lang;
 
-if (!empty($playerinfo['lang'])) {
-    $language = $playerinfo['lang'];
+if (!empty($userinfo['lang'])) {
+    $language = $userinfo['lang'];
 } else {
     if (!empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
         switch (mb_strtolower(substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2))) {
@@ -74,6 +74,8 @@ $languageFileMain = sprintf('languages/%s.php', $language);
 $languageFileSub = sprintf('languages/%s%s', $language, $_SERVER['PHP_SELF']);
 
 include $languageFileMain;
+
+$l = new \BNT\Language();
 
 if (file_exists($languageFileSub)) {
     include $languageFileSub;

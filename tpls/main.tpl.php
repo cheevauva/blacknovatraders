@@ -1,32 +1,31 @@
 <?php
-global $playerinfo;
 $title = $l->main_title;
 $self = BNT\Controller\MainController::as($this);
-?>
-<?php
 $picsperrow = 7;
+$shiptypes = shipTypes();
+$planettypes = planetTypes();
 ?>
 <?php include("header.php"); ?>
 
 <table class="table">
     <tr>
         <td align="center" colspan=3>
-            <?php echo player_insignia_name($playerinfo['ship_id']); ?> <?php echo htmlspecialchars($playerinfo['character_name']); ?> <?php echo $l->abord ?> <a href="ships.php"><?php echo htmlspecialchars($playerinfo['ship_name']); ?>
+            <?php echo player_insignia_name($self->playerinfo['ship_id']); ?> <?php echo htmlspecialchars($self->playerinfo['character_name']); ?> <?php echo $l->abord ?> <a href="ships.php"><?php echo htmlspecialchars($self->playerinfo['ship_name']); ?>
         </td>
     </tr>
     <tr>
         <td>
-            &nbsp;<?php echo $l->turns_have; ?><?php echo NUMBER($playerinfo['turns']) ?>
+            &nbsp;<?php echo $l->turns_have; ?><?php echo NUMBER($self->playerinfo['turns']) ?>
         </td>
         <td align=center>
-            <?php echo $l->turns_used ?><?php echo NUMBER($playerinfo['turns_used']); ?>
+            <?php echo $l->turns_used ?><?php echo NUMBER($self->playerinfo['turns_used']); ?>
         </td>
         <td align=right>
-            <?php echo $l->score ?><?php echo NUMBER($playerinfo['score']) ?>&nbsp;
+            <?php echo $l->score ?><?php echo NUMBER($self->playerinfo['score']) ?>&nbsp;
         </td>
     <tr>
         <td>
-            &nbsp;<?php echo $l->sector ?>: <?php echo $playerinfo['sector']; ?>
+            &nbsp;<?php echo $l->sector ?>: <?php echo $self->playerinfo['sector']; ?>
         </td>
         <td align=center>
             <?php if (!empty($self->sectorinfo['beacon'])) : ?>
@@ -93,8 +92,7 @@ $picsperrow = 7;
                                         <?php if ($traderoute['circuit'] == '1') :
                                             ?> =&gt;&nbsp;<?php
                                         else :
-                                            ?>&lt;=&gt;&nbsp;<?php
-                                        endif; ?>
+                                            ?>&lt;=&gt;&nbsp;<?php endif; ?>
 
                                         <?php if ($traderoute['dest_type'] == 'P') : ?>
                                             <?php echo $traderoute['dest_id']; ?>
@@ -150,14 +148,14 @@ $picsperrow = 7;
             </table>
             <?php echo $l->ships_in_sec ?>:
             <table class="table">
-                <?php if (empty($playerinfo['sector'])) : ?>
+                <?php if (empty($self->playerinfo['sector'])) : ?>
                     <tr>
                         <td align=center valign=top>
                             <?php echo $l->sector_0; ?>
                         </td>
                     </tr>
                 <?php endif; ?>
-                <?php if (!empty($playerinfo['sector']) && empty($self->shipsInSector)) : ?>
+                <?php if (!empty($self->playerinfo['sector']) && empty($self->shipsInSector)) : ?>
                     <tr>
                         <td align=center valign=top>
                             <?php echo $l->none; ?>
@@ -173,8 +171,8 @@ $picsperrow = 7;
                                 </a>
                                 <?php echo htmlspecialchars($shipInSector['ship_name']); ?> (<?php echo htmlspecialchars($shipInSector['character_name']); ?>)
                                 <?php if (!empty($shipInSector['team_name'])) :
-                                    ?>&nbsp;(<?php echo htmlspecialchars($shipInSector['team_name']); ?>)<?php
-                                endif; ?>
+                                    ?>&nbsp;(<?php echo htmlspecialchars($shipInSector['team_name']); ?>)<?php endif;
+                                ?>
                             </td>
                         <?php endforeach; ?>
                     </tr>
@@ -225,27 +223,27 @@ $picsperrow = 7;
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <img alt="<?php echo $l->ore ?>" src="images/ore.gif">&nbsp;<?php echo $l->ore ?>:
-                                <span class="float-end"><?php echo NUMBER($playerinfo['ship_ore']); ?></span>
+                                <span class="float-end"><?php echo NUMBER($self->playerinfo['ship_ore']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?php echo $l->organics ?>" src="images/organics.gif">&nbsp;<?php echo $l->organics ?>:
-                                <span class="float-end"><?php echo NUMBER($playerinfo['ship_organics']); ?></span>
+                                <span class="float-end"><?php echo NUMBER($self->playerinfo['ship_organics']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?php echo $l->goods ?>" src="images/goods.gif">&nbsp;<?php echo $l->goods ?>:
-                                <span class="float-end"><?php echo NUMBER($playerinfo['ship_goods']); ?></span>
+                                <span class="float-end"><?php echo NUMBER($self->playerinfo['ship_goods']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?php echo $l->energy ?>" src="images/energy.gif">&nbsp;<?php echo $l->energy ?>:
-                                <span class="float-end"><?php echo NUMBER($playerinfo['ship_energy']); ?></span>
+                                <span class="float-end"><?php echo NUMBER($self->playerinfo['ship_energy']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?php echo $l->colonists ?>" src="images/colonists.gif">&nbsp;<?php echo $l->colonists ?>:
-                                <span class="float-end"><?php echo NUMBER($playerinfo['ship_colonists']); ?></span>
+                                <span class="float-end"><?php echo NUMBER($self->playerinfo['ship_colonists']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?php echo $l->credits ?>" src="images/credits.gif">&nbsp;<?php echo $l->credits ?>:
-                                <span class="float-end"><?php echo NUMBER($playerinfo['credits']); ?></span>
+                                <span class="float-end"><?php echo NUMBER($self->playerinfo['credits']); ?></span>
                             </li>
                         </ul>
 
@@ -258,20 +256,20 @@ $picsperrow = 7;
                     <td>
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?php echo $playerinfo['preset1']; ?>">
-                                    =&gt;&nbsp;<?php echo $playerinfo['preset1']; ?>
+                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?php echo $self->playerinfo['preset1']; ?>">
+                                    =&gt;&nbsp;<?php echo $self->playerinfo['preset1']; ?>
                                 </a>
                                 <a class="nav-link d-inline ms-2" href="preset.php">[<?php echo $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?php echo $playerinfo['preset2']; ?>">
-                                    =&gt;&nbsp;<?php echo $playerinfo['preset2']; ?>
+                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?php echo $self->playerinfo['preset2']; ?>">
+                                    =&gt;&nbsp;<?php echo $self->playerinfo['preset2']; ?>
                                 </a>
                                 <a class="nav-link d-inline ms-2" href="preset.php">[<?php echo $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?php echo $playerinfo['preset3']; ?>">
-                                    =&gt;&nbsp;<?php echo $playerinfo['preset3']; ?>
+                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?php echo $self->playerinfo['preset3']; ?>">
+                                    =&gt;&nbsp;<?php echo $self->playerinfo['preset3']; ?>
                                 </a>
                                 <a class="nav-link d-inline ms-2" href="preset.php">[<?php echo $l->set; ?>]</a>
                             </li>

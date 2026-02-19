@@ -1,37 +1,6 @@
 <?php
 global $title, $l_news_title, $l_rankings, $l_settings_game, $l_help, $l_faq, $l_emailus, $l_forums, $link_forums;
 global $admin_mail;
-
-$shiptypes = [];
-$shiptypes[0] = "tinyship.gif";
-$shiptypes[1] = "smallship.gif";
-$shiptypes[2] = "mediumship.gif";
-$shiptypes[3] = "largeship.gif";
-$shiptypes[4] = "hugeship.gif";
-
-$planettypes = [];
-$planettypes[0] = "tinyplanet.gif";
-$planettypes[1] = "smallplanet.gif";
-$planettypes[2] = "mediumplanet.gif";
-$planettypes[3] = "largeplanet.gif";
-$planettypes[4] = "hugeplanet.gif";
-
-function options($options, $selected)
-{
-    foreach ($options as $value => $label) {
-        $selectedAttr = '';
-
-        if (is_array($selected) && in_array($value, $selected)) {
-            $selectedAttr = 'selected';
-        }
-
-        if ($selected == $value) {
-            $selectedAttr = 'selected';
-        }
-
-        echo '<option value="', htmlspecialchars($value), '" ', $selectedAttr, '>', htmlspecialchars($label), '</option>';
-    }
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html data-bs-theme="">

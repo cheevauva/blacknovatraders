@@ -36,7 +36,13 @@ class ShipsController extends BaseController
     #[\Override]
     protected function processPost(): void
     {
-        $shipId = intval($this->parsedBody['ship_id'] ?? 0) ?: throw new \Exception('ship_id');
+        $shipId = intval($this->parsedBody['ship_id'] ?? 0);
+
+        if (empty($shipId)) {
+            $this->redirectTo('ships.php');
+            return;
+        }
+
         $ship = ShipByIdDAO::call($this->container, $shipId)->ship;
 
         if ($ship['user_id'] !== $this->userinfo['id']) {

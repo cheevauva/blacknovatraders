@@ -131,8 +131,8 @@ abstract class BaseController extends \UUA\Unit
 
         if (!empty($this->template)) {
             global $title;
+            global $l;
 
-            $l = new Language();
             $title = $this->title;
 
             include $this->template;
