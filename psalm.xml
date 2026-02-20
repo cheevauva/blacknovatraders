@@ -18,6 +18,7 @@
         </ignoreFiles>
     </projectFiles>
     <globals>
+        <var name="l" type="BNT\Language" />
         <var name="title" type="string" />
         <var name="container" type="Psr\Container\ContainerInterface" />
         <var name="playerinfo" type="array|null"/>

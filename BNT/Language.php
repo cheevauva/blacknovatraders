@@ -12,6 +12,8 @@ class Language
     protected array $mapping = [
         'l_zi_' => 'zoneinfo.php',
         'l_ze_' => 'zoneedit.php',
+        'l_login_' => 'login.php',
+        'l_ships_' => 'ships.php',
     ];
 
     public function __get(string $name): mixed

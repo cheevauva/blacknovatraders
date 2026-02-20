@@ -179,8 +179,6 @@ class CreateUniverseController extends BaseController
                 $this->startParams = $this->calculateStartParams();
 
                 $universeDeploy = GameUniverseDeployServant::new($this->container);
-                $universeDeploy->admin_mail = $this->admin_mail;
-                $universeDeploy->admin_pass = $this->admin_pass;
                 $universeDeploy->startParams = $this->startParams;
                 $universeDeploy->sectorMax = $this->sector_max;
                 $universeDeploy->universeSize = $this->universe_size;

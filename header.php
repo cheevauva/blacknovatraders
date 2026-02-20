@@ -1,6 +1,5 @@
 <?php
-global $title, $l_news_title, $l_rankings, $l_settings_game, $l_help, $l_faq, $l_emailus, $l_forums, $link_forums;
-global $admin_mail;
+global $title, $l, $link_forums, $admin_mail;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html data-bs-theme="">
@@ -10,6 +9,20 @@ global $admin_mail;
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <script type="text/javascript">
+        function alert(message, type) {
+            const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+            alertPlaceholder.innerHTML = '';
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('');
+
+            alertPlaceholder.append(wrapper);
+        }
+
         function bntForm(id) {
             document.getElementById(id).addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -28,8 +41,7 @@ global $admin_mail;
 
                 const result = await response.json();
 
-                document.getElementById('alertMain').classList.remove('d-none');
-                document.getElementById('alertMain').getElementsByClassName('error')[0].innerHTML = result.error;
+                alert(result.message, result.type);
             });
         }
     </script>
@@ -43,24 +55,25 @@ global $admin_mail;
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link" href="news.php"><?php echo $l_news_title; ?></a>
-                            <a class="nav-link" href="ranking.php"><?php echo $l_rankings; ?></a>
-                            <a class="nav-link" href="settings.php"><?php echo $l_settings_game; ?></A>
-                            <a class="nav-link" href="help.php"><?php echo $l_help; ?></a>
-                            <a class="nav-link" href="faq.html"><?php echo "$l_faq"; ?></a>
-                            <a class="nav-link" href="mailto:<?php echo $admin_mail; ?>"><?php echo $l_emailus; ?></a>
+                            <a class="nav-link" href="news.php"><?php echo $l->news_title; ?></a>
+                            <a class="nav-link" href="ranking.php"><?php echo $l->rankings; ?></a>
+                            <a class="nav-link" href="settings.php"><?php echo $l->settings_game; ?></A>
+                            <a class="nav-link" href="help.php"><?php echo $l->help; ?></a>
+                            <a class="nav-link" href="faq.html"><?php echo "$l->faq"; ?></a>
+                            <a class="nav-link" href="mailto:<?php echo $admin_mail; ?>"><?php echo $l->emailus; ?></a>
 
                             <?php if (!empty($link_forums)) : ?>
-                                <a class="nav-link" href="<?php echo $link_forums; ?>" target="_blank"><?php echo $l_forums; ?></A>
+                                <a class="nav-link" href="<?php echo $link_forums; ?>" target="_blank"><?php echo $l->forums; ?></A>
                             <?php endif; ?>
                             <a class="nav-link" target="_blank" href="http://www.sourceforge.net/projects/blacknova">BlackNova Traders</a>
                         </div>
                     </div>
                 </div>
             </nav>
-            <div class="alert alert-warning alert-dismissible d-none" id="alertMain" role="alert">
-                <span class="error"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="row mt-3">
+                <div class="col" id="liveAlertPlaceholder">
+
+                </div>
             </div>
 
 

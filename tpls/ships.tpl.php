@@ -6,7 +6,7 @@ $self = \BNT\Controller\ShipsController::as($this);
 <?php include_header(); ?>
 <?php bigtitle(); ?>
 <div class="container mt-4">
-    <form action="ships.php" method="post">
+    <form action="ships.php" method="post" id="bntShipsForm">
         <div class="accordion" id="accordionShips">
             <?php foreach ($self->ships as $ship) : ?>
                 <?php
@@ -38,11 +38,20 @@ $self = \BNT\Controller\ShipsController::as($this);
                                             name="ship_id" 
                                             value="<?= $ship['ship_id']; ?>" 
                                             <?php if ($isCurrent): ?>checked<?php endif; ?>
-                                            <?php if ($isDestroyed): ?>disabled<?php endif; ?>
                                             >
                                         <label class="form-check-label" for="ship_id">
                                             <img src="images/<?php echo $shiptypes[shipLevel($ship)]; ?>" border=0><br/>
                                             <?php echo $l->credits; ?>: <?php echo NUMBER($ship['credits']); ?>
+                                            <?php if ($ship['ship_destroyed'] == 'Y'): ?>
+                                                <div class="alert alert-danger" role="alert">
+                                                    <?= $l->shipdestroyed; ?>
+                                                </div>
+                                                <?php if ($ship['dev_escapepod'] == 'Y'): ?> 
+                                                    <div class="alert alert-success" role="alert">
+                                                        <?= $l->escape_pod; ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
 
                                         </label>
                                     </div>
@@ -143,5 +152,8 @@ $self = \BNT\Controller\ShipsController::as($this);
             </div>
         </div>
     </form>
+    <script type="text/javascript">
+        bntForm('bntShipsForm');
+    </script>
 </div>
 <?php include_footer(); ?>

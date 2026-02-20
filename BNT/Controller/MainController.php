@@ -73,7 +73,7 @@ class MainController extends BaseController
 
         for ($i = 0; $i < 10; $i++) {
             $this->traderoutes[] = [
-                'traderoute_id' => $ii,
+                'traderoute_id' => $i,
             ];
             $this->planets[] = [
                 'name' => 'P' . $i,

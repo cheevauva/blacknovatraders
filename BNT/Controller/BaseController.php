@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
-use BNT\Language;
+use BNT\Exception\WarningException;
+use BNT\Exception\InfoException;
+use BNT\Exception\ErrorException;
+use BNT\Exception\SuccessException;
 
 abstract class BaseController extends \UUA\Unit
 {
@@ -45,9 +48,19 @@ abstract class BaseController extends \UUA\Unit
     {
         $this->exception = $ex;
         $this->responseJson = new \ArrayObject([
-            'success' => false,
-            'type' => 'exception',
-            'error' => $ex->getMessage(),
+            'success' => match (true) {
+                $ex instanceof InfoException => true,
+                $ex instanceof SuccessException => true,
+                default => false,
+            },
+            'type' => match (true) {
+                $ex instanceof ErrorException => 'danger',
+                $ex instanceof WarningException => 'warning',
+                $ex instanceof InfoException => 'info',
+                $ex instanceof SuccessException => 'success',
+                default => 'primary',
+            },
+            'message' => $ex->getMessage(),
             'code' => $ex->getCode(),
         ]);
     }
@@ -126,16 +139,17 @@ abstract class BaseController extends \UUA\Unit
         if ($this->disablePrepareResponse) {
             return;
         }
-        
+
         $this->processedPrepareResponse = true;
 
         if (!empty($this->template)) {
-            global $title;
             global $l;
 
             $title = $this->title;
 
             include $this->template;
+
+            $title . $l->yes;
         }
 
         foreach ($this->responseCookies as $name => $cookies) {

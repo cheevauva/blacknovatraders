@@ -7,6 +7,8 @@ namespace BNT\Controller;
 use BNT\User\DAO\UserUpdateDAO;
 use BNT\Ship\DAO\ShipsByUserIdDAO;
 use BNT\Ship\DAO\ShipByIdDAO;
+use BNT\Ship\Servant\ShipChooseServant;
+use Exception;
 
 class ShipsController extends BaseController
 {
@@ -43,16 +45,15 @@ class ShipsController extends BaseController
             return;
         }
 
-        $ship = ShipByIdDAO::call($this->container, $shipId)->ship;
+        try {
+            $choose = ShipChooseServant::new($this->container);
+            $choose->user = $this->userinfo;
+            $choose->shipId = $shipId;
+            $choose->serve();
 
-        if ($ship['user_id'] !== $this->userinfo['id']) {
-            throw new \Exception('broken ship_id');
+            $this->redirectTo('main.php');
+        } catch (Exception $ex) {
+            $this->responseJsonByException($ex);
         }
-
-        UserUpdateDAO::call($this->container, [
-            'ship_id' => $shipId,
-        ], $this->userinfo['id']);
-
-        $this->redirectTo('main.php');
     }
 }

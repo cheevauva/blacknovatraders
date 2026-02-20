@@ -149,3 +149,4 @@ $l_by_placebounty = "Установить или просмотреть нагр
 $l_toplanetmenu = "перейти в меню планеты.";
 $l_report_title = "Отчет о корабле";
 $l_level = "Уровень";
+$l_shipdestroyed = "Корабль уничтожен!";
