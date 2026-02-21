@@ -1,7 +1,9 @@
+<?php $self = BNT\Controller\AdminUserController::as($this); ?>
+<?php include_header(); ?>
 <div class="card shadow">
     <div class="card-header bg-primary text-white">
         <h3 class="mb-0">
-            User Editor
+            User list
         </h3>
     </div>
     <div class="card-body">
@@ -10,7 +12,7 @@
                 <div class="col-md-8 mb-3">
                     <label class="form-label fw-bold mb-2">Select User:</label>
                     <select size="10" class="form-select h-100" name="user">
-                        <?php echo options($ships, null); ?>
+                        <?php echo options($self->users, null); ?>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3 d-flex flex-column align-items-center">
@@ -21,8 +23,8 @@
                     </div>
                 </div>
             </div>
-            
-            <input type="hidden" name="module" value="useredit">
+
+            <input type="hidden" name="module" value="user">
             <input type="hidden" name="operation" value="edit">
         </form>
     </div>
@@ -32,3 +34,4 @@
         </small>
     </div>
 </div>
+<?php include_footer(); ?>

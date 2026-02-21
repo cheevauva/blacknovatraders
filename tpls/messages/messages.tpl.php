@@ -85,7 +85,7 @@
                                                 <span class="fw-bold small"><?= $l->dreadm_sender; ?></span>
                                             </div>
                                             <div class="col">
-                                                <span class="text-warning small"><?php echo $sender['character_name']; ?></span>
+                                                <span class="text-warning small"><?php echo $sender['ship_name']; ?></span>
                                             </div>
                                             <div class="col-auto text-nowrap">
                                                 <span class="small me-2"><?php echo $msg['sent']; ?></span>
@@ -137,7 +137,7 @@
                                     <div class="card-body p-1 text-center">
                                         <a href="readmail.php?action=delete&ID=<?php echo $msg['ID']; ?>" class="text-white text-decoration-none me-3"><?= $l->dreadm_del ?></a>
                                         <span class="text-white">|</span>
-                                        <a href="mailto2.php?name=<?php echo $sender['character_name']; ?>&subject=<?php echo $msg['subject']; ?>" class="text-white text-decoration-none ms-3"><?= $l->dreadm_repl ?></a>
+                                        <a href="mailto2.php?name=<?php echo $sender['ship_name']; ?>&subject=<?php echo $msg['subject']; ?>" class="text-white text-decoration-none ms-3"><?= $l->dreadm_repl ?></a>
                                     </div>
                                 </div>
                             </div>

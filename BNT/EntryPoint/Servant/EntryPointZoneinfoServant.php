@@ -49,7 +49,7 @@ class EntryPointZoneinfoServant extends \UUA\Servant
         } else {
             if ($this->zoneinfo['corp_zone'] == 'N') {
                 $this->ownerinfo = ShipByIdDAO::call($this->container, $this->zoneinfo['owner'])->ship;
-                $this->ownername = $this->ownerinfo['character_name'] ?? null;
+                $this->ownername = $this->ownerinfo['ship_name'] ?? null;
             } else {
                 $this->ownerinfo = TeamByIdDAO::call($this->container, $this->zoneinfo['owner'])->team;
                 $this->ownername = $this->ownerinfo['team_name'] ?? null;

@@ -29,7 +29,7 @@
                 <tr>
                     <td><?php echo NUMBER($i); ?></td>
                     <td><?php echo NUMBER($row['score']); ?></td>
-                    <td><?php echo player_insignia_name($row['ship_id']); ?>&nbsp;<?php echo htmlspecialchars($row['character_name']); ?></td>
+                    <td><?php echo player_insignia_name($row['ship_id']); ?>&nbsp;<?php echo htmlspecialchars($row['ship_name']); ?></td>
                     <td><?php echo NUMBER($row['turns_used'] <= 0 ? 1 : $row['turns_used']); ?></td>
                     <td><?php echo $row['last_login']; ?></td>
                     <td>&nbsp;&nbsp;<?php echo NUMBER($rating); ?></td>

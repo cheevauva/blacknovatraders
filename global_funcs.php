@@ -42,6 +42,13 @@ function planetTypes(): array
     return $planettypes;
 }
 
+function isAdmin(): bool
+{
+    global $userinfo;
+    
+    return !empty($userinfo) && $userinfo['role'] == 'admin';
+}
+
 function languages()
 {
     global $avail_lang;

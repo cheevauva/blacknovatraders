@@ -61,6 +61,9 @@ global $title, $l, $link_forums, $admin_mail, $userinfo;
                             <a class="nav-link" href="news.php"><?= $l->news_title; ?></a>
                             <a class="nav-link" href="ranking.php"><?= $l->rankings; ?></a>
                             <a class="nav-link" href="settings.php"><?= $l->settings_game; ?></A>
+                            <?php if (isAdmin()) : ?>
+                                <a class="nav-link" href="admin.php"><?= "$l->admin"; ?></a>
+                            <?php endif; ?>
                             <?php if (!empty($userinfo)) : ?>
                                 <a class="nav-link" href="logout.php"><?= "$l->logout"; ?></a>
                             <?php endif; ?>

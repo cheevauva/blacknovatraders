@@ -10,7 +10,7 @@ $planettypes = planetTypes();
 <table class="table">
     <tr>
         <td align="center" colspan=3>
-            <?php echo player_insignia_name($self->playerinfo['ship_id']); ?> <?php echo htmlspecialchars($self->playerinfo['character_name']); ?> <?php echo $l->abord ?> <a href="ships.php"><?php echo htmlspecialchars($self->playerinfo['ship_name']); ?>
+            <a href="ships.php"><?php echo htmlspecialchars($self->playerinfo['ship_name']); ?></a> [<?php echo player_insignia_name($self->playerinfo['ship_id']); ?>]
         </td>
     </tr>
     <tr>
@@ -139,7 +139,7 @@ $planettypes = planetTypes();
                                 <br>
                                 <?php echo empty($planet['name']) ? $l->unnamed : htmlspecialchars($planet['name']); ?>
                                 <br>
-                                (<?php echo empty($planet['owner']) ? $l->unowned : htmlspecialchars($planet['owner_character_name']); ?>)
+                                (<?php echo empty($planet['owner']) ? $l->unowned : htmlspecialchars($planet['owner_ship_name']); ?>)
                             </td>
                         <?php endforeach; ?>
                     </tr>
@@ -168,7 +168,7 @@ $planettypes = planetTypes();
                                 <a href="ship.php?ship_id=<?php echo $shipInSector['ship_id']; ?>">
                                     <img src="images/<?php echo $shiptypes[shipLevel($shipInSector['score'])]; ?>" border=0>
                                 </a>
-                                <?php echo htmlspecialchars($shipInSector['ship_name']); ?> (<?php echo htmlspecialchars($shipInSector['character_name']); ?>)
+                                <?php echo htmlspecialchars($shipInSector['ship_name']); ?> (<?php echo htmlspecialchars($shipInSector['ship_name']); ?>)
                                 <?php if (!empty($shipInSector['team_name'])) :
                                     ?>&nbsp;(<?php echo htmlspecialchars($shipInSector['team_name']); ?>)<?php endif;
                                 ?>
@@ -204,7 +204,7 @@ $planettypes = planetTypes();
                                     <?php $def_type = $l->mines; ?>
                                 <?php endif; ?>
                                 <BR>
-                                <?php echo $defence['character_name']; ?><br/>
+                                <?php echo $defence['ship_name']; ?><br/>
                                 <?php echo $defence['quantity']; ?> <?php echo $def_type; ?>
                             </td>
                         <?php endforeach; ?>

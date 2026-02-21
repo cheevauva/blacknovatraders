@@ -27,7 +27,7 @@ class MessagesController extends BaseController
     protected function processGetAsHtml(): void
     {
 
-        $this->ships = db()->fetchAll("SELECT * FROM ships WHERE ship_destroyed = 'N' ORDER BY character_name ASC");
+        $this->ships = db()->fetchAll("SELECT * FROM ships WHERE ship_destroyed = 'N' ORDER BY ship_name ASC");
         $this->to = intval($this->queryParams['to'] ?? 0);
         $this->messages = db()->fetchAll("SELECT * FROM messages WHERE recp_id='" . $this->playerinfo['ship_id'] . "' ORDER BY sent DESC");
         $this->messages[] = [

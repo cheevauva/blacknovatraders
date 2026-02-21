@@ -62,6 +62,7 @@ CREATE TABLE traderoutes
 CREATE TABLE users 
 (
     id int unsigned NOT NULL auto_increment,
+    character_name char(60) NOT NULL,
     email char(60) NOT NULL,
     password varchar(36) NOT NULL,
     token tinytext NULL,

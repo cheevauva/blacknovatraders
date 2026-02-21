@@ -21,21 +21,21 @@ class ShipsGetRankingDAO extends \UUA\DAO
         $sort = $this->sort;
 
         if ($sort == "turns") {
-            $by = "turns_used DESC,character_name ASC";
+            $by = "turns_used DESC,ship_name ASC";
         } elseif ($sort == "login") {
-            $by = "last_login DESC,character_name ASC";
+            $by = "last_login DESC,ship_name ASC";
         } elseif ($sort == "good") {
-            $by = "rating DESC,character_name ASC";
+            $by = "rating DESC,ship_name ASC";
         } elseif ($sort == "bad") {
-            $by = "rating ASC,character_name ASC";
+            $by = "rating ASC,ship_name ASC";
         } elseif ($sort == "alliance") {
-            $by = "teams.team_name DESC, character_name ASC";
+            $by = "teams.team_name DESC, ship_name ASC";
         } elseif ($sort == "efficiency") {
             $by = "efficiency DESC";
         } elseif ($sort == "online") {
             $by = "online DESC";
         } else {
-            $by = "score DESC,character_name ASC";
+            $by = "score DESC,ship_name ASC";
         }
 
         $query = "
@@ -43,7 +43,7 @@ class ShipsGetRankingDAO extends \UUA\DAO
             ships.ship_id,
             ships.email,
             ships.score,
-            ships.character_name,
+            ships.ship_name,
             ships.turns_used,
             ships.last_login,
             UNIX_TIMESTAMP(ships.last_login) as online,

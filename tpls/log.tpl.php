@@ -1,5 +1,5 @@
 <?php include "header.php"; ?>
-<h1><?php echo str_replace("[player]", htmlspecialchars($playerinfo['character_name']), $l_log_log); ?></h1>
+<h1><?php echo str_replace("[player]", htmlspecialchars($playerinfo['ship_name']), $l_log_log); ?></h1>
 <table class="table table-hover">
     <?php foreach ($logs as $log) : ?>
         <tr>

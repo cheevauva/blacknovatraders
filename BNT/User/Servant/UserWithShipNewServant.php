@@ -29,12 +29,12 @@ class UserWithShipNewServant extends \UUA\Servant
         $newUser->email = $this->email;
         $newUser->password = $this->password;
         $newUser->role = $this->role;
+        $newUser->character = $this->character;
         $newUser->serve();
 
         $user = $newUser->user;
 
         $newShip = ShipNewServant::new($this->container);
-        $newShip->character = $this->character;
         $newShip->shipname = $this->shipname;
         $newShip->userId = $user['id'];
         $newShip->serve();

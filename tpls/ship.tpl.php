@@ -11,7 +11,7 @@
             <?php echo $l_ship_youc; ?> 
             <?php echo htmlspecialchars($othership['ship_name']); ?>, 
             <?php echo $l_ship_owned; ?> 
-            <?php echo htmlspecialchars($othership['character_name']); ?>.
+            <?php echo htmlspecialchars($othership['ship_name']); ?>.
         </div>
     </div>
     <div class="mb-3">

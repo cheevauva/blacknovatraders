@@ -168,12 +168,11 @@ abstract class BaseController extends \UUA\Unit
         return ($this->queryParams[$name] ?? null) ?: ($requiredText ? throw new WarningException($requiredText) : null);
     }
 
-    #[\Override]
-    public function serve(): void
+    protected function fromGlobals(): void
     {
         global $userinfo;
         global $playerinfo;
-
+        
         $this->headers ??= getallheaders();
         $this->acceptType ??= $_SERVER['HTTP_ACCEPT'] ?? (getallheaders()['Accept'] ?? 'text/html');
         $this->playerinfo ??= $playerinfo;
@@ -181,6 +180,12 @@ abstract class BaseController extends \UUA\Unit
         $this->requestMethod ??= $_SERVER['REQUEST_METHOD'] ?? 'GET';
         $this->queryParams ??= $_GET ?? [];
         $this->parsedBody ??= $_POST ?? [];
+    }
+
+    #[\Override]
+    public function serve(): void
+    {
+        $this->fromGlobals();
 
         if (!$this->auth()) {
             $this->prepareResponse();
@@ -213,6 +218,15 @@ abstract class BaseController extends \UUA\Unit
         }
     }
 
+    public function isAdmin(): bool
+    {
+        if (empty($this->userinfo)) {
+            return false;
+        }
+
+        return $this->userinfo['role'] == 'admin';
+    }
+
     protected function playerinfoUpdate(): void
     {
         if (empty($this->playerinfo)) {
@@ -227,7 +241,7 @@ abstract class BaseController extends \UUA\Unit
         if (empty($this->userinfo)) {
             throw new ErrorException('userinfo not define');
         }
-        
+
         UserUpdateDAO::call($this->container, $this->userinfo, $this->userinfo['id']);
     }
 

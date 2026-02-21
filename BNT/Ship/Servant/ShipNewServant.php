@@ -12,7 +12,6 @@ class ShipNewServant extends \UUA\Servant
 {
     public int $userId;
     public string $shipname;
-    public string $character;
  
     public array $ship;
     public ?int $start_turns;
@@ -55,7 +54,6 @@ class ShipNewServant extends \UUA\Servant
         return [
             'ship_name' => $this->shipname,
             'ship_destroyed' => 'N',
-            'character_name' => $this->character,
             'armor_pts' => $start_armor,
             'credits' => $start_credits,
             'ship_energy' => $start_energy,

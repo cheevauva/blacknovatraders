@@ -75,19 +75,18 @@ class MainController extends BaseController
                 'planet_id' => $i,
                 'owner_score' => $i * 3,
                 'owner' => $i * 1000,
-                'owner_character_name' => 'OCN' . $i * 1000,
+                'owner_ship_name' => 'OSN' . $i * 1000,
             ];
             $this->shipsInSector[] = [
                 'ship_id' => $i,
                 'score' => $i * 3,
                 'ship_name' => 'S' . $i * 1000,
-                'character_name' => 'N' . $i * 1000,
             ];
 
             $defenceTypes = ['F', 'M'];
             $defenceFmSetting = ['attack', 'toll'];
             $this->defences[] = [
-                'character_name' => 'CN' . $i * 1000,
+                'ship_name' => 'SN' . $i * 1000,
                 'quantity' => rand(0, 100),
                 'defence_id' => $i,
                 'fm_setting' => $defenceFmSetting[rand(0, 1)],

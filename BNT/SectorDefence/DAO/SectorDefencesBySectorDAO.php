@@ -18,7 +18,7 @@ class SectorDefencesBySectorDAO extends \UUA\DAO
         $sql = "
         SELECT 
             sector_defence.*,
-            ships.character_name
+            ships.ship_name
         FROM
             sector_defence,
             ships

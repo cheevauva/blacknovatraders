@@ -19,7 +19,7 @@ class PlanetsBySectorDAO extends \UUA\DAO
         SELECT 
             p.*,
             (owner.hull + owner.engines + owner.computer + owner.beams + owner.torp_launchers + owner.shields + owner.armor) / 7 AS owner_score,
-            owner.character_name AS owner_character_name
+            owner.ship_name AS owner_ship_name
         FROM 
             planets AS p
         LEFT JOIN
