@@ -2,7 +2,7 @@
 global $title, $l, $link_forums, $admin_mail, $userinfo;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html data-bs-theme="">
+<html data-bs-theme="<?= $userinfo['theme'] ?? 'dark';?>">
     <head>
         <title><?= $title; ?></title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">

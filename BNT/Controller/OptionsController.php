@@ -23,10 +23,15 @@ class OptionsController extends BaseController
     {
         global $l;
 
-        $oldpass = strval($this->parsedBody['oldpass'] ?? '');
-        $newpass1 = strval($this->parsedBody['newpass1'] ?? '');
-        $newpass2 = strval($this->parsedBody['newpass2'] ?? '');
-        $newlang = strval($this->parsedBody['newlang'] ?? $this->user['lang']);
+        $oldpass = (string) $this->fromParsedBody('oldpass');
+        $newpass1 = (string) $this->fromParsedBody('newpass1');
+        $newpass2 = (string) $this->fromParsedBody('newpass2');
+        $newlang = strval($this->fromParsedBody('newlang') ?? $this->user['lang']);
+        $theme = (string) $this->fromParsedBody('theme');
+
+        if (in_array($theme, ['dark', 'light'], true)) {
+            $this->userinfo['theme'] = $theme;
+        }
 
         if (in_array($newlang, array_keys(languages()), true)) {
             $this->userinfo['lang'] = $newlang;
@@ -35,17 +40,19 @@ class OptionsController extends BaseController
         if (!empty($newpass1) || !empty($newpass2)) {
             if (empty($oldpass)) {
                 throw new WarningException($l->opt2_srcpassfalse);
-            } elseif ($newpass1 != $newpass2) {
-                throw new WarningException($l->opt2_newpassnomatch);
-            } else {
-                if (md5($oldpass) != $this->userinfo['password']) {
-                    throw new WarningException($l->opt2_srcpassfalse);
-                }
-
-                $this->userinfo['password'] = md5($newpass1);
             }
+
+            if ($newpass1 != $newpass2) {
+                throw new WarningException($l->opt2_newpassnomatch);
+            }
+
+            if (md5($oldpass) != $this->userinfo['password']) {
+                throw new WarningException($l->opt2_srcpassfalse);
+            }
+
+            $this->userinfo['password'] = md5($newpass1);
         }
-        
+
         $this->userinfoUpdate();
         $this->redirectTo('index.php');
     }

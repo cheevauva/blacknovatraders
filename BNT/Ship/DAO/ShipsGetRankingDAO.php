@@ -11,7 +11,7 @@ class ShipsGetRankingDAO extends \UUA\DAO
 
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $ranking;
+    public array $ships;
     public $sort;
     public $max_rank;
 
@@ -22,8 +22,6 @@ class ShipsGetRankingDAO extends \UUA\DAO
 
         if ($sort == "turns") {
             $by = "turns_used DESC,ship_name ASC";
-        } elseif ($sort == "login") {
-            $by = "last_login DESC,ship_name ASC";
         } elseif ($sort == "good") {
             $by = "rating DESC,ship_name ASC";
         } elseif ($sort == "bad") {
@@ -41,15 +39,12 @@ class ShipsGetRankingDAO extends \UUA\DAO
         $query = "
         SELECT 
             ships.ship_id,
-            ships.email,
             ships.score,
             ships.ship_name,
             ships.turns_used,
-            ships.last_login,
-            UNIX_TIMESTAMP(ships.last_login) as online,
             ships.rating, 
             teams.team_name, 
-            IF(ships.turns_used<150,0,ROUND(ships.score/ships.turns_used)) AS efficiency 
+            IF(ships.turns_used < 150, 0, ROUND(ships.score/ships.turns_used)) AS efficiency 
         FROM 
             ships 
         LEFT JOIN 
@@ -57,13 +52,12 @@ class ShipsGetRankingDAO extends \UUA\DAO
         ON 
             ships.team = teams.id  
         WHERE 
-            ship_destroyed='N' AND 
-            email NOT LIKE '%@xenobe' 
+            ship_destroyed='N'
         ORDER BY $by 
         LIMIT :limit
         ";
 
-        $this->ranking = $this->db()->fetchAll($query, [
+        $this->ships = $this->db()->fetchAll($query, [
             'limit' => $this->max_rank,
         ], [
             'limit' => PDO::PARAM_INT,

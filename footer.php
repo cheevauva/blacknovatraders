@@ -1,7 +1,7 @@
 <?php
 global $l_footer_until_update, $l_footer_players_on_1, $l_footer_players_on_2, $admin_mail, $l, $link_forums;
 ?>
-        <div class="bg-body-tertiary">
+        <div class="bg-body-tertiary mt-5">
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
                     <a class="nav-link" href="help.php"><?= $l->help; ?></a>

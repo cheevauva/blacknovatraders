@@ -11,12 +11,12 @@ class ShipGetNotDestroyedExcludeXenobeCountDAO extends \UUA\DAO
 
     use \BNT\Traits\DatabaseMainTrait;
 
-    public protected(set) int $count;
+    public int $count;
 
     #[\Override]
     public function serve(): void
     {
-        $this->count = $this->db()->column("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N' and email NOT LIKE '%@xenobe'");
+        $this->count = (int) $this->db()->column("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N'");
     }
 
     public static function call(ContainerInterface $container): self

@@ -5,9 +5,9 @@ $self = BNT\Controller\SchemaController::as($this);
 ?>
 <?php include_header(); ?>
 <?php bigtitle(); ?>
-<?php foreach ($self->messages as $message) : ?>
-    <div class="alert alert-info">
-        <?php echo $message; ?>
-    </div>
-<?php endforeach; ?>
+<ul class="list-group">
+    <?php foreach ($self->messages as $message) : ?>
+        <li class="list-group-item"><?php echo $message; ?></li>
+    <?php endforeach; ?>
+</ul>
 <?php include_footer(); ?>

@@ -1,41 +1,38 @@
-<?php $title = $l_ranks_title; ?>
+<?php $title = $l->ranks_title; ?>
+<?php $self = BNT\Controller\RankingController::as($this);?>
 <?php include("header.php"); ?>
 <?php bigtitle(); ?>
-<?php if (empty($rows)) : ?>
-    <?php echo $l_ranks_none; ?>
+<?php if (empty($self->ships)) : ?>
+    <?= $l->ranks_none; ?>
 <?php else : ?>
-    <p class="text-start"><?php echo $l_ranks_pnum; ?>: <?php echo NUMBER($num_players); ?></p>
+    <p class="text-start"><?= $l->ranks_pnum; ?>: <?= $self->numPlayers; ?></p>
     <div class="alert alert-info" role="alert">
-        <?php echo $l_ranks_dships; ?>
+        <?= $l->ranks_dships; ?>
     </div>
     <div class="table-responsive">
         <table class="table table-hover">
-            <tr BGCOLOR="<?php echo $color_header; ?>">
-                <td><?php echo $l_ranks_rank; ?></td>
-                <td><a href="ranking.php"><?php echo $l_score; ?></a></td>
-                <td><?php echo $l_player; ?></td>
-                <td><a href="ranking.php?sort=turns"><?php echo $l_turns_used; ?></a></td>
-                <td><a href="ranking.php?sort=login"><?php echo $l_ranks_lastlog; ?></a></td>
-                <td><a href="ranking.php?sort=good"><?php echo $l_ranks_good; ?></a>/<a href="ranking.php?sort=bad"><?php echo $l_ranks_evil; ?></a></td>
-                <td><a href="ranking.php?sort=alliance"><?php echo $l_team_alliance; ?></a></td>
-                <td><a href="ranking.php?sort=online">Online</a></td>
+            <tr>
+                <td><?= $l->ranks_rank; ?></td>
+                <td><a href="ranking.php"><?= $l->score; ?></a></td>
+                <td><?= $l->player; ?></td>
+                <td><a href="ranking.php?sort=turns"><?= $l->turns_used; ?></a></td>
+                <td><a href="ranking.php?sort=good"><?= $l->ranks_good; ?></a>/<a href="ranking.php?sort=bad"><?= $l->ranks_evil; ?></a></td>
+                <td><a href="ranking.php?sort=alliance"><?= $l->team_alliance; ?></a></td>
                 <td><a href="ranking.php?sort=efficiency">Eff. Rating.</a></td>
             </TR>
             <?php $i = 0; ?>
-            <?php foreach ($rows as $row) : ?>
+            <?php foreach ($self->ships as $ship) : ?>
                 <?php $i++; ?>
-                <?php $rating = round(sqrt(abs($row['rating']))); ?>
-                <?php $rating = $row['rating'] < 0 ? -1 * $rating : $rating; ?>
+                <?php $rating = round(sqrt(abs($ship['rating']))); ?>
+                <?php $rating = $ship['rating'] < 0 ? -1 * $rating : $rating; ?>
                 <tr>
-                    <td><?php echo NUMBER($i); ?></td>
-                    <td><?php echo NUMBER($row['score']); ?></td>
-                    <td><?php echo player_insignia_name($row['ship_id']); ?>&nbsp;<?php echo htmlspecialchars($row['ship_name']); ?></td>
-                    <td><?php echo NUMBER($row['turns_used'] <= 0 ? 1 : $row['turns_used']); ?></td>
-                    <td><?php echo $row['last_login']; ?></td>
-                    <td>&nbsp;&nbsp;<?php echo NUMBER($rating); ?></td>
-                    <td><?php echo htmlspecialchars($row['team_name']); ?>&nbsp;</td>
-                    <td><?php echo (time() - $row['online']) / 60 <= 5 ? 'Online' : 'Offline'; ?></td>
-                    <td><?php echo $row['efficiency']; ?></td>
+                    <td><?= NUMBER($i); ?></td>
+                    <td><?= NUMBER($ship['score']); ?></td>
+                    <td><?= player_insignia_name($ship['ship_id']); ?>&nbsp;<?= htmlspecialchars($ship['ship_name']); ?></td>
+                    <td><?= NUMBER($ship['turns_used'] <= 0 ? 1 : $ship['turns_used']); ?></td>
+                    <td>&nbsp;&nbsp;<?= NUMBER($rating); ?></td>
+                    <td><?= htmlspecialchars($ship['team_name']); ?>&nbsp;</td>
+                    <td><?= $ship['efficiency']; ?></td>
                 </TR>
             <?php endforeach; ?>
         </table>

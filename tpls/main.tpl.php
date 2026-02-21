@@ -138,7 +138,7 @@ $planettypes = planetTypes();
                                 </a>
                                 <br>
                                 <?php echo empty($planet['name']) ? $l->unnamed : htmlspecialchars($planet['name']); ?>
-                                <br>
+                                <br> 
                                 (<?php echo empty($planet['owner']) ? $l->unowned : htmlspecialchars($planet['owner_ship_name']); ?>)
                             </td>
                         <?php endforeach; ?>
@@ -165,13 +165,9 @@ $planettypes = planetTypes();
                     <tr>
                         <?php foreach ($shipsOnRow as $shipInSector) : ?>
                             <td align=center valign=top>
-                                <a href="ship.php?ship_id=<?php echo $shipInSector['ship_id']; ?>">
-                                    <img src="images/<?php echo $shiptypes[shipLevel($shipInSector['score'])]; ?>" border=0>
-                                </a>
-                                <?php echo htmlspecialchars($shipInSector['ship_name']); ?> (<?php echo htmlspecialchars($shipInSector['ship_name']); ?>)
-                                <?php if (!empty($shipInSector['team_name'])) :
-                                    ?>&nbsp;(<?php echo htmlspecialchars($shipInSector['team_name']); ?>)<?php endif;
-                                ?>
+                                <a href="ship.php?ship_id=<?php echo $shipInSector['ship_id']; ?>"><img src="images/<?php echo $shiptypes[shipLevel($shipInSector['score'])]; ?>"></a>
+                                <?php echo htmlspecialchars($shipInSector['ship_name']); ?>
+                                <?php if (!empty($shipInSector['team_name'])) : ?>(<?php echo htmlspecialchars($shipInSector['team_name']); ?>)<?php endif; ?>
                             </td>
                         <?php endforeach; ?>
                     </tr>

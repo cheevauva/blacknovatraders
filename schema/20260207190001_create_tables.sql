@@ -68,6 +68,7 @@ CREATE TABLE users
     token tinytext NULL,
     lang varchar(30) DEFAULT 'english' NOT NULL,
     last_login datetime,
+    theme varchar(36) DEFAULT 'dark' NOT NULL,
     role varchar(15) DEFAULT 'user' NOT NULL,
     ship_id int unsigned NULL,
     PRIMARY KEY (id),
