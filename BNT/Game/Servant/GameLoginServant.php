@@ -10,7 +10,7 @@ use BNT\Log\LogTypeConstants;
 use BNT\User\DAO\UserUpdateDAO;
 use BNT\User\DAO\UserByEmailDAO;
 use BNT\Ship\DAO\ShipByIdDAO;
-use Exception;
+use BNT\Exception\WarningException;
 
 class GameLoginServant extends \UUA\Servant
 {
@@ -29,11 +29,11 @@ class GameLoginServant extends \UUA\Servant
         $user = UserByEmailDAO::call($this->container, $this->email)->user;
 
         if (empty($user)) {
-            throw new Exception($l_login_noone);
+            throw new WarningException($l_login_noone);
         }
 
         if ($user['password'] !== md5($this->password)) {
-            throw new Exception($l_login_4gotpw1);
+            throw new WarningException($l_login_4gotpw1);
         }
 
         $user['token'] = UUID::v7();
@@ -42,9 +42,15 @@ class GameLoginServant extends \UUA\Servant
         if (!empty($user['ship_id'])) {
             $ship = ShipByIdDAO::call($this->container, $user['ship_id'])->ship;
 
+            if ($user['id'] !== $ship['user_id']) {
+                $user['ship_id'] = null;
+            }
+
             if ($ship['ship_destroyed'] == 'Y') {
                 $user['ship_id'] = null;
-            } else {
+            }
+            
+            if (!empty($user['ship_id'])) {
                 LogPlayerDAO::call($this->container, $user['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
             }
         }

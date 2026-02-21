@@ -62,7 +62,6 @@ $planettypes = planetTypes();
                                 <li class="list-group-item"><a class="nav-link" href="galaxy.php"><?php echo $l->map ?></a></li>
                             <?php endif; ?>
                             <li class="list-group-item"><a class="nav-link" href="navcomp.php"><?php echo $l->navcomp ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="feedback.php"><?php echo $l->feedback ?></a></li>
                             <li class="list-group-item"><a class="nav-link" href="logout.php"><?php echo $l->logout ?></a></li>
                         </ul>
                     </td>

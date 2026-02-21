@@ -1,11 +1,15 @@
 <?php
 $shiptypes = shipTypes();
-$title = $l->ships;
 $self = \BNT\Controller\ShipsController::as($this);
 ?>
 <?php include_header(); ?>
 <?php bigtitle(); ?>
 <div class="container mt-4">
+    <?php if (empty($self->ships)): ?>  
+        <div class="alert alert-danger" role="alert">
+            Empty ship list
+        </div>
+    <?php endif; ?>
     <form action="ships.php" method="post" id="bntShipsForm">
         <div class="accordion" id="accordionShips">
             <?php foreach ($self->ships as $ship) : ?>

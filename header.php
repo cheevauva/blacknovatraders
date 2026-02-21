@@ -1,10 +1,10 @@
 <?php
-global $title, $l, $link_forums, $admin_mail;
+global $title, $l, $link_forums, $admin_mail, $userinfo;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html data-bs-theme="">
     <head>
-        <title><?php echo $title; ?></title>
+        <title><?= $title; ?></title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
@@ -31,7 +31,10 @@ global $title, $l, $link_forums, $admin_mail;
 
                 const response = await fetch(e.target.getAttribute('action'), {
                     method: e.target.getAttribute('method'),
-                    body: formData
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
                 });
 
                 if (response.redirected) {
@@ -55,17 +58,12 @@ global $title, $l, $link_forums, $admin_mail;
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link" href="news.php"><?php echo $l->news_title; ?></a>
-                            <a class="nav-link" href="ranking.php"><?php echo $l->rankings; ?></a>
-                            <a class="nav-link" href="settings.php"><?php echo $l->settings_game; ?></A>
-                            <a class="nav-link" href="help.php"><?php echo $l->help; ?></a>
-                            <a class="nav-link" href="faq.html"><?php echo "$l->faq"; ?></a>
-                            <a class="nav-link" href="mailto:<?php echo $admin_mail; ?>"><?php echo $l->emailus; ?></a>
-
-                            <?php if (!empty($link_forums)) : ?>
-                                <a class="nav-link" href="<?php echo $link_forums; ?>" target="_blank"><?php echo $l->forums; ?></A>
+                            <a class="nav-link" href="news.php"><?= $l->news_title; ?></a>
+                            <a class="nav-link" href="ranking.php"><?= $l->rankings; ?></a>
+                            <a class="nav-link" href="settings.php"><?= $l->settings_game; ?></A>
+                            <?php if (!empty($userinfo)) : ?>
+                                <a class="nav-link" href="logout.php"><?= "$l->logout"; ?></a>
                             <?php endif; ?>
-                            <a class="nav-link" target="_blank" href="http://www.sourceforge.net/projects/blacknova">BlackNova Traders</a>
                         </div>
                     </div>
                 </div>

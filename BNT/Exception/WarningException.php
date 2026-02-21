@@ -6,5 +6,5 @@ namespace BNT\Exception;
 
 class WarningException extends \Exception
 {
-    //put your code here
+    
 }

@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
-use BNT\User\DAO\UserUpdateDAO;
 use BNT\Ship\DAO\ShipsByUserIdDAO;
-use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Ship\Servant\ShipChooseServant;
-use Exception;
 
 class ShipsController extends BaseController
 {
@@ -24,19 +21,17 @@ class ShipsController extends BaseController
     }
 
     #[\Override]
-    protected function processGet(): void
+    protected function processGetAsHtml(): void
     {
-        $this->loadShips();
+        global $l;
+        
+        $this->title = $l->ships;
+        $this->ships = ShipsByUserIdDAO::call($this->container, $this->userinfo['id'])->ships;
         $this->render('tpls/ships.tpl.php');
     }
 
-    protected function loadShips(): void
-    {
-        $this->ships = ShipsByUserIdDAO::call($this->container, $this->userinfo['id'])->ships;
-    }
-
     #[\Override]
-    protected function processPost(): void
+    protected function processPostAsJson(): void
     {
         $shipId = intval($this->parsedBody['ship_id'] ?? 0);
 
@@ -45,15 +40,11 @@ class ShipsController extends BaseController
             return;
         }
 
-        try {
-            $choose = ShipChooseServant::new($this->container);
-            $choose->user = $this->userinfo;
-            $choose->shipId = $shipId;
-            $choose->serve();
+        $choose = ShipChooseServant::new($this->container);
+        $choose->user = $this->userinfo;
+        $choose->shipId = $shipId;
+        $choose->serve();
 
-            $this->redirectTo('main.php');
-        } catch (Exception $ex) {
-            $this->responseJsonByException($ex);
-        }
+        $this->redirectTo('main.php');
     }
 }

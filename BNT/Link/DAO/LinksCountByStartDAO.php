@@ -6,18 +6,18 @@ namespace BNT\Link\DAO;
 
 use Psr\Container\ContainerInterface;
 
-class LinksByStartDAO extends \UUA\DAO
+class LinksCountByStartDAO extends \UUA\DAO
 {
 
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $start;
-    public array $links;
+    public int $count;
 
     #[\Override]
     public function serve(): void
     {
-        $this->links = $this->db()->fetchAll("SELECT * FROM links WHERE link_start= :sectorId ORDER BY link_dest ASC", [
+        $this->count = (int) $this->db()->column("SELECT COUNT(*) FROM links WHERE link_start= :sectorId", [
             'sectorId' => $this->start,
         ]);
     }

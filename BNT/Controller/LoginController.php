@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BNT\Controller;
 
 use BNT\Game\Servant\GameLoginServant;
-use Exception;
+use BNT\Exception\WarningException;
 
 class LoginController extends BaseController
 {
@@ -13,11 +13,13 @@ class LoginController extends BaseController
     #[\Override]
     protected function init(): void
     {
+        parent::init();
+        
         $this->enableCheckAuth = false;
     }
 
     #[\Override]
-    protected function processGet(): void
+    protected function processGetAsHtml(): void
     {
         if (!empty($this->userinfo)) {
             $this->redirectTo('index.php');
@@ -27,7 +29,7 @@ class LoginController extends BaseController
     }
 
     #[\Override]
-    protected function processPost(): void
+    protected function processPostAsJson(): void
     {
         global $gamepath;
         global $gamedomain;
@@ -43,28 +45,24 @@ class LoginController extends BaseController
             return;
         }
 
-        try {
-            if ($server_closed) {
-                throw new Exception($l_login_closed_message);
-            }
-
-            $email = strval($this->parsedBody['email'] ?? '') ?: throw new Exception($l_login_email . ' ' . $l_is_required);
-
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new Exception($l_login_email . ' ' . $l_is_invalid);
-            }
-
-            $password = strval($this->parsedBody['pass'] ?? '') ?: throw new Exception($l_login_pw . ' ' . $l_is_required);
-
-            $login = GameLoginServant::new($this->container);
-            $login->email = $email;
-            $login->password = $password;
-            $login->serve();
-
-            $this->setCookie('token', $login->user['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
-            $this->redirectTo('main.php');
-        } catch (\Exception $ex) {
-            $this->responseJsonByException($ex);
+        if ($server_closed) {
+            throw new WarningException($l_login_closed_message);
         }
+
+        $email = strval($this->parsedBody['email'] ?? '') ?: throw new WarningException($l_login_email . ' ' . $l_is_required);
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new WarningException($l_login_email . ' ' . $l_is_invalid);
+        }
+
+        $password = strval($this->parsedBody['pass'] ?? '') ?: throw new WarningException($l_login_pw . ' ' . $l_is_required);
+
+        $login = GameLoginServant::new($this->container);
+        $login->email = $email;
+        $login->password = $password;
+        $login->serve();
+
+        $this->setCookie('token', $login->user['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
+        $this->redirectTo('main.php');
     }
 }

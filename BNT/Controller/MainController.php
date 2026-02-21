@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
-use Exception;
 use BNT\Ship\Servant\ShipExploreSectorServant;
 use BNT\Ship\Exception\ShipExploreSectorNotAllowOnPlanetException;
 
@@ -20,7 +19,7 @@ class MainController extends BaseController
     public array $shipsInSector;
 
     #[\Override]
-    protected function processGet(): void
+    protected function processGetAsHtml(): void
     {
         if (!empty(trim(strval($this->playerinfo['cleared_defences'])))) {
             $this->redirectTo($this->playerinfo['cleared_defences']);
@@ -28,17 +27,17 @@ class MainController extends BaseController
         }
 
         try {
-            $entryPointMain = ShipExploreSectorServant::new($this->container);
-            $entryPointMain->ship = $this->playerinfo;
-            $entryPointMain->serve();
+            $exploreSector = ShipExploreSectorServant::new($this->container);
+            $exploreSector->ship = $this->playerinfo;
+            $exploreSector->serve();
 
-            $this->sectorinfo = $entryPointMain->sector;
-            $this->links = $entryPointMain->links;
-            $this->planets = $entryPointMain->planets;
-            $this->defences = $entryPointMain->sectorDefences;
-            $this->zoneinfo = $entryPointMain->zone;
-            $this->traderoutess = $entryPointMain->traderoutes;
-            $this->shipsInSector = $entryPointMain->ships;
+            $this->sectorinfo = $exploreSector->sector;
+            $this->links = $exploreSector->links;
+            $this->planets = $exploreSector->planets;
+            $this->defences = $exploreSector->sectorDefences;
+            $this->zoneinfo = $exploreSector->zone;
+            $this->traderoutess = $exploreSector->traderoutes;
+            $this->shipsInSector = $exploreSector->ships;
 
             if (!empty($this->queryParams['demo'])) {
                 $this->demoData();
@@ -56,10 +55,6 @@ class MainController extends BaseController
             $this->render('tpls/main.tpl.php');
         } catch (ShipExploreSectorNotAllowOnPlanetException $ex) {
             redirectTo('planet.php?planet_id=' . $ex->planet);
-            return;
-        } catch (Exception $ex) {
-            $this->exception = $ex;
-            $this->render('tpls/error.tpl.php');
             return;
         }
     }

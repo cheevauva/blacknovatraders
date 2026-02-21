@@ -69,7 +69,7 @@ class CreateUniverseController extends BaseController
         global $sched_ranking;
 
         parent::init();
-        
+
         $this->enableCheckAuth = false;
         $this->admin_mail = $admin_mail;
         $this->admin_pass = $admin_pass;
@@ -95,12 +95,13 @@ class CreateUniverseController extends BaseController
     }
 
     #[\Override]
-    protected function processGet(): void
+    protected function processGetAsHtml(): void
     {
         $this->render('tpls/create_universe/create_universe_login.tpl.php');
     }
 
-    protected function prepareInput(): void
+    #[\Override]
+    protected function preProcess(): void
     {
         $this->step = intval($this->parsedBody['step'] ?? $this->step);
         $this->swordfish = $this->parsedBody['swordfish'] ?? null;
@@ -133,11 +134,9 @@ class CreateUniverseController extends BaseController
     }
 
     #[\Override]
-    protected function processPost(): void
+    protected function processPostAsHtml(): void
     {
         global $adminpass;
-
-        $this->prepareInput();
 
         $step = $this->step;
 

@@ -1,36 +1,5 @@
 <?php
 
-function linksByStartAndDest($link_start, $link_dest)
-{
-    return db()->fetchAll("SELECT * FROM links WHERE link_start = :link_start AND link_dest = :link_dest", [
-        'link_start' => $link_start,
-        'link_dest' => $link_dest,
-    ]);
-}
-
-function linksByStart($sectorId)
-{
-    return db()->fetchAll("SELECT * FROM links WHERE link_start= :sectorId ORDER BY link_dest ASC", [
-        'sectorId' => $sectorId,
-    ]);
-}
-
-function linksDeleteByStartAndDest($link_start, $link_dest)
-{
-    return db()->q('DELETE FROM links WHERE link_start= :link_start AND link_dest= :link_dest', [
-        'link_start' => $link_start,
-        'link_dest' => $link_dest,
-    ]);
-}
-
-function linkCreate($link_start, $link_dest)
-{
-    return db()->q("INSERT INTO links SET link_start= :link_start, link_dest= :link_dest", [
-        'link_start' => $link_start,
-        'link_dest' => $link_dest,
-    ]);
-}
-
 function defencesBySectorAndFighters($sectorId)
 {
     return db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id=:sectorId and defence_type ='F' ORDER BY quantity DESC", [
@@ -41,22 +10,6 @@ function defencesBySectorAndFighters($sectorId)
 function defencesCleanUp()
 {
     return db()->q("delete from sector_defence where quantity <= 0 ");
-}
-
-function shipDevWarpeditSub($ship, $devWarpedit)
-{
-    return db()->q('UPDATE ships SET dev_warpedit = dev_warpedit - :dev_warpedit WHERE ship_id= :ship', [
-        'ship' => $ship,
-        'dev_warpedit' => $devWarpedit,
-    ]);
-}
-
-function shipDevBeaconSub($ship, $beacon)
-{
-    return db()->q('UPDATE ships SET dev_beacon = dev_beacon - :beacon WHERE ship_id= :ship', [
-        'ship' => $ship,
-        'beacon' => $beacon,
-    ]);
 }
 
 function shipTurn($shipId, $turns)
