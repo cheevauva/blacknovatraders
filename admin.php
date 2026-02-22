@@ -12,7 +12,7 @@ function YESNO($onoff)
     return(($onoff == "ON") ? 'Y' : 'N');
 }
 
-$controller = BNT\Controller\BaseController::as(match ($_GET['module'] ?? null) {
+\BNT\FrontController::call($container, match ($_GET['module'] ?? null) {
     'sector' => BNT\Controller\AdminSectorController::new($container),
     'ship' => BNT\Controller\AdminShipController::new($container),
     'user' => BNT\Controller\AdminUserController::new($container),
@@ -21,5 +21,4 @@ $controller = BNT\Controller\BaseController::as(match ($_GET['module'] ?? null) 
     'config' => BNT\Controller\AdminConfigController::new($container),
     default => BNT\Controller\AdminController::new($container),
 });
-$controller->serve();
 

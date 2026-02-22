@@ -15,6 +15,7 @@ class Language
         'l_login_' => 'login.php',
         'l_ships_' => 'ships.php',
         'warp_' => 'warpedit.php',
+        'new_' => 'new.php',
     ];
 
     public function __get(string $name): mixed

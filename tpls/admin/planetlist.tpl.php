@@ -1,5 +1,5 @@
 <?php include_header(); ?>
-<?php $self = \BNT\Controller\AdminPlanetController::as($this); ?>
+<?php $self = \BNT\Controller\AdminPlanetController::as($self); ?>
 <div class="card shadow">
     <div class="card-header bg-primary text-white">
         <h3 class="mb-0">

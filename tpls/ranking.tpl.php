@@ -1,5 +1,5 @@
 <?php $title = $l->ranks_title; ?>
-<?php $self = BNT\Controller\RankingController::as($this);?>
+<?php $self = BNT\Controller\RankingController::as($self);?>
 <?php include("header.php"); ?>
 <?php bigtitle(); ?>
 <?php if (empty($self->ships)) : ?>

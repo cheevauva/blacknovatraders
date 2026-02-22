@@ -23,8 +23,9 @@ class SchemaControllerTest extends \Tests\UnitTestCase
     protected function prepareSchemaPOST(array $parsedData = []): SchemaController
     {
         $schema = SchemaController::new(self::$container);
-        $schema->disablePrepareResponse = true;
         $schema->requestMethod = 'POST';
+        $schema->acceptType = $schema::ACCEPT_TYPE_HTML;
+        $schema->enableThrowExceptionOnProcess = true;
         $schema->parsedBody = $parsedData;
         $schema->serve();
 
@@ -34,7 +35,7 @@ class SchemaControllerTest extends \Tests\UnitTestCase
     public function testSchemaLoginPage(): void
     {
         $schema = SchemaController::new(self::$container);
-        $schema->disablePrepareResponse = true;
+        $schema->acceptType = $schema::ACCEPT_TYPE_HTML;
         $schema->requestMethod = 'GET';
         $schema->serve();
 
@@ -56,26 +57,20 @@ class SchemaControllerTest extends \Tests\UnitTestCase
 
     public function testSchemaWithoutPassword(): void
     {
-        global $l_schema_password;
-        global $l_is_required;
+        global $l;
 
-        $schema = $this->prepareSchemaPOST();
-
-        self::assertEquals($l_schema_password . ' ' . $l_is_required, $schema->exception?->getMessage());
-        self::assertEquals('tpls/error.tpl.php', $schema->template);
+        $this->expectExceptionMessage($l->schema_password . ' ' . $l->is_required);
+        $this->prepareSchemaPOST();
     }
 
     public function testSchemaWithWrongPassword(): void
     {
-        global $l_schema_password;
-        global $l_is_wrong;
+        global $l;
 
-        $schema = $this->prepareSchemaPOST([
+        $this->expectExceptionMessage($l->schema_password . ' ' . $l->is_wrong);
+        $this->prepareSchemaPOST([
             'password' => 'wrongpassword',
         ]);
-
-        self::assertEquals($l_schema_password . ' ' . $l_is_wrong, $schema->exception?->getMessage());
-        self::assertEquals('tpls/error.tpl.php', $schema->template);
     }
 
     #[\Override]

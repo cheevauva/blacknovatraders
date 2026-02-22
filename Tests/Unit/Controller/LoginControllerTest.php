@@ -27,9 +27,10 @@ class LoginControllerTest extends \Tests\UnitTestCase
     protected function prepareLoginPOST(array $parsedData = []): LoginController
     {
         $login = LoginController::new(self::$container);
-        $login->disablePrepareResponse = true;
+        $login->acceptType = $login::ACCEPT_TYPE_JSON;
         $login->requestMethod = 'POST';
         $login->parsedBody = $parsedData;
+        $login->acceptType = $login::ACCEPT_TYPE_JSON;
         $login->serve();
 
         return $login;
@@ -38,7 +39,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
     public function testLoginPage(): void
     {
         $login = LoginController::new(self::$container);
-        $login->disablePrepareResponse = true;
+        $login->acceptType = $login::ACCEPT_TYPE_HTML;
         $login->requestMethod = 'GET';
         $login->serve();
 

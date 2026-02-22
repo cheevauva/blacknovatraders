@@ -1,4 +1,4 @@
-<?php $self = \BNT\Controller\CreateUniverseController::as($this); ?>
+<?php $self = \BNT\Controller\CreateUniverseController::as($self); ?>
 <?php include_header(); ?>
 <div class="container mt-4">
     <form action="create_universe.php" method="post" class="row g-3">

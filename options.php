@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-\BNT\Controller\OptionsController::new($container)->serve();
+\BNT\FrontController::call($container, BNT\Controller\OptionsController::class);

@@ -2,4 +2,4 @@
 
 require 'config.php';
 
-\BNT\Controller\MessagesController::new($container)->serve();
+\BNT\FrontController::call($container, BNT\Controller\MessagesController::class);

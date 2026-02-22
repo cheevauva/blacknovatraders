@@ -14,7 +14,7 @@ class LoginController extends BaseController
     protected function init(): void
     {
         parent::init();
-        
+
         $this->enableCheckAuth = false;
     }
 

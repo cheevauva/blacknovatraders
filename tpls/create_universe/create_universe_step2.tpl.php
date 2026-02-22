@@ -1,4 +1,4 @@
-<?php $self = \BNT\Controller\CreateUniverseController::as($this); ?>
+<?php $self = \BNT\Controller\CreateUniverseController::as($self); ?>
 <?php include_header(); ?>
 <div class="alert alert-info mb-4" role="alert">
     Create Universe Confirmation [So you would like your <?php echo $self->sector_max; ?> sector universe to have]

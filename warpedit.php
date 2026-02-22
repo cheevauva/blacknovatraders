@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-BNT\Controller\WarpeditController::new($container)->serve();
+BNT\FrontController::call($container, BNT\Controller\WarpeditController::class);

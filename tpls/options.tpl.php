@@ -1,6 +1,6 @@
 <?php
 $title = $l->opt_title;
-$self = \BNT\Controller\OptionsController::as($this);
+$self = \BNT\Controller\OptionsController::as($self);
 ?>
 <?php include_header(); ?>
 <?php echo bigtitle(); ?>

@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-BNT\Controller\LoginController::new($container)->serve();
+BNT\FrontController::call($container, BNT\Controller\LoginController::class);

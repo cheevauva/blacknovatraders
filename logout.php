@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-BNT\Controller\LogoutController::new($container)->serve();
+BNT\FrontController::call($container, BNT\Controller\LogoutController::class);

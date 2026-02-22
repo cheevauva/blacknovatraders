@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-\BNT\Controller\BeaconController::new($container)->serve();
+\BNT\FrontController::call($container, BNT\Controller\BeaconController::class);

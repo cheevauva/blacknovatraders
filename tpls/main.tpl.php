@@ -1,6 +1,6 @@
 <?php
 $title = $l->main_title;
-$self = BNT\Controller\MainController::as($this);
+$self = BNT\Controller\MainController::as($self);
 $picsperrow = 7;
 $shiptypes = shipTypes();
 $planettypes = planetTypes();

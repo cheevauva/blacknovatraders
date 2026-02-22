@@ -2,5 +2,5 @@
 
 include 'config.php';
 
-BNT\Controller\ShipsController::new($container)->serve();
+\BNT\FrontController::call($container, \BNT\Controller\ShipsController::class);
 

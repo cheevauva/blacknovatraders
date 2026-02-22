@@ -1,6 +1,6 @@
 <?php
 global $allow_ibank;
-$self = \BNT\Controller\PlanetController::as($this);
+$self = \BNT\Controller\PlanetController::as($self);
 include_header();
 ?>
 

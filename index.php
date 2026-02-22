@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-BNT\Controller\IndexController::new($container)->serve();
+BNT\FrontController::call($container, BNT\Controller\IndexController::class);

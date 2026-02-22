@@ -1,6 +1,6 @@
 <?php
 $shiptypes = shipTypes();
-$self = \BNT\Controller\ShipsController::as($this);
+$self = \BNT\Controller\ShipsController::as($self);
 ?>
 <?php include_header(); ?>
 <?php bigtitle(); ?>

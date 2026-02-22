@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-BNT\Controller\NewController::new($container)->serve();
+BNT\FrontController::call($container, BNT\Controller\NewController::class);

@@ -1,4 +1,4 @@
-<?php $self = BNT\Controller\AdminUserController::as($this); ?>
+<?php $self = BNT\Controller\AdminUserController::as($self); ?>
 <?php include_header(); ?>
 <div class="card shadow">
     <div class="card-header bg-primary text-white">

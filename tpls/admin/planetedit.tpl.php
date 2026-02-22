@@ -1,5 +1,5 @@
 <?php include_header(); ?>
-<?php $self = \BNT\Controller\AdminPlanetController::as($this); ?>
+<?php $self = \BNT\Controller\AdminPlanetController::as($self); ?>
 <?php $planet = $self->planet;?>
 <div class="container-fluid mt-4">
     <h2 class="mb-4">

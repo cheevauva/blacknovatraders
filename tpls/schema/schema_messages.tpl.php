@@ -1,7 +1,7 @@
 <?php
 global $l_schema_title;
 $title = $l_schema_title;
-$self = BNT\Controller\SchemaController::as($this);
+$self = BNT\Controller\SchemaController::as($self);
 ?>
 <?php include_header(); ?>
 <?php bigtitle(); ?>

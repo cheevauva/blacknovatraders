@@ -1,4 +1,4 @@
-<?php $self = \BNT\Controller\CreateUniverseController::as($this); ?>
+<?php $self = \BNT\Controller\CreateUniverseController::as($self); ?>
 <?php include "header.php"; ?>
 <form action="create_universe.php" method="post" class="form-container">
     <div class="card mb-4">
@@ -164,7 +164,7 @@
 
     <input type="hidden" name="engage" value="1">
     <input type="hidden" name="step" value="2">
-    <input type="hidden" name="swordfish" value="<?php echo htmlspecialchars($this->swordfish); ?>">
+    <input type="hidden" name="swordfish" value="<?php echo htmlspecialchars($self->swordfish); ?>">
 
     <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
         <input type="submit" class="btn btn-primary me-md-2" value="Submit">

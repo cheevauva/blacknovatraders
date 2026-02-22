@@ -1,4 +1,4 @@
-<?php $self = BNT\Controller\AdminZoneController::as($this); ?>
+<?php $self = BNT\Controller\AdminZoneController::as($self); ?>
 <?php $zone = $self->zone;?>
 <?php include_header(); ?>
 <div class="card shadow">

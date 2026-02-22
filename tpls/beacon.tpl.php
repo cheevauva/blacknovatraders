@@ -1,5 +1,5 @@
 <?php $title = $l->beacon_title; ?>
-<?php $self = \BNT\Controller\BeaconController::as($this);?>
+<?php $self = \BNT\Controller\BeaconController::as($self);?>
 <?php include_header(); ?>
 <?php bigtitle(); ?>
 <?php if (!empty($ex)) : ?>

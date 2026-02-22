@@ -2,4 +2,4 @@
 
 include 'config.php';
 
-BNT\Controller\RankingController::new($container)->serve();
+BNT\FrontController::call($container, BNT\Controller\RankingController::class);

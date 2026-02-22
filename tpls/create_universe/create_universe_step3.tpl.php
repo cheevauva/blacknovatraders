@@ -1,4 +1,4 @@
-<?php $self = \BNT\Controller\CreateUniverseController::as($this); ?>
+<?php $self = \BNT\Controller\CreateUniverseController::as($self); ?>
 <?php include_header(); ?>
 <div class="mb-5">
     <h4 class="mb-4">Configuring game scheduler — Stage 7</h4>
@@ -64,7 +64,7 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-9">The planetary apocalypse will occur every <?php echo $this->sched_apocalypse; ?> minutes.</div>
+            <div class="col-md-9">The planetary apocalypse will occur every <?php echo $self->sched_apocalypse; ?> minutes.</div>
             <div class="col-md-3"><span class="badge bg-success">Inserted</span></div>
         </div>
 

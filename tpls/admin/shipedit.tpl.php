@@ -1,4 +1,4 @@
-<?php $self = BNT\Controller\AdminShipController::as($this); ?>
+<?php $self = BNT\Controller\AdminShipController::as($self); ?>
 <?php $ship = $self->ship; ?>
 <?php include_header(); ?>
 <div class="container-fluid">

@@ -27,9 +27,10 @@ class NewControllerTest extends \Tests\UnitTestCase
     protected function prepareNewPOST(array $parsedData = []): NewController
     {
         $new = NewController::new(self::$container);
-        $new->disablePrepareResponse = true;
         $new->requestMethod = 'POST';
         $new->parsedBody = $parsedData;
+        $new->acceptType = $new::ACCEPT_TYPE_JSON;
+        $new->enableThrowExceptionOnProcess = true;
         $new->serve();
 
         return $new;
@@ -38,7 +39,7 @@ class NewControllerTest extends \Tests\UnitTestCase
     public function testNewPage(): void
     {
         $new = NewController::new(self::$container);
-        $new->disablePrepareResponse = true;
+        $new->acceptType = $new::ACCEPT_TYPE_HTML;
         $new->requestMethod = 'GET';
         $new->serve();
 
@@ -58,89 +59,63 @@ class NewControllerTest extends \Tests\UnitTestCase
         self::assertEquals('main.php', $new->location);
     }
 
-    public function testNewAccountCreationClosed(): void
+    /**
+     * @dataProvider failDataProvider
+     * @return void
+     */
+    public function testWithoutUsername(array $parsedBody, string $exceptionMessage, ?\Closure $closure = null): void
     {
-        global $account_creation_closed;
-        global $l_new_closed_message;
+        if ($closure) {
+            $closure();
+        }
 
-        $account_creation_closed = true;
+        $this->expectExceptionMessage($exceptionMessage);
 
-        $new = $this->prepareNewPOST();
-
-        self::assertEquals($l_new_closed_message, $new->exception?->getMessage());
-        self::assertEmpty($new->responseCookies);
-        self::assertEmpty($new->location);
+        $this->prepareNewPOST($parsedBody);
     }
 
-    public function testWithoutUsername(): void
+    public static function failDataProvider(): array
     {
-        global $l_new_username;
-        global $l_is_required;
+        global $l;
 
-        $new = $this->prepareNewPOST();
-
-        self::assertEquals($l_new_username . ' ' . $l_is_required, $new->exception?->getMessage());
-        self::assertEmpty($new->responseCookies);
-        self::assertEmpty($new->location);
-    }
-
-    public function testWithInvalidUsername(): void
-    {
-        global $l_new_username;
-        global $l_is_invalid;
-
-        $new = $this->prepareNewPOST([
-            'username' => 'invalid-email',
-        ]);
-
-        self::assertEquals($l_new_username . ' ' . $l_is_invalid, $new->exception?->getMessage());
-        self::assertEmpty($new->responseCookies);
-        self::assertEmpty($new->location);
-    }
-
-    public function testWithoutCharacter(): void
-    {
-        global $l_new_character;
-        global $l_is_required;
-
-        $new = $this->prepareNewPOST([
-            'username' => 'user@example.com',
-        ]);
-
-        self::assertEquals($l_new_character . ' ' . $l_is_required, $new->exception?->getMessage());
-        self::assertEmpty($new->responseCookies);
-        self::assertEmpty($new->location);
-    }
-
-    public function testWithoutShipname(): void
-    {
-        global $l_new_shipname;
-        global $l_is_required;
-
-        $new = $this->prepareNewPOST([
-            'username' => 'user@example.com',
-            'character' => 'Test Character',
-        ]);
-
-        self::assertEquals($l_new_shipname . ' ' . $l_is_required, $new->exception?->getMessage());
-        self::assertEmpty($new->responseCookies);
-        self::assertEmpty($new->location);
-    }
-
-    public function testWithoutPassword(): void
-    {
-        global $l_new_password;
-        global $l_is_required;
-
-        $new = $this->prepareNewPOST([
-            'username' => 'user@example.com',
-            'character' => 'Test Character',
-            'shipname' => 'Test Ship',
-        ]);
-
-        self::assertEquals($l_new_password . ' ' . $l_is_required, $new->exception?->getMessage());
-        self::assertEmpty($new->responseCookies);
-        self::assertEmpty($new->location);
+        return [
+            'testNewAccountCreationClosed' => [
+                [],
+                $l->new_closed_message,
+                fn() => $GLOBALS['account_creation_closed'] = true,
+            ],
+            'testWithoutUsername' => [
+                [],
+                $l->new_username . ' ' . $l->is_required
+            ],
+            'testWithInvalidUsername' => [
+                [
+                    'username' => 'invalid-email',
+                ],
+                $l->new_username . ' ' . $l->is_invalid
+            ],
+            'testWithoutCharacter' => [
+                [
+                    'username' => 'user@example.com',
+                ],
+                $l->new_character . ' ' . $l->is_required
+            ],
+            'testWithoutShipname' => [
+                [
+                    'username' => 'user@example.com',
+                    'character' => 'Test Character',
+                ],
+                $l->new_shipname . ' ' . $l->is_required
+            ],
+            'testWithoutPassword' => [
+                [
+                    'username' => 'user@example.com',
+                    'character' => 'Test Character',
+                    'shipname' => 'Test Ship',
+                ],
+                $l->new_password . ' ' . $l->is_required,
+            ]
+        ];
     }
 
     #[\Override]

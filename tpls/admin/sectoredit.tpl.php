@@ -1,5 +1,5 @@
 <?php include_header(); ?>
-<?php $self = \BNT\Controller\AdminSectorController::as($this); ?>
+<?php $self = \BNT\Controller\AdminSectorController::as($self); ?>
 <?php $sector = $self->sector;?>
 <div class="container-fluid mt-4">
     <h2 class="mb-4">

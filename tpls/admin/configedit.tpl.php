@@ -1,4 +1,4 @@
-<?php $self = BNT\Controller\AdminConfigController::as($this); ?>
+<?php $self = BNT\Controller\AdminConfigController::as($self); ?>
 <?php $config = $self->config; ?>
 <?php include_header(); ?>
 <div class="container-fluid">

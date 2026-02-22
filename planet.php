@@ -2,7 +2,7 @@
 
 include 'config.php';
 
-//BNT\Controller\PlanetController::new($container)->serve();die;
+//BNT\FrontController::call($container, BNT\Controller\PlanetController::class);die;
 
 include("combat.php");
 

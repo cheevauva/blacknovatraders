@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BNT\Controller;
 
 use BNT\Game\Servant\GameNewServant;
-use Exception;
+use BNT\Exception\WarningException;
 
 class NewController extends BaseController
 {
@@ -13,6 +13,8 @@ class NewController extends BaseController
     #[\Override]
     protected function init(): void
     {
+        parent::init();
+
         $this->enableCheckAuth = false;
     }
 
@@ -30,15 +32,8 @@ class NewController extends BaseController
     protected function processPostAsJson(): void
     {
         global $account_creation_closed;
-        global $l_new_closed_message;
         global $gamepath;
         global $gamedomain;
-        global $l_new_username;
-        global $l_new_character;
-        global $l_new_shipname;
-        global $l_new_password;
-        global $l_is_required;
-        global $l_is_invalid;
 
         if (!empty($this->userinfo)) {
             $this->redirectTo('index.php');
@@ -46,20 +41,20 @@ class NewController extends BaseController
         }
 
         if ($account_creation_closed) {
-            throw new Exception($l_new_closed_message);
+            throw new WarningException($this->l->new_closed_message);
         }
 
-        $username = strval($this->parsedBody['username'] ?? '') ?: throw new Exception($l_new_username . ' ' . $l_is_required);
+        $username = (string) $this->fromParsedBody('username', $this->l->new_username . ' ' . $this->l->is_required);
 
         if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception($l_new_username . ' ' . $l_is_invalid);
+            throw new WarningException($this->l->new_username . ' ' . $this->l->is_invalid);
         }
 
         $gameNew = GameNewServant::new($this->container);
         $gameNew->email = $username;
-        $gameNew->character = strval($this->parsedBody['character'] ?? '') ?: throw new Exception($l_new_character . ' ' . $l_is_required);
-        $gameNew->shipname = strval($this->parsedBody['shipname'] ?? '') ?: throw new Exception($l_new_shipname . ' ' . $l_is_required);
-        $gameNew->password = strval($this->parsedBody['password'] ?? '') ?: throw new Exception($l_new_password . ' ' . $l_is_required);
+        $gameNew->character = (string) $this->fromParsedBody('character', $this->l->new_character . ' ' . $this->l->is_required);
+        $gameNew->shipname = (string) $this->fromParsedBody('shipname', $this->l->new_shipname . ' ' . $this->l->is_required);
+        $gameNew->password = (string) $this->fromParsedBody('password', $this->l->new_password . ' ' . $this->l->is_required);
         $gameNew->serve();
 
         $this->setCookie('token', $gameNew->user['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);

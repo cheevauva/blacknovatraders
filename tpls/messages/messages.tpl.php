@@ -1,5 +1,5 @@
 <?= include_header(); ?>
-<?php $self = \BNT\Controller\MessagesController::as($this); ?>
+<?php $self = \BNT\Controller\MessagesController::as($self); ?>
 <form action="mailto2.php" method="POST">
     <table class="form-table">
         <tr>

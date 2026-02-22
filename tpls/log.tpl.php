@@ -1,4 +1,4 @@
-<?php $self = BNT\Controller\LogController::as($this); ?>
+<?php $self = BNT\Controller\LogController::as($self); ?>
 <?php include_header(); ?>
 <h1><?php echo str_replace("[player]", htmlspecialchars($self->playerinfo['ship_name']), $l->log_log); ?></h1>
 <table class="table table-hover">

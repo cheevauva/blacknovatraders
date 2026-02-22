@@ -1,4 +1,4 @@
-<?php $self = BNT\Controller\AdminUserController::as($this); ?>
+<?php $self = BNT\Controller\AdminUserController::as($self); ?>
 <?php $user = $self->user; ?>
 <?php include_header(); ?>
 <div class="container-fluid">

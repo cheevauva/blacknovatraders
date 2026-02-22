@@ -1,4 +1,4 @@
-<?php $self = BNT\Controller\WarpeditController::as($this);?>
+<?php $self = BNT\Controller\WarpeditController::as($self);?>
 <?php $title = $l->warp_title; ?>
 <?php include_header();?>
 <?php bigtitle(); ?>

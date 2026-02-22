@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
-use Exception;
+use BNT\Exception\WarningException;
 use BNT\Game\Servant\GameMigrationsExecuteServant;
 
 class SchemaController extends BaseController
@@ -15,6 +15,8 @@ class SchemaController extends BaseController
     #[\Override]
     protected function init(): void
     {
+        parent::init();
+        
         $this->enableCheckAuth = false;
     }
 
@@ -28,14 +30,11 @@ class SchemaController extends BaseController
     protected function processPostAsHtml(): void
     {
         global $adminpass;
-        global $l_schema_password;
-        global $l_is_required;
-        global $l_is_wrong;
 
-        $password = strval($this->parsedBody['password'] ?? '') ?: throw new Exception($l_schema_password . ' ' . $l_is_required);
+        $password = $this->fromParsedBody('password' ,$this->l->schema_password . ' ' . $this->l->is_required);
 
         if ($password !== $adminpass) {
-            throw new \Exception($l_schema_password . ' ' . $l_is_wrong);
+            throw new WarningException($this->l->schema_password . ' ' . $this->l->is_wrong);
         }
 
         $this->messages = GameMigrationsExecuteServant::call($this->container)->messages;

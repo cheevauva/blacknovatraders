@@ -8,7 +8,7 @@ global $l_submit;
 global $l_reset;
 global $l_new_info;
 $title = $l_new_title;
-$self = \BNT\Controller\NewController::as($this);
+$self = \BNT\Controller\NewController::as($self);
 ?>
 <?php include_header();?>
 <?php bigtitle(); ?>

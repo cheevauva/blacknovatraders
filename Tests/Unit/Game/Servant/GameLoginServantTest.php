@@ -35,6 +35,7 @@ class GameLoginServantTest extends \Tests\UnitTestCase
         self::$ship = [
             'ship_id' => 555,
             'ship_destroyed' => 'N',
+            'user_id' => 444,
         ];
     }
 

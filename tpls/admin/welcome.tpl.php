@@ -1,4 +1,4 @@
-<?php $self = \BNT\Controller\AdminController::as($this); ?>
+<?php $self = \BNT\Controller\AdminController::as($self); ?>
 <?php include_header(); ?>
 <?php bigtitle(); ?>
 <div class="container mt-1">
