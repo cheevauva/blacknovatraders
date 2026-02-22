@@ -6,6 +6,7 @@ namespace Tests\Unit\Controller;
 
 use BNT\Controller\NewController;
 use BNT\Game\Servant\GameNewServant;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class NewControllerTest extends \Tests\UnitTestCase
 {
@@ -20,8 +21,7 @@ class NewControllerTest extends \Tests\UnitTestCase
         $new->gamedomain = 'gamedomain';
         $new->gamepath = 'gamepath';
         $new->accountCreationClosed = false;
-        $new->serve();
-        
+
         return $new;
     }
 
@@ -43,21 +43,24 @@ class NewControllerTest extends \Tests\UnitTestCase
             'shipname' => 'Test Ship',
             'password' => 'password123',
         ]);
+        $new->serve();
 
         self::assertNotEmpty($new->responseCookies['token'] ?? null);
         self::assertEquals('main.php', $new->location);
     }
 
-    #[DataProvider('parsedBodyProvider1')]
+    #[DataProvider('parsedBodyProvider')]
     public function testParsedBody(array $parsedBody, string $exceptionMessage, ?\Closure $closure = null): void
     {
-        if ($closure) {
-            $closure();
-        }
-
         $this->expectExceptionMessage($exceptionMessage);
 
-        $this->prepareNewPOST($parsedBody);
+        $new = $this->prepareNewPOST($parsedBody);
+
+        if ($closure) {
+            $closure($new);
+        }
+        
+        $new->serve();
     }
 
     public static function parsedBodyProvider(): array
@@ -65,11 +68,11 @@ class NewControllerTest extends \Tests\UnitTestCase
         global $l;
 
         return [
-//            'testNewAccountCreationClosed' => [
-//                [],
-//                $l->new_closed_message,
-//                fn() => $GLOBALS['account_creation_closed'] = true,
-//            ],
+            'testNewAccountCreationClosed' => [
+                [],
+                $l->new_closed_message,
+                fn(NewController $c) => $c->accountCreationClosed = true,
+            ],
             'testWithoutUsername' => [
                 [],
                 $l->new_username . ' ' . $l->is_required
