@@ -19,7 +19,7 @@ trait DatabaseRowsDeleteByCriteria
         $where = [];
 
         foreach ($this->criteria as $field => $value) {
-            $where[] = sprintf('%s = :%s', $field);
+            $where[] = sprintf('%s = :%s', $field, $field);
             $parameters[$field] = $value;
         }
 

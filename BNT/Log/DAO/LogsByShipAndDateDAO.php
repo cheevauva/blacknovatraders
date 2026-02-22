@@ -22,9 +22,10 @@ class LogsByShipAndDateDAO extends \UUA\DAO
     #[\Override]
     public function serve(): void
     {
-        $this->logs = $this->db()->fetchAll('SELECT * FROM logs WHERE ship_id = :ship AND time LIKE :date ORDER BY time DESC, type DESC', [
+        $this->logs = $this->db()->fetchAll('SELECT * FROM logs WHERE ship_id = :ship AND time >= :dateFrom AND time <= :dateTo ORDER BY time DESC, type DESC', [
             'ship' => $this->ship,
-            'date' => $this->date . '%',
+            'dateFrom' => new \DateTimeImmutable($this->date)->format('Y-m-d 00:00:00'),
+            'dateTo' => new \DateTimeImmutable($this->date)->format('Y-m-d 23:59:59'),
         ]);
     }
 

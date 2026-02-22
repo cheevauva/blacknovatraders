@@ -637,29 +637,11 @@ function collect_bounty($attacker, $bounty_on)
     ]);
 }
 
-function cancel_bounty($bounty_on)
+function cancel_bounty($ship)
 {
-
-    $res = db()->fetchAll("SELECT * FROM bounty,ships WHERE bounty_on = :bounty_on AND bounty_on = ship_id", [
-        'bounty_on' => $bounty_on,
-    ]);
-
-    if (!empty($res)) {
-        foreach ($res as $bountydetails) {
-            if ($bountydetails['placed_by'] <> 0) {
-                db()->q("UPDATE ships SET credits = credits + :amount WHERE ship_id = :ship_id", [
-                    'amount' => $bountydetails['amount'],
-                    'ship_id' => $bountydetails['placed_by'],
-                ]);
-
-                playerlog($bountydetails['placed_by'], LogTypeConstants::LOG_BOUNTY_CANCELLED, "$bountydetails[amount]|$bountydetails[character_name]");
-            }
-
-            db()->q("DELETE FROM bounty WHERE bounty_id = :bounty_id", [
-                'bounty_id' => $bountydetails['bounty_id'],
-            ]);
-        }
-    }
+    global  $container;
+    
+    \BNT\Game\Servant\GameCancelBountyServant::call($container, (int) $ship);
 }
 
 function get_player($ship_id)
