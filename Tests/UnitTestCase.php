@@ -17,10 +17,8 @@ class UnitTestCase extends TestCase
 
     protected function setUp(): void
     {
-        global $l;
-        
         self::$container = $this->container();
-        self::$l = $l;
+        self::$l = Language::instance();
     }
 
     protected function container(): ContainerInterface

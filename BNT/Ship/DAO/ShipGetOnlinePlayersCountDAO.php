@@ -14,6 +14,6 @@ class ShipGetOnlinePlayersCountDAO extends \UUA\DAO
     #[\Override]
     public function serve(): void
     {
-        $this->count = (int) $this->db()->column("SELECT COUNT(*) as loggedin FROM ships WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(ships.last_login)) / 60 <= 5 AND email NOT LIKE '%@xenobe'");
+        $this->count = (int) $this->db()->column("SELECT COUNT(*) as loggedin FROM users WHERE (UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(users.last_login)) / 60 <= 5 AND email NOT LIKE '%@xenobe'");
     }
 }

@@ -7,6 +7,8 @@ namespace BNT;
 class Language
 {
 
+    protected static Language $instance;
+
     use \UUA\Traits\AsTrait;
 
     protected array $mapping = [
@@ -17,6 +19,15 @@ class Language
         'warp_' => 'warpedit.php',
         'new_' => 'new.php',
     ];
+
+    public static function instance(): Language
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
 
     public function __get(string $name): mixed
     {

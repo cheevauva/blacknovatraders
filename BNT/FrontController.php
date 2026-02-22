@@ -30,7 +30,7 @@ class FrontController extends \UUA\Unit
         $controller->parsedBody ??= $_POST ?? [];
         $controller->serve();
 
-        if (count(array_filter([$controller->template, $controller->exception, $controller->location])) != 1) {
+        if (count(array_filter([$controller->template, $controller->exception, $controller->location, $controller->responseJson])) != 1) {
             throw new \Exception('must be one action');
         }
 
@@ -44,6 +44,12 @@ class FrontController extends \UUA\Unit
 
         if (!empty($controller->location)) {
             header('Location: ' . $controller->location, true, 302);
+        }
+
+
+        if (str_contains($controller->acceptType, 'application/json') && !empty($controller->responseJson)) {
+            header('Content-Type: application/json');
+            echo json_encode($controller->responseJson, JSON_UNESCAPED_UNICODE);
         }
 
         if (!empty($controller->exception)) {

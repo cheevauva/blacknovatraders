@@ -55,11 +55,9 @@ class GameLoginServantTest extends \Tests\UnitTestCase
 
     public function testEmailNotFound(): void
     {
-        global $l_login_noone;
-
         self::$user = null;
 
-        $this->expectExceptionMessage($l_login_noone);
+        $this->expectExceptionMessage(self::$l->login_noone);
 
         $login = GameLoginServant::new(self::$container);
         $login->email = 'e@a.com';
@@ -69,12 +67,11 @@ class GameLoginServantTest extends \Tests\UnitTestCase
 
     public function testPasswordWrong(): void
     {
-        global $l_login_4gotpw1;
         global $ip;
 
         $ip = 1;
 
-        $this->expectExceptionMessage($l_login_4gotpw1);
+        $this->expectExceptionMessage(self::$l->login_4gotpw1);
 
         $login = GameLoginServant::new(self::$container);
         $login->email = 'e@a.com';

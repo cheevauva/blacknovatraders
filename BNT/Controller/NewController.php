@@ -10,6 +10,10 @@ use BNT\Exception\WarningException;
 class NewController extends BaseController
 {
 
+    public bool $accountCreationClosed;
+    public string $gamepath;
+    public string $gamedomain;
+    
     #[\Override]
     protected function init(): void
     {
@@ -31,16 +35,13 @@ class NewController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $account_creation_closed;
-        global $gamepath;
-        global $gamedomain;
 
         if (!empty($this->userinfo)) {
             $this->redirectTo('index.php');
             return;
         }
 
-        if ($account_creation_closed) {
+        if ($this->accountCreationClosed) {
             throw new WarningException($this->l->new_closed_message);
         }
 
@@ -57,7 +58,7 @@ class NewController extends BaseController
         $gameNew->password = (string) $this->fromParsedBody('password', $this->l->new_password . ' ' . $this->l->is_required);
         $gameNew->serve();
 
-        $this->setCookie('token', $gameNew->user['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
+        $this->setCookie('token', $gameNew->user['token'], time() + (3600 * 24) * 365, $this->gamepath, $this->gamedomain);
         $this->redirectTo('main.php');
     }
 }

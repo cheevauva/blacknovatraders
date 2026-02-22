@@ -22,18 +22,17 @@ class GameLoginServant extends \UUA\Servant
     #[\Override]
     public function serve(): void
     {
-        global $l_login_noone;
-        global $l_login_4gotpw1;
+        global $l;
         global $ip;
 
         $user = UserByEmailDAO::call($this->container, $this->email)->user;
 
         if (empty($user)) {
-            throw new WarningException($l_login_noone);
+            throw new WarningException($l->login_noone);
         }
 
         if ($user['password'] !== md5($this->password)) {
-            throw new WarningException($l_login_4gotpw1);
+            throw new WarningException($l->login_4gotpw1);
         }
 
         $user['token'] = UUID::v7();
@@ -49,7 +48,7 @@ class GameLoginServant extends \UUA\Servant
             if ($ship['ship_destroyed'] == 'Y') {
                 $user['ship_id'] = null;
             }
-            
+
             if (!empty($user['ship_id'])) {
                 LogPlayerDAO::call($this->container, $user['ship_id'], LogTypeConstants::LOG_LOGIN, $ip);
             }

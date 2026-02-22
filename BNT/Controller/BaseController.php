@@ -31,7 +31,7 @@ abstract class BaseController extends \UUA\Unit
     public protected(set) ?string $location = null;
     public string $title = 'BlackNova Traders';
     public array $responseCookies = [];
-    public ?\ArrayObject $responseJson = null;
+    public null|array|\ArrayObject $responseJson = null;
     public bool $enableThrowExceptionOnProcess = false;
     public bool $enableCheckAuth = true;
     public bool $enableCheckShip = true;

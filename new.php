@@ -2,4 +2,9 @@
 
 include 'config.php';
 
-BNT\FrontController::call($container, BNT\Controller\NewController::class);
+$new = BNT\Controller\NewController::new($container);
+$new->accountCreationClosed = $account_creation_closed;
+$new->gamedomain = $gamedomain;
+$new->gamepath = $gamepath;
+
+BNT\FrontController::call($container, $new);

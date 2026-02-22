@@ -66,7 +66,6 @@ class GameUniverseDeployServantTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->numbersOfCreatedSectors = $this->limit;
                 }
             },
             ZonesSetMaxHullDAO::class => fn($c) => new class($c) extends ZonesSetMaxHullDAO {

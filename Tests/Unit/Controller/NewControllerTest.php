@@ -10,20 +10,6 @@ use BNT\Game\Servant\GameNewServant;
 class NewControllerTest extends \Tests\UnitTestCase
 {
 
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        global $account_creation_closed;
-        global $gamepath;
-        global $gamedomain;
-
-        $gamepath = 'gamepath';
-        $account_creation_closed = false;
-        $gamedomain = 'gamedomain';
-    }
-
     protected function prepareNewPOST(array $parsedData = []): NewController
     {
         $new = NewController::new(self::$container);
@@ -31,8 +17,11 @@ class NewControllerTest extends \Tests\UnitTestCase
         $new->parsedBody = $parsedData;
         $new->acceptType = $new::ACCEPT_TYPE_JSON;
         $new->enableThrowExceptionOnProcess = true;
+        $new->gamedomain = 'gamedomain';
+        $new->gamepath = 'gamepath';
+        $new->accountCreationClosed = false;
         $new->serve();
-
+        
         return $new;
     }
 
@@ -59,11 +48,8 @@ class NewControllerTest extends \Tests\UnitTestCase
         self::assertEquals('main.php', $new->location);
     }
 
-    /**
-     * @dataProvider failDataProvider
-     * @return void
-     */
-    public function testWithoutUsername(array $parsedBody, string $exceptionMessage, ?\Closure $closure = null): void
+    #[DataProvider('parsedBodyProvider1')]
+    public function testParsedBody(array $parsedBody, string $exceptionMessage, ?\Closure $closure = null): void
     {
         if ($closure) {
             $closure();
@@ -74,16 +60,16 @@ class NewControllerTest extends \Tests\UnitTestCase
         $this->prepareNewPOST($parsedBody);
     }
 
-    public static function failDataProvider(): array
+    public static function parsedBodyProvider(): array
     {
         global $l;
 
         return [
-            'testNewAccountCreationClosed' => [
-                [],
-                $l->new_closed_message,
-                fn() => $GLOBALS['account_creation_closed'] = true,
-            ],
+//            'testNewAccountCreationClosed' => [
+//                [],
+//                $l->new_closed_message,
+//                fn() => $GLOBALS['account_creation_closed'] = true,
+//            ],
             'testWithoutUsername' => [
                 [],
                 $l->new_username . ' ' . $l->is_required

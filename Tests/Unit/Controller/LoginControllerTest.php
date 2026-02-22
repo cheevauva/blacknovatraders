@@ -10,20 +10,6 @@ use BNT\Game\Servant\GameLoginServant;
 class LoginControllerTest extends \Tests\UnitTestCase
 {
 
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        global $server_closed;
-        global $gamepath;
-        global $gamedomain;
-
-        $gamepath = 'gamepath';
-        $server_closed = false;
-        $gamedomain = 'gamedomain';
-    }
-
     protected function prepareLoginPOST(array $parsedData = []): LoginController
     {
         $login = LoginController::new(self::$container);
@@ -31,6 +17,9 @@ class LoginControllerTest extends \Tests\UnitTestCase
         $login->requestMethod = 'POST';
         $login->parsedBody = $parsedData;
         $login->acceptType = $login::ACCEPT_TYPE_JSON;
+        $login->gamepath = 'gamepath';
+        $login->serverClosed = false;
+        $login->gamedomain = 'gamedomain';
         $login->serve();
 
         return $login;
@@ -59,54 +48,44 @@ class LoginControllerTest extends \Tests\UnitTestCase
 
     public function testLoginClosed(): void
     {
-        global $server_closed;
-        global $l_login_closed_message;
+        $login = LoginController::new(self::$container);
+        $login->serverClosed = true;
+        $login->acceptType = $login::ACCEPT_TYPE_JSON;
+        $login->requestMethod = 'POST';
+        $login->serve();
 
-        $server_closed = true;
-
-        $login = $this->prepareLoginPOST();
-
-        self::assertEquals($l_login_closed_message, $login->exception?->getMessage());
+        self::assertEquals(self::$l->login_closed_message, $login->exception?->getMessage());
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }
 
     public function testWithoutEmail(): void
     {
-        global $l_login_email;
-        global $l_is_required;
-
         $login = $this->prepareLoginPOST();
 
-        self::assertEquals($l_login_email . ' ' . $l_is_required, $login->exception?->getMessage());
+        self::assertEquals(self::$l->login_email . ' ' . self::$l->is_required, $login->exception?->getMessage());
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }
 
     public function testWithEmailAndWithoutPass(): void
     {
-        global $l_login_pw;
-        global $l_is_required;
-
         $login = $this->prepareLoginPOST([
             'email' => 'email@admin.com',
         ]);
 
-        self::assertEquals($l_login_pw . ' ' . $l_is_required, $login->exception?->getMessage());
+        self::assertEquals(self::$l->login_pw . ' ' . self::$l->is_required, $login->exception?->getMessage());
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }
 
     public function testWithInvalidEmail(): void
     {
-        global $l_login_email;
-        global $l_is_invalid;
-
         $login = $this->prepareLoginPOST([
             'email' => 'emailadmin.com',
         ]);
 
-        self::assertEquals($l_login_email . ' ' . $l_is_invalid, $login->exception?->getMessage());
+        self::assertEquals(self::$l->login_email . ' ' . self::$l->is_invalid, $login->exception?->getMessage());
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }

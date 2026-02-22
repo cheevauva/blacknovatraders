@@ -10,6 +10,10 @@ use BNT\Exception\WarningException;
 class LoginController extends BaseController
 {
 
+    public bool $serverClosed;
+    public string $gamepath;
+    public string $gamedomain;
+    
     #[\Override]
     protected function init(): void
     {
@@ -31,38 +35,29 @@ class LoginController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $gamepath;
-        global $gamedomain;
-        global $server_closed;
-        global $l_login_closed_message;
-        global $l_login_email;
-        global $l_login_pw;
-        global $l_is_required;
-        global $l_is_invalid;
-
         if (!empty($this->playerinfo)) {
             $this->redirectTo('index.php');
             return;
         }
 
-        if ($server_closed) {
-            throw new WarningException($l_login_closed_message);
+        if ($this->serverClosed) {
+            throw new WarningException($this->l->login_closed_message);
         }
 
-        $email = strval($this->parsedBody['email'] ?? '') ?: throw new WarningException($l_login_email . ' ' . $l_is_required);
+        $email = strval($this->parsedBody['email'] ?? '') ?: throw new WarningException($this->l->login_email . ' ' . $this->l->is_required);
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new WarningException($l_login_email . ' ' . $l_is_invalid);
+            throw new WarningException($this->l->login_email . ' ' . $this->l->is_invalid);
         }
 
-        $password = strval($this->parsedBody['pass'] ?? '') ?: throw new WarningException($l_login_pw . ' ' . $l_is_required);
+        $password = strval($this->parsedBody['pass'] ?? '') ?: throw new WarningException($this->l->login_pw . ' ' . $this->l->is_required);
 
         $login = GameLoginServant::new($this->container);
         $login->email = $email;
         $login->password = $password;
         $login->serve();
 
-        $this->setCookie('token', $login->user['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);
+        $this->setCookie('token', $login->user['token'], time() + (3600 * 24) * 365, $this->gamepath, $this->gamedomain);
         $this->redirectTo('main.php');
     }
 }

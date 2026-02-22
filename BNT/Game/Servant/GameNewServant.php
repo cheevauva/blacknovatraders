@@ -13,11 +13,12 @@ use BNT\User\Servant\UserWithShipNewServant;
 class GameNewServant extends \UUA\Servant
 {
 
-    public $email;
-    public $password;
-    public $character;
-    public $shipname;
-    public $ship;
+    public string $email;
+    public string $password;
+    public string $character;
+    public string $shipname;
+    public array $ship;
+    public array $user;
 
     #[\Override]
     public function serve(): void
