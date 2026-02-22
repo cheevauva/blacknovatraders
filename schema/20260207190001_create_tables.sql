@@ -59,14 +59,30 @@ CREATE TABLE traderoutes
     KEY owner (owner)
 );
 
+CREATE TABLE users 
+(
+    id int unsigned NOT NULL auto_increment,
+    character_name char(60) NOT NULL,
+    email char(60) NOT NULL,
+    password varchar(36) NOT NULL,
+    token tinytext NULL,
+    lang varchar(30) DEFAULT 'english' NOT NULL,
+    last_login datetime,
+    theme varchar(36) DEFAULT 'dark' NOT NULL,
+    role varchar(15) DEFAULT 'user' NOT NULL,
+    ship_id int unsigned NULL,
+    PRIMARY KEY (id),
+    UNIQUE (email),
+    KEY ship_id (ship_id),
+    KEY token (token(255))
+);
+
 CREATE TABLE ships 
 (
     ship_id int unsigned NOT NULL auto_increment,
     ship_name char(20),
     ship_destroyed enum('Y','N') DEFAULT 'N' NOT NULL,
     character_name char(20) NOT NULL,
-    password varchar(36) NOT NULL,
-    email char(60) NOT NULL,
     hull tinyint(3) unsigned DEFAULT '0' NOT NULL,
     engines tinyint(3) unsigned DEFAULT '0' NOT NULL,
     power tinyint(3) unsigned DEFAULT '0' NOT NULL,
@@ -98,13 +114,10 @@ CREATE TABLE ships
     dev_fuelscoop enum('Y','N') DEFAULT 'N' NOT NULL,
     dev_minedeflector bigint(20) DEFAULT '0' NOT NULL,
     turns_used int unsigned DEFAULT '0' NOT NULL,
-    last_login datetime,
     rating int DEFAULT '0' NOT NULL,
     score int DEFAULT '0' NOT NULL,
     team int DEFAULT '0' NOT NULL,
     team_invite int DEFAULT '0' NOT NULL,
-    interface enum('N','O') DEFAULT 'N' NOT NULL,
-    token tinytext NULL,
     planet_id int unsigned DEFAULT '0' NOT NULL,
     preset1 int DEFAULT '0' NOT NULL,
     preset2 int DEFAULT '0' NOT NULL,
@@ -114,18 +127,15 @@ CREATE TABLE ships
     trade_torps enum('Y', 'N') DEFAULT 'N' NOT NULL,
     trade_energy enum('Y', 'N') DEFAULT 'Y' NOT NULL,
     cleared_defences tinytext,
-    lang varchar(30) DEFAULT 'english.inc' NOT NULL,
     dhtml enum('Y', 'N') DEFAULT 'Y' NOT NULL,
     dev_lssd enum('Y','N') DEFAULT 'Y' NOT NULL,
-    role varchar(15) DEFAULT 'user' NOT NULL,
-    PRIMARY KEY (email),
-    KEY email (email),
+    user_id int unsigned NOT NULL,
+    PRIMARY KEY (ship_id),
     KEY sector (sector),
     KEY ship_destroyed (ship_destroyed),
     KEY on_planet (on_planet),
     KEY team (team),
-    KEY ship_id (ship_id),
-    KEY token (token(255))
+    KEY ship_id (ship_id)
 );
 
 CREATE TABLE universe 
@@ -186,7 +196,7 @@ CREATE TABLE IGB_transfers
 
 CREATE TABLE teams
 (
-    id int DEFAULT '0' NOT NULL,
+    id int NOT NULL auto_increment, 
     creator int DEFAULT '0',
     team_name tinytext,
     description tinytext,

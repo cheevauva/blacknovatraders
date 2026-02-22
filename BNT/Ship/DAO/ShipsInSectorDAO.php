@@ -1,19 +1,23 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
 class ShipsInSectorDAO extends \UUA\DAO
 {
-
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $sector;
-    public $excludeShip;
-    public $ships;
+    public int $sector;
+    public int $excludeShip;
 
-    public function serve()
+    /**
+     * @var array
+     */
+    public array $ships;
+
+    #[\Override]
+    public function serve(): void
     {
         $sql = " 
         SELECT
@@ -33,7 +37,7 @@ class ShipsInSectorDAO extends \UUA\DAO
             ships.on_planet = 'N'
         ";
 
-        $this->ships = db()->fetchAll($sql, [
+        $this->ships = $this->db()->fetchAll($sql, [
             'sector' => $this->sector,
             'excludeShip' => $this->excludeShip,
         ]);

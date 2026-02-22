@@ -16,6 +16,8 @@ $l_colonists = "Колонисты";
 $l_credits = "Кредиты";
 $l_units = "единиц ";
 $l_special = "Особый";
+$l_qty = "Количество";
+$l_device = "Устройство";
 
 $l_cargo = "Груз";
 $l_fighters = "Истребители ";
@@ -75,12 +77,15 @@ $l_genesis = "Торпеды Генезис";
 $l_escape_pod = "Спасательная капсула";
 $l_fuel_scoop = "Сборщик топлива";
 $l_is_required = 'является обязательным';
+$l_is_wrong = 'является ложным';
+$l_is_invalid = 'является неправильным';
 
 // global_funcs.php
 
 $l_global_mmenu = "Нажмите <A HREF=main.php>здесь</A>, чтобы вернуться в главное меню.";
 $l_global_mlogin = "Нажмите <A HREF=login.php>здесь</A>, чтобы вернуться на экран входа.";
 $l_global_needlogin = "Вам необходимо войти в систему, нажмите <A HREF=login.php>здесь</A>.";
+$l_global_needchooseship = 'Вам необходимо выбрать корабль, нажмите <A HREF=ships.php>здесь</A>.';
 $l_global_died = "Игрок МЕРТВ! <a href=log.php>Вот</a> что произошло<BR><BR>Удачи в следующий раз!";
 $l_global_warzone = "Зона теперь является зоной войны!";
 $l_global_nzone = "Зона является нейтральной зоной.";
@@ -138,3 +143,11 @@ $l_insignia[17] = "Контр-адмирал";
 $l_insignia[18] = "Вице-адмирал";
 $l_insignia[19] = "Адмирал";
 
+$l_ifyouneedplan = "Доступ к планете";
+$l_igb_term = "Банковский терминал МГБ";
+$l_by_placebounty = "Установить или просмотреть награды.";
+$l_toplanetmenu = "перейти в меню планеты.";
+$l_report_title = "Отчет о корабле";
+$l_level = "Уровень";
+$l_shipdestroyed = "Корабль уничтожен!";
+$l_admin = 'Администрирование';

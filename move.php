@@ -2,10 +2,12 @@
 
 use BNT\Sector\Exception\SectorFightException;
 use BNT\Sector\Exception\SectorChooseMoveException;
+use BNT\Sector\DAO\SectorByIdDAO;
+use BNT\Link\DAO\LinksByStartDAO;
 
 include 'config.php';
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
@@ -18,8 +20,8 @@ try {
         throw new \Exception($l_move_turn);
     }
 
-    $sectorinfo = sectoryById($playerinfo['sector']);
-    $links = linksByStart($playerinfo['sector']);
+    $sectorinfo = SectorByIdDAO::call($container, $playerinfo['sector'])->sector;
+    $links = LinksByStartDAO::call($container, $playerinfo['sector'])->links;
 
     $flag = false;
 
@@ -43,7 +45,7 @@ try {
         include 'sector_fighters.php';
     }
 
-    BNT\ShipFunc::shipMoveToSector($playerinfo['ship_id'], $sector);
+    shipMoveToSector($playerinfo['ship_id'], $sector);
     log_move($playerinfo['ship_id'], $sector);
 
     include 'check_mines.php';
@@ -62,5 +64,3 @@ try {
     echo $ex->getMessage() . '<pre>' . $ex->getTraceAsString() . '</pre>';
     include 'footer.php';
 }
-
-

@@ -2,9 +2,8 @@
 
 include 'config.php';
 
-if (checklogin()) {
+if (checkship()) {
     die();
 }
 
 include 'tpls/device.tpl.php';
-

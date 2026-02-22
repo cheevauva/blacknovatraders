@@ -1,18 +1,15 @@
-<?
+<?php
 
-  if (preg_match("/sched_ranking.php/i", $PHP_SELF)) {
-      echo "You can not access this file directly!";
-      die();
-  }
+if (preg_match("/sched_ranking.php/i", $_SERVER['PHP_SELF'])) {
+    echo "You can not access this file directly!";
+    die();
+}
 
   echo "<B>RANKING</B><BR><BR>";
   $res = $db->adoExecute("SELECT ship_id FROM ships WHERE ship_destroyed='N'");
-  while(!$res->EOF)
-  {
+while (!$res->EOF) {
     gen_score($res->fields[ship_id]);
     $res->MoveNext();
-  }
+}
   echo "<BR>";
   $multiplier = 0;
-
-?>

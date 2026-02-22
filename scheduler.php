@@ -1,4 +1,5 @@
-<?
+<?php
+
 /******************************************************************
 * Explanation of the scheduler                                    *
 *                                                                 *
@@ -47,7 +48,7 @@
 ******************************************************************/
 
 require_once("config.php");
-$title="System Update";
+$title = "System Update";
 
 include("header.php");
 
@@ -58,56 +59,51 @@ require_once("sched_funcs.php");
 
 srand((double)microtime() * 1000000);
 
-if($swordfish != $adminpass)
-{
-  echo "<FORM ACTION=scheduler.php METHOD=POST>";
-  echo "Password: <INPUT TYPE=PASSWORD NAME=swordfish SIZE=20 MAXLENGTH=20><BR><BR>";
-  echo "<INPUT TYPE=SUBMIT VALUE=Submit><INPUT TYPE=RESET VALUE=Reset>";
-  echo "</FORM>";
-}
-else
-{
-  $starttime=time();
-  
-  $sched_res = $db->adoExecute("SELECT * FROM $dbtables[scheduler]");
-  if($sched_res)
-  {
-     while (!$sched_res->EOF)
-     {
-       $event = $sched_res->fields;
-       $multiplier = ($sched_ticks / $event[ticks_full]) + ($event[ticks_left] / $event[ticks_full]);
-       $multiplier = (int) $multiplier;
-       $ticks_left = ($sched_ticks + $event[ticks_left]) % $event[ticks_full];
+if ($swordfish != $adminpass) {
+    echo "<FORM ACTION=scheduler.php METHOD=POST>";
+    echo "Password: <INPUT TYPE=PASSWORD NAME=swordfish SIZE=20 MAXLENGTH=20><BR><BR>";
+    echo "<INPUT TYPE=SUBMIT VALUE=Submit><INPUT TYPE=RESET VALUE=Reset>";
+    echo "</FORM>";
+} else {
+    $starttime = time();
 
-       if($event[repeate] == 'N')
-       {
-         if($multiplier > $event[spawn])
-           $multiplier = $event[spawn];
-      
-         if($event[spawn] - $multiplier == 0)
-           $db->adoExecute("DELETE FROM $dbtables[scheduler] WHERE sched_id=$event[sched_id]");
-         else
-           $db->adoExecute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left, spawn=spawn-$multiplier WHERE sched_id=$event[sched_id]");
-       }
-       else
-         $db->adoExecute("UPDATE $dbtables[scheduler] SET ticks_left=$ticks_left WHERE sched_id=$event[sched_id]");
-  
-       $sched_var_id = $event[sched_id];
-       $sched_var_extrainfo = $event[extra_info];
+    $sched_res = $db->adoExecute("SELECT * FROM scheduler");
+    if ($sched_res) {
+        while (!$sched_res->EOF) {
+            $event = $sched_res->fields;
+            $multiplier = ($sched_ticks / $event[ticks_full]) + ($event[ticks_left] / $event[ticks_full]);
+            $multiplier = (int) $multiplier;
+            $ticks_left = ($sched_ticks + $event[ticks_left]) % $event[ticks_full];
 
-       $sched_i = 0;
-       while($sched_i < $multiplier)
-       {
-         include("$event[sched_file]");
-         $sched_i++;
-       }
-       $sched_res->MoveNext();
-     }
-   }
-  
-  $runtime= time() - $starttime;
-  echo "<p>The scheduler took $runtime seconds to execute.<p>";
+            if ($event[repeate] == 'N') {
+                if ($multiplier > $event[spawn]) {
+                    $multiplier = $event[spawn];
+                }
 
-  include("footer.php");
-  $db->adoExecute("UPDATE $dbtables[scheduler] SET last_run=". TIME());
+                if ($event[spawn] - $multiplier == 0) {
+                    $db->adoExecute("DELETE FROM scheduler WHERE sched_id=$event[sched_id]");
+                } else {
+                    $db->adoExecute("UPDATE scheduler SET ticks_left=$ticks_left, spawn=spawn-$multiplier WHERE sched_id=$event[sched_id]");
+                }
+            } else {
+                $db->adoExecute("UPDATE scheduler SET ticks_left=$ticks_left WHERE sched_id=$event[sched_id]");
+            }
+
+            $sched_var_id = $event[sched_id];
+            $sched_var_extrainfo = $event[extra_info];
+
+            $sched_i = 0;
+            while ($sched_i < $multiplier) {
+                include("$event[sched_file]");
+                $sched_i++;
+            }
+            $sched_res->MoveNext();
+        }
+    }
+
+    $runtime = time() - $starttime;
+    echo "<p>The scheduler took $runtime seconds to execute.<p>";
+
+    include("footer.php");
+    $db->adoExecute("UPDATE scheduler SET last_run=" . TIME());
 }

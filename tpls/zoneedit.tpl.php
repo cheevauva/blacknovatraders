@@ -3,8 +3,8 @@
 <?php bigtitle(); ?>
 <form action="zoneedit.php?command=change&zone=<?php echo $zone; ?>" method="post" id="bntZoneeditForm">
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label"><?php echo $l_ze_name; ?></label>
-        <input type="text" name="name" class="form-control" aria-describedby="emailHelp" value="<?php echo htmlspecialchars($curzone['zone_name']); ?>" required>
+        <label for="name" class="form-label"><?php echo $l_ze_name; ?></label>
+        <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($curzone['zone_name']); ?>" required>
     </div>
     <div class="mb-3 ">
         <label for="exampleInputPassword1" class="form-label"><?php echo $l_allow . $l_beacons; ?></label>

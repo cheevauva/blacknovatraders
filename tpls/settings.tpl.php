@@ -10,7 +10,7 @@
     <tr><td><?php echo $l_settings_max_links_per_sector; ?></td><td><?php echo $link_max; ?></td></tr>
     <tr><td><?php echo $l_settings_fed_max_hull; ?></td><td><?php echo $fed_max_hull; ?></td></tr>
     <tr><td><?php echo $l_settings_allow_ibank; ?></td><td><?php echo $allow_ibank ? $l_settings_yes : $l_settings_no; ?></td></tr>
-    <?php if ($allow_ibank): ?>
+    <?php if ($allow_ibank) : ?>
         <tr><td><?php echo $l_settings_igb_interest_rate; ?></td><td><?php echo $ibank_interest * 100; ?></td></tr>
         <tr><td><?php echo $l_settings_igb_loan_rate; ?></td><td><?php echo $ibank_loaninterest * 100; ?></td></tr>
     <?php endif; ?>
@@ -38,7 +38,7 @@
     <tr><td><?php echo $l_settings_turns_happen; ?></td><td><?php echo $sched_turns; ?> <?php echo $l_settings_minutes; ?>&nbsp;</td></tr>
     <tr><td><?php echo $l_settings_defenses_checked; ?></td><td><?php echo $sched_turns; ?> <?php echo $l_settings_minutes; ?>&nbsp;</td></tr>
     <tr><td><?php echo $l_settings_xenobes_play; ?></td><td><?php echo $sched_turns; ?> <?php echo $l_settings_minutes; ?>&nbsp;</td></tr>
-    <?php if ($allow_ibank): ?>
+    <?php if ($allow_ibank) : ?>
         <tr><td><?php echo $l_settings_igb_interest_accumulated; ?></td><td><?php echo $sched_igb; ?> <?php echo $l_settings_minutes; ?>&nbsp;</td></tr>
     <?php endif; ?>
     <tr><td><?php echo $l_settings_news_generated; ?></td><td><?php echo $sched_news; ?> <?php echo $l_settings_minutes; ?>&nbsp;</td></tr>

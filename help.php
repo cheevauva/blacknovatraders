@@ -11,5 +11,3 @@ switch ($language) {
         include_once 'tpls/help/help_english.tpl.php';
         break;
 }
-
-

@@ -1,21 +1,37 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Sector\DAO;
+
+use Psr\Container\ContainerInterface;
 
 class SectorByIdDAO extends \UUA\DAO
 {
 
     use \BNT\Traits\DatabaseMainTrait;
 
-    public $id;
-    public $sector;
+    public int $id;
 
-    public function serve()
+    /**
+     * @var array<string, mixed>|null
+     */
+    public ?array $sector;
+
+    #[\Override]
+    public function serve(): void
     {
-        return $this->db()->fetch('SELECT * FROM universe WHERE sector_id = :sectorId LIMIT 1', [
+        $this->sector = $this->db()->fetch('SELECT * FROM universe WHERE sector_id = :sectorId LIMIT 1', [
             'sectorId' => $this->id,
         ]);
+    }
+
+    public static function call(ContainerInterface $container, int $id): self
+    {
+        $self = self::new($container);
+        $self->id = $id;
+        $self->serve();
+
+        return $self;
     }
 }

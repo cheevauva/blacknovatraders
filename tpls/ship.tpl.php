@@ -1,17 +1,17 @@
 <?php $title = $l_ship_title; ?>
 <?php include("header.php"); ?>
 <?php bigtitle(); ?>
-<?php if ($othership['sector'] != $playerinfo['sector']): ?>
+<?php if ($othership['sector'] != $playerinfo['sector']) : ?>
     <div class="alert alert-info">
         <?php echo $l_ship_the; ?> <?php echo $othership['ship_name']; ?> <?php echo $l_ship_nolonger; ?> <?php echo $playerinfo['sector']; ?>
     </div>
-<?php else: ?>
+<?php else : ?>
     <div class="mb-3">
         <div class="alert alert-warning">
             <?php echo $l_ship_youc; ?> 
             <?php echo htmlspecialchars($othership['ship_name']); ?>, 
             <?php echo $l_ship_owned; ?> 
-            <?php echo htmlspecialchars($othership['character_name']); ?>.
+            <?php echo htmlspecialchars($othership['ship_name']); ?>.
         </div>
     </div>
     <div class="mb-3">

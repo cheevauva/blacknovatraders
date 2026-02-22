@@ -1,10 +1,28 @@
 <?php
 
+define('MICROTIME_START', microtime(true));
+define('COUNT_CLASS_CORE', count(get_declared_classes()));
+
 //$Id$
 //ini_set('display_errors', 0);
 date_default_timezone_set('UTC');
-include("db_config.php");
-define('MICROTIME_START', microtime(true));
+
+$gamedomain = "";
+$gamepath = "";
+//
+$dbhost = "db";
+$dbport = 3306;
+$dbuname = "bnt";
+$dbpass = "bnt";
+$dbname = "bnt";
+$db_type = "mysql";
+//
+$adminpass = "secret";
+$admin_mail = "admin@example.com";
+$admin_pass = "admin@example.com";
+$adminname = "Admin Name";
+//
+$link_forums = "http://forums.blacknova.net";
 
 /* Main scheduler variables (game flow control)
   ----------------------------------------------- */
@@ -190,14 +208,6 @@ $min_bases_to_own = 3;
 
 $default_lang = 'english';
 
-$avail_lang[0]['file'] = 'english';
-$avail_lang[0]['name'] = 'English';
-$avail_lang[1]['file'] = 'french';
-$avail_lang[1]['name'] = 'Francais';
-$avail_lang[2]['file'] = 'spanish';
-$avail_lang[2]['name'] = 'Spanish';
-$avail_lang[3]['file'] = 'russian';
-$avail_lang[3]['name'] = 'Русский';
 $IGB_min_turns = $start_turns; //Turns a player has to play before ship transfers are allowed 0=disable
 $IGB_svalue = 0.15; //Max amount of sender's value allowed for ship transfers 0=disable
 $IGB_trate = 1440; //Time (in minutes) before two similar transfers are allowed for ship transfers.0=disable
@@ -222,8 +232,23 @@ $xen_unemployment = 100000;   // Amount of credits each xenobe receive on each x
 $xen_aggression = 100;                // Percent of xenobe that are aggressive or hostile - rjordan
 $xen_planets = 5;                     //Percent of created xenobe that will own planets. Recommended to keep at small percentage - rjordan
 $xenstartsize = 15;                   // Max starting size of Xenobes at universe creation
+$title = 'BlackNova Traders';
 
-include 'global_funcs.php';
+$disableRegisterGlobalFix ??= false;
+$disableAutoLogin ??= false;
 
 
+$avail_lang[0]['file'] = 'english';
+$avail_lang[0]['name'] = 'English';
+$avail_lang[1]['file'] = 'french';
+$avail_lang[1]['name'] = 'Francais';
+$avail_lang[2]['file'] = 'spanish';
+$avail_lang[2]['name'] = 'Spanish';
+$avail_lang[3]['file'] = 'russian';
+$avail_lang[3]['name'] = 'Русский';
 
+
+require_once 'bootstrap.php';
+require_once 'global_funcs.php';
+require_once 'db_functions.php';
+require_once 'init.php';

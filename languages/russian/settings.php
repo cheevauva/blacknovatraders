@@ -1,6 +1,5 @@
 <?php
 
-
 $l_settings_game_version = "Версия игры:";
 $l_settings_game_name = "Название игры:";
 $l_settings_mine_hullsize = "Средний технический уровень для поражения мин";

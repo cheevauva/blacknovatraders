@@ -1,7 +1,7 @@
-<?php $title = "Administration"; ?>
-<?php include 'header.php'; ?>
-
-<div class="container mt-5">
+<?php $self = \BNT\Controller\AdminController::as($self); ?>
+<?php include_header(); ?>
+<?php bigtitle(); ?>
+<div class="container mt-1">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
             <h2 class="mb-0">BlackNova Traders Administration Module</h2>
@@ -19,35 +19,29 @@
             </div>
             <div clas="row">
                 <div class="col-md-12">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?php include 'tpls/admin/userlist.tpl.php'; ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?php include 'tpls/admin/expand_universe.tpl.php'; ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?php include 'tpls/admin/sectorlist.tpl.php'; ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?php include 'tpls/admin/planetlist.tpl.php'; ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <?php include 'tpls/admin/zonelist.tpl.php'; ?>
-                            </div>
-                            <div class="col-md-6">
-                                <?php include 'tpls/admin/logview.tpl.php'; ?>
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.php?module=user&operation=list">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.php?module=sector&operation=list">Sectors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.php?module=ship&operation=list">Ships</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.php?module=zone&operation=list">Zones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.php?module=planet&operation=list">Planets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.php?module=config&operation=edit">Config</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<?php include 'footer.php'; ?>
+<?php include_footer(); ?>

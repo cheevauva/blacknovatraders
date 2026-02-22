@@ -1,0 +1,1513 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="6"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    autoload="config.php"
+    findUnusedCode="false"
+    allFunctionsGlobal="true"
+>
+    <projectFiles>
+        <directory name="./" />
+        <ignoreFiles>
+            <directory name="./tpls/"/>
+            <directory name="./Tests/"/>
+        </ignoreFiles>
+    </projectFiles>
+    <globals>
+        <var name="l" type="BNT\Language" />
+        <var name="title" type="string" />
+        <var name="container" type="Psr\Container\ContainerInterface" />
+        <var name="playerinfo" type="array|null"/>
+        <var name="disableRegisterGlobalFix" type="bool"/>
+        <var name="l_zi_nexist" type="string"/>
+        <var name="l_ze_allow" type="string"/>
+        <var name="l_ze_notowner" type="string"/>
+        <var name="l_warp_unlinked" type="string"/>
+        <var name="l_warp_forbidtwo" type="string"/>
+        <var name="gamedomain" type="string" />
+        <var name="gamepath" type="string" />
+        
+        <!-- Database variables -->
+        <var name="dbhost" type="string" />
+        <var name="dbport" type="int" />
+        <var name="dbuname" type="string" />
+        <var name="dbpass" type="string" />
+        <var name="dbname" type="string" />
+        <var name="db_type" type="string" />
+        
+        <!-- Admin variables -->
+        <var name="adminpass" type="string" />
+        <var name="admin_mail" type="string" />
+        <var name="admin_pass" type="string" />
+        <var name="adminname" type="string" />
+        
+        <!-- Links -->
+        <var name="link_forums" type="string" />
+        
+        <!-- Scheduler variables -->
+        <var name="sched_ticks" type="int" />
+        <var name="sched_turns" type="int" />
+        <var name="sched_ports" type="int" />
+        <var name="sched_planets" type="int" />
+        <var name="sched_igb" type="int" />
+        <var name="sched_ranking" type="int" />
+        <var name="sched_news" type="int" />
+        <var name="sched_degrade" type="int" />
+        <var name="sched_apocalypse" type="int" />
+        <var name="doomsday_value" type="int" />
+        
+        <!-- GUI colors -->
+        <var name="color_header" type="string" />
+        <var name="color_line1" type="string" />
+        <var name="color_line2" type="string" />
+        
+        <!-- Localization -->
+        <var name="local_number_dec_point" type="string" />
+        <var name="local_number_thousands_sep" type="string" />
+        <var name="language" type="string" />
+        
+        <!-- Game variables -->
+        <var name="ip" type="string" />
+        <var name="mine_hullsize" type="int" />
+        <var name="ewd_maxhullsize" type="int" />
+        <var name="sector_max" type="int" />
+        <var name="link_max" type="int" />
+        <var name="universe_size" type="int" />
+        <var name="game_name" type="string" />
+        <var name="release_version" type="string" />
+        <var name="fed_max_hull" type="int" />
+        <var name="maxlen_password" type="int" />
+        <var name="max_rank" type="int" />
+        <var name="rating_combat_factor" type="float" />
+        <var name="server_closed" type="bool" />
+        <var name="account_creation_closed" type="bool" />
+        
+        <!-- Newbie variables -->
+        <var name="newbie_nice" type="string" />
+        <var name="newbie_extra_nice" type="string" />
+        <var name="newbie_hull" type="string" />
+        <var name="newbie_engines" type="string" />
+        <var name="newbie_power" type="string" />
+        <var name="newbie_computer" type="string" />
+        <var name="newbie_sensors" type="string" />
+        <var name="newbie_armor" type="string" />
+        <var name="newbie_shields" type="string" />
+        <var name="newbie_beams" type="string" />
+        <var name="newbie_torp_launchers" type="string" />
+        <var name="newbie_cloak" type="string" />
+        
+        <!-- Special features -->
+        <var name="allow_fullscan" type="bool" />
+        <var name="allow_navcomp" type="bool" />
+        <var name="allow_ibank" type="bool" />
+        <var name="allow_genesis_destroy" type="bool" />
+        
+        <!-- iBank variables -->
+        <var name="ibank_interest" type="float" />
+        <var name="ibank_paymentfee" type="float" />
+        <var name="ibank_loaninterest" type="float" />
+        <var name="ibank_loanfactor" type="float" />
+        <var name="ibank_loanlimit" type="float" />
+        <var name="ibank_ownaccount_info" type="string" />
+        
+        <!-- Default production percentages -->
+        <var name="default_prod_ore" type="float" />
+        <var name="default_prod_organics" type="float" />
+        <var name="default_prod_goods" type="float" />
+        <var name="default_prod_energy" type="float" />
+        <var name="default_prod_fighters" type="float" />
+        <var name="default_prod_torp" type="float" />
+        
+        <!-- Port pricing -->
+        <var name="ore_price" type="int" />
+        <var name="ore_delta" type="int" />
+        <var name="ore_rate" type="int" />
+        <var name="ore_prate" type="float" />
+        <var name="ore_limit" type="int" />
+        
+        <var name="organics_price" type="int" />
+        <var name="organics_delta" type="int" />
+        <var name="organics_rate" type="int" />
+        <var name="organics_prate" type="float" />
+        <var name="organics_limit" type="int" />
+        
+        <var name="goods_price" type="int" />
+        <var name="goods_delta" type="int" />
+        <var name="goods_rate" type="int" />
+        <var name="goods_prate" type="float" />
+        <var name="goods_limit" type="int" />
+        
+        <var name="energy_price" type="int" />
+        <var name="energy_delta" type="int" />
+        <var name="energy_rate" type="int" />
+        <var name="energy_prate" type="float" />
+        <var name="energy_limit" type="int" />
+        
+        <var name="inventory_factor" type="int" />
+        <var name="upgrade_cost" type="int" />
+        <var name="upgrade_factor" type="int" />
+        <var name="level_factor" type="float" />
+        
+        <!-- Device prices -->
+        <var name="dev_genesis_price" type="int" />
+        <var name="dev_beacon_price" type="int" />
+        <var name="dev_emerwarp_price" type="int" />
+        <var name="dev_warpedit_price" type="int" />
+        <var name="dev_minedeflector_price" type="int" />
+        <var name="dev_escapepod_price" type="int" />
+        <var name="dev_fuelscoop_price" type="int" />
+        <var name="dev_lssd_price" type="int" />
+        
+        <!-- Combat variables -->
+        <var name="fighter_price" type="int" />
+        <var name="fighter_prate" type="float" />
+        <var name="torpedo_price" type="int" />
+        <var name="torpedo_prate" type="float" />
+        <var name="torp_dmg_rate" type="int" />
+        <var name="credits_prate" type="float" />
+        <var name="armor_price" type="int" />
+        <var name="basedefense" type="int" />
+        
+        <!-- Colonist variables -->
+        <var name="colonist_price" type="int" />
+        <var name="colonist_production_rate" type="float" />
+        <var name="colonist_reproduction_rate" type="float" />
+        <var name="colonist_limit" type="int" />
+        <var name="organics_consumption" type="float" />
+        <var name="starvation_death_rate" type="float" />
+        
+        <!-- Base variables -->
+        <var name="interest_rate" type="float" />
+        <var name="base_ore" type="int" />
+        <var name="base_goods" type="int" />
+        <var name="base_organics" type="int" />
+        <var name="base_credits" type="int" />
+        <var name="base_modifier" type="int" />
+        
+        <!-- Start variables -->
+        <var name="start_fighters" type="int" />
+        <var name="start_armor" type="int" />
+        <var name="start_credits" type="int" />
+        <var name="start_energy" type="int" />
+        <var name="start_turns" type="int" />
+        <var name="max_turns" type="int" />
+        <var name="max_emerwarp" type="int" />
+        
+        <!-- Scan variables -->
+        <var name="fullscan_cost" type="int" />
+        <var name="scan_error_factor" type="int" />
+        
+        <!-- Game limits -->
+        <var name="max_planets_sector" type="int" />
+        <var name="max_traderoutes_player" type="int" />
+        <var name="min_bases_to_own" type="int" />
+        <var name="default_lang" type="string" />
+        
+        <!-- IGB variables -->
+        <var name="IGB_min_turns" type="int" />
+        <var name="IGB_svalue" type="float" />
+        <var name="IGB_trate" type="int" />
+        <var name="IGB_lrate" type="int" />
+        <var name="IGB_tconsolidate" type="int" />
+        <var name="corp_planet_transfers" type="int" />
+        <var name="min_value_capture" type="int" />
+        <var name="defence_degrade_rate" type="float" />
+        <var name="energy_per_fighter" type="float" />
+        
+        <!-- Bounty variables -->
+        <var name="bounty_maxvalue" type="float" />
+        <var name="bounty_ratio" type="float" />
+        <var name="bounty_minturns" type="int" />
+        
+        <!-- Other variables -->
+        <var name="display_password" type="bool" />
+        <var name="space_plague_kills" type="float" />
+        <var name="max_credits_without_base" type="int" />
+        <var name="sofa_on" type="bool" />
+        <var name="ksm_allowed" type="bool" />
+        
+        <!-- Xenobe variables -->
+        <var name="xenobe_max" type="int" />
+        <var name="xen_start_credits" type="int" />
+        <var name="xen_unemployment" type="int" />
+        <var name="xen_aggression" type="int" />
+        <var name="xen_planets" type="int" />
+        <var name="xenstartsize" type="int" />
+        
+        <!-- Registration variables -->
+        <var name="disableRegisterGlobalFix" type="bool" />
+        <var name="disableAutoLogin" type="bool" />
+        
+        <var name="l_yes" type="string" />
+        <var name="l_no" type="string" />
+        <var name="l_here" type="string" />
+        <var name="l_submit" type="string" />
+        <var name="l_reset" type="string" />
+        <var name="l_all" type="string" />
+        <var name="l_ore" type="string" />
+        <var name="l_commodities" type="string" />
+        <var name="l_organics" type="string" />
+        <var name="l_goods" type="string" />
+        <var name="l_energy" type="string" />
+        <var name="l_colonists" type="string" />
+        <var name="l_credits" type="string" />
+        <var name="l_units" type="string" />
+        <var name="l_special" type="string" />
+        <var name="l_cargo" type="string" />
+        <var name="l_fighters" type="string" />
+        <var name="l_mines" type="string" />
+        <var name="l_torps" type="string" />
+        <var name="l_none" type="string" />
+        <var name="l_unnamed" type="string" />
+        <var name="l_name" type="string" />
+        <var name="l_unowned" type="string" />
+        <var name="l_unknown" type="string" />
+        <var name="l_clickme" type="string" />
+        <var name="l_player" type="string" />
+        <var name="l_ship" type="string" />
+        <var name="l_ships" type="string" />
+        <var name="l_set" type="string" />
+        <var name="l_realspace" type="string" />
+        <var name="l_armorpts" type="string" />
+        <var name="l_links" type="string" />
+
+        <!-- main.php -->
+        <var name="l_main_title" type="string" />
+        <var name="l_main_warpto" type="string" />
+        <var name="l_main_other" type="string" />
+        <var name="l_traderoutes" type="string" />
+        <var name="l_trade_control" type="string" />
+        <var name="l_youhave" type="string" />
+        <var name="l_turns_used" type="string" />
+        <var name="l_turns_have" type="string" />
+        <var name="l_score" type="string" />
+        <var name="l_sector" type="string" />
+        <var name="l_help" type="string" />
+        <var name="l_faq" type="string" />
+        <var name="l_feedback" type="string" />
+        <var name="l_forums" type="string" />
+        <var name="l_logout" type="string" />
+        <var name="l_commands" type="string" />
+        <var name="l_command_no" type="string" />
+        <var name="l_devices" type="string" />
+        <var name="l_planets" type="string" />
+        <var name="l_log" type="string" />
+        <var name="l_sector_def" type="string" />
+        <var name="l_defense" type="string" />
+        <var name="l_read_msg" type="string" />
+        <var name="l_send_msg" type="string" />
+        <var name="l_rankings" type="string" />
+        <var name="l_teams" type="string" />
+        <var name="l_ohno" type="string" />
+        <var name="l_options" type="string" />
+        <var name="l_navcomp" type="string" />
+        <var name="l_incompletemove" type="string" />
+        <var name="l_clicktocontinue" type="string" />
+        <var name="l_toplanetmenu" type="string" />
+        <var name="l_nonexistant_pl" type="string" />
+        <var name="l_abord" type="string" />
+        <var name="l_messages_wait" type="string" />
+        <var name="l_no_warplink" type="string" />
+        <var name="l_scan" type="string" />
+        <var name="l_fullscan" type="string" />
+        <var name="l_port" type="string" />
+        <var name="l_tradingport" type="string" />
+        <var name="l_planet_in_sec" type="string" />
+        <var name="l_ships_in_sec" type="string" />
+        <var name="l_sector_0" type="string" />
+
+        <!-- report.php -->
+        <var name="l_report_title" type="string" />
+        <var name="l_level" type="string" />
+        <var name="l_ship_levels" type="string" />
+        <var name="l_hull" type="string" />
+        <var name="l_engines" type="string" />
+        <var name="l_power" type="string" />
+        <var name="l_computer" type="string" />
+        <var name="l_sensors" type="string" />
+        <var name="l_armor" type="string" />
+        <var name="l_shields" type="string" />
+        <var name="l_beams" type="string" />
+        <var name="l_torp_launch" type="string" />
+        <var name="l_cloak" type="string" />
+        <var name="l_holds" type="string" />
+        <var name="l_deflect" type="string" />
+        <var name="l_ewd" type="string" />
+        <var name="l_shipavg" type="string" />
+        <var name="l_arm_weap" type="string" />
+        <var name="l_beacons" type="string" />
+        <var name="l_warpedit" type="string" />
+        <var name="l_genesis" type="string" />
+        <var name="l_escape_pod" type="string" />
+        <var name="l_fuel_scoop" type="string" />
+
+        <!-- device.php -->
+        <var name="l_device_title" type="string" />
+        <var name="l_device_expl" type="string" />
+        <var name="l_device" type="string" />
+        <var name="l_qty" type="string" />
+        <var name="l_usage" type="string" />
+        <var name="l_manual" type="string" />
+        <var name="l_automatic" type="string" />
+
+        <!-- port.php port2.php -->
+        <var name="l_trade" type="string" />
+        <var name="l_title_port" type="string" />
+        <var name="l_title_trade" type="string" />
+        <var name="l_sector_war" type="string" />
+        <var name="l_war_info" type="string" />
+        <var name="l_no_trade" type="string" />
+        <var name="l_no_trade_out" type="string" />
+        <var name="l_no_trade_info" type="string" />
+        <var name="l_buying" type="string" />
+        <var name="l_selling" type="string" />
+        <var name="l_commodity" type="string" />
+        <var name="l_amount" type="string" />
+        <var name="l_price" type="string" />
+        <var name="l_buy" type="string" />
+        <var name="l_sell" type="string" />
+        <var name="l_trade_st_info" type="string" />
+        <var name="l_special_port" type="string" />
+        <var name="l_no_credits" type="string" />
+        <var name="l_creds_to_spend" type="string" />
+        <var name="l_cost" type="string" />
+        <var name="l_avail" type="string" />
+        <var name="l_profit" type="string" />
+        <var name="l_current" type="string" />
+        <var name="l_current_qty" type="string" />
+        <var name="l_max" type="string" />
+        <var name="l_ifyouneedmore" type="string" />
+        <var name="l_ifyouneedplan" type="string" />
+        <var name="l_igb_term" type="string" />
+        <var name="l_upgrade" type="string" />
+        <var name="l_unlimited" type="string" />
+        <var name="l_full" type="string" />
+        <var name="l_equipped" type="string" />
+        <var name="l_n_a" type="string" />
+        <var name="l_item" type="string" />
+        <var name="l_totalcost" type="string" />
+        <var name="l_would_dump" type="string" />
+        <var name="l_noport" type="string" />
+        <var name="l_trade_turnneed" type="string" />
+        <var name="l_returnto_port" type="string" />
+        <var name="l_notenough_cargo" type="string" />
+        <var name="l_notenough_power" type="string" />
+        <var name="l_notenough_credits" type="string" />
+        <var name="l_notenough_turns" type="string" />
+        <var name="l_notenough_ore" type="string" />
+        <var name="l_notenough_goods" type="string" />
+        <var name="l_notenough_energy" type="string" />
+        <var name="l_notenough_organics" type="string" />
+        <var name="l_exceed_organics" type="string" />
+        <var name="l_exceed_ore" type="string" />
+        <var name="l_exceed_energy" type="string" />
+        <var name="l_exceed_goods" type="string" />
+        <var name="l_trade_result" type="string" />
+        <var name="l_traded_ore" type="string" />
+        <var name="l_traded_goods" type="string" />
+        <var name="l_traded_organics" type="string" />
+        <var name="l_traded_energy" type="string" />
+        <var name="l_trade_complete" type="string" />
+        <var name="l_trade_upgraded" type="string" />
+        <var name="l_trade_added" type="string" />
+        <var name="l_trade_installed" type="string" />
+
+        <!-- planet.php planet2.php planet3.php -->
+        <var name="l_planet_title" type="string" />
+        <var name="l_planet_none" type="string" />
+        <var name="l_planet_capture1" type="string" />
+        <var name="l_planet_capture2" type="string" />
+        <var name="l_planet_unowned" type="string" />
+        <var name="l_planet_unnamed" type="string" />
+        <var name="l_planet_named" type="string" />
+        <var name="l_planet_onsurface" type="string" />
+        <var name="l_planet_orbit" type="string" />
+        <var name="l_planet_leave_link" type="string" />
+        <var name="l_planet_leave" type="string" />
+        <var name="l_planet_name_link" type="string" />
+        <var name="l_planet_name2" type="string" />
+        <var name="l_planet_land_link" type="string" />
+        <var name="l_planet_land" type="string" />
+        <var name="l_planet_logout" type="string" />
+        <var name="l_planet_selling" type="string" />
+        <var name="l_planet_not_selling" type="string" />
+        <var name="l_planet_transfer_link" type="string" />
+        <var name="l_planet_transfer" type="string" />
+        <var name="l_planet_hasbase" type="string" />
+        <var name="l_planet_perc" type="string" />
+        <var name="l_planet_interest" type="string" />
+        <var name="l_planet_update" type="string" />
+        <var name="l_planet_tsell_link" type="string" />
+        <var name="l_planet_tsell" type="string" />
+        <var name="l_planet_bbase_link" type="string" />
+        <var name="l_planet_bbase" type="string" />
+        <var name="l_planet_bbuild" type="string" />
+        <var name="l_planet_mcorp_linkC" type="string" />
+        <var name="l_planet_mcorp_linkP" type="string" />
+        <var name="l_planet_mcorp" type="string" />
+        <var name="l_planet_buy_link" type="string" />
+        <var name="l_planet_buy" type="string" />
+        <var name="l_planet_att_link" type="string" />
+        <var name="l_planet_att" type="string" />
+        <var name="l_planet_att_sure" type="string" />
+        <var name="l_planet_scn_link" type="string" />
+        <var name="l_planet_scn" type="string" />
+        <var name="l_planet_nowsell" type="string" />
+        <var name="l_planet_nownosell" type="string" />
+        <var name="l_planet_iname" type="string" />
+        <var name="l_planet_cname" type="string" />
+        <var name="l_planet_landed" type="string" />
+        <var name="l_planet_left" type="string" />
+        <var name="l_planet_cinfo" type="string" />
+        <var name="l_planet_toplanet" type="string" />
+        <var name="l_planet_baseinfo" type="string" />
+        <var name="l_planet_p_under" type="string" />
+        <var name="l_planet_p_over" type="string" />
+        <var name="l_planet_p_changed" type="string" />
+        <var name="l_plant_scn_turn" type="string" />
+        <var name="l_planet_noscan" type="string" />
+        <var name="l_planet_logscanA" type="string" />
+        <var name="l_planet_logscanB" type="string" />
+        <var name="l_planet_scn_report" type="string" />
+        <var name="l_base" type="string" />
+        <var name="l_planet_ison" type="string" />
+        <var name="l_planet_captured" type="string" />
+        <var name="l_planet_notdef" type="string" />
+        <var name="l_planet_caplog" type="string" />
+        <var name="l_planet_noone" type="string" />
+        <var name="l_planet2_title" type="string" />
+        <var name="l_planet2_noturn" type="string" />
+        <var name="l_planet2_noten" type="string" />
+        <var name="l_planet2_fortr" type="string" />
+        <var name="l_planet2_settr" type="string" />
+        <var name="l_planet2_losup" type="string" />
+        <var name="l_planet2_notowner" type="string" />
+        <var name="l_planet2_compl" type="string" />
+        <var name="l_planet2_power" type="string" />
+        <var name="l_planet2_comp" type="string" />
+        <var name="l_planet2_laun" type="string" />
+        <var name="l_planet2_nocorptransfer" type="string" />
+        <var name="l_planet2_baseexceeded" type="string" />
+        <var name="l_planet3_title" type="string" />
+
+        <!-- planet-report.php -->
+        <var name="l_pr_title" type="string" />
+        <var name="l_pr_teamlink" type="string" />
+        <var name="l_pr_noplanet" type="string" />
+        <var name="l_pr_clicktosort" type="string" />
+        <var name="l_pr_totals" type="string" />
+
+        <!-- rsmove.php -->
+        <var name="l_rs_title" type="string" />
+        <var name="l_rs_whichsector" type="string" />
+        <var name="l_rs_insector" type="string" />
+        <var name="l_rs_submit" type="string" />
+        <var name="l_rs_movetime" type="string" />
+        <var name="l_rs_energy" type="string" />
+        <var name="l_rs_noturns" type="string" />
+        <var name="l_rs_engage_link" type="string" />
+        <var name="l_rs_engage" type="string" />
+        <var name="l_rs_invalid" type="string" />
+        <var name="l_rs_ready" type="string" />
+
+        <!-- navcomp.php -->
+        <var name="l_nav_title" type="string" />
+        <var name="l_nav_nocomp" type="string" />
+        <var name="l_nav_query" type="string" />
+        <var name="l_nav_pathfnd" type="string" />
+        <var name="l_nav_answ1" type="string" />
+        <var name="l_nav_answ2" type="string" />
+        <var name="l_nav_proper" type="string" />
+
+        <!-- attack.php -->
+        <var name="l_att_title" type="string" />
+        <var name="l_att_notarg" type="string" />
+        <var name="l_att_noturn" type="string" />
+        <var name="l_att_noatt" type="string" />
+        <var name="l_att_flee" type="string" />
+        <var name="l_att_ewd" type="string" />
+        <var name="l_att_att" type="string" />
+        <var name="l_att_beams" type="string" />
+        <var name="l_att_torps" type="string" />
+        <var name="l_att_fighters" type="string" />
+        <var name="l_att_lost" type="string" />
+        <var name="l_att_ylost" type="string" />
+        <var name="l_att_sdown" type="string" />
+        <var name="l_att_ydown" type="string" />
+        <var name="l_att_shits" type="string" />
+        <var name="l_att_yhits" type="string" />
+        <var name="l_att_dmg" type="string" />
+        <var name="l_att_sarm" type="string" />
+        <var name="l_att_yarm" type="string" />
+        <var name="l_att_ashit" type="string" />
+        <var name="l_att_ayhit" type="string" />
+        <var name="l_att_lostf" type="string" />
+        <var name="l_att_ylostf" type="string" />
+        <var name="l_att_sdest" type="string" />
+        <var name="l_att_espod" type="string" />
+        <var name="l_att_ysalv" type="string" />
+        <var name="l_att_andused" type="string" />
+        <var name="l_att_stilship" type="string" />
+        <var name="l_att_atyou" type="string" />
+        <var name="l_att_and" type="string" />
+        <var name="l_att_yshiplost" type="string" />
+        <var name="l_att_salv" type="string" />
+
+        <!-- warpedit 1-3.php -->
+        <var name="l_warp_title" type="string" />
+        <var name="l_warp_turn" type="string" />
+        <var name="l_warp_none" type="string" />
+        <var name="l_warp_forbid" type="string" />
+        <var name="l_warp_nolink" type="string" />
+        <var name="l_warp_linkto" type="string" />
+        <var name="l_warp_query" type="string" />
+        <var name="l_warp_oneway" type="string" />
+        <var name="l_warp_dest" type="string" />
+        <var name="l_warp_destquery" type="string" />
+        <var name="l_warp_bothway" type="string" />
+        <var name="l_warp_nosector" type="string" />
+        <var name="l_warp_twoerror" type="string" />
+        <var name="l_warp_sectex" type="string" />
+        <var name="l_warp_linked" type="string" />
+        <var name="l_warp_unlinked" type="string" />
+        <var name="l_warp_coneway" type="string" />
+        <var name="l_warp_ctwoway" type="string" />
+        <var name="l_warp_forbidtwo" type="string" />
+        <var name="l_warp_removed" type="string" />
+        <var name="l_warp_removedtwo" type="string" />
+        <var name="l_warp_cantsame" type="string" />
+
+        <!-- genesis.php -->
+        <var name="l_gns_title" type="string" />
+        <var name="l_gns_turn" type="string" />
+        <var name="l_gns_onplanet" type="string" />
+        <var name="l_gns_full" type="string" />
+        <var name="l_gns_planetex" type="string" />
+        <var name="l_gns_nogenesis" type="string" />
+        <var name="l_gns_forbid" type="string" />
+        <var name="l_gns_bforbid" type="string" />
+        <var name="l_gns_pcreate" type="string" />
+
+        <!-- ship.php -->
+        <var name="l_ship_title" type="string" />
+        <var name="l_ship_the" type="string" />
+        <var name="l_ship_nolonger" type="string" />
+        <var name="l_ship_youc" type="string" />
+        <var name="l_ship_owned" type="string" />
+        <var name="l_ship_perform" type="string" />
+
+        <!-- selfdestruct.php -->
+        <var name="l_die_title" type="string" />
+        <var name="l_die_rusure" type="string" />
+        <var name="l_die_goodbye" type="string" />
+        <var name="l_die_check" type="string" />
+        <var name="l_die_nonono" type="string" />
+        <var name="l_die_what" type="string" />
+        <var name="l_die_count" type="string" />
+        <var name="l_die_vapor" type="string" />
+        <var name="l_die_please" type="string" />
+        <var name="l_die_exploit" type="string" />
+
+        <!-- move.php -->
+        <var name="l_move_title" type="string" />
+        <var name="l_move_turn" type="string" />
+        <var name="l_move_failed" type="string" />
+
+        <!-- scan.php -->
+        <var name="l_scan_title" type="string" />
+        <var name="l_scan_turn" type="string" />
+        <var name="l_scan_ron" type="string" />
+        <var name="l_scan_capt" type="string" />
+        <var name="l_scan_arma" type="string" />
+        <var name="l_scan_carry" type="string" />
+
+        <!-- lrscan.php -->
+        <var name="l_lrs_title" type="string" />
+        <var name="l_lrs_nofull" type="string" />
+        <var name="l_lrs_noturns" type="string" />
+        <var name="l_lrs_used" type="string" />
+        <var name="l_lrs_turns" type="string" />
+        <var name="l_lrs_left" type="string" />
+        <var name="l_lrs_reach" type="string" />
+        <var name="l_lrs_links" type="string" />
+        <var name="l_lrs_ships" type="string" />
+        <var name="l_lrs_click" type="string" />
+        <var name="l_lrs_cantscan" type="string" />
+        <var name="l_lrs_zero" type="string" />
+        <var name="l_lrs_moveto" type="string" />
+        <var name="l_log_titlet" type="string" />
+
+        <!-- log.php arrays -->
+        <var name="l_log_months" type="array" />
+        <var name="l_log_months_short" type="array" />
+        <var name="l_log_pod" type="string" />
+        <var name="l_log_nopod" type="string" />
+        <var name="l_log_log" type="string" />
+        <var name="l_log_start" type="string" />
+        <var name="l_log_end" type="string" />
+        <var name="l_log_click" type="string" />
+        <var name="l_log_note" type="string" />
+
+        <!-- Log text arrays by LogTypeConstants -->
+        <var name="l_log_text" type="array" />
+        <var name="l_log_title" type="array" />
+        <var name="l_log_test" type="array" />
+
+        <!-- modify-defences.php -->
+        <var name="l_md_title" type="string" />
+        <var name="l_md_invalid" type="string" />
+        <var name="l_md_nolonger" type="string" />
+        <var name="l_md_you" type="string" />
+        <var name="l_md_bmines" type="string" />
+        <var name="l_md_msgdownerb" type="string" />
+        <var name="l_md_retr" type="string" />
+        <var name="l_md_mode" type="string" />
+        <var name="l_md_consist" type="string" />
+        <var name="l_md_youcan" type="string" />
+        <var name="l_md_retrieve" type="string" />
+        <var name="l_md_change" type="string" />
+        <var name="l_md_cmode" type="string" />
+        <var name="l_md_attack" type="string" />
+        <var name="l_md_toll" type="string" />
+        <var name="l_md_attdef" type="string" />
+        <var name="l_md_noturn" type="string" />
+        <var name="l_md_nothere" type="string" />
+        <var name="l_md_notyours" type="string" />
+        <var name="l_md_yours" type="string" />
+
+        <!-- news.php -->
+        <var name="l_news_title" type="string" />
+        <var name="l_news_info" type="string" />
+        <var name="l_news_for" type="string" />
+        <var name="l_news_prev" type="string" />
+        <var name="l_news_next" type="string" />
+        <var name="l_news_none" type="string" />
+        <var name="l_news_flash" type="string" />
+
+        <!-- dump.php -->
+        <var name="l_dump_title" type="string" />
+        <var name="l_dump_turn" type="string" />
+        <var name="l_dump_nocol" type="string" />
+        <var name="l_dump_dumped" type="string" />
+        <var name="l_dump_nono" type="string" />
+
+        <!-- readmail.php -->
+        <var name="l_readm_title" type="string" />
+        <var name="l_readm_delete" type="string" />
+        <var name="l_readm_nomessage" type="string" />
+        <var name="l_readm_center" type="string" />
+        <var name="l_readm_sender" type="string" />
+        <var name="l_readm_captn" type="string" />
+        <var name="l_readm_del" type="string" />
+        <var name="l_readm_repl" type="string" />
+
+        <!-- mailto2.php -->
+        <var name="l_sendm_title" type="string" />
+        <var name="l_sendm_to" type="string" />
+        <var name="l_sendm_from" type="string" />
+        <var name="l_sendm_ally" type="string" />
+        <var name="l_sendm_subj" type="string" />
+        <var name="l_sendm_mess" type="string" />
+        <var name="l_sendm_send" type="string" />
+        <var name="l_sendm_sent" type="string" />
+
+        <!-- zoneinfo.php -->
+        <var name="l_zi_title" type="string" />
+        <var name="l_zi_nexist" type="string" />
+        <var name="l_zi_feds" type="string" />
+        <var name="l_zi_traders" type="string" />
+        <var name="l_zi_nobody" type="string" />
+        <var name="l_zi_war" type="string" />
+        <var name="l_zi_allow" type="string" />
+        <var name="l_zi_notallow" type="string" />
+        <var name="l_zi_limit" type="string" />
+        <var name="l_zi_ul" type="string" />
+        <var name="l_zi_control" type="string" />
+        <var name="l_zi_tochange" type="string" />
+        <var name="l_zi_owner" type="string" />
+        <var name="l_zi_maxhull" type="string" />
+
+        <!-- zoneedit.php -->
+        <var name="l_ze_title" type="string" />
+        <var name="l_ze_notowner" type="string" />
+        <var name="l_ze_name" type="string" />
+        <var name="l_ze_allow" type="string" />
+        <var name="l_ze_attacks" type="string" />
+        <var name="l_ze_genesis" type="string" />
+        <var name="l_ze_return" type="string" />
+        <var name="l_ze_saved" type="string" />
+
+        <!-- teams.php -->
+        <var name="l_team_title" type="string" />
+        <var name="l_team_menu" type="string" />
+        <var name="l_team_galax" type="string" />
+        <var name="l_team_members" type="string" />
+        <var name="l_team_coord" type="string" />
+        <var name="l_team_member" type="string" />
+        <var name="l_team_noinvite" type="string" />
+        <var name="l_team_ifyouwant" type="string" />
+        <var name="l_team_tocreate" type="string" />
+        <var name="l_team_injoin" type="string" />
+        <var name="l_team_tojoin" type="string" />
+        <var name="l_team_or" type="string" />
+        <var name="l_team_reject" type="string" />
+        <var name="l_team_ed" type="string" />
+        <var name="l_team_inv" type="string" />
+        <var name="l_team_leave" type="string" />
+        <var name="l_team_eject" type="string" />
+        <var name="l_team_pending" type="string" />
+        <var name="l_team_noinvites" type="string" />
+        <var name="l_team_confirmleave" type="string" />
+        <var name="l_team_onlymember" type="string" />
+        <var name="l_team_youarecoord" type="string" />
+        <var name="l_team_relinq" type="string" />
+        <var name="l_team_newc" type="string" />
+        <var name="l_team_youveleft" type="string" />
+        <var name="l_team_relto" type="string" />
+        <var name="l_team_welcome" type="string" />
+        <var name="l_team_noinviteto" type="string" />
+        <var name="l_team_ejectsure" type="string" />
+        <var name="l_team_ejected" type="string" />
+        <var name="l_team_testing" type="string" />
+        <var name="l_team_pw" type="string" />
+        <var name="l_team_entername" type="string" />
+        <var name="l_team_enterdesc" type="string" />
+        <var name="l_team_hcreated" type="string" />
+        <var name="l_team_alliance" type="string" />
+        <var name="l_team_selectp" type="string" />
+        <var name="l_team_isorry" type="string" />
+        <var name="l_team_plinvted" type="string" />
+        <var name="l_team_refuse" type="string" />
+        <var name="l_team_edname" type="string" />
+        <var name="l_team_eddesc" type="string" />
+        <var name="l_team_hasbeenr" type="string" />
+        <var name="l_team_error" type="string" />
+        <var name="l_team_notmember" type="string" />
+        <var name="l_team_urejected" type="string" />
+        <var name="l_team_noalliances" type="string" />
+
+        <!-- ranking.php -->
+        <var name="l_ranks_title" type="string" />
+        <var name="l_ranks_none" type="string" />
+        <var name="l_ranks_pnum" type="string" />
+        <var name="l_ranks_dships" type="string" />
+        <var name="l_ranks_rank" type="string" />
+        <var name="l_ranks_lastlog" type="string" />
+        <var name="l_ranks_good" type="string" />
+        <var name="l_ranks_evil" type="string" />
+
+        <!-- beacon.php -->
+        <var name="l_beacon_title" type="string" />
+        <var name="l_beacon_notpermitted" type="string" />
+        <var name="l_beacon_reads" type="string" />
+        <var name="l_beacon_none" type="string" />
+        <var name="l_beacon_enter" type="string" />
+        <var name="l_beacon_nowreads" type="string" />
+        <var name="l_beacon_donthave" type="string" />
+
+        <!-- emerwarp.php -->
+        <var name="l_ewd_title" type="string" />
+        <var name="l_ewd_used" type="string" />
+        <var name="l_ewd_none" type="string" />
+
+        <!-- defence-report.php -->
+        <var name="l_sdf_title" type="string" />
+        <var name="l_sdf_none" type="string" />
+        <var name="l_sdf_type" type="string" />
+        <var name="l_sdf_mode" type="string" />
+
+        <!-- traderoute.php -->
+        <var name="l_tdr_within" type="string" />
+        <var name="l_tdr_title" type="string" />
+        <var name="l_tdr_newtdr" type="string" />
+        <var name="l_tdr_modtdrset" type="string" />
+        <var name="l_tdr_confdel" type="string" />
+        <var name="l_tdr_noactive" type="string" />
+        <var name="l_tdr_curtdr" type="string" />
+        <var name="l_tdr_deltdr" type="string" />
+        <var name="l_tdr_src" type="string" />
+        <var name="l_tdr_srctype" type="string" />
+        <var name="l_tdr_dest" type="string" />
+        <var name="l_tdr_desttype" type="string" />
+        <var name="l_tdr_move" type="string" />
+        <var name="l_tdr_circuit" type="string" />
+        <var name="l_tdr_change" type="string" />
+        <var name="l_tdr_portin" type="string" />
+        <var name="l_tdr_planet" type="string" />
+        <var name="l_tdr_nonexistance" type="string" />
+        <var name="l_tdr_na" type="string" />
+        <var name="l_tdr_cargo" type="string" />
+        <var name="l_tdr_none" type="string" />
+        <var name="l_tdr_colonists" type="string" />
+        <var name="l_tdr_fighters" type="string" />
+        <var name="l_tdr_torps" type="string" />
+        <var name="l_tdr_escooped" type="string" />
+        <var name="l_tdr_warp" type="string" />
+        <var name="l_tdr_turns" type="string" />
+        <var name="l_tdr_way" type="string" />
+        <var name="l_tdr_ways" type="string" />
+        <var name="l_tdr_edit" type="string" />
+        <var name="l_tdr_del" type="string" />
+        <var name="l_tdr_nowlink1" type="string" />
+        <var name="l_tdr_nowlink2" type="string" />
+        <var name="l_tdr_sportissrc" type="string" />
+        <var name="l_tdr_notownplanet" type="string" />
+        <var name="l_tdr_planetisdest" type="string" />
+        <var name="l_tdr_samecom" type="string" />
+        <var name="l_tdr_sportcom" type="string" />
+        <var name="l_tdr_editerr" type="string" />
+        <var name="l_tdr_maxtdr" type="string" />
+        <var name="l_tdr_createnew" type="string" />
+        <var name="l_tdr_editinga" type="string" />
+        <var name="l_tdr_traderoute" type="string" />
+        <var name="l_tdr_unnamed" type="string" />
+        <var name="l_tdr_cursector" type="string" />
+        <var name="l_tdr_selspoint" type="string" />
+        <var name="l_tdr_port" type="string" />
+        <var name="l_tdr_insector" type="string" />
+        <var name="l_tdr_selendpoint" type="string" />
+        <var name="l_tdr_selmovetype" type="string" />
+        <var name="l_tdr_realspace" type="string" />
+        <var name="l_tdr_selcircuit" type="string" />
+        <var name="l_tdr_oneway" type="string" />
+        <var name="l_tdr_errnotvalidport" type="string" />
+        <var name="l_tdr_bothways" type="string" />
+        <var name="l_tdr_create" type="string" />
+        <var name="l_tdr_modify" type="string" />
+        <var name="l_tdr_returnmenu" type="string" />
+        <var name="l_tdr_errnotvalidport" type="string" />
+        <var name="l_tdr_errnoport" type="string" />
+        <var name="l_tdr_errnosrc" type="string" />
+        <var name="l_tdr_errnotownnotsell" type="string" />
+        <var name="l_tdr_errnotvaliddestport" type="string" />
+        <var name="l_tdr_errnoport2" type="string" />
+        <var name="l_tdr_errnodestplanet" type="string" />
+        <var name="l_tdr_errnotownnotsell2" type="string" />
+        <var name="l_tdr_newtdrcreated" type="string" />
+        <var name="l_tdr_tdrmodified" type="string" />
+        <var name="l_tdr_doesntexist" type="string" />
+        <var name="l_tdr_notowntdr" type="string" />
+        <var name="l_tdr_tdrdeleted" type="string" />
+        <var name="l_tdr_globalset" type="string" />
+        <var name="l_tdr_tdrsportsrc" type="string" />
+        <var name="l_tdr_tdrescooped" type="string" />
+        <var name="l_tdr_trade" type="string" />
+        <var name="l_tdr_keep" type="string" />
+        <var name="l_tdr_save" type="string" />
+        <var name="l_tdr_globalsetsaved" type="string" />
+        <var name="l_tdr_engagenonexist" type="string" />
+        <var name="l_tdr_invalidspoint" type="string" />
+        <var name="l_tdr_inittdr" type="string" />
+        <var name="l_tdr_invalidsrc" type="string" />
+        <var name="l_tdr_inittdrsector" type="string" />
+        <var name="l_tdr_notyourplanet" type="string" />
+        <var name="l_tdr_invalidssector" type="string" />
+        <var name="l_tdr_invaliddport" type="string" />
+        <var name="l_tdr_invaliddplanet" type="string" />
+        <var name="l_tdr_invaliddsector" type="string" />
+        <var name="l_tdr_moreturnsneeded" type="string" />
+        <var name="l_tdr_tdrhostdef" type="string" />
+        <var name="l_tdr_globalsetbuynothing" type="string" />
+        <var name="l_tdr_nosrcporttrade" type="string" />
+        <var name="l_tdr_tradesrcportoutsider" type="string" />
+        <var name="l_tdr_nodestporttrade" type="string" />
+        <var name="l_tdr_tradedestportoutsider" type="string" />
+        <var name="l_tdr_tdrres" type="string" />
+        <var name="l_tdr_bought" type="string" />
+        <var name="l_tdr_nothingtotrade" type="string" />
+        <var name="l_tdr_sold" type="string" />
+        <var name="l_tdr_ore" type="string" />
+        <var name="l_tdr_portisfull" type="string" />
+        <var name="l_tdr_goods" type="string" />
+        <var name="l_tdr_organics" type="string" />
+        <var name="l_tdr_energy" type="string" />
+        <var name="l_tdr_portisempty" type="string" />
+        <var name="l_tdr_loaded" type="string" />
+        <var name="l_tdr_nothingtoload" type="string" />
+        <var name="l_tdr_scooped" type="string" />
+        <var name="l_tdr_dumped" type="string" />
+        <var name="l_tdr_planetisovercrowded" type="string" />
+        <var name="l_tdr_nothingtodump" type="string" />
+        <var name="l_tdr_onlyonewaytdr" type="string" />
+        <var name="l_tdr_profit" type="string" />
+        <var name="l_tdr_cost" type="string" />
+        <var name="l_tdr_totalprofit" type="string" />
+        <var name="l_tdr_totalcost" type="string" />
+        <var name="l_tdr_credits" type="string" />
+        <var name="l_tdr_turnsused" type="string" />
+        <var name="l_tdr_turnsleft" type="string" />
+        <var name="l_tdr_notowner" type="string" />
+        <var name="l_tdr_engageagain" type="string" />
+
+        <!-- IGB.php -->
+        <var name="l_igb_credit_symbol" type="string" />
+        <var name="l_igb_title" type="string" />
+        <var name="l_igb_humor" type="string" />
+        <var name="l_igb_malfunction" type="string" />
+        <var name="l_igb_quit" type="string" />
+        <var name="l_igb_login" type="string" />
+        <var name="l_igb_welcometoigb" type="string" />
+        <var name="l_igb_accountholder" type="string" />
+        <var name="l_igb_shipaccount" type="string" />
+        <var name="l_igb_igbaccount" type="string" />
+        <var name="l_igb_operations" type="string" />
+        <var name="l_igb_withdraw" type="string" />
+        <var name="l_igb_deposit" type="string" />
+        <var name="l_igb_transfer" type="string" />
+        <var name="l_igb_back" type="string" />
+        <var name="l_igb_logout" type="string" />
+        <var name="l_igb_withdrawfunds" type="string" />
+        <var name="l_igb_fundsavailable" type="string" />
+        <var name="l_igb_selwithdrawamount" type="string" />
+        <var name="l_igb_depositfunds" type="string" />
+        <var name="l_igb_seldepositamount" type="string" />
+        <var name="l_igb_transfertype" type="string" />
+        <var name="l_igb_toanothership" type="string" />
+        <var name="l_igb_shiptransfer" type="string" />
+        <var name="l_igb_fromplanet" type="string" />
+        <var name="l_igb_unnamed" type="string" />
+        <var name="l_igb_in" type="string" />
+        <var name="l_igb_none" type="string" />
+        <var name="l_igb_destination" type="string" />
+        <var name="l_igb_planettransfer" type="string" />
+        <var name="l_igb_sendyourself" type="string" />
+        <var name="l_igb_unknowntargetship" type="string" />
+        <var name="l_igb_min_turns" type="string" />
+        <var name="l_igb_min_turns2" type="string" />
+        <var name="l_igb_mustwait" type="string" />
+        <var name="l_igb_maxtransfer" type="string" />
+        <var name="l_igb_unlimited" type="string" />
+        <var name="l_igb_maxtransferpercent" type="string" />
+        <var name="l_igb_recipient" type="string" />
+        <var name="l_igb_seltransferamount" type="string" />
+        <var name="l_igb_transferrate" type="string" />
+        <var name="l_igb_errplanetsrcanddest" type="string" />
+        <var name="l_igb_errunknownplanet" type="string" />
+        <var name="l_igb_errnotyourplanet" type="string" />
+        <var name="l_igb_srcplanet" type="string" />
+        <var name="l_igb_destplanet" type="string" />
+        <var name="l_igb_transferrate2" type="string" />
+        <var name="l_igb_errsendyourself" type="string" />
+        <var name="l_igb_min_turns3" type="string" />
+        <var name="l_igb_min_turns4" type="string" />
+        <var name="l_igb_mustwait2" type="string" />
+        <var name="l_igb_invalidtransferinput" type="string" />
+        <var name="l_igb_nozeroamount" type="string" />
+        <var name="l_igb_notenoughcredits" type="string" />
+        <var name="l_igb_amounttoogreat" type="string" />
+        <var name="l_igb_transfersuccessful" type="string" />
+        <var name="l_igb_creditsto" type="string" />
+        <var name="l_igb_transferamount" type="string" />
+        <var name="l_igb_transferfee" type="string" />
+        <var name="l_igb_amounttransferred" type="string" />
+        <var name="l_igb_notenoughcredits2" type="string" />
+        <var name="l_igb_to" type="string" />
+        <var name="l_igb_ctransferredfrom" type="string" />
+        <var name="l_igb_invaliddepositinput" type="string" />
+        <var name="l_igb_nozeroamount2" type="string" />
+        <var name="l_igb_operationsuccessful" type="string" />
+        <var name="l_igb_creditstoyou" type="string" />
+        <var name="l_igb_accounts" type="string" />
+        <var name="l_igb_invalidwithdrawinput" type="string" />
+        <var name="l_igb_nozeroamount3" type="string" />
+        <var name="l_igb_creditstoyourship" type="string" />
+        <var name="l_igb_igberrreport" type="string" />
+        <var name="l_igb_source" type="string" />
+        <var name="l_igb_loans" type="string" />
+        <var name="l_igb_loanstatus" type="string" />
+        <var name="l_igb_currentloan" type="string" />
+        <var name="l_igb_maxloanpercent" type="string" />
+        <var name="l_igb_loanamount" type="string" />
+        <var name="l_igb_borrow" type="string" />
+        <var name="l_igb_loanrates" type="string" />
+        <var name="l_igb_invalidamount" type="string" />
+        <var name="l_igb_notwoloans" type="string" />
+        <var name="l_igb_loantoobig" type="string" />
+        <var name="l_igb_takenaloan" type="string" />
+        <var name="l_igb_loancongrats" type="string" />
+        <var name="l_igb_loantransferred" type="string" />
+        <var name="l_igb_loanfee" type="string" />
+        <var name="l_igb_amountowned" type="string" />
+        <var name="l_igb_loanreminder" type="string" />
+        <var name="l_igb_loantimeleft" type="string" />
+        <var name="l_igb_loanlate" type="string" />
+        <var name="l_igb_repayamount" type="string" />
+        <var name="l_igb_repay" type="string" />
+        <var name="l_igb_notrepay" type="string" />
+        <var name="l_igb_notenoughrepay" type="string" />
+        <var name="l_igb_payloan" type="string" />
+        <var name="l_igb_loanthanks" type="string" />
+        <var name="l_igb_credsconsol" type="string" />
+        <var name="l_igb_transferrate3" type="string" />
+        <var name="l_igb_currentpl" type="string" />
+        <var name="l_igb_consolrates" type="string" />
+        <var name="l_igb_minimum" type="string" />
+        <var name="l_igb_maximum" type="string" />
+        <var name="l_igb_planetconsolidate" type="string" />
+        <var name="l_igb_compute" type="string" />
+        <var name="l_igb_plaffected" type="string" />
+        <var name="l_igb_turncost" type="string" />
+        <var name="l_igb_consolidate" type="string" />
+        <var name="l_igb_conspl" type="string" />
+        <var name="l_igb_notenturns" type="string" />
+        <var name="l_igb_errnobase" type="string" />
+
+        <!-- combat.php -->
+        <var name="l_cmb_atleastoneturn" type="string" />
+        <var name="l_cmb_shipenergybb" type="string" />
+        <var name="l_cmb_shipenergyab" type="string" />
+        <var name="l_cmb_shipenergyas" type="string" />
+        <var name="l_cmb_shiptorpsbtl" type="string" />
+        <var name="l_cmb_shiptorpsatl" type="string" />
+        <var name="l_cmb_planettorpdamage" type="string" />
+        <var name="l_cmb_attackertorpdamage" type="string" />
+        <var name="l_cmb_beams" type="string" />
+        <var name="l_cmb_fighters" type="string" />
+        <var name="l_cmb_shields" type="string" />
+        <var name="l_cmb_torps" type="string" />
+        <var name="l_cmb_torpdamage" type="string" />
+        <var name="l_cmb_armor" type="string" />
+        <var name="l_cmb_you" type="string" />
+        <var name="l_cmb_planet" type="string" />
+        <var name="l_cmb_combatflow" type="string" />
+        <var name="l_cmb_defender" type="string" />
+        <var name="l_cmb_attackingplanet" type="string" />
+        <var name="l_cmb_youfireyourbeams" type="string" />
+        <var name="l_cmb_defenselost" type="string" />
+        <var name="l_cmb_defenselost2" type="string" />
+        <var name="l_cmb_planetarybeams" type="string" />
+        <var name="l_cmb_planetarybeams2" type="string" />
+        <var name="l_cmb_youdestroyedplanetshields" type="string" />
+        <var name="l_cmb_beamsexhausted" type="string" />
+        <var name="l_cmb_breachedyourshields" type="string" />
+        <var name="l_cmb_destroyedyourshields" type="string" />
+        <var name="l_cmb_breachedyourarmor" type="string" />
+        <var name="l_cmb_destroyedyourarmor" type="string" />
+        <var name="l_cmb_torpedoexchangephase" type="string" />
+        <var name="l_cmb_nofightersleft" type="string" />
+        <var name="l_cmb_youdestroyfighters" type="string" />
+        <var name="l_cmb_planettorpsdestroy" type="string" />
+        <var name="l_cmb_planettorpsdestroy2" type="string" />
+        <var name="l_cmb_torpsbreachedyourarmor" type="string" />
+        <var name="l_cmb_planettorpsdestroy3" type="string" />
+        <var name="l_cmb_youdestroyedallfighters" type="string" />
+        <var name="l_cmb_youdestroyplanetfighters" type="string" />
+        <var name="l_cmb_fightercombatphase" type="string" />
+        <var name="l_cmb_youdestroyedallfighters2" type="string" />
+        <var name="l_cmb_youdestroyplanetfighters2" type="string" />
+        <var name="l_cmb_allyourfightersdestroyed" type="string" />
+        <var name="l_cmb_fightertofighterlost" type="string" />
+        <var name="l_cmb_youbreachedplanetshields" type="string" />
+        <var name="l_cmb_shieldsremainup" type="string" />
+        <var name="l_cmb_fighterswarm" type="string" />
+        <var name="l_cmb_swarmandrepel" type="string" />
+        <var name="l_cmb_engshiptoshipcombat" type="string" />
+        <var name="l_cmb_shipdock" type="string" />
+        <var name="l_cmb_approachattackvector" type="string" />
+        <var name="l_cmb_noshipsdocked" type="string" />
+        <var name="l_cmb_yourshipdestroyed" type="string" />
+        <var name="l_cmb_escapepod" type="string" />
+        <var name="l_cmb_finalcombatstats" type="string" />
+        <var name="l_cmb_youlostfighters" type="string" />
+        <var name="l_cmb_youlostarmorpoints" type="string" />
+        <var name="l_cmb_energyused" type="string" />
+        <var name="l_cmb_planetdefeated" type="string" />
+        <var name="l_cmb_citizenswanttodie" type="string" />
+        <var name="l_cmb_youmaycapture" type="string" />
+        <var name="l_cmb_youmaycapture2" type="string" />
+        <var name="l_cmb_planetnotdefeated" type="string" />
+        <var name="l_cmb_planetstatistics" type="string" />
+        <var name="l_cmb_fighterloststat" type="string" />
+        <var name="l_cmb_energyleft" type="string" />
+        <var name="l_cmb_startingstats" type="string" />
+        <var name="l_cmb_statattackerbeams" type="string" />
+        <var name="l_cmb_statattackerfighters" type="string" />
+        <var name="l_cmb_statattackershields" type="string" />
+        <var name="l_cmb_statattackertorps" type="string" />
+        <var name="l_cmb_statattackerarmor" type="string" />
+        <var name="l_cmb_statattackertorpdamage" type="string" />
+        <var name="l_cmb_isattackingyou" type="string" />
+        <var name="l_cmb_beamexchange" type="string" />
+        <var name="l_cmb_beamsdestroy" type="string" />
+        <var name="l_cmb_beamsdestroy2" type="string" />
+        <var name="l_cmb_nobeamsareleft" type="string" />
+        <var name="l_cmb_beamshavenotarget" type="string" />
+        <var name="l_cmb_fighterdestroyedbybeams" type="string" />
+        <var name="l_cmb_beamsdestroystillhave" type="string" />
+        <var name="l_cmb_fighterunhindered" type="string" />
+        <var name="l_cmb_youhavenofightersleft" type="string" />
+        <var name="l_cmb_breachedsomeshields" type="string" />
+        <var name="l_cmb_shieldsarehitbybeams" type="string" />
+        <var name="l_cmb_nobeamslefttoattack" type="string" />
+        <var name="l_cmb_yourshieldsbreachedby" type="string" />
+        <var name="l_cmb_yourshieldsarehit" type="string" />
+        <var name="l_cmb_hehasnobeamslefttoattack" type="string" />
+        <var name="l_cmb_yourbeamsbreachedhim" type="string" />
+        <var name="l_cmb_yourbeamshavedonedamage" type="string" />
+        <var name="l_cmb_nobeamstoattackarmor" type="string" />
+        <var name="l_cmb_yourarmorbreachedbybeams" type="string" />
+        <var name="l_cmb_yourarmorhitdamaged" type="string" />
+        <var name="l_cmb_torpedoexchange" type="string" />
+        <var name="l_cmb_hehasnobeamslefttoattackyou" type="string" />
+        <var name="l_cmb_yourtorpsdestroy" type="string" />
+        <var name="l_cmb_yourtorpsdestroy2" type="string" />
+        <var name="l_cmb_youhavenotorpsleft" type="string" />
+        <var name="l_cmb_hehasnofighterleft" type="string" />
+        <var name="l_cmb_torpsdestroyyou" type="string" />
+        <var name="l_cmb_someonedestroyedfighters" type="string" />
+        <var name="l_cmb_hehasnotorpsleftforyou" type="string" />
+        <var name="l_cmb_youhavenofightersanymore" type="string" />
+        <var name="l_cmb_youbreachedwithtorps" type="string" />
+        <var name="l_cmb_hisarmorishitbytorps" type="string" />
+        <var name="l_cmb_notorpslefttoattackarmor" type="string" />
+        <var name="l_cmb_yourarmorbreachedbytorps" type="string" />
+        <var name="l_cmb_yourarmorhitdmgtorps" type="string" />
+        <var name="l_cmb_hehasnotorpsforyourarmor" type="string" />
+        <var name="l_cmb_fightersattackexchange" type="string" />
+        <var name="l_cmb_enemylostallfighters" type="string" />
+        <var name="l_cmb_helostsomefighters" type="string" />
+        <var name="l_cmb_youlostallfighters" type="string" />
+        <var name="l_cmb_youalsolostsomefighters" type="string" />
+        <var name="l_cmb_hehasnofightersleftattack" type="string" />
+        <var name="l_cmb_younofightersattackleft" type="string" />
+        <var name="l_cmb_youbreachedarmorwithfighters" type="string" />
+        <var name="l_cmb_youhitarmordmgfighters" type="string" />
+        <var name="l_cmb_youhavenofighterstoarmor" type="string" />
+        <var name="l_cmb_hasbreachedarmorfighters" type="string" />
+        <var name="l_cmb_yourarmorishitfordmgby" type="string" />
+        <var name="l_cmb_nofightersleftheforyourarmor" type="string" />
+        <var name="l_cmb_hehasbeendestroyed" type="string" />
+        <var name="l_cmb_escapepodlaunched" type="string" />
+        <var name="l_cmb_yousalvaged" type="string" />
+        <var name="l_cmb_youdidntdestroyhim" type="string" />
+        <var name="l_cmb_shiptoshipcombatstats" type="string" />
+
+        <!-- check_mines.php -->
+        <var name="l_chm_youhitsomemines" type="string" />
+        <var name="l_chm_hehitminesinsector" type="string" />
+        <var name="l_chm_youlostminedeflectors" type="string" />
+        <var name="l_chm_youlostallminedeflectors" type="string" />
+        <var name="l_chm_youhadnominedeflectors" type="string" />
+        <var name="l_chm_yourshieldshitforminesdmg" type="string" />
+        <var name="l_chm_yourshieldsaredown" type="string" />
+        <var name="l_chm_youlostallyourshields" type="string" />
+        <var name="l_chm_yourarmorhitforminesdmg" type="string" />
+        <var name="l_chm_yourhullisbreached" type="string" />
+        <var name="l_chm_hewasdestroyedbyyourmines" type="string" />
+        <var name="l_chm_yourshiphasbeendestroyed" type="string" />
+        <var name="l_chm_luckescapepod" type="string" />
+
+        <!-- check_fighters.php -->
+        <var name="l_chf_youretreatback" type="string" />
+        <var name="l_chf_notenoughcreditstoll" type="string" />
+        <var name="l_chf_movefailed" type="string" />
+        <var name="l_chf_youpaidsometoll" type="string" />
+        <var name="l_chf_thefightersdetectyou" type="string" />
+        <var name="l_chf_therearetotalfightersindest" type="string" />
+        <var name="l_chf_creditsdemanded" type="string" />
+        <var name="l_chf_youcanretreat" type="string" />
+        <var name="l_chf_inputpay" type="string" />
+        <var name="l_chf_inputfight" type="string" />
+        <var name="l_chf_inputcloak" type="string" />
+        <var name="l_chf_go" type="string" />
+
+        <!-- mines.php -->
+        <var name="l_mines_title" type="string" />
+        <var name="l_mines_noturn" type="string" />
+        <var name="l_mines_nopermit" type="string" />
+        <var name="l_mines_nodeploy" type="string" />
+        <var name="l_mines_info1" type="string" />
+        <var name="l_mines_info2" type="string" />
+        <var name="l_mines_deploy" type="string" />
+        <var name="l_mines_deployed" type="string" />
+        <var name="l_mines_att" type="string" />
+        <var name="l_mines_toll" type="string" />
+        <var name="l_mines_notorps" type="string" />
+        <var name="l_mines_nofighters" type="string" />
+        <var name="l_mines_dmines" type="string" />
+        <var name="l_mines_dfighter" type="string" />
+        <var name="l_mines_fmode" type="string" />
+
+        <!-- alliance-planets.php -->
+        <var name="l_teamplanet_title" type="string" />
+        <var name="l_teamplanet_notally" type="string" />
+        <var name="l_teamplanet_personal" type="string" />
+        <var name="l_teamplanet_noplanet" type="string" />
+
+        <!-- feedback.php -->
+        <var name="l_feedback_title" type="string" />
+        <var name="l_feedback_to" type="string" />
+        <var name="l_feedback_from" type="string" />
+        <var name="l_feedback_topi" type="string" />
+        <var name="l_feedback_feedback" type="string" />
+        <var name="l_feedback_message" type="string" />
+        <var name="l_feedback_messent" type="string" />
+        <var name="l_feedback_subj" type="string" />
+        <var name="l_feedback_info" type="string" />
+
+        <!-- corp.php -->
+        <var name="l_corpm_title" type="string" />
+        <var name="l_corpm_tocorp" type="string" />
+        <var name="l_corpm_topersonal" type="string" />
+        <var name="l_corpm_exploit" type="string" />
+
+        <!-- login.php login2.php -->
+        <var name="l_login_title" type="string" />
+        <var name="l_login_email" type="string" />
+        <var name="l_login_pw" type="string" />
+        <var name="l_login_chooseres" type="string" />
+        <var name="l_login_newp" type="string" />
+        <var name="l_login_prbs" type="string" />
+        <var name="l_login_emailus" type="string" />
+        <var name="l_login_sclosed" type="string" />
+        <var name="l_login_closed_message" type="string" />
+        <var name="l_login_title2" type="string" />
+        <var name="l_login_banned" type="string" />
+        <var name="l_login_died" type="string" />
+        <var name="l_login_newbie" type="string" />
+        <var name="l_login_newlife" type="string" />
+        <var name="l_login_looser" type="string" />
+        <var name="l_login_4gotpw1" type="string" />
+        <var name="l_login_4gotpw2" type="string" />
+        <var name="l_login_4gotpw3" type="string" />
+        <var name="l_login_noone" type="string" />
+        <var name="l_login_lang" type="string" />
+        <var name="l_login_settings" type="string" />
+        <var name="l_login_change" type="string" />
+
+        <!-- new.php new2.php -->
+        <var name="l_new_title" type="string" />
+        <var name="l_new_title2" type="string" />
+        <var name="l_new_shipname" type="string" />
+        <var name="l_new_pname" type="string" />
+        <var name="l_new_info" type="string" />
+        <var name="l_new_closed_message" type="string" />
+        <var name="l_new_blank" type="string" />
+        <var name="l_new_inuse" type="string" />
+        <var name="l_new_4gotpw1" type="string" />
+        <var name="l_new_4gotpw2" type="string" />
+        <var name="l_new_inusechar" type="string" />
+        <var name="l_new_inuseship" type="string" />
+        <var name="l_new_pwsent" type="string" />
+        <var name="l_new_login" type="string" />
+        <var name="l_new_err" type="string" />
+        <var name="l_new_topic" type="string" />
+        <var name="l_new_message" type="string" />
+
+        <!-- logout.php -->
+        <var name="l_logout_score" type="string" />
+        <var name="l_logout_text" type="string" />
+
+        <!-- mail.php -->
+        <var name="l_mail_title" type="string" />
+        <var name="l_mail_noplayer" type="string" />
+        <var name="l_mail_sent" type="string" />
+        <var name="l_mail_topic" type="string" />
+        <var name="l_mail_message" type="string" />
+
+        <!-- global_funcs.php -->
+        <var name="l_global_mmenu" type="string" />
+        <var name="l_global_mlogin" type="string" />
+        <var name="l_global_needlogin" type="string" />
+        <var name="l_global_died" type="string" />
+        <var name="l_global_warzone" type="string" />
+        <var name="l_global_nzone" type="string" />
+        <var name="l_global_team" type="string" />
+        <var name="l_global_player" type="string" />
+
+        <!-- news flashes -->
+        <var name="l_news_planets" type="string" />
+        <var name="l_news_cols" type="string" />
+        <var name="l_news_p_headline" type="string" />
+        <var name="l_killheadline" type="string" />
+        <var name="l_news_killed" type="string" />
+        <var name="l_news_p_text5" type="string" />
+        <var name="l_news_p_text10" type="string" />
+        <var name="l_news_p_text25" type="string" />
+        <var name="l_news_p_text50" type="string" />
+        <var name="l_news_c_text25" type="string" />
+        <var name="l_news_c_text100" type="string" />
+        <var name="l_news_c_text500" type="string" />
+        <var name="l_news_c_text1000" type="string" />
+
+        <!-- Options.php -->
+        <var name="l_opt_title" type="string" />
+        <var name="l_opt_chpass" type="string" />
+        <var name="l_opt_curpass" type="string" />
+        <var name="l_opt_newpass" type="string" />
+        <var name="l_opt_newpagain" type="string" />
+        <var name="l_opt_userint" type="string" />
+        <var name="l_opt_usenew" type="string" />
+        <var name="l_opt_lang" type="string" />
+        <var name="l_opt_select" type="string" />
+        <var name="l_opt_enabled" type="string" />
+        <var name="l_opt_save" type="string" />
+
+        <!-- Option2.php -->
+        <var name="l_opt2_title" type="string" />
+        <var name="l_opt2_passunchanged" type="string" />
+        <var name="l_opt2_srcpassfalse" type="string" />
+        <var name="l_opt2_newpassnomatch" type="string" />
+        <var name="l_opt2_passchanged" type="string" />
+        <var name="l_opt2_passchangeerr" type="string" />
+        <var name="l_opt2_userintup" type="string" />
+        <var name="l_opt2_userintfail" type="string" />
+        <var name="l_opt2_chlang" type="string" />
+        <var name="l_opt2_dhtmlup" type="string" />
+        <var name="l_opt2_dhtmlfail" type="string" />
+
+        <!-- Presets.php -->
+        <var name="l_pre_title" type="string" />
+        <var name="l_pre_exceed" type="string" />
+        <var name="l_pre_set" type="string" />
+        <var name="l_pre_save" type="string" />
+
+        <!-- Mailto.php -->
+        <var name="l_mt_title" type="string" />
+        <var name="l_mt_from" type="string" />
+        <var name="l_mt_subject" type="string" />
+        <var name="l_mt_message" type="string" />
+        <var name="l_mt_sent" type="string" />
+        <var name="l_mt_send" type="string" />
+
+        <!-- sector_fighters.php -->
+        <var name="l_sf_attacking" type="string" />
+        <var name="l_sf_destfight" type="string" />
+        <var name="l_sf_destfightb" type="string" />
+        <var name="l_sf_torphit" type="string" />
+        <var name="l_sf_destfightt" type="string" />
+        <var name="l_sf_fighthit" type="string" />
+        <var name="l_sf_destfightall" type="string" />
+        <var name="l_sf_destfightt2" type="string" />
+        <var name="l_sf_lostfight" type="string" />
+        <var name="l_sf_lostfight2" type="string" />
+        <var name="l_sf_armorbreach" type="string" />
+        <var name="l_sf_armorbreach2" type="string" />
+        <var name="l_sf_sendlog" type="string" />
+        <var name="l_sf_lreport" type="string" />
+        <var name="l_sf_shipdestroyed" type="string" />
+        <var name="l_sf_sendlog2" type="string" />
+        <var name="l_sf_escape" type="string" />
+
+        <!-- Zone names array -->
+        <var name="l_zname" type="array" />
+
+        <!-- Bounty -->
+        <var name="l_by_title" type="string" />
+        <var name="l_by_noturn" type="string" />
+        <var name="l_by_amount" type="string" />
+        <var name="l_by_place" type="string" />
+        <var name="l_by_nobounties" type="string" />
+        <var name="l_by_bountyon" type="string" />
+        <var name="l_by_placedby" type="string" />
+        <var name="l_by_thefeds" type="string" />
+        <var name="l_by_cancel" type="string" />
+        <var name="l_by_yourself" type="string" />
+        <var name="l_by_notenough" type="string" />
+        <var name="l_by_toomuch" type="string" />
+        <var name="l_by_zeroamount" type="string" />
+        <var name="l_by_placed" type="string" />
+        <var name="l_by_nobounty" type="string" />
+        <var name="l_by_notyours" type="string" />
+        <var name="l_by_canceled" type="string" />
+        <var name="l_by_action" type="string" />
+        <var name="l_by_placebounty" type="string" />
+        <var name="l_by_moredetails" type="string" />
+        <var name="l_by_fedbounty" type="string" />
+        <var name="l_by_fedbounty2" type="string" />
+        <var name="l_by_notexists" type="string" />
+        <var name="l_by_destroyed" type="string" />
+
+        <!-- Additional variables -->
+        <var name="l_new_pwis" type="string" />
+        <var name="l_planet2_sector" type="string" />
+        <var name="l_planet_destroyplanet" type="string" />
+        <var name="l_planet_warning" type="string" />
+        <var name="l_planet_confirm" type="string" />
+        <var name="l_port_bounty" type="string" />
+        <var name="l_port_bounty2" type="string" />
+        <var name="l_port_btynotenough" type="string" />
+        <var name="l_port_bountypaid" type="string" />
+        <var name="l_port_loannotrade" type="string" />
+        <var name="l_team_notyours" type="string" />
+        <var name="l_team_leavefirst" type="string" />
+        <var name="l_scan_bounty" type="string" />
+        <var name="l_scan_fedbounty" type="string" />
+        <var name="l_by_nofedbounty" type="string" />
+
+        <!-- Fig Drops -->
+        <var name="l_sofa" type="string" />
+        <var name="l_bombsaway" type="string" />
+        <var name="l_bigfigs" type="string" />
+        <var name="l_bigbeams" type="string" />
+        <var name="l_bigtorps" type="string" />
+        <var name="l_strafesuccess" type="string" />
+        <var name="l_lssd" type="string" />
+        <var name="l_lss" type="string" />
+        <var name="l_map" type="string" />
+        <var name="l_planet_readlog_link" type="string" />
+        <var name="l_planet_readlog" type="string" />
+
+        <!-- Footer text -->
+        <var name="l_footer_one_player_on" type="string" />
+        <var name="l_footer_players_on_1" type="string" />
+        <var name="l_footer_players_on_2" type="string" />
+        <var name="l_footer_until_update" type="string" />
+
+        <!-- Ship officer insignia array -->
+        <var name="l_insignia" type="array" />
+
+        <!-- Settings -->
+        <var name="l_settings_game" type="string" />
+        <var name="l_settings_game_version" type="string" />
+        <var name="l_settings_game_name" type="string" />
+        <var name="l_settings_mine_hullsize" type="string" />
+        <var name="l_settings_ewd_maxhullsize" type="string" />
+        <var name="l_settings_number_of_sectors" type="string" />
+        <var name="l_settings_max_links_per_sector" type="string" />
+        <var name="l_settings_fed_max_hull" type="string" />
+        <var name="l_settings_allow_ibank" type="string" />
+        <var name="l_settings_yes" type="string" />
+        <var name="l_settings_no" type="string" />
+        <var name="l_settings_igb_interest_rate" type="string" />
+        <var name="l_settings_igb_loan_rate" type="string" />
+        <var name="l_settings_tech_upgrade_bases" type="string" />
+        <var name="l_settings_colonists_limit" type="string" />
+        <var name="l_settings_max_accumulated_turns" type="string" />
+        <var name="l_settings_max_planets_per_sector" type="string" />
+        <var name="l_settings_max_traderoutes_per_player" type="string" />
+        <var name="l_settings_colonist_production_rate" type="string" />
+        <var name="l_settings_energy_per_fighter" type="string" />
+        <var name="l_settings_defence_degrade_rate" type="string" />
+        <var name="l_settings_min_bases_to_own" type="string" />
+        <var name="l_settings_planet_interest_rate" type="string" />
+        <var name="l_settings_colonists_per_fighter" type="string" />
+        <var name="l_settings_colonists_per_torpedo" type="string" />
+        <var name="l_settings_colonists_per_ore" type="string" />
+        <var name="l_settings_colonists_per_organics" type="string" />
+        <var name="l_settings_colonists_per_goods" type="string" />
+        <var name="l_settings_colonists_per_energy" type="string" />
+        <var name="l_settings_colonists_per_credits" type="string" />
+        <var name="l_settings_game_scheduler" type="string" />
+        <var name="l_settings_ticks_happen" type="string" />
+        <var name="l_settings_turns_happen" type="string" />
+        <var name="l_settings_defenses_checked" type="string" />
+        <var name="l_settings_xenobes_play" type="string" />
+        <var name="l_settings_igb_interest_accumulated" type="string" />
+        <var name="l_settings_news_generated" type="string" />
+        <var name="l_settings_planets_production" type="string" />
+        <var name="l_settings_ports_regenerate" type="string" />
+        <var name="l_settings_ships_towed" type="string" />
+        <var name="l_settings_rankings_generated" type="string" />
+        <var name="l_settings_sector_defences_degrade" type="string" />
+        <var name="l_settings_planetary_apocalypse" type="string" />
+        <var name="l_settings_minutes" type="string" />
+    </globals>
+    <issueHandlers>
+        <UnusedVariable errorLevel="suppress" />
+    </issueHandlers>
+</psalm>

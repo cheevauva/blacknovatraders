@@ -8,7 +8,6 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class ContainerNotFoundException extends \Exception implements NotFoundExceptionInterface
 {
-
     /**
      * @var string
      */

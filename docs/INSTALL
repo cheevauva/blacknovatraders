@@ -1,6 +1,12 @@
 BlackNova Traders
 
-INSTALLATION
+SETUP
+
+1. make up
+2. localhost:8080/schema.php
+3. localhost:8080/create_universe.php
+
+INSTALLATION 
 
 1. Untar the distribution (be sure to untar the subdirectories):
    tar xvf bnt-x.x.x.tar

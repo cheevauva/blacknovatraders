@@ -1,6 +1,6 @@
 <?php
 
-if (preg_match("/check_mines.php/i", $PHP_SELF)) {
+if (preg_match("/check_mines.php/i", $_SERVER['PHP_SELF'])) {
     die("You can not access this file directly!");
 }
 
@@ -8,13 +8,13 @@ if (preg_match("/check_mines.php/i", $PHP_SELF)) {
 
 //Put the sector information into the array "sectorinfo"
 
-$result2 = $db->adoExecute("SELECT * FROM $dbtables[universe] WHERE sector_id='$sector'");
+$result2 = $db->adoExecute("SELECT * FROM universe WHERE sector_id='$sector'");
 
 $sectorinfo = $result2->fields;
 
-//Put the defence information into the array "defenceinfo"  
+//Put the defence information into the array "defenceinfo"
 
-$result3 = $db->adoExecute("SELECT * FROM $dbtables[sector_defence] 
+$result3 = $db->adoExecute("SELECT * FROM sector_defence 
 WHERE sector_id='$sector' and defence_type ='M'");
 
 // Correct the targetship bug to reflect the player info
@@ -36,13 +36,13 @@ if ($result3 > 0) {
     }
 }
 
-// Compute the ship average...if its too low then the ship will not hit mines...     
+// Compute the ship average...if its too low then the ship will not hit mines...
 
 $shipavg = ($targetship['hull'] + $targetship['engines'] + $targetship['power'] + $targetship['computer'] + $targetship['sensors'] + $targetship['armor'] + $targetship['shields'] + $targetship['beams'] + $targetship['torp_launchers'] + $targetship['cloak']) / 10;
 
 // The mines will attack if 4 conditions are met
 //    1) There is at least 1 group of mines in the sector
-//    2) There is at least 1 mine in the sector 
+//    2) There is at least 1 mine in the sector
 //    3) You are not the owner or on the team of the owner - team 0 dosent count
 //    4) You ship is at least $mine_hullsize (setable in config.php) big
 
@@ -83,7 +83,6 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
 
         // If the player has enough mine deflectors then subtract the ammount and continue
         if ($playerinfo[dev_minedeflector] >= $roll) {
-
             $l_chm_youlostminedeflectors = str_replace("[chm_roll]", $roll, $l_chm_youlostminedeflectors);
             echo "$l_chm_youlostminedeflectors<BR>";
             $result2 = $db->adoExecute("UPDATE ships set dev_minedeflector=dev_minedeflector-$roll where ship_id=$playerinfo[ship_id]");
@@ -105,8 +104,9 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                 echo "$l_chm_yourshieldshitforminesdmg<BR>";
 
                 $result2 = $db->adoExecute("UPDATE ships set ship_energy=ship_energy-$mines_left, dev_minedeflector=0 where ship_id=$playerinfo[ship_id]");
-                if ($playershields == $mines_left)
+                if ($playershields == $mines_left) {
                     echo "$l_chm_yourshieldsaredown<BR>";
+                }
             } else {
                 // Direct hit sir
                 echo "$l_chm_youlostallyourshields<BR>";
@@ -115,8 +115,9 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
                     $l_chm_yourarmorhitforminesdmg = str_replace("[chm_mines_left]", $mines_left, $l_chm_yourarmorhitforminesdmg);
                     echo "$l_chm_yourarmorhitforminesdmg<BR>";
                     $result2 = $db->adoExecute("UPDATE ships set armor_pts=armor_pts-$mines_left,ship_energy=0,dev_minedeflector=0 where ship_id=$playerinfo[ship_id]");
-                    if ($playerinfo[armor_pts] == $mines_left)
+                    if ($playerinfo[armor_pts] == $mines_left) {
                         echo "$l_chm_yourhullisbreached<BR>";
+                    }
                 } else {
                     // BOOM
                     $pod = $playerinfo[dev_escapepod];
@@ -147,6 +148,3 @@ if ($num_defences > 0 && $total_sector_mines > 0 && !$owner && $shipavg > $mine_
         explode_mines($sector, $roll);
     }
 }
-
-
-

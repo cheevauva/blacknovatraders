@@ -1,8 +1,10 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
+
+use Psr\Container\ContainerInterface;
 
 class ShipByIdDAO extends \UUA\DAO
 {
@@ -10,18 +12,27 @@ class ShipByIdDAO extends \UUA\DAO
     /**
      * @var int
      */
-    public $id;
+    public int $id;
 
     /**
-     * @var array
+     * @var array<string, mixed>|null
      */
-    public $ship;
+    public ?array $ship;
 
-    public function serve()
+    #[\Override]
+    public function serve(): void
     {
         $this->ship = db()->fetch("SELECT * FROM ships WHERE ship_id = :id LIMIT 1", [
             'id' => $this->id,
         ]);
     }
-    
+
+    public static function call(ContainerInterface $container, int $id): self
+    {
+        $self = self::new($container);
+        $self->id = $id;
+        $self->serve();
+
+        return $self;
+    }
 }

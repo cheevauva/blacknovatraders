@@ -1,3 +1,5 @@
+<?php include_header(); ?>
+<?php $self = \BNT\Controller\AdminSectorController::as($self); ?>
 <div class="card shadow">
     <div class="card-header bg-primary text-white">
         <h3 class="mb-0">
@@ -15,7 +17,7 @@
                 <div class="col-md-8 mb-3">
                     <label class="form-label fw-bold mb-2">Select Sector:</label>
                     <select size="10" class="form-select h-100" name="sector">
-                        <?php echo options($sectors, null); ?>
+                        <?php echo options($self->sectors, null); ?>
                     </select>
                 </div>
                 <div class="col-md-4 mb-3 d-flex flex-column align-items-center">
@@ -27,7 +29,7 @@
                 </div>
             </div>
 
-            <input type="hidden" name="module" value="sectoredit">
+            <input type="hidden" name="module" value="sector">
             <input type="hidden" name="operation" value="edit">
         </form>
     </div>
@@ -37,3 +39,4 @@
         </small>
     </div>
 </div>
+<?php include_footer(); ?>

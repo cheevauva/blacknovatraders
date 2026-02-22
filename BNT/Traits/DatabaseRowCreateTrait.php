@@ -1,6 +1,6 @@
 <?php
 
-//declare(strict_types=1);
+declare(strict_types=1);
 
 namespace BNT\Traits;
 
@@ -9,7 +9,12 @@ trait DatabaseRowCreateTrait
 
     use DatabaseMainTrait;
 
-    protected function rowCreate($table, $data)
+    /**
+     * @param string $table
+     * @param array<string, mixed> $data
+     * @return string|null
+     */
+    protected function rowCreate(string $table, array $data): ?string
     {
         $parameters = [];
         $sets = [];
@@ -21,6 +26,10 @@ trait DatabaseRowCreateTrait
 
         $this->db()->q(sprintf('INSERT INTO %s SET %s', $table, implode(', ', $sets)), $parameters);
 
+        if ($this->db()->ErrorMsg()) {
+            throw new \Exception($this->db()->ErrorMsg());
+        }
+        
         return $this->db()->lastInsertId();
     }
 }

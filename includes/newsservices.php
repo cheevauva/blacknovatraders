@@ -1,4 +1,5 @@
-<?
+<?php
+
 /*
 Assumes $day is a valid formatted time
 */
@@ -11,7 +12,7 @@ function getpreviousday($day)
     $day = $day - 86400;
 
     //return the final amount formatted as YYYY/MM/DD
-    return date("Y/m/d",$day);
+    return date("Y/m/d", $day);
 }
 
 function getnextday($day)
@@ -23,7 +24,5 @@ function getnextday($day)
     $day = $day + 86400;
 
     //return the final amount formatted as YYYY/MM/DD
-    return date("Y/m/d",$day);
+    return date("Y/m/d", $day);
 }
-
-?>
