@@ -45,7 +45,7 @@ function planetTypes(): array
 function isAdmin(): bool
 {
     global $userinfo;
-    
+
     return !empty($userinfo) && $userinfo['role'] == 'admin';
 }
 
@@ -285,71 +285,9 @@ function gen_score($sid)
 
 function db_kill_player($ship_id)
 {
-    global $default_prod_ore;
-    global $default_prod_organics;
-    global $default_prod_goods;
-    global $default_prod_energy;
-    global $default_prod_fighters;
-    global $default_prod_torp;
-    global $gameroot;
+    global $container;
 
-    include("languages/english.inc");
-
-    db()->q("UPDATE ships SET ship_destroyed='Y',on_planet='N',sector=0,cleared_defences=' ' WHERE ship_id=:ship_id", [
-        'ship_id' => $ship_id,
-    ]);
-    db()->q("DELETE from bounty WHERE placed_by = :ship_id", [
-        'ship_id' => $ship_id,
-    ]);
-
-    $res = db()->fetchAll("SELECT DISTINCT sector_id FROM planets WHERE owner=:ship_id AND base='Y'", [
-        'ship_id' => $ship_id,
-    ]);
-    $i = 0;
-    $sectors = [];
-
-    foreach ($res as $row) {
-        $sectors[$i] = $row['sector_id'];
-        $i++;
-    }
-
-    db()->q("UPDATE planets SET owner=0,fighters=0, base='N' WHERE owner=:ship_id", [
-        'ship_id' => $ship_id,
-    ]);
-
-    if (!empty($sectors)) {
-        foreach ($sectors as $sector) {
-            calc_ownership($sector);
-        }
-    }
-    db()->q("DELETE FROM sector_defence where ship_id=:ship_id", [
-        'ship_id' => $ship_id,
-    ]);
-
-    $row = db()->fetch("SELECT zone_id FROM zones WHERE corp_zone='N' AND owner=:ship_id", [
-        'ship_id' => $ship_id,
-    ]);
-    $zone = $row;
-
-    db()->q("UPDATE universe SET zone_id=:zone_id WHERE zone_id=:old_zone_id", [
-        'zone_id' => 1,
-        'old_zone_id' => $zone['zone_id'],
-    ]);
-
-    $row = db()->fetch("select character_name from ships where ship_id=:ship_id", [
-        'ship_id' => $ship_id,
-    ]);
-    $name = $row;
-
-    $headline = $name['character_name'] . $l_killheadline;
-
-    $newstext = str_replace("[name]", $name['character_name'], $l_news_killed);
-
-    db()->q("INSERT INTO news (headline, newstext, user_id, date, news_type) VALUES (:headline, :newstext, :ship_id, NOW(), 'killed')", [
-        'headline' => $headline,
-        'newstext' => $newstext,
-        'ship_id' => $ship_id,
-    ]);
+    BNT\Game\Servant\GameKillPlayerServant::call($container, (int) $ship_id);
 }
 
 function NUMBER($number, $decimals = 0)
@@ -595,6 +533,14 @@ function kick_off_planet($ship_id, $whichteam)
 
 function calc_ownership($sector)
 {
+    global $container;
+
+    try {
+        \BNT\Game\Servant\GameCalcOwnershipServant::call($container, (int) $sector);
+    } catch (\Exception $ex) {
+        return $ex->getMessage();
+    }
+
     global $min_bases_to_own, $l_global_warzone, $l_global_nzone, $l_global_team, $l_global_player;
 
     $res = db()->fetchAll("SELECT owner, corp FROM planets WHERE sector_id=:sector AND base='Y'", [
@@ -619,44 +565,35 @@ function calc_ownership($sector)
         $curcorp = -1;
         $curship = -1;
         $loop = 0;
+        
         while ($loop < $owner_num) {
-            if ($curbase['corp'] != 0) {
-                if ($owners[$loop]['type'] == 'C') {
-                    if ($owners[$loop]['id'] == $curbase['corp']) {
-                        $curcorp = $loop;
-                        $owners[$loop]['num']++;
-                    }
-                }
+            if (!empty($curbase['corp']) && $owners[$loop]['type'] == 'C' && $owners[$loop]['id'] == $curbase['corp']) {
+                $curcorp = $loop;
+                $owners[$loop]['num']++;
             }
 
-            if ($owners[$loop]['type'] == 'S') {
-                if ($owners[$loop]['id'] == $curbase['owner']) {
-                    $curship = $loop;
-                    $owners[$loop]['num']++;
-                }
+            if ($owners[$loop]['type'] == 'S' && $owners[$loop]['id'] == $curbase['owner']) {
+                $curship = $loop;
+                $owners[$loop]['num']++;
             }
 
             $loop++;
         }
 
-        if ($curcorp == -1) {
-            if ($curbase['corp'] != 0) {
-                $curcorp = $owner_num;
-                $owner_num++;
-                $owners[$curcorp]['type'] = 'C';
-                $owners[$curcorp]['num'] = 1;
-                $owners[$curcorp]['id'] = $curbase['corp'];
-            }
+        if ($curcorp == -1 && !empty($curbase['corp'])) {
+            $curcorp = $owner_num;
+            $owner_num++;
+            $owners[$curcorp]['type'] = 'C';
+            $owners[$curcorp]['num'] = 1;
+            $owners[$curcorp]['id'] = $curbase['corp'];
         }
 
-        if ($curship == -1) {
-            if ($curbase['owner'] != 0) {
-                $curship = $owner_num;
-                $owner_num++;
-                $owners[$curship]['type'] = 'S';
-                $owners[$curship]['num'] = 1;
-                $owners[$curship]['id'] = $curbase['owner'];
-            }
+        if ($curship == -1 && !empty($curbase['owner'])) {
+            $curship = $owner_num;
+            $owner_num++;
+            $owners[$curship]['type'] = 'S';
+            $owners[$curship]['num'] = 1;
+            $owners[$curship]['id'] = $curbase['owner'];
         }
     }
 

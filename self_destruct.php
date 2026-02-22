@@ -6,6 +6,8 @@ if (checkship()) {
     die();
 }
 
+use BNT\Game\Servant\GameKillPlayerServant;
+
 $sure = intval(fromRequest('sure', 0));
 try {
     switch (requestMethod()) {
@@ -15,7 +17,7 @@ try {
                 return;
             }
 
-            db_kill_player($playerinfo['ship_id']);
+            GameKillPlayerServant::call($container, $playerinfo['ship_id'])->serve();
             cancel_bounty($playerinfo['ship_id']);
             adminlog(\BNT\Log\LogTypeConstants::LOG_ADMIN_HARAKIRI, $playerinfo['character_name'] . '|' . $ip);
             playerlog($playerinfo['ship_id'], \BNT\Log\LogTypeConstants::LOG_HARAKIRI, $ip);

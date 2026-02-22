@@ -41,7 +41,7 @@ class LogController extends BaseController
         $logs = LogsByShipAndDateDAO::call($this->container, $this->playerinfo['ship_id'], $this->startdate)->logs;
 
         foreach ($logs as $index => $log) {
-            $logs[$index] = logParse($log);
+            $logs[$index] = $this->logParse($log);
         }
 
         $this->logs = $logs;
