@@ -13,7 +13,7 @@ trait DatabaseRowsDeleteByCriteria
 
     public array $criteria;
 
-    public function deleteRows(string $table): array
+    public function deleteRows(string $table): int
     {
         $parameters = [];
         $where = [];

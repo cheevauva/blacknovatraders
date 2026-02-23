@@ -13,8 +13,7 @@ trait DatabaseRowsSelectByCriteriaTrait
 
     public array $criteria;
     public array $items;
-
-    #[\Override]
+    
     public function selectRows(string $table): array
     {
         $parameters = [];
