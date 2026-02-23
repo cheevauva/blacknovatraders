@@ -9,8 +9,8 @@ use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Bounty\DAO\BountiesByCriteriaDAO;
 use BNT\Bounty\DAO\BountyByIdDAO;
 use BNT\Bounty\DAO\BountyDeleteByCriteriaDAO;
-use BNT\Bounty\DAO\BountyCreateDAO;
 use BNT\Exception\WarningException;
+use BNT\Bounty\Servant\BountyPlaceServant;
 
 class BountyController extends BaseController
 {
@@ -31,69 +31,51 @@ class BountyController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $bounty_maxvalue;
-        
         $this->response = $this->fromParsedBody('response');
-        
+
         if ($this->response === 'place') {
             $this->checkTurns();
-            $bountyOn = (int) $this->fromParsedBody('bounty_on', 'bounty_on ' . $this->l->is_required);
+
             $amount = (int) $this->fromParsedBody('amount', 'amount ' . $this->l->is_required);
-            $bountyOnShip = ShipByIdDAO::call($this->container, $bountyOn)->ship;
+            $bountyOn = (int) $this->fromParsedBody('bounty_on', 'bounty_on ' . $this->l->is_required);
 
-            if (!$bountyOnShip) {
-                throw new WarningException($this->l->by_notexists);
-            }
-
-            $this->bounty_on = $bountyOnShip;
-
-            if ($bountyOnShip['ship_destroyed'] == 'Y') {
-                throw new WarningException($this->l->by_destroyed);
-            }
-
-            if ($bountyOn == $this->playerinfo['ship_id']) {
-                throw new WarningException($this->l->by_yourself);
-            }
-
-            if (empty($amount)) {
-                throw new WarningException($this->l->by_zeroamount);
-            }
-
-            if ($amount > $this->playerinfo['credits']) {
-                throw new WarningException($this->l->by_notenough);
-            }
-
-            if ($bounty_maxvalue != 0) {
-                $percent = $bounty_maxvalue * 100;
-                $score = gen_score($this->playerinfo['ship_id']);
-                $maxtrans = $score * $score * $bounty_maxvalue;
-
-                $previous_bounty = 0;
-                $prev = db()->fetch("SELECT SUM(amount) AS totalbounty FROM bounty WHERE bounty_on = :bounty_on AND placed_by = :placed_by", [
-                    'bounty_on' => $bountyOn,
-                    'placed_by' => $this->playerinfo['ship_id']
-                ]);
-
-                if ($prev) {
-                    $previous_bounty = $prev['totalbounty'];
-                }
-
-                if ($amount + $previous_bounty > $maxtrans) {
-                    throw new WarningException($this->l->by_toomuch);
-                }
-            }
-
-            BountyCreateDAO::call($this->container, [
-                'bounty_on' => $bountyOn,
-                'placed_by' => $this->playerinfo['ship_id'],
-                'amount' => $amount
-            ]);
+            $place = BountyPlaceServant::new($this->container);
+            $place->placedBy = $this->playerinfo['ship_id'];
+            $place->bountyOn = $bountyOn;
+            $place->amount = (int) $amount;
+            $place->serve();
 
             $this->playerinfo['turns'] -= 1;
             $this->playerinfo['turns_used'] += 1;
             $this->playerinfo['credits'] -= $amount;
             $this->playerinfoUpdate();
             $this->redirectTo('bounty.php');
+            return;
+        }
+        
+        if ($this->response === 'cancel') {
+            $this->checkTurns();
+            $bountyId = (int) $this->fromParsedBody('bid', 'bid ' . $this->l->is_required);
+            $bounty = BountyByIdDAO::call($this->container, $bountyId)->bounty;
+
+            if (!$bounty) {
+                throw new WarningException($this->l->by_nobounty);
+            }
+
+            if ($bounty['placed_by'] != $this->playerinfo['ship_id']) {
+                throw new WarningException($this->l->by_notyours);
+            }
+
+            BountyDeleteByCriteriaDAO::call($this->container, [
+                'bounty_id' => $bountyId,
+            ]);
+
+            $this->playerinfo['turns'] -= 1;
+            $this->playerinfo['turns_used'] += 1;
+            $this->playerinfo['credits'] += $bounty['amount'];
+            $this->playerinfoUpdate();
+            $this->redirectTo(sprintf('bounty.php?bounty_on=%s&response=display', $bounty['bounty_on']));
+            return;
         }
     }
 
@@ -116,31 +98,6 @@ class BountyController extends BaseController
                     unset($this->ships[$idxShip]);
                 }
             }
-        }
-
-        if ($this->response === 'cancel') {
-            $this->checkTurns();
-            $bountyId = (int) $this->fromQueryParams('bid', 'bid ' . $this->l->is_required);
-            $bounty = BountyByIdDAO::call($this->container, $bountyId)->bounty;
-
-            if (!$bounty) {
-                throw new WarningException($this->l->by_nobounty);
-            }
-
-            if ($bounty['placed_by'] != $this->playerinfo['ship_id']) {
-                throw new WarningException($this->l->by_notyours);
-            }
-
-            BountyDeleteByCriteriaDAO::call($this->container, [
-                'bounty_id' => $bountyId,
-            ]);
-
-            $this->playerinfo['turns'] -= 1;
-            $this->playerinfo['turns_used'] += 1;
-            $this->playerinfo['credits'] += $bounty['amount'];
-            $this->playerinfoUpdate();
-            $this->redirectTo(sprintf('bounty.php?bounty_on=%s&response=display', $bounty['bounty_on']));
-            return;
         }
 
         if ($this->response === 'display') {

@@ -87,9 +87,14 @@
 
                     <td>
                         <?php if ($bounty['placed_by'] == $self->playerinfo['ship_id']): ?>
-                            <a href="bounty.php?bid=<?= $bounty['bounty_id']; ?>&response=cancel" class="text-decoration-none">
-                                <?= $l->by_cancel; ?>
-                            </a>
+                            <form action="bounty.php" method="POST" id="bntBountyForm<?= $bounty['bounty_id']; ?>">
+                                <input type="hidden" name="bid" value="<?= $bounty['bounty_id']; ?>"/>
+                                <input type="hidden" name="response" value="cancel"/>
+                                <button type="submit" class="btn btn-primary"><?= $l->by_cancel; ?></button>
+                            </form>
+                            <script type="text/javascript">
+                                bntForm('bntBountyForm<?= $bounty['bounty_id']; ?>');
+                            </script>
                         <?php else: ?>
                             &nbsp;
                         <?php endif; ?>
