@@ -1,31 +1,28 @@
-<?php $title = $l_ship_title; ?>
-<?php include("header.php"); ?>
+<?php $self = BNT\Controller\ShipController::as($self); ?>
+<?php include_header(); ?>
 <?php bigtitle(); ?>
-<?php if ($othership['sector'] != $playerinfo['sector']) : ?>
+<?php if ($self->othership['sector'] != $self->playerinfo['sector']) : ?>
     <div class="alert alert-info">
-        <?php echo $l_ship_the; ?> <?php echo $othership['ship_name']; ?> <?php echo $l_ship_nolonger; ?> <?php echo $playerinfo['sector']; ?>
+        <?= $l->ship_the; ?> <?= $self->othership['ship_name']; ?> <?= $l->ship_nolonger; ?> <?= $playerinfo['sector']; ?>
     </div>
 <?php else : ?>
     <div class="mb-3">
         <div class="alert alert-warning">
-            <?php echo $l_ship_youc; ?> 
-            <?php echo htmlspecialchars($othership['ship_name']); ?>, 
-            <?php echo $l_ship_owned; ?> 
-            <?php echo htmlspecialchars($othership['ship_name']); ?>.
+            <?= $l->ship_youc; ?> 
+            <?= htmlspecialchars($self->othership['ship_name']); ?>
         </div>
     </div>
     <div class="mb-3">
-        <?php echo $l_ship_perform; ?>
+        <?= $l->ship_perform; ?>
     </div>
     <div class="mb-3">
-        <a class="btn btn-secondary" href="scan.php?ship_id=<?php echo $ship_id; ?>" ><?php echo $l_planet_scn_link; ?></a>
+        <a class="btn btn-secondary" href="scan.php?ship_id=<?= $self->ship_id; ?>" ><?= $l->planet_scn_link; ?></a>
     </div>
     <div class="mb-3">
-        <a class="btn btn-danger" href="attack.php?ship_id=<?php echo $ship_id; ?>"><?php echo $l_planet_att_link; ?></a>
+        <a class="btn btn-danger" href="attack.php?ship_id=<?= $self->ship_id; ?>"><?= $l->planet_att_link; ?></a>
     </div>
     <div class="mb-3">
-        <a class="btn btn-info" href="mailto.php?to=<?php echo $ship_id; ?>"><?php echo $l_send_msg; ?></a>
+        <a class="btn btn-info" href="mailto.php?to=<?= $self->ship_id; ?>"><?= $l->send_msg; ?></a>
     </div>
 <?php endif; ?>
-
-<?php include("footer.php"); ?>
+<?php include_footer(); ?>

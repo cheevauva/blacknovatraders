@@ -16,8 +16,9 @@ class Language
         'l_ze_' => 'zoneedit.php',
         'l_login_' => 'login.php',
         'l_ships_' => 'ships.php',
-        'warp_' => 'warpedit.php',
-        'new_' => 'new.php',
+        'l_warp_' => 'warpedit.php',
+        'l_new_' => 'new.php',
+        'l_planet_' => 'planet.php',
     ];
 
     public static function instance(): Language
