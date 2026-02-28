@@ -16,11 +16,15 @@
     <?php endforeach; ?>
 </table>
 <?php $postlink = isAdmin() ? '&player=' . fromGet('player') : ''; ?>
-<a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($self->startdate . ' -3 day')) . $postlink; ?>" class="btn btn-primary"><<<</a>
-<a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($self->startdate . ' -2 day')) . $postlink; ?>" class="btn btn-primary"><?php echo date('Y-m-d', strtotime($self->startdate . ' -2 day')); ?></a>
-<a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($self->startdate . ' -1 day')) . $postlink; ?>" class="btn btn-primary"><?php echo date('Y-m-d', strtotime($self->startdate . ' -1 day')); ?></a>
-<a href="log.php?startdate=<?php echo $self->startdate . $postlink; ?>" class="btn btn-primary"><?php echo $self->startdate; ?></a>
+<a href="<?= route('log', ['startdate' => date('Y-m-d', strtotime($self->startdate . ' -3 day'))]) . $postlink; ?>" class="btn btn-primary"><<<</a>
+<a href="<?= route('log', ['startdate' => date('Y-m-d', strtotime($self->startdate . ' -2 day'))]) . $postlink; ?>" class="btn btn-primary">
+    <?php echo date('Y-m-d', strtotime($self->startdate . ' -2 day')); ?>
+</a>
+<a href="<?= route('log', ['startdate' => date('Y-m-d', strtotime($self->startdate . ' -1 day'))]) . $postlink; ?>" class="btn btn-primary">
+    <?php echo date('Y-m-d', strtotime($self->startdate . ' -1 day')); ?>
+</a>
+<a href="<?= route('log', ['startdate' => $self->startdate]) . $postlink; ?>" class="btn btn-primary"><?php echo $self->startdate; ?></a>
 <?php if (strtotime($self->startdate) < strtotime('today')) : ?>
-    <a href="log.php?startdate=<?php echo date('Y-m-d', strtotime($self->startdate . ' + 1 day')) . $postlink; ?>" class="btn btn-primary">>>></a>
+    <a href="<?= route('log', ['startdate' => date('Y-m-d', strtotime($self->startdate . ' + 1 day'))]) . $postlink; ?>" class="btn btn-primary">>>></a>
 <?php endif; ?>
 <?php include_footer(); ?>

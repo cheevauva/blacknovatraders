@@ -43,7 +43,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
         ]);
 
         self::assertNotEmpty($login->responseCookies['token'] ?? null);
-        self::assertEquals('main.php', $login->location);
+        self::assertEquals('main', $login->location);
     }
 
     public function testLoginClosed(): void

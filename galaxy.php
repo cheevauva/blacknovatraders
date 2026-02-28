@@ -78,6 +78,6 @@ echo "<img src=images/" . $tile['goods'] . "> - Goods Port<BR>\n";
 echo "<img src=images/" . $tile['none'] . "> - No Port<BR><BR>\n";
 echo "<img src=images/" . $tile['unknown'] . "> - Unexplored<BR><BR>\n";
 echo "</div>";
-echo "Click <a href=main.php>here</a> to return to main menu.";
+echo "Click <a href=" . route('main') . ">here</a> to return to main menu.";
 
 include("footer.php");

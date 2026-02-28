@@ -46,7 +46,7 @@ class NewControllerTest extends \Tests\UnitTestCase
         $new->serve();
 
         self::assertNotEmpty($new->responseCookies['token'] ?? null);
-        self::assertEquals('main.php', $new->location);
+        self::assertEquals('main', $new->location);
     }
 
     #[DataProvider('parsedBodyProvider')]

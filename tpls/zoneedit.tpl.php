@@ -1,7 +1,7 @@
-<?php $self = \BNT\Controller\ZoneeditController::as($self);?>
-<?php include_header();?>
+<?php $self = \BNT\Controller\ZoneeditController::as($self); ?>
+<?php include_header(); ?>
 <?php bigtitle(); ?>
-<form action="zoneedit.php?command=change&zone=<?= $self->zone; ?>" method="post" id="bntZoneeditForm">
+<form action="<?= route('zoneedit', ['command' => 'change', 'zone' => $self->zone]); ?>" method="POST" id="bntZoneeditForm">
     <div class="mb-3">
         <label for="name" class="form-label"><?= $l->ze_name; ?></label>
         <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($self->currentZone['zone_name']); ?>" required>
@@ -48,4 +48,4 @@
 <script type="text/javascript">
     bntForm('bntZoneeditForm');
 </script>
-<?php include_footer();?>
+<?php include_footer(); ?>

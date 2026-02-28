@@ -2,8 +2,6 @@
 
 include 'config.php';
 
-//BNT\FrontController::call($container, BNT\Controller\PlanetController::class);die;
-
 include("combat.php");
 
 $title = $l_planet_title;
@@ -145,7 +143,7 @@ if (!empty($planetinfo)) {
                 echo "$l_planet_hasbase<BR>";
             }
 
-            $l_planet_readlog_link = "<a href=log.php>" . $l_planet_readlog_link . "</a>";
+            $l_planet_readlog_link = "<a href=" . route('log') . ">" . $l_planet_readlog_link . "</a>";
             $l_planet_readlog = str_replace("[View]", $l_planet_readlog_link, $l_planet_readlog);
             echo "<BR>$l_planet_readlog<BR>";
 

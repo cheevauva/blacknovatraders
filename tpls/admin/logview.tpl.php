@@ -9,7 +9,7 @@
             <div class="col-md-12">
                 <div class="card h-100">
                     <div class="card-body">
-                        <form action="log.php" method="GET">
+                        <form action="<?= route('log');?>" method="GET">
                             <div class="row align-items-start">
                                 <div class="col-md-8 mb-3">
                                     <label class="form-label fw-bold mb-2">Select User:</label>

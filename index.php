@@ -27,6 +27,10 @@ BNT\FrontController::call($container, match ($_SERVER['PATH_INFO'] ?? null) {
 
         return $new;
     })(),
+    '/warpedit' => \BNT\Controller\WarpeditController::class,
+    '/zoneedit' => \BNT\Controller\ZoneeditController::class,
+    '/zoneinfo' => \BNT\Controller\ZoneinfoController::class,
+    '/self_destruct' => \BNT\Controller\SelfDestructController::class,
     '/ships' => BNT\Controller\ShipsController::class,
     '/ship' => BNT\Controller\ShipController::class,
     '/beacon' => BNT\Controller\BeaconController::class,

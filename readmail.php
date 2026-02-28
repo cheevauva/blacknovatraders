@@ -40,7 +40,7 @@ $res = $db->adoExecute("SELECT * FROM messages WHERE recp_id='" . $playerinfo[sh
                     <tr>
                       <td width="75%" align="left"><font color="white" size="2"><b><?php echo $l_readm_center ?></b></font></td>
                       <td width="21%" align="center" nowrap><font color="white" size="2"><?php echo "$cur_D" ?>&nbsp;<?php echo "$cur_T" ?></font></td>
-                      <td width="4%" align="center" bordercolorlight="black" bordercolordark="gray"><A HREF="main.php"><img alt="Click here to return to the main menu" src="images/c95x.gif" width="16" height="14" border="0"></a></td>
+                      <td width="4%" align="center" bordercolorlight="black" bordercolordark="gray"><A HREF="<?= route('main');?>"><img alt="Click here to return to the main menu" src="images/c95x.gif" width="16" height="14" border="0"></a></td>
                     </tr>
                   </table>
                 </div>

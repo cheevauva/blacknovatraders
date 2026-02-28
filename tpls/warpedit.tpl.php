@@ -27,7 +27,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <form action="warpedit.php" method="POST" id="bntWarpeditLink">
+            <form action="<?= route('warpedit'); ?>" method="POST" id="bntWarpeditLink">
                 <input type="hidden" name="action" value="link">
                 <div class="mb-3">
                     <label class="form-label"><?php echo $l->warp_query; ?></label>
@@ -46,7 +46,7 @@
             </form>
         </div>
         <div class="col">
-            <form action="warpedit.php" method="POST" id="bntWarpeditUnlink">
+            <form action="<?= route('warpedit'); ?>" method="POST" id="bntWarpeditUnlink">
                 <input type="hidden" name="action" value="unlink">
                 <div class="mb-3">
                     <label class="form-label"><?php echo $l->warp_destquery; ?></label>

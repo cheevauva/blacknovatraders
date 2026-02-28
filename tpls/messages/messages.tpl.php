@@ -53,7 +53,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="fw-bold small"><?= $l->dreadm_center ?></span>
                                 <span class="small"><?php echo "$cur_D" ?>&nbsp;<?php echo "$cur_T" ?></span>
-                                <a href="main.php" class="text-white text-decoration-none">
+                                <a href="<?= route('main');?>" class="text-white text-decoration-none">
                                     <i class="bi bi-house-door-fill"></i>
                                 </a>
                             </div>

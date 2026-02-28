@@ -43,7 +43,7 @@ global $l_footer_until_update, $l_footer_players_on_1, $l_footer_players_on_2, $
 </body>
 <script language="javascript" type="text/javascript">
     function rmyx() {
-        fetch('status.php', {
+        fetch('<?= route('status');?>', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json'

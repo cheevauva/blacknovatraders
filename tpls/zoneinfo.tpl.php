@@ -1,10 +1,9 @@
-<?php $self = BNT\Controller\ZoneinfoController::as($self);?>
 <?php
 
 function YesNoLimit($value, $other = null): string
 {
     global $l;
-    
+
     if ($value == 'Y') {
         return $l->zi_allow;
     } elseif ($value == 'N') {
@@ -16,8 +15,8 @@ function YesNoLimit($value, $other = null): string
     }
 }
 ?>
-<?php $title = $l->zi_title; ?>
-<?php include 'header.php'; ?>
+<?php $self = BNT\Controller\ZoneinfoController::as($self); ?>
+<?php include_header(); ?>
 <?php bigtitle(); ?>
 <?php if (empty($self->zoneinfo)) : ?>
     <?= $l->zi_nexist; ?>
@@ -27,7 +26,7 @@ function YesNoLimit($value, $other = null): string
             <tr>
                 <td>
                     <div class="alert alert-info">
-                        <?= $l->zi_control; ?>. <a href="zoneedit.php?zone=<?= $self->zone; ?>"><?= $l->clickme; ?></a> <?= $l->zi_tochange; ?>
+                        <?= $l->zi_control; ?>. <a href="<?= route('zoneedit', ['zone' => $self->zone]); ?>"><?= $l->clickme; ?></a> <?= $l->zi_tochange; ?>
                     </div>
 
                 </td>
@@ -76,4 +75,4 @@ function YesNoLimit($value, $other = null): string
         </tr>
     </table>
 <?php endif; ?>
-<?php include 'footer.php'; ?>
+<?php include_footer(); ?>

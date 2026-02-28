@@ -15,7 +15,7 @@
         <TD><?= $l->manual; ?></TD>
     </TR>
     <TR >
-        <TD><A HREF=warpedit.php><?= $l->warpedit; ?></A></TD>
+        <TD><A HREF="<?= route('warpedit'); ?>"><?= $l->warpedit; ?></A></TD>
         <TD><?= number($self->playerinfo['dev_warpedit']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
