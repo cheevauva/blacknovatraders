@@ -10,7 +10,7 @@ $self = \BNT\Controller\ShipsController::as($self);
             Empty ship list
         </div>
     <?php endif; ?>
-    <form action="ships.php" method="post" id="bntShipsForm">
+    <form action="<?= route('ships');?>" method="post" id="bntShipsForm">
         <div class="accordion" id="accordionShips">
             <?php foreach ($self->ships as $ship) : ?>
                 <?php

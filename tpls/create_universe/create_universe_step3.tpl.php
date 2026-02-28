@@ -109,7 +109,7 @@
 <div class="text-center py-5">
     <div class="display-6 mb-4">Congratulations! Universe created successfully.</div>
     <p class="lead mb-4">
-        Click <a href="login.php" class="btn btn-success btn-lg">here</a> to return to the login screen.
+        Click <a href="<?= route('login');?>" class="btn btn-success btn-lg">here</a> to return to the login screen.
     </p>
 </div>
 <?php include_footer(); ?>

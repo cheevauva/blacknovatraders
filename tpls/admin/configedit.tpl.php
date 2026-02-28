@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <h2 class="mb-4">Ship Editor</h2>
 
-    <form action="admin.php?module=config&operation=save" id="bntConfigEditForm" method="POST">
+    <form action="<?= route('admin', 'module=config&operation=save'); ?>" id="bntConfigEditForm" method="POST">
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Configuration</h5>

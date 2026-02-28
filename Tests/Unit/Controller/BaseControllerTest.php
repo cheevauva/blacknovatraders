@@ -38,7 +38,7 @@ class BaseControllerTest extends \Tests\UnitTestCase
                 protected function processGetAsHtml(): void
                 {
                     if ($this->fromQueryParams('testRedirectToSetsLocation')) {
-                        $this->redirectTo('main.php');
+                        $this->redirectTo('main');
                     }
 
                     if ($this->fromQueryParams('testSetCookieAddsToResponseCookies')) {

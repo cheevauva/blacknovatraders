@@ -1,16 +1,17 @@
-<?php include_header();?>
-
+<?php $self = \BNT\Controller\NewsController::as($self); ?>
+<?php include_header(); ?>
 <?php bigtitle(); ?>
-
 <div class="container">
     <div class="alert alert-info" role="alert">
-            <?= $l->news_info ?>
+        <?= $l->news_info ?>
     </div>
-        <p><?= $l->news_for ?> <?= $self->startdate ?></p>
+    <p><?= $l->news_for ?> <?= $self->startdate ?></p>
     <table class="table">
         <tr>
             <td colspan="2" align="right">
-                <a href="news.php?startdate=<?= $self->previousday ?>"><?= $l->news_prev ?></a> - <a href="news.php?startdate=<?= $self->nextday ?>"><?= $l->news_next ?></a>
+                <a href="<?= route('news', ['startdate' => $self->previousday]); ?>"><?= $l->news_prev ?></a>
+                - 
+                <a href="<?= route('news', ['startdate' => $self->nextday]); ?>"><?= $l->news_next ?></a>
             </td>
         </tr>
         <?php if (empty($self->news)) : ?>
@@ -36,5 +37,4 @@
         </tr>
     </table>
 </div>
-
-<?php include_footer();?>
+<?php include_footer(); ?>

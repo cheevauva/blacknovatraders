@@ -33,7 +33,7 @@ class AdminSectorController extends BaseController
         }
 
         if ($this->operation === 'edit') {
-            $sector = (int) $this->fromQueryParams('sector', 'sector ' . $l->is_required);
+            $sector = (int) $this->fromQueryParams('sector', 'sector ' . $this->l->is_required);
 
             $this->sector = SectorByIdDAO::call($this->container, $sector)->sector;
             $this->zones = db()->fetchAllKeyValue('SELECT zone_id, zone_name FROM zones ORDER BY zone_name');
@@ -50,7 +50,7 @@ class AdminSectorController extends BaseController
         global $l;
 
         if ($this->operation === 'save') {
-            $sector = (int) $this->fromQueryParams('sector', 'sector ' . $l->is_required);
+            $sector = (int) $this->fromQueryParams('sector', 'sector ' . $this->l->is_required);
 
             $this->sector = SectorByIdDAO::call($this->container, $sector)->sector;
 
@@ -67,7 +67,10 @@ class AdminSectorController extends BaseController
                 'angle1' => (float) fromPOST('angle1'),
                 'angle2' => (float) fromPOST('angle2'),
             ], $sector);
-            $this->redirectTo('admin.php?module=sector&operation=list');
+            $this->redirectTo('admin', [
+                'module' => 'sector',
+                'operation' => 'list',
+            ]);
             return;
         }
 

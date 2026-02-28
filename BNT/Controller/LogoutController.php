@@ -30,6 +30,6 @@ class LogoutController extends BaseController
             playerlog($this->playerinfo['ship_id'], LogTypeConstants::LOG_LOGOUT, $ip);
         }
 
-        $this->redirectTo('index.php');
+        $this->redirectTo('index');
     }
 }

@@ -1,6 +1,5 @@
-<?php $title = $l->ranks_title; ?>
-<?php $self = BNT\Controller\RankingController::as($self);?>
-<?php include("header.php"); ?>
+<?php $self = BNT\Controller\RankingController::as($self); ?>
+<?php include_header(); ?>
 <?php bigtitle(); ?>
 <?php if (empty($self->ships)) : ?>
     <?= $l->ranks_none; ?>
@@ -13,12 +12,12 @@
         <table class="table table-hover">
             <tr>
                 <td><?= $l->ranks_rank; ?></td>
-                <td><a href="ranking.php"><?= $l->score; ?></a></td>
+                <td><a href="<?= route('ranking');?>"><?= $l->score; ?></a></td>
                 <td><?= $l->player; ?></td>
-                <td><a href="ranking.php?sort=turns"><?= $l->turns_used; ?></a></td>
-                <td><a href="ranking.php?sort=good"><?= $l->ranks_good; ?></a>/<a href="ranking.php?sort=bad"><?= $l->ranks_evil; ?></a></td>
-                <td><a href="ranking.php?sort=alliance"><?= $l->team_alliance; ?></a></td>
-                <td><a href="ranking.php?sort=efficiency">Eff. Rating.</a></td>
+                <td><a href="<?= route('ranking', 'sort=turns'); ?>"><?= $l->turns_used; ?></a></td>
+                <td><a href="<?= route('ranking', 'sort=good'); ?>"><?= $l->ranks_good; ?></a>/<a href="<?= route('ranking', 'sort=bad'); ?>"><?= $l->ranks_evil; ?></a></td>
+                <td><a href="<?= route('ranking', 'sort=alliance'); ?>"><?= $l->team_alliance; ?></a></td>
+                <td><a href="<?= route('ranking', 'sort=efficiency'); ?>">Eff. Rating.</a></td>
             </TR>
             <?php $i = 0; ?>
             <?php foreach ($self->ships as $ship) : ?>
@@ -38,5 +37,4 @@
         </table>
     </div>
 <?php endif; ?>
-
-<?php include("footer.php"); ?>
+<?php include_footer(); ?>

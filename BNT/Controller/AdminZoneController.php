@@ -60,7 +60,10 @@ class AdminZoneController extends BaseController
                 'allow_planet' => !fromPOST('zone_planet') ? 'N' : 'Y',
                 'max_hull' => (int) fromPOST('zone_hull', 0)
             ], $zone);
-            $this->redirectTo('admin.php?module=zone&operation=list');
+            $this->redirectTo('admin', [
+                'module' => 'zone',
+                'operation' => 'list',
+            ]);
             return;
         }
 

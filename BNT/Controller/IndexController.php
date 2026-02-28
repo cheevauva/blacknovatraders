@@ -17,20 +17,20 @@ class IndexController extends BaseController
     protected function processGet(): void
     {
         if (empty($this->userinfo)) {
-            $this->redirectTo('login.php');
+            $this->redirectTo('login');
             return;
         }
 
         if (empty($this->playerinfo)) {
-            $this->redirectTo('ships.php');
+            $this->redirectTo('ships');
             return;
         }
 
         if ($this->playerinfo['ship_destroyed'] === 'Y') {
-            $this->redirectTo('ships.php');
+            $this->redirectTo('ships');
             return;
         }
 
-        $this->redirectTo('main.php');
+        $this->redirectTo('main');
     }
 }

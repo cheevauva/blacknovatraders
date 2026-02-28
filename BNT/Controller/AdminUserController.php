@@ -63,9 +63,12 @@ class AdminUserController extends BaseController
             if (!empty($password)) {
                 $userinfo['password'] = md5($password);
             }
-  
+
             UserUpdateDAO::call($this->container, $userinfo, $user);
-            $this->redirectTo('admin.php?module=user&operation=list');
+            $this->redirectTo('admin', [
+                'module' => 'user',
+                'operation' => 'list',
+            ]);
             return;
         }
 

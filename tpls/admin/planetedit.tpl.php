@@ -6,7 +6,7 @@
         Planet Editor
     </h2>
     
-    <form action="admin.php?module=planet&operation=save&planet=<?= $planet['planet_id']; ?>" method="POST" id="bntPlaneteditForm">
+    <form action="<?= route('admin', 'module=planet&operation=save&planet=' . $planet['planet_id']); ?>" method="POST" id="bntPlaneteditForm">
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Basic Planet Information</h5>

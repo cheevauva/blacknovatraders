@@ -85,7 +85,10 @@ class AdminShipController extends BaseController
             ];
 
             ShipUpdateDAO::call($this->container, $shipinfo, $ship);
-            $this->redirectTo('admin.php?module=ship&operation=list');
+            $this->redirectTo('admin', [
+                'module' => 'ship',
+                'operation' => 'list',
+            ]);
             return;
         }
 

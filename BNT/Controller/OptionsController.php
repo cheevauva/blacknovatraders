@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
-use BNT\User\DAO\UserUpdateDAO;
 use BNT\Exception\WarningException;
 
 class OptionsController extends BaseController
 {
 
     public array $user;
+
+    #[\Override]
+    protected function preProcess(): void
+    {
+        $this->title = $this->l->opt_title;
+    }
 
     #[\Override]
     protected function processGetAsHtml(): void
@@ -54,6 +59,6 @@ class OptionsController extends BaseController
         }
 
         $this->userinfoUpdate();
-        $this->redirectTo('index.php');
+        $this->redirectTo('index');
     }
 }

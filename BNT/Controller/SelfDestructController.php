@@ -33,7 +33,7 @@ class SelfDestructController extends BaseController
         global $ip;
 
         if ($this->sure !== 2) {
-            $this->redirectTo('index.php');
+            $this->redirectTo('index');
             return;
         }
 
@@ -43,6 +43,6 @@ class SelfDestructController extends BaseController
         LogPlayerDAO(LogTypeConstants::LOG_ADMIN_HARAKIRI, [$this->playerinfo['ship_name'], $ip]);
         LogPlayerDAO::call($this->container, $this->playerinfo['ship_id'], LogTypeConstants::LOG_HARAKIRI, $ip);
 
-        $this->redirectTo('index.php');
+        $this->redirectTo('index');
     }
 }

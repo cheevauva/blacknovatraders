@@ -55,7 +55,7 @@ class AdminConfigController extends BaseController
             db()->q('UPDATE universe SET distance = FLOOR(RAND() * :universe_size) WHERE 1 = 1', [
                 'universe_size' => $universeSize + 1,
             ]);
-            $this->redirectTo('admin.php');
+            $this->redirectTo('admin');
             return;
         }
         

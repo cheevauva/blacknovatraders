@@ -8,9 +8,7 @@ $l_traderoutes = "Торговые маршруты";
 $l_trade_control = "Контроль торговли";
 
 $l_youhave = "У вас есть ";
-$l_turns_used = "Ходов использовано: ";
 $l_turns_have = "Ходов доступно: ";
-$l_score = "Очки: ";
 $l_sector = "Сектор";
 
 

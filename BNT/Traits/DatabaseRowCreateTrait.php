@@ -12,13 +12,14 @@ trait DatabaseRowCreateTrait
     use DatabaseMainTrait;
 
     public array $data;
+    public ?int $id;
 
-    protected function rowCreate(string $table): ?string
+    protected function rowCreate(string $table, ?array $data = null): void
     {
         $parameters = [];
         $sets = [];
 
-        foreach ($this->data as $key => $value) {
+        foreach ($data ?? $this->data as $key => $value) {
             $sets[] = sprintf('%s = :%s', $key, $key);
             $parameters[$key] = $value;
         }
@@ -29,7 +30,9 @@ trait DatabaseRowCreateTrait
             throw new \Exception($this->db()->ErrorMsg());
         }
 
-        return $this->db()->lastInsertId();
+        $id = $this->db()->lastInsertId();
+
+        $this->id = is_null($id) ? null : (int) $id;
     }
 
     public static function call(ContainerInterface $container, array $data): self

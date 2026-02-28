@@ -13,7 +13,7 @@ class NewController extends BaseController
     public bool $accountCreationClosed;
     public string $gamepath;
     public string $gamedomain;
-    
+
     #[\Override]
     protected function init(): void
     {
@@ -23,12 +23,22 @@ class NewController extends BaseController
     }
 
     #[\Override]
+    protected function preProcess(): void
+    {
+        $this->title = $this->l->new_title;
+
+        if ($this->accountCreationClosed) {
+            throw new WarningException($this->l->new_closed_message);
+        }
+    }
+
+    #[\Override]
     protected function processGet(): void
     {
         if (empty($this->userinfo)) {
             $this->render('tpls/new.tpl.php');
         } else {
-            $this->redirectTo('index.php');
+            $this->redirectTo('index');
         }
     }
 
@@ -37,12 +47,8 @@ class NewController extends BaseController
     {
 
         if (!empty($this->userinfo)) {
-            $this->redirectTo('index.php');
+            $this->redirectTo('index');
             return;
-        }
-
-        if ($this->accountCreationClosed) {
-            throw new WarningException($this->l->new_closed_message);
         }
 
         $username = (string) $this->fromParsedBody('username', $this->l->new_username . ' ' . $this->l->is_required);
@@ -59,6 +65,6 @@ class NewController extends BaseController
         $gameNew->serve();
 
         $this->setCookie('token', $gameNew->user['token'], time() + (3600 * 24) * 365, $this->gamepath, $this->gamedomain);
-        $this->redirectTo('main.php');
+        $this->redirectTo('main');
     }
 }

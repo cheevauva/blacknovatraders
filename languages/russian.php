@@ -41,6 +41,8 @@ $l_planets = "Планеты";
 $l_modify_defence = "Оборона сектора";
 $l_attack = "Атака ";
 $l_port = 'Порт';
+$l_turns_used = "Ходов использовано";
+$l_score = "Очки";
 
 $l_news_title = "Новости вселенной";
 $l_rankings = "Рейтинги";
@@ -82,11 +84,11 @@ $l_is_invalid = 'является неправильным';
 
 // global_funcs.php
 
-$l_global_mmenu = "Нажмите <A HREF=main.php>здесь</A>, чтобы вернуться в главное меню.";
-$l_global_mlogin = "Нажмите <A HREF=login.php>здесь</A>, чтобы вернуться на экран входа.";
-$l_global_needlogin = "Вам необходимо войти в систему, нажмите <A HREF=login.php>здесь</A>.";
+$l_global_mmenu = "Нажмите <A HREF=[main]>здесь</A>, чтобы вернуться в главное меню.";
+$l_global_mlogin = "Нажмите <A HREF=[login]>здесь</A>, чтобы вернуться на экран входа.";
+$l_global_needlogin = "Вам необходимо войти в систему, нажмите <A HREF=[login]>здесь</A>.";
 $l_global_needchooseship = 'Вам необходимо выбрать корабль, нажмите <A HREF=ships.php>здесь</A>.';
-$l_global_died = "Игрок МЕРТВ! <a href=log.php>Вот</a> что произошло<BR><BR>Удачи в следующий раз!";
+$l_global_died = "Игрок МЕРТВ! <a href=[log]>Вот</a> что произошло<BR><BR>Удачи в следующий раз!";
 $l_global_warzone = "Зона теперь является зоной войны!";
 $l_global_nzone = "Зона является нейтральной зоной.";
 $l_global_team = "Зона теперь принадлежит альянсу";

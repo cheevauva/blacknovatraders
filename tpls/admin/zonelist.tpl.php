@@ -1,6 +1,6 @@
 <?php $self = BNT\Controller\AdminZoneController::as($self); ?>
 <?php include_header(); ?>
-<?php bigtitle();?>
+<?php bigtitle(); ?>
 <div class="card shadow">
     <div class="card-header bg-primary text-white">
         <h3 class="mb-0">
@@ -8,7 +8,7 @@
         </h3>
     </div>
     <div class="card-body">
-        <form action="admin.php" method="GET">
+        <form action="<?= route('admin'); ?>" method="GET">
             <div class="row align-items-start">
                 <div class="col-md-8 mb-3">
                     <label class="form-label fw-bold mb-2">Select Zone:</label>

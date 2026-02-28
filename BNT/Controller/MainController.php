@@ -17,6 +17,12 @@ class MainController extends BaseController
     public array $zoneinfo = [];
     public array $traderoutes = [];
     public array $shipsInSector;
+    
+    #[\Override]
+    protected function preProcess(): void
+    {
+        $this->title = $this->l->main_title;
+    }
 
     #[\Override]
     protected function processGetAsHtml(): void

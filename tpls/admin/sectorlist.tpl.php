@@ -12,7 +12,7 @@
             <strong>Note:</strong> Cannot Edit Sector 0
         </div>
 
-        <form action="admin.php" method="GET">
+        <form action="<?= route('admin'); ?>" method="GET">
             <div class="row align-items-start">
                 <div class="col-md-8 mb-3">
                     <label class="form-label fw-bold mb-2">Select Sector:</label>

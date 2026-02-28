@@ -49,10 +49,10 @@ class BountyController extends BaseController
             $this->playerinfo['turns_used'] += 1;
             $this->playerinfo['credits'] -= $amount;
             $this->playerinfoUpdate();
-            $this->redirectTo('bounty.php');
+            $this->redirectTo('bounty');
             return;
         }
-        
+
         if ($this->response === 'cancel') {
             $this->checkTurns();
             $bountyId = (int) $this->fromParsedBody('bid', 'bid ' . $this->l->is_required);
@@ -74,7 +74,10 @@ class BountyController extends BaseController
             $this->playerinfo['turns_used'] += 1;
             $this->playerinfo['credits'] += $bounty['amount'];
             $this->playerinfoUpdate();
-            $this->redirectTo(sprintf('bounty.php?bounty_on=%s&response=display', $bounty['bounty_on']));
+            $this->redirectTo('bounty', [
+                'bounty_on' => $bounty['bounty_on'],
+                'response' => 'display',
+            ]);
             return;
         }
     }

@@ -8,7 +8,7 @@
         <h5 class="text-danger mb-3">
             Expand/Contract the Universe
         </h5>
-        <form action="admin.php?module=univedit&operation=doexpand" method="POST">
+        <form action="<?= route('admin', 'module=univedit&operation=doexpand'); ?>" method="POST">
             <div class="row align-items-center mb-4">
                 <div class="col-md-4">
                     <label class="form-label fw-bold">

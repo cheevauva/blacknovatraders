@@ -2,8 +2,9 @@
 global $title, $l, $link_forums, $admin_mail, $userinfo;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html data-bs-theme="<?= $userinfo['theme'] ?? 'dark';?>">
+<html data-bs-theme="<?= $userinfo['theme'] ?? 'dark'; ?>">
     <head>
+        <base href="/" />
         <title><?= $title; ?></title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,20 +53,20 @@ global $title, $l, $link_forums, $admin_mail, $userinfo;
         <div class="container">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="index.php"><img src="images/bnthed.gif" alt="Bootstrap" ></a>
+                    <a class="navbar-brand" href="<?= route('index'); ?>"><img src="images/bnthed.gif" alt="Bootstrap" ></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link" href="news.php"><?= $l->news_title; ?></a>
-                            <a class="nav-link" href="ranking.php"><?= $l->rankings; ?></a>
-                            <a class="nav-link" href="settings.php"><?= $l->settings_game; ?></A>
+                            <a class="nav-link" href="<?= route('news'); ?>"><?= $l->news_title; ?></a>
+                            <a class="nav-link" href="<?= route('ranking'); ?>"><?= $l->rankings; ?></a>
+                            <a class="nav-link" href="<?= route('settings'); ?>"><?= $l->settings_game; ?></A>
                             <?php if (isAdmin()) : ?>
-                                <a class="nav-link" href="admin.php"><?= "$l->admin"; ?></a>
+                                <a class="nav-link" href="<?= route('admin'); ?>"><?= "$l->admin"; ?></a>
                             <?php endif; ?>
                             <?php if (!empty($userinfo)) : ?>
-                                <a class="nav-link" href="logout.php"><?= "$l->logout"; ?></a>
+                                <a class="nav-link" href="<?= route('logout'); ?>"><?= "$l->logout"; ?></a>
                             <?php endif; ?>
                         </div>
                     </div>

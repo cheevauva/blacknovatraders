@@ -8,5 +8,5 @@ $l_die_nonono = "НЕТ! НЕТ! НЕТ!";
 $l_die_what = "О чем я думал?";
 $l_die_count = "5.. 4.. 3.. 2.. 1.. Бум!";
 $l_die_vapor = "Ваш корабль и все на борту испарены.";
-$l_die_please = "Пожалуйста, <A HREF=logout.php>выйдите</A>";
+$l_die_please = "Пожалуйста, <A HREF=[logout]>выйдите</A>";
 $l_die_exploit = "Не играйте с тем, чего не понимаете.";

@@ -11,15 +11,6 @@ include("header.php");
 
 bigtitle();
 
-function CHECKED($yesno)
-{
-    return(($yesno == "Y") ? "CHECKED" : "");
-}
-
-function YESNO($onoff)
-{
-    return(($onoff == "ON") ? "Y" : "N");
-}
 
 $module = fromPOST('menu');
 $swordfish = fromPOST('swordfish');

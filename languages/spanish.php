@@ -278,7 +278,7 @@ $l_planet_name_link = "Name";
 $l_planet_name2 = "[name] planet";
 $l_planet_land_link      = "Land";
 $l_planet_land           = "[land] on Planet";
-$l_planet_logout     = "You can also <a href=logout.php>log-out</a> in the safety of your planet.";
+$l_planet_logout     = "You can also <a href=[logout]>log-out</a> in the safety of your planet.";
 $l_planet_selling    = "Planet is presently selling commodities.";
 $l_planet_not_selling    = "Planet is not presently selling commodities.";
 $l_planet_transfer_link  = "Transfer";
@@ -466,7 +466,7 @@ $l_die_nonono        = "NO! NO! NO!";
 $l_die_what      = "What was I thinking?";
 $l_die_count         = "5.. 4.. 3.. 2.. 1.. Boom!";
 $l_die_vapor         = "You ship and all aboard have been vaporized.";
-$l_die_please        = "Please, <A HREF=logout.php>logout</A>";
+$l_die_please        = "Please, <A HREF=[logout]>logout</A>";
 $l_die_exploit       = "Don't play with what you don't understand.";
 
 // move.php
@@ -510,8 +510,8 @@ $l_log_nopod = "<font color=yellow><b>You did not have an escape pod, you died.<
 $l_log_log = "[player]'s Log";
 $l_log_start = "Log entry for";
 $l_log_end = "End of log entry for";
-$l_log_click = "Click <A HREF=main.php><font color=#00ff00>here</font></A> to return to the main menu.";
-$l_log_note = "NOTE: If this page displays incorrectly, or if you simply don't like the dynamic html effects or find them annoying, you can disable them <a href=options.php><font color=#00FF00>here</font>";
+$l_log_click = "Click <A HREF=[main]><font color=#00ff00>here</font></A> to return to the main menu.";
+$l_log_note = "NOTE: If this page displays incorrectly, or if you simply don't like the dynamic html effects or find them annoying, you can disable them <a href=[options]><font color=#00FF00>here</font>";
 
 $l_log_text[LogTypeConstants::LOG_LOGIN] = "You have logged in, from [ip].";
 $l_log_title[LogTypeConstants::LOG_LOGIN] = "Logged in";
@@ -1232,21 +1232,21 @@ $l_login_title          ="Login";
 $l_login_email          ="E-mail Address:";
 $l_login_pw         ="Password:";
 $l_login_chooseres      ="Unable to determine your screen resolution. Please choose the best fit:";
-$l_login_newp           = "If you are a new player, click <A HREF=\"new.php\">here</A>.";
+$l_login_newp           = "If you are a new player, click <A href=[new]>here</A>.";
 $l_login_prbs           = "Problems?";
 $l_login_emailus        = "E-mail us";
 $l_login_sclosed        = "Server Closed";
 $l_login_closed_message     ="Server closed until further notice.";
 $l_login_title2         ="Login Phase Two";
 $l_login_banned         ="<b>You have been banned from this game by the administrator. You are no longer welcome to play on this server. Next time, behave.</b>";
-$l_login_died           ="Your ship was destroyed, but your escape pod saved you and your crew.  Click <A HREF=main.php>here</A> to continue with a new ship.";
+$l_login_died           ="Your ship was destroyed, but your escape pod saved you and your crew.  Click <A HREF=[main]>here</A> to continue with a new ship.";
 $l_login_newbie         ="Due to the seriousness of this crime and the vicious attack against you, the Federation has graciously decided to provide a free of charge cloning from your remains.  Sadly, even in this day and age, new clones can not own property, aside from the basics to make a living.  You will be provided with a basic ship and a few credits to get you started.  Hopefully your next life will be better.";
-$l_login_newlife        ="Click <A HREF=main.php>here</A> to continue in a new life.";
+$l_login_newlife        ="Click <A HREF=[main]>here</A> to continue in a new life.";
 $l_login_looser         ="You had no escape pod, and due to your modest success in this life, the Federation declines to clone you.  Your remains should eventually fall into a gravity well, hopefully to be used to create life elsewhere... several billion years from now.<BR><BR> Better luck next game...";
 $l_login_4gotpw1        = "The password you entered is incorrect.<BR><BR>  If you have forgotten your password, ";
 $l_login_4gotpw2        = "to have it e-mailed to you.<BR><BR>  Otherwise,";
 $l_login_4gotpw3        = "to try again.  Attempt logged with IP address of";
-$l_login_noone          = "No Such Player! - Create a new player <A HREF=new.php>here</A>.";
+$l_login_noone          = "No Such Player! - Create a new player <A href=[new]>here</A>.";
 $l_login_lang = "Language";
 $l_login_settings = "Game Settings";
 $l_login_change = "Change";
@@ -1266,7 +1266,7 @@ $l_new_inusechar        ="Character name $character, is already in use.";
 $l_new_inuseship        ="Ship name $shipname, is already in use.";
 $l_new_pwsent           ="Password has been sent to ${HTTP_POST_VARS['username']}.";
 $l_new_login            ="to go to the login screen.";
-$l_new_err          ="Please go back or <a href=new.php>click here</a> and try again.";
+$l_new_err          ="Please go back or <a href=[new]>click here</a> and try again.";
 $l_new_topic            ="Traders Password";
 $l_new_message          ="Greetings,\n\nSomeone from the IP address $ip requested that your password for Traders be sent to you.\n\nYour password is: [pass]\n\nThank you\n\nThe Traders web team.";
 
@@ -1278,17 +1278,17 @@ $l_logout_text          ="[name] is now logged out.  Click <A HREF=index.php>her
 // mail.php
 
 $l_mail_title           ="Mail Password";
-$l_mail_noplayer        ="No Such Player! - Create a new player <a href=new.php>here</a>.";
+$l_mail_noplayer        ="No Such Player! - Create a new player <a href=[new]>here</a>.";
 $l_mail_sent            ="Password has been sent to";
 $l_mail_topic           ="$game_name Password";
 $l_mail_message         ="Greetings,\n\nSomeone from the IP address $ip requested that your password for $game_name be sent to you.\n\nYour password is: [pass]\n\nThank you\n\nThe $game_name web team.";
 
 // global_funcs.php
 
-$l_global_mmenu         ="Click <A HREF=main.php>here</A> to return to the main menu.";
-$l_global_mlogin        ="Click <A HREF=login.php>here</A> to return to the login screen.";
-$l_global_needlogin     ="You need to log in, click <A HREF=login.php>here</A>.";
-$l_global_died          ="Player is DEAD! <a href=log.php>Here</a>'s what happened<BR><BR>Better Luck Next Time!";
+$l_global_mmenu         ="Click <A HREF=[main]>here</A> to return to the main menu.";
+$l_global_mlogin        ="Click <A HREF=[login]>here</A> to return to the login screen.";
+$l_global_needlogin     ="You need to log in, click <A HREF=[login]>here</A>.";
+$l_global_died          ="Player is DEAD! <a href=[log]>Here</a>'s what happened<BR><BR>Better Luck Next Time!";
 $l_global_warzone       ="Zone is now a War Zone!";
 $l_global_nzone         ="Zone is a neutral zone.";
 $l_global_team          ="Zone now belongs to alliance";
@@ -1509,7 +1509,7 @@ $l_planet_name_link = "Nombre";
 $l_planet_name2 = "[name] del Planeta";
 $l_planet_land_link      = "Aterrizar";
 $l_planet_land           = "[land] en el Planeta";
-$l_planet_logout     = "También puedes <a href=logout.php>desconectar</a> en la seguridad de tu planeta.";
+$l_planet_logout     = "También puedes <a href=[logout]>desconectar</a> en la seguridad de tu planeta.";
 $l_planet_selling    = "El planeta está vendiendo actualmente mercancías.";
 $l_planet_not_selling    = "El planeta no está vendiendo actualmente mercancías.";
 $l_planet_transfer_link  = "Transferir";
@@ -1699,7 +1699,7 @@ $l_die_nonono        = "¡NO! ¡NO! ¡NO!";
 $l_die_what      = "¿En qué estaba yo pensando?";
 $l_die_count         = "5.. 4.. 3.. 2.. 1.. ¡Bum!";
 $l_die_vapor         = "Tu nave y todos los que estaban a bordo han sido vaporizados.";
-$l_die_please        = "Por favor, <A HREF=logout.php>desconéctate</A>";
+$l_die_please        = "Por favor, <A HREF=[logout]>desconéctate</A>";
 $l_die_exploit       = "No juegues con lo que no entiendes.";
 
 // move.php
@@ -1743,8 +1743,8 @@ $l_log_nopod = "<font color=yellow><b>No tenías cápsula de salvamento. Has mue
 $l_log_log = "Diario de [player]";
 $l_log_start = "Entrada en el diario para";
 $l_log_end = "Fin de la entrada de diario para";
-$l_log_click = "Pulsa <A HREF=main.php><font color=#00ff00>aquí</font></A> para volver al menú principal.";
-$l_log_note = "NOTA: Si esta página se muestra incorrectamente, o si simplemente no te gustan los efectos de html dinámico, o lo encuentras molesto, puedes desactivarlos <a href=options.php><font color=#00FF00>aquí</font></a>";
+$l_log_click = "Pulsa <A HREF=[main]><font color=#00ff00>aquí</font></A> para volver al menú principal.";
+$l_log_note = "NOTA: Si esta página se muestra incorrectamente, o si simplemente no te gustan los efectos de html dinámico, o lo encuentras molesto, puedes desactivarlos <a href=[options]><font color=#00FF00>aquí</font></a>";
 
 $l_log_text[LogTypeConstants::LOG_LOGIN] = "Te has conectado, desde [ip].";
 $l_log_title[LogTypeConstants::LOG_LOGIN] = "Conectado";
@@ -2458,22 +2458,22 @@ $l_login_title          = "Conectar";
 $l_login_email          = "Dirección de email:";
 $l_login_pw         = "Contraseña:";
 $l_login_chooseres      = "Imposible determinar tu resolución de pantalla. Por favor, escoge la que mejor se ajuste:";
-$l_login_newp           = "Si eres un jugador nuevo, pulsa <A HREF=\"new.php\">aquí</A>.";
+$l_login_newp           = "Si eres un jugador nuevo, pulsa <A href=[new]>aquí</A>.";
 $l_login_prbs           = "¿Problemas?";
 $l_login_emailus        = "Mándanos un email";
 $l_login_sclosed        = "Servidor Cerrado";
 $l_login_closed_message     = "Servidor cerrado hasta futuras notificaciones.";
 $l_login_title2         = "Fase Dos de la Conexión";
 $l_login_banned         = "<b>Has sido vetado de este juego por el administrador. Ya no eres bienvenido a jugar en este servidor. La próxima vez, compórtate.</b>";
-$l_login_died           = "Tu nave ha sido destruida, pero tú y tu tripulación os habéis salvado gracias a una cápsula de salvamento. Pulsa <A HREF=main.php>aquí</A> para continuar con una nueva nave.";
+$l_login_died           = "Tu nave ha sido destruida, pero tú y tu tripulación os habéis salvado gracias a una cápsula de salvamento. Pulsa <A HREF=[main]>aquí</A> para continuar con una nueva nave.";
 $l_login_newbie         = "Debido a la seriedad de este crimen y el terrible ataque contra ti, la Federación ha decidido proveerte sin cargo alguno de una clonación de tus restos. Lamentablemente, incluso a estas alturas los nuevos clones no pueden poseer propiedades, aparte de las fundamentales para poder vivir. Te será otorgado una nave básica y unos cuantos créditos para que comiences. Esperamos que te vaya mejor en tu nueva vida.";
 
-$l_login_newlife        = "Pulsa <A HREF=main.php>aquí</A> para continuar una nueva vida.";
+$l_login_newlife        = "Pulsa <A HREF=[main]>aquí</A> para continuar una nueva vida.";
 $l_login_looser         = "No tenías cápsula de salvamento, y debido a tu modesto éxite en esta vida, la Federación no accede a clonarte. Tus restos caerán probablemente en un campo gravitatorio, con la esperanza de ser usados para crear vida en cualquier lugar... dentro de un billón de años.<br><br>Mejor suerte en tu siguiente partida...";
 $l_login_4gotpw1        = "La contraseña que has introducido es incorrecta<br><br>Si has olvidado tu contraseña,";
 $l_login_4gotpw2        = "para que te sea enviada por email.<br><br>De otro modo,";
 $l_login_4gotpw3        = "inténtalo de nuevo. Intento de conexión con la dirección IP de";
-$l_login_noone          = "¡No existe ese jugador! - Crea un nuevo jugador <A HREF=new.php>aquí</A>.";
+$l_login_noone          = "¡No existe ese jugador! - Crea un nuevo jugador <A href=[new]>aquí</A>.";
 $l_login_lang = "Idioma";
 $l_login_settings = "Configuración del Juego";
 $l_login_change = "Cambiar";
@@ -2493,7 +2493,7 @@ $l_new_inusechar        = "El nombre de personaje $character ya está en uso.";
 $l_new_inuseship        = "El nombre de la nave $shipname ya está en uso.";
 $l_new_pwsent           = "La contraseña ha sido enviada a ${HTTP_POST_VARS['username']}";
 $l_new_login            = "para ir a la pantalla de conexión";
-$l_new_err          = "Por favor, ve atrás o <a href=new.php>pulsa aquí</a> e inténtalo de nuevo.";
+$l_new_err          = "Por favor, ve atrás o <a href=[new]>pulsa aquí</a> e inténtalo de nuevo.";
 $l_new_topic            = "Contraseña de Traders";
 $l_new_message          = "Saludos,\r\n\r\nAlguien desde la dirección IP $ip ha solicitado tu contraseña para Traders te sea enviada.\r\n\r\nTu contraseña es: [pass]\r\n\r\nGracias\r\n\r\nEl equipo web de Traders.";
 
@@ -2505,7 +2505,7 @@ $l_logout_text          = "[name] está ahora desconectado. Pulsa <A HREF=index.
 
 // mail.php
 $l_mail_title           = "Enviar Contraseña";
-$l_mail_noplayer        = "¡No existe ese jugador! - Crea un nuevo jugador desde <a href=new.php>aquí</a>.";
+$l_mail_noplayer        = "¡No existe ese jugador! - Crea un nuevo jugador desde <a href=[new]>aquí</a>.";
 $l_mail_sent            = "La contraseña ha sido enviada a";
 $l_mail_topic           = "Contraseña de $game_name";
 $l_mail_message         = "Saludos,\r\n\r\nAlguien desde la dirección IP $ip ha solicitado que tu contraseña para $game_name te sea enviada.\r\n\r\nTu contraseña es: [pass]\r\n\r\nGracias\r\n\r\nEl equipo web de $game_name.";
@@ -2513,10 +2513,10 @@ $l_mail_message         = "Saludos,\r\n\r\nAlguien desde la dirección IP $ip ha
 
 
 // global_funcs.php
-$l_global_mmenu         = "Pulsa <A HREF=main.php>aquí</A> para volver al menú principal.";
-$l_global_mlogin        = "Pulsa <A HREF=login.php>aquí</A> para volver a la pantalla de conexión.";
-$l_global_needlogin     = "Necesitas estar conectado, pulsa <A HREF=login.php>aquí</A>.";
-$l_global_died          = "¡El jugador está MUERTO! <a href=log.php>Aquí</a> está lo que ha ocurido<br><br>¡Mejor suerte la próxima vez!";
+$l_global_mmenu         = "Pulsa <A HREF=[main]>aquí</A> para volver al menú principal.";
+$l_global_mlogin        = "Pulsa <A HREF=[login]>aquí</A> para volver a la pantalla de conexión.";
+$l_global_needlogin     = "Necesitas estar conectado, pulsa <A HREF=[login]>aquí</A>.";
+$l_global_died          = "¡El jugador está MUERTO! <a href=[log]>Aquí</a> está lo que ha ocurido<br><br>¡Mejor suerte la próxima vez!";
 $l_global_warzone       = "¡La zona es una zona de guerra!";
 $l_global_nzone         = "La zona es una zona neutral.";
 $l_global_team          = "La zona pertenece ahora a la alianza";

@@ -50,7 +50,7 @@ class WarpeditController extends BaseController
                 $this->playerinfo['dev_warpedit'] -= 1;
                 $this->playerinfo['turns'] -= 1;
                 $this->playerinfoUpdate();
-                $this->redirectTo('index.php');
+                $this->redirectTo('index');
                 break;
             case 'unlink':
                 $remove = LinkRemoveServant::new($this->container);
@@ -62,7 +62,7 @@ class WarpeditController extends BaseController
                 $this->playerinfo['dev_warpedit'] -= 1;
                 $this->playerinfo['turns'] -= 1;
                 $this->playerinfoUpdate();
-                $this->redirectTo('index.php');
+                $this->redirectTo('index');
                 break;
         }
     }

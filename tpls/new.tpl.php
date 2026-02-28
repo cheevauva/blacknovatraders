@@ -1,54 +1,32 @@
-<?php 
-global $l_new_title;
-global $l_new_username;
-global $l_new_shipname;
-global $l_new_pname;
-global $l_new_password;
-global $l_submit;
-global $l_reset;
-global $l_new_info;
-$title = $l_new_title;
-$self = \BNT\Controller\NewController::as($self);
-?>
-<?php include_header();?>
+<?php $self = \BNT\Controller\NewController::as($self); ?>
+<?php include_header(); ?>
 <?php bigtitle(); ?>
-<?php if (!empty($ex)) : ?>  
-    <div class="alert alert-danger">
-        <?php echo $ex->getMessage(); ?>
+<form action="<?= route('new');?>" id="bntNewForm" method="POST">
+    <div class="mb-3">
+        <div class="form-text">
+            <?= $l->new_info; ?>
+        </div>
     </div>
-<?php else : ?>
-    <form action="new.php" id="bntNewForm" method="post">
-        <div class="alert alert-warning alert-dismissible bntNewError d-none" role="alert">
-            <span class="error"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <div class="mb-3">
-            <div class="form-text">
-                <?php echo $l_new_info; ?>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label"><?php echo $l_new_username; ?></label>
-            <input type="text" name="username" class="form-control" maxlength="40" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label"><?php echo $l_new_shipname; ?></label>
-            <input type="text" name="shipname" class="form-control" maxlength="20"  required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label"><?php echo $l_new_pname; ?></label>
-            <input type="text" name="character" class="form-control" maxlength="20"  required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label"><?php echo $l_new_password; ?></label>
-            <input type="password" name="password" class="form-control" maxlength="20"  required>
-        </div>
-        <input type="submit" class="btn btn-primary" value="<?php echo $l_submit; ?>">
-        <input type="reset"  class="btn btn-primary" value="<?php echo $l_reset; ?>">
-    </form>
-
-    <script type="text/javascript">
-        bntForm('bntNewForm');
-    </script>
-<?php endif; ?>
-<?php include_footer();?>
+    <div class="mb-3">
+        <label class="form-label"><?= $l->new_username; ?></label>
+        <input type="text" name="username" class="form-control" maxlength="40" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><?= $l->new_shipname; ?></label>
+        <input type="text" name="shipname" class="form-control" maxlength="20"  required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><?= $l->new_pname; ?></label>
+        <input type="text" name="character" class="form-control" maxlength="20"  required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label"><?= $l->new_password; ?></label>
+        <input type="password" name="password" class="form-control" maxlength="20"  required>
+    </div>
+    <input type="submit" class="btn btn-primary" value="<?= $l->submit; ?>">
+    <input type="reset"  class="btn btn-primary" value="<?= $l->reset; ?>">
+</form>
+<script type="text/javascript">
+    bntForm('bntNewForm');
+</script>
+<?php include_footer(); ?>

@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <h2 class="mb-4">Ship Editor</h2>
 
-    <form action="admin.php?module=ship&operation=save&ship=<?= $ship['ship_id']; ?>" id="bntUsereditForm" method="POST">
+    <form action="<?= route('admin', 'module=ship&operation=save&ship=' . $ship['ship_id']);?>" id="bntUsereditForm" method="POST">
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Basic Information</h5>

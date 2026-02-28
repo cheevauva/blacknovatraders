@@ -1,5 +1,5 @@
 <?php $self = BNT\Controller\AdminZoneController::as($self); ?>
-<?php $zone = $self->zone;?>
+<?php $zone = $self->zone; ?>
 <?php include_header(); ?>
 <div class="card shadow">
     <div class="card-header bg-primary text-white">
@@ -8,7 +8,7 @@
         </h3>
     </div>
     <div class="card-body">
-        <form action="admin.php?module=zone&operation=save&zone=<?= $zone['zone_id']; ?>" method="POST" id="bntPlaneteditForm">
+        <form action="<?= route('admin', 'module=zone&operation=save&zone=' . $zone['zone_id']); ?>" method="POST" id="bntPlaneteditForm">
             <div class="row mb-4">
                 <div class="col-md-4 mb-3">
                     <label class="form-label fw-bold">Zone ID</label>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-8 mb-3">
                     <label class="form-label fw-bold">Zone Name</label>
-                    <input type="text" class="form-control" name="zone_name"  value="<?=  htmlspecialchars($zone['zone_name']); ?>">
+                    <input type="text" class="form-control" name="zone_name"  value="<?= htmlspecialchars($zone['zone_name']); ?>">
                 </div>
             </div>
 

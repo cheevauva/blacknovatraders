@@ -1,70 +1,70 @@
-<?php $title = $l_device_title; ?>
-<?php include 'header.php'; ?>
+<?php $self = BNT\Controller\DeviceController::as($self); ?>
+<?php include_header(); ?>
 <?php bigtitle(); ?>
-<?php echo $l_device_expl; ?>
+<?= $l->device_expl; ?>
 <BR><BR>
 <TABLE class="table table-hover">
     <TR>
-        <TD><B><?php echo $l_device; ?></B></TD>
-        <TD><B><?php echo $l_qty; ?></B></TD>
-        <TD><B><?php echo $l_usage; ?></B></TD>
+        <TD><B><?= $l->device; ?></B></TD>
+        <TD><B><?= $l->qty; ?></B></TD>
+        <TD><B><?= $l->usage; ?></B></TD>
     </TR>
     <TR>
-        <TD><A HREF=beacon.php><?php echo $l_beacons; ?></A></TD>
-        <TD><?php echo NUMBER($playerinfo['dev_beacon']); ?></TD>
-        <TD><?php echo $l_manual; ?></TD>
+        <TD><A HREF="<?= route('beacon'); ?>"><?= $l->beacons; ?></A></TD>
+        <TD><?= number($self->playerinfo['dev_beacon']); ?></TD>
+        <TD><?= $l->manual; ?></TD>
     </TR>
     <TR >
-        <TD><A HREF=warpedit.php><?php echo $l_warpedit; ?></A></TD>
-        <TD><?php echo NUMBER($playerinfo['dev_warpedit']); ?></TD>
-        <TD><?php echo $l_manual; ?></TD>
+        <TD><A HREF=warpedit.php><?= $l->warpedit; ?></A></TD>
+        <TD><?= number($self->playerinfo['dev_warpedit']); ?></TD>
+        <TD><?= $l->manual; ?></TD>
     </TR>
     <TR>
-        <TD><A HREF=genesis.php><?php echo $l_genesis; ?></A></TD>
-        <TD><?php echo NUMBER($playerinfo['dev_genesis']); ?></TD>
-        <TD><?php echo $l_manual; ?></TD>
+        <TD><A HREF=genesis.php><?= $l->genesis; ?></A></TD>
+        <TD><?= number($self->playerinfo['dev_genesis']); ?></TD>
+        <TD><?= $l->manual; ?></TD>
     </TR>
     <TR >
-        <TD><?php echo $l_deflect; ?></TD>
-        <TD><?php echo NUMBER($playerinfo['dev_minedeflector']); ?></TD>
-        <TD><?php echo $l_automatic; ?></TD>
+        <TD><?= $l->deflect; ?></TD>
+        <TD><?= number($self->playerinfo['dev_minedeflector']); ?></TD>
+        <TD><?= $l->automatic; ?></TD>
     </TR>
     <TR>
-        <TD><A HREF=mines.php?op=1><?php echo $l_mines; ?></A></TD>
-        <TD><?php echo NUMBER($playerinfo['torps']); ?></TD>
-        <TD><?php echo $l_manual; ?></TD>
+        <TD><A HREF=mines.php?op=1><?= $l->mines; ?></A></TD>
+        <TD><?= number($self->playerinfo['torps']); ?></TD>
+        <TD><?= $l->manual; ?></TD>
     </TR>
     <TR >
-        <TD><A HREF=mines.php?op=2><?php echo $l_fighters; ?></A></TD>
-        <TD><?php echo NUMBER($playerinfo['ship_fighters']); ?></TD>
-        <TD><?php echo $l_manual; ?></TD>
+        <TD><A HREF=mines.php?op=2><?= $l->fighters; ?></A></TD>
+        <TD><?= number($self->playerinfo['ship_fighters']); ?></TD>
+        <TD><?= $l->manual; ?></TD>
     </TR>
     <TR>
-        <TD><A HREF=emerwarp.php><?php echo $l_ewd; ?></A></TD>
-        <TD><?php echo NUMBER($playerinfo['dev_emerwarp']); ?></TD>
-        <TD><?php echo $l_manual; ?>/<?php echo $l_automatic; ?></TD>
+        <TD><A HREF=emerwarp.php><?= $l->ewd; ?></A></TD>
+        <TD><?= number($self->playerinfo['dev_emerwarp']); ?></TD>
+        <TD><?= $l->manual; ?>/<?= $l->automatic; ?></TD>
     </TR>
     <TR >
-        <TD><?php echo $l_escape_pod; ?></TD>
+        <TD><?= $l->escape_pod; ?></TD>
         <TD>
-            <?php echo ($playerinfo['dev_escapepod'] == 'Y') ? $l_yes : $l_no; ?>
+            <?= lYesNo($self->playerinfo['dev_escapepod']); ?>
         </TD>
-        <TD><?php echo $l_automatic; ?></TD>
+        <TD><?= $l->automatic; ?></TD>
     </TR>
     <TR>
-        <TD><?php echo $l_fuel_scoop; ?></TD>
+        <TD><?= $l->fuel_scoop; ?></TD>
         <TD>
-            <?php echo ($playerinfo['dev_fuelscoop'] == 'Y') ? $l_yes : $l_no; ?>
+            <?= lYesNo($self->playerinfo['dev_fuelscoop']); ?>
         </TD>
-        <TD><?php echo $l_automatic; ?></TD>
+        <TD><?= $l->automatic; ?></TD>
     </TR>
     <TR >
-        <TD><?php echo $l_lssd; ?></TD>
+        <TD><?= $l->lssd; ?></TD>
         <TD>
-            <?php echo ($playerinfo['dev_lssd'] == 'Y') ? $l_yes : $l_no; ?>
+            <?= lYesNo($self->playerinfo['dev_lssd']); ?>
         </TD>
-        <TD><?php echo $l_automatic; ?></TD>
+        <TD><?= $l->automatic; ?></TD>
     </TR>
 </TABLE>
 <BR>
-<?php include 'footer.php'; ?>
+<?php include_footer(); ?>

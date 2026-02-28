@@ -211,7 +211,7 @@ $l_planet_land_link      = "Atterir";
 $l_planet_land           = "[land] sur la planète";
 $l_planet_name_link = "Nommer";
 $l_planet_name2 = "[name] la planète";
-$l_planet_logout     = "Vous pouvez aussi <a href=logout.php>Quitter</a> le jeu sous la protection de votre planète.";
+$l_planet_logout     = "Vous pouvez aussi <a href=[logout]>Quitter</a> le jeu sous la protection de votre planète.";
 $l_planet_selling    = "La planète vend des commodités. ";
 $l_planet_not_selling    = "La planète ne vend aucune commodité. ";
 $l_planet_transfer_link  = "Transférer";
@@ -394,7 +394,7 @@ $l_die_nonono        = "NON! NON! NON!";
 $l_die_what      = "À quoi je pensais?";
 $l_die_count         = "5.. 4.. 3.. 2.. 1.. Boom!";
 $l_die_vapor         = "Votre vaisseau et tous ceux à bord ont été vaporisés.";
-$l_die_please        = "S'il vous plaît, <A HREF=logout.php>Quittez</A>";
+$l_die_please        = "S'il vous plaît, <A HREF=[logout]>Quittez</A>";
 $l_die_exploit       = "Ne jouez pas avec ce que vous ne comprenez pas.";
 
 // move.php
@@ -439,7 +439,7 @@ $l_log_log = "Journal de [player]";
 $l_log_start = "Entrées pour";
 $l_log_end = "Fin des entrées pour";
 $l_log_click = "Cliquez <A HREF=$interface><font color=#00ff00>ici</font></A> pour retourner au menu principal.";
-$l_log_note = "NOTE: Si cette page ne s'affiche pas correctement, ou si vous n'aimez pas les effets de HTML dynamique ou vous les trouvez agaçants, vous pouvez les désactiver <a href=options.php><font color=#00FF00>ici</font>";
+$l_log_note = "NOTE: Si cette page ne s'affiche pas correctement, ou si vous n'aimez pas les effets de HTML dynamique ou vous les trouvez agaçants, vous pouvez les désactiver <a href=[options]><font color=#00FF00>ici</font>";
 
 $l_log_text[LogTypeConstants::LOG_LOGIN] = "Vous vous êtes connecté, à partir de [ip].";
 $l_log_title[LogTypeConstants::LOG_LOGIN] = "Connection";
@@ -1122,21 +1122,21 @@ $l_login_title          = "Connection";
 $l_login_email          = "Adresse E-mail:";
 $l_login_pw         = "Mot de passe:";
 $l_login_chooseres      = "La résolution de votre écran n'a pu être déterminée. Veuillez choisir le plus près:";
-$l_login_newp           = "Si vous êtes un nouveau joueur, cliquez <A HREF=\"new.php\">ici</A>.";
+$l_login_newp           = "Si vous êtes un nouveau joueur, cliquez <A href=[new]>ici</A>.";
 $l_login_prbs           = "Problèmes?";
 $l_login_emailus        = "Écrivez nous";
 $l_login_sclosed        = "Le serveur est fermé";
 $l_login_closed_message     = "Le serveur est fermé jusqu'à nouvel ordre.";
 $l_login_title2         = "Phase deux de la connection";
 $l_login_banned         = "<b>Vous avez été bannis de ce serveur par l'administrateur. La prochaine fois, conduisez-vous mieux</b>";
-$l_login_died           = "Votre vaisseau a été détruit, mais votre module de secours vous a sauvé vous ainsi que votre équipage.  Cliquez <A HREF=main.php>ici</A> pour recommencer avec un nouveau vaisseau.";
+$l_login_died           = "Votre vaisseau a été détruit, mais votre module de secours vous a sauvé vous ainsi que votre équipage.  Cliquez <A HREF=[main]>ici</A> pour recommencer avec un nouveau vaisseau.";
 $l_login_newbie         = "À cause du degré de ce crime contre vous, la Fédération a gracieusement accepté de vous cloner. Malheureusement, même en cet âge, les nouveaux clones ne peuvent avoir de propriété, sauf les besoins essentiels. Vous aurez un vaisseau de base et quelque crédits pour commencer une nouvelle vie. Espérons qu'elle sera meilleure que l'ancienne.";
-$l_login_newlife        = "Cliquez <A HREF=main.php>ici</A> pour continuer vers une nouvelle vie.";
+$l_login_newlife        = "Cliquez <A HREF=[main]>ici</A> pour continuer vers une nouvelle vie.";
 $l_login_looser         = "Vous n'aviez pas de module de secours, donc vous avez péri.<BR><BR> Meilleure chance la prochaine fois...";
 $l_login_4gotpw1        = "Le mot de passe que vous avez entré est incorrect.<BR><BR>  Si vous avez oublié votre mot de passe, ";
 $l_login_4gotpw2        = "pour le recevoir par e-mail.<BR><BR>  Sinon,";
 $l_login_4gotpw3        = "pour essayer encore une fois.  La tentative a été enregistrée, de l'ip";
-$l_login_noone          = "Ce joueur n'existe pas! - Créer un nouveau joueur <A HREF=new.php>ici</A>.";
+$l_login_noone          = "Ce joueur n'existe pas! - Créer un nouveau joueur <A href=[new]>ici</A>.";
 $l_login_lang = "Langue";
 $l_login_settings = "Paramètres";
 $l_login_change = "Changer";
@@ -1156,7 +1156,7 @@ $l_new_inusechar        = "Le nom de joueur $character est déjà en utilisation
 $l_new_inuseship        = "Le nom de vaisseau $shipname est déjà en utilisation.";
 $l_new_pwsent           = "Le mot de passe a été envoyé à $username.";
 $l_new_login            = "pour aller à l'écran de connection.";
-$l_new_err          = "S'il vous plaît cliquez <a href=new.php>ici</a> pour réessayer.";
+$l_new_err          = "S'il vous plaît cliquez <a href=[new]>ici</a> pour réessayer.";
 $l_new_topic            = "Mot de passe pour Blacknova Traders";
 $l_new_message          = "Salutations,\n\nQuelqu'un avec l'ip $ip a demandé que votre mot de passe pour Blacknova Traders soit envoyé à cette adresse.\n\nVotre mot de passe est: [pass]\n\nMerci\n\nL'équipe de Blacknova Traders.";
 
@@ -1168,17 +1168,17 @@ $l_logout_text          = "[name] est maintenant déconnecté.  Cliquez <A HREF=
 // mail.php
 
 $l_mail_title           = "Envoyer le mot de passe";
-$l_mail_noplayer        = "Ce joueur n'existe pas! - Créer un nouveau joueur <a href=new.php>ici</a>.";
+$l_mail_noplayer        = "Ce joueur n'existe pas! - Créer un nouveau joueur <a href=[new]>ici</a>.";
 $l_mail_sent            = "Le mot de passe a été envoyé à";
 $l_mail_topic           = "Mot de passe pour $game_name";
 $l_mail_message         = "Salutations,\n\nQuelqu'un avec l'ip $ip a demandé que votre mot de passe pour Blacknova Traders soit envoyé à cette adresse.\n\nVotre mot de passe est: [pass]\n\nMerci\n\nL'équipe de Blacknova Traders.";
 
 // global_funcs.php
 
-$l_global_mmenu         = "Cliquez <A HREF=main.php>ici</A> pour retourner au menu principal.";
-$l_global_mlogin        = "Cliquez <A HREF=login.php>ici</A> pour retourner à l'écran de connection.";
-$l_global_needlogin     = "Vous devez vous connecter, cliquez <A HREF=login.php>ici</A>.";
-$l_global_died          = "Vous êtes mort! <a href=log.php>Voici</a> ce qui vous est arrivé<BR><BR>Meilleure chance la prochaine fois!";
+$l_global_mmenu         = "Cliquez <A HREF=[main]>ici</A> pour retourner au menu principal.";
+$l_global_mlogin        = "Cliquez <A HREF=[login]>ici</A> pour retourner à l'écran de connection.";
+$l_global_needlogin     = "Vous devez vous connecter, cliquez <A HREF=[login]>ici</A>.";
+$l_global_died          = "Vous êtes mort! <a href=[log]>Voici</a> ce qui vous est arrivé<BR><BR>Meilleure chance la prochaine fois!";
 $l_global_warzone       = "La zone est maintenant une Zone de Guerre!";
 $l_global_nzone         = "La zone est maintenant une Zone Neutre.";
 $l_global_team          = "La zone appartient maintenant à l'alliance";

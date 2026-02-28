@@ -19,6 +19,15 @@ class Language
         'l_warp_' => 'warpedit.php',
         'l_new_' => 'new.php',
         'l_planet_' => 'planet.php',
+        'l_main_' => 'main.php',
+        'l_log_' => 'log.php',
+        'l_news_' => 'news.php',
+        'l_ranks_' => 'ranking.php',
+        'l_team_' => 'teams.php',
+        'l_settings_' => 'settings.php',
+        'l_device_' => 'device.php',
+        'l_beacon_' => 'beacon.php',
+        'l_opt_' => 'options.php',
     ];
 
     public static function instance(): Language

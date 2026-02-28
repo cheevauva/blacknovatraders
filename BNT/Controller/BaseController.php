@@ -49,9 +49,9 @@ abstract class BaseController extends \UUA\Unit
         $this->l = $l;
     }
 
-    protected function redirectTo($location): void
+    protected function redirectTo($route, array|string $params = []): void
     {
-        $this->location = $location;
+        $this->location = route($route, $params);
     }
 
     protected function setCookie(string $name, string $value = "", int $expires_or_options = 0, string $path = "", string $domain = "", bool $secure = false, bool $httponly = false): void
@@ -68,7 +68,7 @@ abstract class BaseController extends \UUA\Unit
     {
         $this->acceptType ?? throw new WarningException('acceptType is required');
         $this->requestMethod ?? throw new WarningException('requestMethod is required');
-        
+
         try {
             $this->preProcess();
 
@@ -222,14 +222,14 @@ abstract class BaseController extends \UUA\Unit
 
         if ($this->enableCheckUser) {
             if (empty($this->userinfo)) {
-                $this->redirectTo('login.php');
+                $this->redirectTo('login');
                 return false;
             }
         }
 
         if ($this->enableCheckShip) {
             if (empty($this->playerinfo)) {
-                $this->redirectTo('ships.php');
+                $this->redirectTo('ships');
                 return false;
             }
         }

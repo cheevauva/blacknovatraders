@@ -1,12 +1,12 @@
 <?php include_header(); ?>
 <?php $self = \BNT\Controller\AdminSectorController::as($self); ?>
-<?php $sector = $self->sector;?>
+<?php $sector = $self->sector; ?>
 <div class="container-fluid mt-4">
     <h2 class="mb-4">
         Sector Editor
     </h2>
 
-    <form action="admin.php?module=sector&operation=save&sector=<?= $sector['sector_id']; ?>" method="POST" id="bntSectoreditForm">
+    <form action="<?= route('admin', 'module=sector&operation=save&sector=' . $sector['sector_id']); ?>" method="POST" id="bntSectoreditForm">
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">Sector Information</h5>

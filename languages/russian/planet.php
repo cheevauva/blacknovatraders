@@ -15,7 +15,7 @@ $l_planet_name_link = "Назвать";
 $l_planet_name2 = "[назвать] планету";
 $l_planet_land_link = "Приземлиться";
 $l_planet_land = "[приземлиться] на планету";
-$l_planet_logout = "Вы также можете <a href=logout.php>выйти</a> в безопасности вашей планеты.";
+$l_planet_logout = "Вы также можете <a href=[logout]>выйти</a> в безопасности вашей планеты.";
 $l_planet_selling = "Планета в настоящее время продает товары.";
 $l_planet_not_selling = "Планета в настоящее время не продает товары.";
 $l_planet_transfer_link = "Переместить";

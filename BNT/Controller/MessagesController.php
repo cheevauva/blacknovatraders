@@ -65,6 +65,6 @@ class MessagesController extends BaseController
                 break;
         }
 
-        $this->redirectTo('messages.php');
+        $this->redirectTo('messages');
     }
 }

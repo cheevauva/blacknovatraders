@@ -36,7 +36,7 @@ class ShipsController extends BaseController
         $shipId = intval($this->parsedBody['ship_id'] ?? 0);
 
         if (empty($shipId)) {
-            $this->redirectTo('ships.php');
+            $this->redirectTo('ships');
             return;
         }
 
@@ -45,6 +45,6 @@ class ShipsController extends BaseController
         $choose->shipId = $shipId;
         $choose->serve();
 
-        $this->redirectTo('main.php');
+        $this->redirectTo('main');
     }
 }

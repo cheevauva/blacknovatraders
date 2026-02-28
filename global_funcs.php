@@ -6,6 +6,38 @@ use BNT\Ship\Servant\ShipRestoreFromEscapePodServant;
 
 preg_match("/global_funcs.php/i", $_SERVER['PHP_SELF']) ? die("You can not access this file directly!") : null;
 
+function CHECKED($yesno): string
+{
+    return $yesno == "Y" ? "CHECKED" : "";
+}
+
+function YESNO($onoff): string
+{
+    return $onoff == "ON" ? "Y" : "N";
+}
+
+function lYesNo($value): string
+{
+    global $l;
+    
+    return $value === 'Y' ? $l->yes : $l->no;
+}
+
+function route(string $route, array|string $params = []): string
+{
+    $link = '/index.php/' . $route;
+
+    if (!empty($params) && is_array($params)) {
+        $link .= '?' . http_build_query($params);
+    }
+
+    if (!empty($params) && is_string($params)) {
+        $link .= '?' . $params;
+    }
+
+    return $link;
+}
+
 function db(): ADOPDO
 {
     global $db;
@@ -639,8 +671,8 @@ function collect_bounty($attacker, $bounty_on)
 
 function cancel_bounty($ship)
 {
-    global  $container;
-    
+    global $container;
+
     \BNT\Game\Servant\GameCancelBountyServant::call($container, (int) $ship);
 }
 

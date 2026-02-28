@@ -47,7 +47,7 @@ class AdminPlanetController extends BaseController
     protected function processPostAsJson(): void
     {
         global $l;
-        
+
         if ($this->operation === 'save') {
             $planet = (int) $this->fromQueryParams('planet', 'planet ' . $l->is_required);
 
@@ -74,7 +74,10 @@ class AdminPlanetController extends BaseController
                 'prod_fighters' => (int) fromPOST('prod_fighters', 0),
                 'prod_torp' => (int) fromPOST('prod_torp', 0)
             ], $planet);
-            $this->redirectTo('admin.php?module=planet&operation=list');
+            $this->redirectTo('admin', [
+                'module' => 'planet',
+                'operation' => 'list',
+            ]);
             return;
         }
         parent::processPostAsJson();

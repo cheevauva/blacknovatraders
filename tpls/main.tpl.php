@@ -1,5 +1,4 @@
 <?php
-$title = $l->main_title;
 $self = BNT\Controller\MainController::as($self);
 $picsperrow = 7;
 $shiptypes = shipTypes();
@@ -10,7 +9,7 @@ $planettypes = planetTypes();
 <table class="table">
     <tr>
         <td align="center" colspan=3>
-            <a href="ships.php"><?php echo htmlspecialchars($self->playerinfo['ship_name']); ?></a> [<?php echo player_insignia_name($self->playerinfo['ship_id']); ?>]
+            <a href="<?= route('ships');?>"><?php echo htmlspecialchars($self->playerinfo['ship_name']); ?></a> [<?php echo player_insignia_name($self->playerinfo['ship_id']); ?>]
         </td>
     </tr>
     <tr>
@@ -49,20 +48,20 @@ $planettypes = planetTypes();
                 <TR>
                     <td>
                         <ul class="list-group">
-                            <li class="list-group-item"><a class="nav-link" href="device.php"><?php echo $l->devices ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="planet_report.php"><?php echo $l->planets ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="log.php"><?php echo $l->log ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="defence_report.php"><?php echo $l->sector_def ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="readmail.php"><?php echo $l->read_msg ?></A></li>
-                            <li class="list-group-item"><a class="nav-link" href="mailto2.php"><?php echo $l->send_msg ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="teams.php"><?php echo $l->teams ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="self_destruct.php"><?php echo $l->ohno ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="options.php"><?php echo $l->options ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('device');?>"><?php echo $l->devices ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('planet_report.php');?>"><?php echo $l->planets ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('log');?>"><?php echo $l->log ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('defence_report.php');?>"><?php echo $l->sector_def ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('readmail.php');?>"><?php echo $l->read_msg ?></A></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('mailto2.php');?>"><?php echo $l->send_msg ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('teams.php');?>"><?php echo $l->teams ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('self_destruct.php');?>"><?php echo $l->ohno ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('options');?>"><?php echo $l->options ?></a></li>
                             <?php if (!empty($ksm_allowed)) : ?>
                                 <li class="list-group-item"><a class="nav-link" href="galaxy.php"><?php echo $l->map ?></a></li>
                             <?php endif; ?>
                             <li class="list-group-item"><a class="nav-link" href="navcomp.php"><?php echo $l->navcomp ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="logout.php"><?php echo $l->logout ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('logout');?>"><?php echo $l->logout ?></a></li>
                         </ul>
                     </td>
                 </tr>
@@ -165,7 +164,7 @@ $planettypes = planetTypes();
                     <tr>
                         <?php foreach ($shipsOnRow as $shipInSector) : ?>
                             <td align=center valign=top>
-                                <a href="ship.php?ship_id=<?php echo $shipInSector['ship_id']; ?>"><img src="images/<?php echo $shiptypes[shipLevel($shipInSector['score'])]; ?>"></a>
+                                <a href="<?= route('ship', ['ship_id' => $shipInSector['ship_id']]); ?>"><img src="images/<?php echo $shiptypes[shipLevel($shipInSector['score'])]; ?>"></a>
                                 <?php echo htmlspecialchars($shipInSector['ship_name']); ?>
                                 <?php if (!empty($shipInSector['team_name'])) : ?>(<?php echo htmlspecialchars($shipInSector['team_name']); ?>)<?php endif; ?>
                             </td>

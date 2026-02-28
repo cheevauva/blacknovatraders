@@ -57,6 +57,8 @@ class ZoneeditController extends BaseController
             'allow_defenses' => $this->fromParsedBody('defenses', 'defenses ' . $this->l->is_required),
         ], $this->zone);
 
-        $this->redirectTo('zoneinfo.php?zone=' . $this->zone);
+        $this->redirectTo('zoneinfo', [
+            'zone' => $this->zone,
+        ]);
     }
 }

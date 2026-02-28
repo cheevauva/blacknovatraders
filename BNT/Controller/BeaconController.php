@@ -16,6 +16,7 @@ class BeaconController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
+        $this->title = $this->l->beacon_title;
         $this->checkTurns();
 
         $this->sectorinfo = SectorByIdDAO::call($this->container, $this->playerinfo['sector'])->sector;
@@ -44,6 +45,6 @@ class BeaconController extends BaseController
         $this->playerinfo['turns'] -= 1;
 
         $this->playerinfoUpdate();
-        $this->redirectTo('beacon.php');
+        $this->redirectTo('beacon');
     }
 }

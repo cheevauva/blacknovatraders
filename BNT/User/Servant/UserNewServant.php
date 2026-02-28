@@ -21,12 +21,7 @@ class UserNewServant extends \UUA\Servant
     public function serve(): void
     {
         $this->user = $this->newUser();
-
-        $newUser = UserCreateDAO::new($this->container);
-        $newUser->user = $this->user;
-        $newUser->serve();
-
-        $this->user['id'] = $newUser->id;
+        $this->user['id'] = UserCreateDAO::call($this->container, $this->user)->id;
     }
 
     protected function newUser(): array

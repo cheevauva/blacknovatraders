@@ -21,22 +21,22 @@
                 <div class="col-md-12">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="admin.php?module=user&operation=list">Users</a>
+                            <a class="nav-link" href="<?= route('admin', 'module=user&operation=list'); ?>">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="admin.php?module=sector&operation=list">Sectors</a>
+                            <a class="nav-link" href="<?= route('admin', 'module=sector&operation=list'); ?>">Sectors</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="admin.php?module=ship&operation=list">Ships</a>
+                            <a class="nav-link" href="<?= route('admin', 'module=ship&operation=list'); ?>">Ships</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="admin.php?module=zone&operation=list">Zones</a>
+                            <a class="nav-link" href="<?= route('admin', 'module=zone&operation=list'); ?>">Zones</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="admin.php?module=planet&operation=list">Planets</a>
+                            <a class="nav-link" href="<?= route('admin', 'module=planet&operation=list'); ?>">Planets</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="admin.php?module=config&operation=edit">Config</a>
+                            <a class="nav-link" href="<?= route('admin', 'module=config&operation=edit'); ?>">Config</a>
                         </li>
                     </ul>
                 </div>

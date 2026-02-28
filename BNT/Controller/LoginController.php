@@ -13,7 +13,7 @@ class LoginController extends BaseController
     public bool $serverClosed;
     public string $gamepath;
     public string $gamedomain;
-    
+
     #[\Override]
     protected function init(): void
     {
@@ -23,10 +23,20 @@ class LoginController extends BaseController
     }
 
     #[\Override]
+    protected function preProcess(): void
+    {
+        $this->title = $this->l->login_title;
+
+        if ($this->serverClosed) {
+            throw new WarningException($this->l->login_closed_message);
+        }
+    }
+
+    #[\Override]
     protected function processGetAsHtml(): void
     {
         if (!empty($this->userinfo)) {
-            $this->redirectTo('index.php');
+            $this->redirectTo('index');
         } else {
             $this->render('tpls/login.tpl.php');
         }
@@ -36,13 +46,10 @@ class LoginController extends BaseController
     protected function processPostAsJson(): void
     {
         if (!empty($this->playerinfo)) {
-            $this->redirectTo('index.php');
+            $this->redirectTo('index');
             return;
         }
 
-        if ($this->serverClosed) {
-            throw new WarningException($this->l->login_closed_message);
-        }
 
         $email = strval($this->parsedBody['email'] ?? '') ?: throw new WarningException($this->l->login_email . ' ' . $this->l->is_required);
 
@@ -58,6 +65,6 @@ class LoginController extends BaseController
         $login->serve();
 
         $this->setCookie('token', $login->user['token'], time() + (3600 * 24) * 365, $this->gamepath, $this->gamedomain);
-        $this->redirectTo('main.php');
+        $this->redirectTo('main');
     }
 }
