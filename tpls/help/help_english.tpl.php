@@ -1,8 +1,5 @@
-<?php $title = "Help"; ?>
-<?php include __DIR__ . '/../header.php'; ?>
+<?php include_header();?>
 <?php bigtitle(); ?>
-
-
 Greetings and welcome to BlackNova Traders!
 <BR><BR>
 This is a game of inter-galactic exploration. Players explore the universe, trading for commodities and 
@@ -157,6 +154,5 @@ main page). Your ship can be towed out of a zone to a random sector when your hu
 maximum allowed level for that specific zone. Attacking other players and using some devices can also 
 be disallowed in some zones.
 <BR><BR>
-
-<?php include __DIR__ . '/../footer.php'; ?>
+<?php include_footer();?>
 
