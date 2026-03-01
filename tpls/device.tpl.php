@@ -10,17 +10,17 @@
         <TD><B><?= $l->usage; ?></B></TD>
     </TR>
     <TR>
-        <TD><A HREF="<?= route('beacon'); ?>"><?= $l->beacons; ?></A></TD>
+        <TD><a href="<?= route('beacon'); ?>"><?= $l->beacons; ?></A></TD>
         <TD><?= number($self->playerinfo['dev_beacon']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
     <TR >
-        <TD><A HREF="<?= route('warpedit'); ?>"><?= $l->warpedit; ?></A></TD>
+        <TD><a href="<?= route('warpedit'); ?>"><?= $l->warpedit; ?></A></TD>
         <TD><?= number($self->playerinfo['dev_warpedit']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
     <TR>
-        <TD><A HREF=genesis.php><?= $l->genesis; ?></A></TD>
+        <TD><a href="<?= route('genesis');?>"><?= $l->genesis; ?></A></TD>
         <TD><?= number($self->playerinfo['dev_genesis']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
@@ -30,17 +30,17 @@
         <TD><?= $l->automatic; ?></TD>
     </TR>
     <TR>
-        <TD><A HREF=mines.php?op=1><?= $l->mines; ?></A></TD>
+        <TD><a href=mines.php?op=1><?= $l->mines; ?></A></TD>
         <TD><?= number($self->playerinfo['torps']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
     <TR >
-        <TD><A HREF=mines.php?op=2><?= $l->fighters; ?></A></TD>
+        <TD><a href=mines.php?op=2><?= $l->fighters; ?></A></TD>
         <TD><?= number($self->playerinfo['ship_fighters']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
     <TR>
-        <TD><A HREF=emerwarp.php><?= $l->ewd; ?></A></TD>
+        <TD><a href=emerwarp.php><?= $l->ewd; ?></A></TD>
         <TD><?= number($self->playerinfo['dev_emerwarp']); ?></TD>
         <TD><?= $l->manual; ?>/<?= $l->automatic; ?></TD>
     </TR>

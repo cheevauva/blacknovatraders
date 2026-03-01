@@ -27,6 +27,7 @@ BNT\FrontController::call($container, match ($_SERVER['PATH_INFO'] ?? null) {
 
         return $new;
     })(),
+    '/genesis' => \BNT\Controller\GenesisController::class,
     '/warpedit' => \BNT\Controller\WarpeditController::class,
     '/zoneedit' => \BNT\Controller\ZoneeditController::class,
     '/zoneinfo' => \BNT\Controller\ZoneinfoController::class,

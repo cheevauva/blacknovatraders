@@ -28,6 +28,7 @@ class Language
         'l_device_' => 'device.php',
         'l_beacon_' => 'beacon.php',
         'l_opt_' => 'options.php',
+        'l_gns_' => 'genesis.php',
     ];
 
     public static function instance(): Language
