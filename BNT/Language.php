@@ -30,6 +30,7 @@ class Language
         'l_opt_' => 'options.php',
         'l_gns_' => 'genesis.php',
         'l_ewd_' => 'emerwarp.php',
+        'l_mines_' => 'mines.php',
     ];
 
     public static function instance(): Language

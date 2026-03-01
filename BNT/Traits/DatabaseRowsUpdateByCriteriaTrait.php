@@ -14,8 +14,7 @@ trait DatabaseRowsUpdateByCriteriaTrait
     public array $criteria;
     public array $values;
 
-    #[\Override]
-    public function updateRows(string $table): array
+    public function updateRows(string $table): int
     {
         $parameters = [];
         $where = [];

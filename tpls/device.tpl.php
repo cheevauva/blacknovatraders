@@ -30,12 +30,12 @@
         <TD><?= $l->automatic; ?></TD>
     </TR>
     <TR>
-        <TD><a href=mines.php?op=1><?= $l->mines; ?></A></TD>
+        <TD><a href="<?= route('mines', 'op=1'); ?>"><?= $l->mines; ?></A></TD>
         <TD><?= number($self->playerinfo['torps']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
     <TR >
-        <TD><a href=mines.php?op=2><?= $l->fighters; ?></A></TD>
+        <TD><a href="<?= route('mines', 'op=1'); ?>"><?= $l->fighters; ?></A></TD>
         <TD><?= number($self->playerinfo['ship_fighters']); ?></TD>
         <TD><?= $l->manual; ?></TD>
     </TR>
