@@ -40,7 +40,7 @@
         <TD><?= $l->manual; ?></TD>
     </TR>
     <TR>
-        <TD><a href=emerwarp.php><?= $l->ewd; ?></A></TD>
+        <TD><a href="<?= route('emerwarp'); ?>"><?= $l->ewd; ?></A></TD>
         <TD><?= number($self->playerinfo['dev_emerwarp']); ?></TD>
         <TD><?= $l->manual; ?>/<?= $l->automatic; ?></TD>
     </TR>

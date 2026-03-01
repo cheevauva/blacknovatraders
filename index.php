@@ -27,6 +27,7 @@ BNT\FrontController::call($container, match ($_SERVER['PATH_INFO'] ?? null) {
 
         return $new;
     })(),
+    '/emerwarp' => BNT\Controller\EmergencyWarpController::class,
     '/help' => BNT\Controller\HelpController::class,
     '/genesis' => \BNT\Controller\GenesisController::class,
     '/warpedit' => \BNT\Controller\WarpeditController::class,

@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace BNT;
 
 use Psr\Container\ContainerInterface;
+use BNT\Exception\ErrorException;
+use BNT\Exception\InfoException;
+use BNT\Exception\SuccessException;
+use BNT\Exception\WarningException;
 use BNT\Controller\BaseController;
 
 class FrontController extends \UUA\Unit

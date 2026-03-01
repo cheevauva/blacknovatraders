@@ -29,6 +29,7 @@ class Language
         'l_beacon_' => 'beacon.php',
         'l_opt_' => 'options.php',
         'l_gns_' => 'genesis.php',
+        'l_ewd_' => 'emerwarp.php',
     ];
 
     public static function instance(): Language

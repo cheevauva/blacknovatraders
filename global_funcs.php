@@ -692,10 +692,8 @@ function get_player($ship_id)
 
 function log_move($ship_id, $sector_id)
 {
-    db()->q('INSERT INTO movement_log (ship_id,sector_id,time) VALUES (:ship_id,:sector_id,NOW())', [
-        'ship_id' => $ship_id,
-        'sector_id' => $sector_id,
-    ]);
+    global $container;
+    BNT\MovementLog\DAO\MovementLogDAO::call($container, $ship_id, $sector_id);
 }
 
 function isLoanPending($ship_id)
