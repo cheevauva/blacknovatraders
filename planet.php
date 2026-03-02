@@ -41,7 +41,7 @@ if (!empty($planetinfo)) {
         include("footer.php");
         die();
     }
-    
+
     if (($planetinfo['owner'] == 0  || $planetinfo['defeated'] == 'Y') && $command != "capture") {
         if ($planetinfo['owner'] == 0) {
             echo "$l_planet_unowned.<BR><BR>";
@@ -150,11 +150,11 @@ if (!empty($planetinfo)) {
             if ($playerinfo['ship_id'] == $planetinfo['owner']) {
                 if ($playerinfo['team'] <> 0) {
                     if ($planetinfo['corp'] == 0) {
-                         $l_planet_mcorp_linkC = "<a href=corp.php?planet_id=$planet_id&action=planetcorp>" . $l_planet_mcorp_linkC . "</a>";
-                         $l_planet_mcorp = str_replace("[planet]", $l_planet_mcorp_linkC, $l_planet_mcorp);
+                        $l_planet_mcorp_linkC = "<a href=" . route('corp', ['planet_id' => $planet_id, 'action' => 'planetcorp']) . ">" . $l_planet_mcorp_linkC . "</a>";
+                        $l_planet_mcorp = str_replace("[planet]", $l_planet_mcorp_linkC, $l_planet_mcorp);
                          echo "$l_planet_mcorp<BR>";
                     } else {
-                        $l_planet_mcorp_linkP = "<a href=corp.php?planet_id=$planet_id&action=planetpersonal>" . $l_planet_mcorp_linkP . "</a>";
+                        $l_planet_mcorp_linkP = "<a href=" . route('corp', ['planet_id' => $planet_id, 'action' => 'planetpersonal']) . ">" . $l_planet_mcorp_linkP . "</a>";
                         $l_planet_mcorp = str_replace("[planet]", $l_planet_mcorp_linkP, $l_planet_mcorp);
                         echo "$l_planet_mcorp<BR>";
                     }

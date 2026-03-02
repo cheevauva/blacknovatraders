@@ -21,7 +21,7 @@ class GameCalcOwnershipServant extends \UUA\Servant
     {
         global $min_bases_to_own;
 
-        $owners = PlanetsBaseOwnersBySectorDAO::call($this->container, $this->sector);
+        $owners = PlanetsBaseOwnersBySectorDAO::call($this->container, $this->sector)->owners;
 
         if (empty($owners)) {
             return;
