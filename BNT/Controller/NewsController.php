@@ -13,6 +13,14 @@ class NewsController extends BaseController
     public array $news = [];
     public string $previousday;
     public string $nextday;
+    
+    #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+        
+        $this->enableCheckAuth = false;
+    }
 
     #[\Override]
     protected function processGetAsHtml(): void

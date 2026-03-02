@@ -6,6 +6,15 @@ namespace BNT\Controller;
 
 class SettingsController extends BaseController
 {
+
+    #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->enableCheckAuth = false;
+    }
+
     #[\Override]
     protected function preProcess(): void
     {

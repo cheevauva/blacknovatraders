@@ -24,6 +24,7 @@ class HelpController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        $this->render(sprintf('tpls/help/help_%s.tpl.php', $this->userinfo['lang']));
+        global $language;
+        $this->render(sprintf('tpls/help/help_%s.tpl.php', $this->userinfo['lang'] ?? $language));
     }
 }

@@ -2,7 +2,7 @@
 
 include 'config.php';
 
-BNT\FrontController::call($container, match ($_SERVER['PATH_INFO'] ?? null) {
+BNT\FrontController::call($container, match (str_replace('?' . $_SERVER['QUERY_STRING'], '', $_SERVER['REQUEST_URI'])) {
     '/login' => (function () use ($container) {
         global $server_closed;
         global $gamepath;

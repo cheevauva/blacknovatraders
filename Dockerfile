@@ -1,8 +1,11 @@
-FROM php:8.5-apache
+FROM dunglas/frankenphp:latest
 
-RUN docker-php-ext-install pdo pdo_mysql
+RUN install-php-extensions pdo pdo_mysql
 
 COPY php.ini /usr/local/etc/php/conf.d/99-errors.ini
-COPY apache.conf /etc/apache2/sites-enabled/000-default.conf
 
 WORKDIR /var/www/html
+
+EXPOSE 80
+
+CMD ["frankenphp", "php-server"]

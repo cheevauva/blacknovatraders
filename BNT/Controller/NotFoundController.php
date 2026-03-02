@@ -8,6 +8,13 @@ use BNT\Exception\ErrorException;
 
 class NotFoundController extends BaseController
 {
+    #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+        
+        $this->enableCheckAuth = false;
+    }
 
     #[\Override]
     protected function processGetAsHtml(): void

@@ -19,13 +19,13 @@ function YESNO($onoff): string
 function lYesNo($value): string
 {
     global $l;
-    
+
     return $value === 'Y' ? $l->yes : $l->no;
 }
 
 function route(string $route, array|string $params = []): string
 {
-    $link = '/index.php/' . $route;
+    $link = $route;
 
     if (!empty($params) && is_array($params)) {
         $link .= '?' . http_build_query($params);
