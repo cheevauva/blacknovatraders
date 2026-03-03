@@ -12,6 +12,7 @@ use BNT\Exception\SuccessException;
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\User\DAO\UserUpdateDAO;
 use BNT\Language;
+use BNT\Fetch;
 
 abstract class BaseController extends \UUA\Unit
 {
@@ -155,6 +156,19 @@ abstract class BaseController extends \UUA\Unit
     protected function fromQueryParams(string $name, ?string $requiredText = null): mixed
     {
         return ($this->queryParams[$name] ?? null) ?: ($requiredText ? throw new WarningException($requiredText) : null);
+    }
+
+    protected function fetch(array $data, ?string $path = null): Fetch
+    {
+        $fetch = new Fetch($data);
+        $fetch->requiredMessage(':label ' . $this->l->is_required);
+        $fetch->notEmptyMessage(':label ' . $this->l->is_not_empty);
+
+        if ($path) {
+            return $fetch->path($path);
+        }
+
+        return $fetch;
     }
 
     #[\Override]

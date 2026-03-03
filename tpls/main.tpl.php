@@ -14,13 +14,13 @@ $planettypes = planetTypes();
     </tr>
     <tr>
         <td>
-            &nbsp;<?= $l->turns_have; ?><?= NUMBER($self->playerinfo['turns']) ?>
+            &nbsp;<?= $l->turns_have; ?><?= number($self->playerinfo['turns']) ?>
         </td>
         <td align=center>
-            <?= $l->turns_used ?><?= NUMBER($self->playerinfo['turns_used']); ?>
+            <?= $l->turns_used ?><?= number($self->playerinfo['turns_used']); ?>
         </td>
         <td align=right>
-            <?= $l->score ?><?= NUMBER($self->playerinfo['score']) ?>&nbsp;
+            <?= $l->score ?><?= number($self->playerinfo['score']) ?>&nbsp;
         </td>
     <tr>
         <td>
@@ -217,27 +217,27 @@ $planettypes = planetTypes();
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <img alt="<?= $l->ore ?>" src="images/ore.gif">&nbsp;<?= $l->ore ?>:
-                                <span class="float-end"><?= NUMBER($self->playerinfo['ship_ore']); ?></span>
+                                <span class="float-end"><?= number($self->playerinfo['ship_ore']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?= $l->organics ?>" src="images/organics.gif">&nbsp;<?= $l->organics ?>:
-                                <span class="float-end"><?= NUMBER($self->playerinfo['ship_organics']); ?></span>
+                                <span class="float-end"><?= number($self->playerinfo['ship_organics']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?= $l->goods ?>" src="images/goods.gif">&nbsp;<?= $l->goods ?>:
-                                <span class="float-end"><?= NUMBER($self->playerinfo['ship_goods']); ?></span>
+                                <span class="float-end"><?= number($self->playerinfo['ship_goods']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?= $l->energy ?>" src="images/energy.gif">&nbsp;<?= $l->energy ?>:
-                                <span class="float-end"><?= NUMBER($self->playerinfo['ship_energy']); ?></span>
+                                <span class="float-end"><?= number($self->playerinfo['ship_energy']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?= $l->colonists ?>" src="images/colonists.gif">&nbsp;<?= $l->colonists ?>:
-                                <span class="float-end"><?= NUMBER($self->playerinfo['ship_colonists']); ?></span>
+                                <span class="float-end"><?= number($self->playerinfo['ship_colonists']); ?></span>
                             </li>
                             <li class="list-group-item">
                                 <img alt="<?= $l->credits ?>" src="images/credits.gif">&nbsp;<?= $l->credits ?>:
-                                <span class="float-end"><?= NUMBER($self->playerinfo['credits']); ?></span>
+                                <span class="float-end"><?= number($self->playerinfo['credits']); ?></span>
                             </li>
                         </ul>
 
@@ -253,19 +253,19 @@ $planettypes = planetTypes();
                                 <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset1']; ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset1']; ?>
                                 </a>
-                                <a class="nav-link d-inline ms-2" href="preset.php">[<?= $l->set; ?>]</a>
+                                <a class="nav-link d-inline ms-2" href="<?= route('preset');?>">[<?= $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
                                 <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset2']; ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset2']; ?>
                                 </a>
-                                <a class="nav-link d-inline ms-2" href="preset.php">[<?= $l->set; ?>]</a>
+                                <a class="nav-link d-inline ms-2" href="<?= route('preset');?>">[<?= $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
                                 <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset3']; ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset3']; ?>
                                 </a>
-                                <a class="nav-link d-inline ms-2" href="preset.php">[<?= $l->set; ?>]</a>
+                                <a class="nav-link d-inline ms-2" href="<?= route('preset');?>">[<?= $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
                                 <a class="nav-link" href="rsmove.php">=&gt;&nbsp;<?= $l->main_other; ?></a>

@@ -32,6 +32,7 @@ class Language
         'l_ewd_' => 'emerwarp.php',
         'l_mines_' => 'mines.php',
         'l_corpm_' => 'corp.php',
+        'l_pre_' => 'preset.php', 
     ];
 
     public static function instance(): Language
