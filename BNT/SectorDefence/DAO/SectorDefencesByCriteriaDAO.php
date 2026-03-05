@@ -9,9 +9,11 @@ class SectorDefencesByCriteriaDAO extends \UUA\DAO
 
     use \BNT\Traits\DatabaseRowsSelectByCriteriaTrait;
 
+    public array $defences;
+
     #[\Override]
     public function serve(): void
     {
-        $this->selectRows('sector_defence');
+        $this->defences = $this->selectRows('sector_defence');
     }
 }
