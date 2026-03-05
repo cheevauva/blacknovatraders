@@ -25,24 +25,23 @@ class BountyController extends BaseController
     protected function preProcess(): void
     {
         $this->title = $this->l->by_title;
-        $this->response = $this->fromQueryParams('response');
     }
 
     #[\Override]
     protected function processPostAsJson(): void
     {
-        $this->response = $this->fromParsedBody('response');
+        $this->checkTurns();
+
+        $this->response = $this->fromParsedBody('response')->enum(['place', 'cancel'])->asString();
 
         if ($this->response === 'place') {
-            $this->checkTurns();
-
-            $amount = (int) $this->fromParsedBody('amount', 'amount ' . $this->l->is_required);
-            $bountyOn = (int) $this->fromParsedBody('bounty_on', 'bounty_on ' . $this->l->is_required);
+            $amount = $this->fromParsedBody('amount')->notEmpty()->asInt();
+            $bountyOn = $this->fromParsedBody('bounty_on')->notEmpty()->asInt();
 
             $place = BountyPlaceServant::new($this->container);
             $place->placedBy = $this->playerinfo['ship_id'];
             $place->bountyOn = $bountyOn;
-            $place->amount = (int) $amount;
+            $place->amount = $amount;
             $place->serve();
 
             $this->playerinfo['turns'] -= 1;
@@ -54,8 +53,7 @@ class BountyController extends BaseController
         }
 
         if ($this->response === 'cancel') {
-            $this->checkTurns();
-            $bountyId = (int) $this->fromParsedBody('bid', 'bid ' . $this->l->is_required);
+            $bountyId = $this->fromParsedBody('bid')->notEmpty()->asInt();
             $bounty = BountyByIdDAO::call($this->container, $bountyId)->bounty;
 
             if (!$bounty) {
@@ -85,6 +83,8 @@ class BountyController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
+        $this->response = $this->fromQueryParams('response')->enum([null, 'display'])->asString();
+        
         if (empty($this->response)) {
             $this->bounties = db()->fetchAll("SELECT bounty_on, SUM(amount) as total_bounty FROM bounty GROUP BY bounty_on");
 
@@ -104,10 +104,10 @@ class BountyController extends BaseController
         }
 
         if ($this->response === 'display') {
-            $bountyOn = (int) $this->fromQueryParams('bounty_on', 'bounty_on ' . $this->l->is_required);
+            $bountyOn = $this->fromQueryParams('bounty_on')->notEmpty()->asInt();
             $this->bounty_on = ShipByIdDAO::call($this->container, $bountyOn)->ship;
             $this->bounty_details = BountiesByCriteriaDAO::call($this->container, [
-                'bounty_on' => $this->fromQueryParams('bounty_on', 'bounty_on ' . $this->l->is_required),
+                'bounty_on' => $this->fromQueryParams('bounty_on')->notEmpty()->asInt(),
             ])->bounties;
 
             foreach ($this->bounty_details as $idxBountyDtls => $bountyDetails) {

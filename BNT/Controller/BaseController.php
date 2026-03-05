@@ -148,14 +148,14 @@ abstract class BaseController extends \UUA\Unit
         $this->template = $template;
     }
 
-    protected function fromParsedBody(string $name, ?string $requiredText = null): mixed
+    protected function fromParsedBody(string $name): Fetch
     {
-        return ($this->parsedBody[$name] ?? null) ?: ($requiredText ? throw new WarningException($requiredText) : null);
+        return $this->fetch($this->parsedBody, $name);
     }
 
-    protected function fromQueryParams(string $name, ?string $requiredText = null): mixed
+    protected function fromQueryParams(string $name): Fetch
     {
-        return ($this->queryParams[$name] ?? null) ?: ($requiredText ? throw new WarningException($requiredText) : null);
+        return $this->fetch($this->queryParams, $name);
     }
 
     protected function fetch(array $data, ?string $path = null): Fetch
@@ -163,6 +163,8 @@ abstract class BaseController extends \UUA\Unit
         $fetch = new Fetch($data);
         $fetch->requiredMessage(':label ' . $this->l->is_required);
         $fetch->notEmptyMessage(':label ' . $this->l->is_not_empty);
+        $fetch->filterMessage(':label ' . $this->l->is_invalid);
+        $fetch->enumMessage(':label ' . $this->l->is_contains_not_allow_value);
 
         if ($path) {
             return $fetch->path($path);

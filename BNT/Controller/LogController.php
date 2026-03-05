@@ -31,7 +31,7 @@ class LogController extends BaseController
     protected function processGetAsHtml(): void
     {
         if ($this->isAdmin()) {
-            $player = fromGet('player', 0);
+            $player = $this->fromQueryParams('player')->default(0)->asInt();
 
             if ($player) {
                 $this->playerinfo = ShipByIdDAO::call($this->container, $player)->ship;

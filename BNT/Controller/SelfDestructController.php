@@ -18,7 +18,7 @@ class SelfDestructController extends BaseController
     protected function preProcess(): void
     {
         $this->title = $this->l->login_title;
-        $this->sure = (int) $this->fromParsedBody('sure');
+        $this->sure = $this->fromParsedBody('sure')->default(0)->asInt();
     }
 
     #[\Override]

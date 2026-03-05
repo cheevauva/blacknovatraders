@@ -38,7 +38,7 @@ class BeaconController extends BaseController
         global $l;
 
         SectorUpdateDAO::call($this->container, [
-            'beacon' => (string) $this->fromParsedBody('beacon_text', $l->beacon_name . ' ' . $l->is_required),
+            'beacon' => $this->fromParsedBody('beacon_text')->label($this->l->beacon_name)->trim()->notEmpty()->asString(),
         ], $this->playerinfo['sector']);
 
         $this->playerinfo['dev_beacon'] -= 1;

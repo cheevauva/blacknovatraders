@@ -51,14 +51,9 @@ class LoginController extends BaseController
         }
 
 
-        $email = strval($this->parsedBody['email'] ?? '') ?: throw new WarningException($this->l->login_email . ' ' . $this->l->is_required);
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new WarningException($this->l->login_email . ' ' . $this->l->is_invalid);
-        }
-
-        $password = strval($this->parsedBody['pass'] ?? '') ?: throw new WarningException($this->l->login_pw . ' ' . $this->l->is_required);
-
+        $email = $this->fromParsedBody('email')->filter(FILTER_VALIDATE_EMAIL)->notEmpty()->label($this->l->login_email)->asString();
+        $password = $this->fromParsedBody('pass')->trim()->notEmpty()->label($this->l->login_pw)->asString();
+    
         $login = GameLoginServant::new($this->container);
         $login->email = $email;
         $login->password = $password;

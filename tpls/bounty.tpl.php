@@ -2,7 +2,7 @@
 <?php include_header(); ?>
 <?php bigtitle(); ?>
 <?php if (empty($self->response)): ?> 
-    <form action="bounty.php" method="POST" id="bntBountyForm">
+    <form action="<?= route('bounty'); ?>" method="POST" id="bntBountyForm">
         <table class="table table-borderless w-auto">
             <tr>
                 <td><?= $l->by_bountyon; ?></td>
@@ -47,7 +47,7 @@
             <?php foreach ($self->bounties as $bounty): ?>
                 <tr>
                     <td>
-                        <a href="bounty.php?bounty_on=<?= $bounty['bounty_on']; ?>&response=display" class="text-decoration-none">
+                        <a href="<?= route('bounty', 'bounty_on=' . $bounty['bounty_on']); ?>&response=display" class="text-decoration-none">
                             <?= htmlspecialchars($bounty['target']['ship_name']); ?>
                         </a>
                     </td>
@@ -87,7 +87,7 @@
 
                     <td>
                         <?php if ($bounty['placed_by'] == $self->playerinfo['ship_id']): ?>
-                            <form action="bounty.php" method="POST" id="bntBountyForm<?= $bounty['bounty_id']; ?>">
+                            <form action="<?= route('bounty'); ?>" method="POST" id="bntBountyForm<?= $bounty['bounty_id']; ?>">
                                 <input type="hidden" name="bid" value="<?= $bounty['bounty_id']; ?>"/>
                                 <input type="hidden" name="response" value="cancel"/>
                                 <button type="submit" class="btn btn-primary"><?= $l->by_cancel; ?></button>

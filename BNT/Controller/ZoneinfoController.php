@@ -7,6 +7,7 @@ namespace BNT\Controller;
 use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Team\DAO\TeamByIdDAO;
+use BNT\Exception\WarningException;
 
 class ZoneinfoController extends BaseController
 {
@@ -21,8 +22,8 @@ class ZoneinfoController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        $this->zone = (int) $this->fromQueryParams('zone', 'zone ' . $this->l->is_required);
-        $this->zoneinfo = ZoneByIdDAO::call($this->container, $this->zone)->zone;
+        $this->zone = $this->fromQueryParams('zone')->notEmpty()->asInt();
+        $this->zoneinfo = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException($this->l->not_found);
 
         if (empty($this->zoneinfo)) {
             $this->render('tpls/zoneinfo.tpl.php');

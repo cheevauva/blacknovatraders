@@ -18,7 +18,7 @@ class RankingController extends BaseController
     protected function init(): void
     {
         global $max_rank;
-        
+
         parent::init();
 
         $this->enableCheckAuth = false;
@@ -32,7 +32,7 @@ class RankingController extends BaseController
     {
         global $max_rank;
 
-        $this->sort = (string) $this->fromQueryParams('sort');
+        $this->sort = $this->fromQueryParams('sort')->enum([null, 'turns', 'good', 'bad', 'alliance', 'efficiency', 'online'])->asString();
 
         $getRanking = ShipsGetRankingDAO::new($this->container);
         $getRanking->sort = $this->sort;

@@ -20,7 +20,7 @@ class ZoneeditController extends BaseController
     protected function preProcess(): void
     {
         $this->title = $this->l->ze_title;
-        $this->zone = (int) $this->fromQueryParams('zone', 'zone ' . $this->l->i_required);
+        $this->zone = $this->fromQueryParams( 'zone')->notEmpty()->asInt();
         $this->currentZone = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException($this->l->zi_nexist);
 
         if ($this->currentZone['corp_zone'] == 'N') {
@@ -33,7 +33,7 @@ class ZoneeditController extends BaseController
             throw new WarningException($this->l->ze_notowner);
         }
 
-        if ($this->currentZone['corp_zone'] == 'Y' && $this->currentZone['owner'] != $this->playerinfo['id'] && $this->currentZone['owner'] == $this->playerinfo['creator']) {
+        if ($this->currentZone['corp_zone'] == 'Y' && $this->currentZone['owner'] != $this->playerinfo['ship_id'] && $this->currentZone['owner'] == $this->playerinfo['creator']) {
             throw new WarningException($this->l->ze_notowner);
         }
     }
@@ -48,13 +48,13 @@ class ZoneeditController extends BaseController
     protected function processPostAsJson(): void
     {
         ZoneUpdateDAO::call($this->container, [
-            'zone_name' => $this->fromParsedBody('name', 'name ' . $this->l->is_required),
-            'allow_beacon' => $this->fromParsedBody('beacons', 'beacons ' . $this->l->is_required),
-            'allow_attack' => $this->fromParsedBody('attacks', 'attacks ' . $this->l->is_required),
-            'allow_warpedit' => $this->fromParsedBody('attacks', 'warpedits ' . $this->l->is_required),
-            'allow_planet' => $this->fromParsedBody('planets', 'planets ' . $this->l->is_required),
-            'allow_trade' => $this->fromParsedBody('trades', 'trades ' . $this->l->is_required),
-            'allow_defenses' => $this->fromParsedBody('defenses', 'defenses ' . $this->l->is_required),
+            'zone_name' => $this->fromParsedBody('name')->trim()->notEmpty()->asString(),
+            'allow_beacon' => $this->fromParsedBody('beacons')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
+            'allow_attack' => $this->fromParsedBody('attacks')->enum(['Y', 'N'])->notEmpty()->asString(), 
+            'allow_warpedit' => $this->fromParsedBody('warpedits')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
+            'allow_planet' => $this->fromParsedBody('planets')->enum(['Y', 'N', 'L'])->notEmpty()->asString(), 
+            'allow_trade' => $this->fromParsedBody('trades')->enum(['Y', 'N', 'L'])->notEmpty()->asString(), 
+            'allow_defenses' => $this->fromParsedBody('defenses')->enum(['Y', 'N', 'L'])->notEmpty()->asString(), 
         ], $this->zone);
 
         $this->redirectTo('zoneinfo', [

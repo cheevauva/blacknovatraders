@@ -12,15 +12,56 @@ class Fetch
     protected array $data;
     protected string $path;
     protected bool $isRequired = false;
-    protected string $requiredMessage = 'Value is required';
+    protected string $requiredMessage = ':label is required';
     protected bool $notEmpty = false;
-    protected string $notEmptyMessage = 'Value cannot be empty';
+    protected string $notEmptyMessage = ':label cannot be empty';
+    protected string $filterMessage = ':label is invalid';
+    protected string $enumMessage = ':label contains is not allow value';
     protected ?string $label = null;
     protected array $typeMessages = [];
+    protected ?int $filter = null;
+    protected bool $trim = false;
+    protected mixed $default = null;
+    protected ?array $enum = null;
 
     public function __construct($data)
     {
         $this->data = $data;
+    }
+
+    public function filter(int $filter): self
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+    public function default(mixed $default): self
+    {
+        $this->default = $default;
+
+        return $this;
+    }
+
+    public function enum(array $enum): self
+    {
+        $this->enum = $enum;
+
+        return $this;
+    }
+
+    public function enumMessage(string $message): self
+    {
+        $this->enumMessage = $message;
+
+        return $this;
+    }
+
+    public function trim(): self
+    {
+        $this->trim = true;
+
+        return $this;
     }
 
     public function path(string $path): self
@@ -58,6 +99,13 @@ class Fetch
         return $this;
     }
 
+    public function filterMessage(string $message): self
+    {
+        $this->filterMessage = $message;
+
+        return $this;
+    }
+
     public function label(string $label): self
     {
         $this->label = $label;
@@ -85,12 +133,32 @@ class Fetch
 
         $val = $this->getValueFromPath($this->path);
 
+        if (isset($this->default) && is_null($val)) {
+            $val = $this->default;
+        }
+
+        if (is_string($val) && $this->trim) {
+            $val = trim($val);
+        }
+
+        if (isset($this->enum) && !in_array($val, $this->enum, true)) {
+            throw new WarningException($this->formatMessage($this->enumMessage));
+        }
+
         if ($this->isRequired && $val === null) {
             throw new WarningException($this->formatMessage($this->requiredMessage));
         }
 
         if ($this->notEmpty && ($val === null || $val === '')) {
             throw new WarningException($this->formatMessage($this->notEmptyMessage));
+        }
+
+        if ($this->filter) {
+            $filterVal = filter_var($val, $this->filter, FILTER_NULL_ON_FAILURE);
+
+            if ($filterVal === null) {
+                throw new WarningException($this->formatMessage($this->filterMessage));
+            }
         }
 
         return $val;

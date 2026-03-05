@@ -35,16 +35,14 @@ class WarpeditController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $l;
-
-        $action = $this->fromParsedBody('action', 'action ' . $l->is_required);
+        $action = $this->fromParsedBody('action')->notEmpty()->asString();
 
         switch ($action) {
             case 'link':
                 $create = LinkCreateServant::new($this->container);
-                $create->oneway = $this->fromParsedBody('oneway') == 'oneway';
+                $create->oneway = $this->fromParsedBody('oneway')->asString() == 'oneway';
                 $create->sector = $this->playerinfo['sector'];
-                $create->targetSector = (int) $this->fromParsedBody('target_sector', 'target_sector ' . $l->is_required);
+                $create->targetSector = $this->fromParsedBody('target_sector')->notEmpty()->asInt();
                 $create->serve();
 
                 $this->playerinfo['dev_warpedit'] -= 1;
@@ -54,14 +52,17 @@ class WarpeditController extends BaseController
                 break;
             case 'unlink':
                 $remove = LinkRemoveServant::new($this->container);
-                $remove->bothway = $this->fromParsedBody('bothway') == 'bothway';
+                $remove->bothway = $this->fromParsedBody('bothway')->asString() == 'bothway';
                 $remove->sector = $this->playerinfo['sector'];
-                $remove->targetSector = (int) $this->fromParsedBody('target_sector', 'target_sector ' . $l->is_required);
+                $remove->targetSector = $this->fromParsedBody('target_sector')->notEmpty()->asInt();
                 $remove->serve();
 
                 $this->playerinfo['dev_warpedit'] -= 1;
                 $this->playerinfo['turns'] -= 1;
                 $this->playerinfoUpdate();
+                $this->redirectTo('index');
+                break;
+            default:
                 $this->redirectTo('index');
                 break;
         }

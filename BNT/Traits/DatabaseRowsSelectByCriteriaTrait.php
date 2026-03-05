@@ -13,9 +13,13 @@ trait DatabaseRowsSelectByCriteriaTrait
 
     public array $criteria;
     public array $items;
-    
+
     public function selectRows(string $table): array
     {
+        if (empty($this->criteria)) {
+            return $this->items = $this->db()->fetchAll('SELECT * FROM ' . $table);
+        }
+        
         $parameters = [];
         $where = [];
 
@@ -24,9 +28,7 @@ trait DatabaseRowsSelectByCriteriaTrait
             $parameters[$field] = $value;
         }
 
-        $this->items = $this->db()->fetchAll('SELECT * FROM ' . $table . ' WHERE ' . implode(' AND ', $where), $parameters);
-
-        return $this->items;
+        return $this->items = $this->db()->fetchAll('SELECT * FROM ' . $table . ' WHERE ' . implode(' AND ', $where), $parameters);
     }
 
     /**
@@ -34,7 +36,7 @@ trait DatabaseRowsSelectByCriteriaTrait
      * @param array $criteria
      * @return static
      */
-    public static function call(ContainerInterface $container, array $criteria): object
+    public static function call(ContainerInterface $container, array $criteria = []): object
     {
         $self = self::new($container);
         $self->criteria = $criteria;

@@ -17,7 +17,7 @@ class AdminConfigController extends BaseController
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');
-        $this->operation = (string) $this->fromQueryParams('operation');
+        $this->operation = $this->fromQueryParams('operation')->enum(['edit', 'save'])->asString();
     }
 
     #[\Override]
@@ -35,14 +35,13 @@ class AdminConfigController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $l;
-
         if ($this->operation == 'save') {
-            $adminpass = $this->fromParsedBody('adminpass');
-            $universeSize = $this->fromParsedBody('universe_size', 'universe_size ' . $l->is_required);
+            $adminpass = $this->fromParsedBody('adminpass')->label($this->l->admin_adminpass)->trim()->asString();
+            $universeSize = $this->fromParsedBody('universe_size')->label($this->l->admin_universe_size)->notEmpty()->asInt();
+            $adminMail = $this->fromParsedBody('admin_mail')->label($this->l->admin_admin_mail)->notEmpty()->filter(FILTER_VALIDATE_EMAIL)->asString();
 
             $config = [
-                'admin_mail' => $this->fromParsedBody('admin_mail', 'admin_mail ' . $l->is_required),
+                'admin_mail' => $adminMail,
                 'universe_size' => $universeSize,
             ];
 
@@ -58,7 +57,7 @@ class AdminConfigController extends BaseController
             $this->redirectTo('admin');
             return;
         }
-        
+
         parent::processPostAsJson();
     }
 }

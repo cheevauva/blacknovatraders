@@ -16,7 +16,7 @@ class SchemaController extends BaseController
     protected function init(): void
     {
         parent::init();
-        
+
         $this->enableCheckAuth = false;
     }
 
@@ -31,7 +31,7 @@ class SchemaController extends BaseController
     {
         global $adminpass;
 
-        $password = $this->fromParsedBody('password' ,$this->l->schema_password . ' ' . $this->l->is_required);
+        $password = $this->fromParsedBody('password')->label($this->l->schema_password)->trim()->notEmpty()->asString();
 
         if ($password !== $adminpass) {
             throw new WarningException($this->l->schema_password . ' ' . $this->l->is_wrong);

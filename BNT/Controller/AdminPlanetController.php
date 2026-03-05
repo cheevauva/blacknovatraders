@@ -6,7 +6,9 @@ namespace BNT\Controller;
 
 use BNT\Planet\DAO\PlanetByIdDAO;
 use BNT\Planet\DAO\PlanetUpdateDAO;
+use BNT\Ship\DAO\ShipsByCriteriaDAO;
 
+// @todo replace sql to dao
 class AdminPlanetController extends BaseController
 {
 
@@ -19,7 +21,7 @@ class AdminPlanetController extends BaseController
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');
-        $this->operation = (string) $this->fromQueryParams('operation');
+        $this->operation = $this->fromQueryParams('operation')->trim()->enum(['edit', 'list', 'save'])->asString();
     }
 
     #[\Override]
@@ -28,10 +30,10 @@ class AdminPlanetController extends BaseController
         global $l;
 
         if ($this->operation === 'edit') {
-            $planet = (int) $this->fromQueryParams('planet', 'planet ' . $l->is_required);
+            $planet = $this->fromQueryParams('planet')->notEmpty()->asInt();
 
             $this->planet = PlanetByIdDAO::call($this->container, $planet)->planet;
-            $this->ships = db()->fetchAllKeyValue("SELECT ship_id, ship_name FROM ships ORDER BY ship_name");
+            $this->ships = array_column(ShipsByCriteriaDAO::call($this->container)->ships, 'ship_name', 'ship_id');
             $this->render('tpls/admin/planetedit.tpl.php');
             return;
         }
@@ -49,31 +51,32 @@ class AdminPlanetController extends BaseController
         global $l;
 
         if ($this->operation === 'save') {
-            $planet = (int) $this->fromQueryParams('planet', 'planet ' . $l->is_required);
+            $planet = $this->fromQueryParams('planet')->notEmpty()->asInt();
 
             PlanetUpdateDAO::call($this->container, [
-                'sector_id' => (int) fromPOST('sector_id'),
-                'defeated' => !fromPOST('defeated') ? 'N' : 'Y',
-                'name' => (string) fromPOST('name'),
-                'base' => !fromPOST('base') ? 'N' : 'Y',
-                'sells' => !fromPOST('sells') ? 'N' : 'Y',
-                'owner' => (string) fromPOST('owner'),
-                'organics' => (int) fromPOST('organics', 0),
-                'ore' => (int) fromPOST('ore', 0),
-                'goods' => (int) fromPOST('goods', 0),
-                'energy' => (int) fromPOST('energy', 0),
-                'corp' => (string) fromPOST('corp'),
-                'colonists' => (int) fromPOST('colonists', 0),
-                'credits' => (int) fromPOST('credits', 0),
-                'fighters' => (int) fromPOST('fighters', 0),
-                'torps' => (int) fromPOST('torps', 0),
-                'prod_organics' => (int) fromPOST('prod_organics', 0),
-                'prod_ore' => (int) fromPOST('prod_ore', 0),
-                'prod_goods' => (int) fromPOST('prod_goods', 0),
-                'prod_energy' => (int) fromPOST('prod_energy', 0),
-                'prod_fighters' => (int) fromPOST('prod_fighters', 0),
-                'prod_torp' => (int) fromPOST('prod_torp', 0)
+                'sector_id' =>  $this->fromParsedBody('sector_id')->notEmpty()->asInt(),
+                'defeated' => !$this->fromParsedBody('defeated')->asBool() ? 'N' : 'Y',
+                'name' =>  $this->fromParsedBody('name')->asString(),
+                'base' => !$this->fromParsedBody('base')->asBool() ? 'N' : 'Y',
+                'sells' => !$this->fromParsedBody('sells')->asBool() ? 'N' : 'Y',
+                'owner' =>  $this->fromParsedBody('owner')->default(0)->asInt(),
+                'organics' =>  $this->fromParsedBody('organics')->default(0)->asInt(),
+                'ore' =>  $this->fromParsedBody('ore')->default(0)->asInt(),
+                'goods' =>  $this->fromParsedBody('goods')->default(0)->asInt(),
+                'energy' =>  $this->fromParsedBody('energy')->default(0)->asInt(),
+                'corp' =>  $this->fromParsedBody('corp')->default(0)->asInt(),
+                'colonists' =>  $this->fromParsedBody('colonists')->default(0)->asInt(),
+                'credits' =>  $this->fromParsedBody('credits')->default(0)->asInt(),
+                'fighters' =>  $this->fromParsedBody('fighters')->default(0)->asInt(),
+                'torps' =>  $this->fromParsedBody('torps')->default(0)->asInt(),
+                'prod_organics' =>  $this->fromParsedBody('prod_organics')->default(0)->asInt(),
+                'prod_ore' =>  $this->fromParsedBody('prod_ore')->default(0)->asInt(),
+                'prod_goods' =>  $this->fromParsedBody('prod_goods')->default(0)->asInt(),
+                'prod_energy' =>  $this->fromParsedBody('prod_energy')->default(0)->asInt(),
+                'prod_fighters' =>  $this->fromParsedBody('prod_fighters')->default(0)->asInt(),
+                'prod_torp' =>  $this->fromParsedBody('prod_torp')->default(0)->asInt()
             ], $planet);
+            
             $this->redirectTo('admin', [
                 'module' => 'planet',
                 'operation' => 'list',

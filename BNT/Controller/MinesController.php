@@ -102,9 +102,9 @@ class MinesController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        $nummines = abs(intval($this->fromParsedBody('nummines')));
-        $numfighters = abs(intval($this->fromParsedBody('numfighters')));
-        $mode = $this->fromParsedBody('mode');
+        $nummines = abs($this->fromParsedBody('nummines')->required()->asInt());
+        $numfighters = abs($this->fromParsedBody('numfighters')->required()->asInt());
+        $mode = $this->fromParsedBody('mode')->notEmpty()->asString();
 
         $messages = [];
 

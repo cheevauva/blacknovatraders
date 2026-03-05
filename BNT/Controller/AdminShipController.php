@@ -6,6 +6,7 @@ namespace BNT\Controller;
 
 use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Ship\DAO\ShipUpdateDAO;
+use BNT\Ship\DAO\ShipsByCriteriaDAO;
 use BNT\Exception\ErrorException;
 
 class AdminShipController extends BaseController
@@ -19,79 +20,70 @@ class AdminShipController extends BaseController
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');
-        $this->operation = (string) $this->fromQueryParams('operation');
+        $this->operation = $this->fromQueryParams('operation')->enum(['list', 'edit', 'save'])->asString();
+
+        if (in_array($this->operation, ['edit', 'save'], true)) {
+            $ship = $this->fromQueryParams('ship')->notEmpty()->asInt();
+            $this->ship = ShipByIdDAO::call($this->container, $ship)->ship ?: throw new ErrorException($this->l->not_found);
+        }
     }
 
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        global $l;
-
         if ($this->operation === 'list') {
-            $this->ships = db()->fetchAllKeyValue("SELECT ship_id, ship_name FROM ships ORDER BY ship_name");
+            $this->ships = array_column(ShipsByCriteriaDAO::call($this->container)->ships, 'ship_name', 'ship_id');
             $this->render('tpls/admin/shiplist.tpl.php');
             return;
         }
 
         if ($this->operation === 'edit') {
-            $ship = (int) $this->fromQueryParams('ship', 'ship ' . $l->is_required);
-            $this->ship = ShipByIdDAO::call($this->container, $ship)->ship;
             $this->render('tpls/admin/shipedit.tpl.php');
             return;
         }
-
-        throw new ErrorException('Not implemented');
     }
 
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $l;
-
         if ($this->operation === 'save') {
-            $ship = (int) $this->fromQueryParams('ship', 'ship ' . $l->is_required);
+            ShipUpdateDAO::call($this->container, [
+                'ship_name' => $this->fromParsedBody('ship_name')->notEmpty()->asString(),
+                'ship_destroyed' => !$this->fromParsedBody('ship_destroyed')->asBool() ? 'N' : 'Y',
+                'hull' => $this->fromParsedBody('hull')->default(0)->asInt(),
+                'engines' => $this->fromParsedBody('engines')->default(0)->asInt(),
+                'power' => $this->fromParsedBody('power')->default(0)->asInt(),
+                'computer' => $this->fromParsedBody('computer')->default(0)->asInt(),
+                'sensors' => $this->fromParsedBody('sensors')->default(0)->asInt(),
+                'armor' => $this->fromParsedBody('armor')->default(0)->asInt(),
+                'shields' => $this->fromParsedBody('shields')->default(0)->asInt(),
+                'beams' => $this->fromParsedBody('beams')->default(0)->asInt(),
+                'torp_launchers' => $this->fromParsedBody('torp_launchers')->default(0)->asInt(),
+                'cloak' => $this->fromParsedBody('cloak')->default(0)->asInt(),
+                'credits' => $this->fromParsedBody('credits')->default(0)->asInt(),
+                'turns' => $this->fromParsedBody('turns')->default(0)->asInt(),
+                'dev_warpedit' => $this->fromParsedBody('dev_warpedit')->default(0)->asInt(),
+                'dev_genesis' => $this->fromParsedBody('dev_genesis')->default(0)->asInt(),
+                'dev_beacon' => $this->fromParsedBody('dev_beacon')->default(0)->asInt(),
+                'dev_emerwarp' => $this->fromParsedBody('dev_emerwarp')->default(0)->asInt(),
+                'dev_escapepod' => !$this->fromParsedBody('dev_escapepod')->asBool() ? 'N' : 'Y',
+                'dev_fuelscoop' => !$this->fromParsedBody('dev_fuelscoop')->asBool() ? 'N' : 'Y',
+                'dev_minedeflector' => $this->fromParsedBody('dev_minedeflector')->default(0)->asInt(),
+                'sector' => $this->fromParsedBody('sector')->notEmpty()->asInt(),
+                'ship_ore' => $this->fromParsedBody('ship_ore')->default(0)->asInt(),
+                'ship_organics' => $this->fromParsedBody('ship_organics')->default(0)->asInt(),
+                'ship_goods' => $this->fromParsedBody('ship_goods')->default(0)->asInt(),
+                'ship_energy' => $this->fromParsedBody('ship_energy')->default(0)->asInt(),
+                'ship_colonists' => $this->fromParsedBody('ship_colonists')->default(0)->asInt(),
+                'ship_fighters' => $this->fromParsedBody('ship_fighters')->default(0)->asInt(),
+                'torps' => $this->fromParsedBody('torps')->default(0)->asInt(),
+                'armor_pts' => $this->fromParsedBody('armor_pts')->default(0)->asInt(),
+            ], $this->ship['ship_id']);
 
-            $shipinfo = [
-                'ship_name' => (string) fromPOST('ship_name', new \Exception('ship_name')),
-                'ship_destroyed' => !fromPOST('ship_destroyed') ? 'N' : 'Y',
-                'hull' => (int) fromPOST('hull', 0),
-                'engines' => (int) fromPOST('engines', 0),
-                'power' => (int) fromPOST('power', 0),
-                'computer' => (int) fromPOST('computer', 0),
-                'sensors' => (int) fromPOST('sensors', 0),
-                'armor' => (int) fromPOST('armor', 0),
-                'shields' => (int) fromPOST('shields', 0),
-                'beams' => (int) fromPOST('beams', 0),
-                'torp_launchers' => (int) fromPOST('torp_launchers', 0),
-                'cloak' => (int) fromPOST('cloak', 0),
-                'credits' => (int) fromPOST('credits', 0),
-                'turns' => (int) fromPOST('turns', 0),
-                'dev_warpedit' => (int) fromPOST('dev_warpedit'),
-                'dev_genesis' => (int) fromPOST('dev_genesis'),
-                'dev_beacon' => (int) fromPOST('dev_beacon'),
-                'dev_emerwarp' => (int) fromPOST('dev_emerwarp'),
-                'dev_escapepod' => !fromPOST('dev_escapepod') ? 'N' : 'Y',
-                'dev_fuelscoop' => !fromPOST('dev_fuelscoop') ? 'N' : 'Y',
-                'dev_minedeflector' => (int) fromPOST('dev_minedeflector'),
-                'sector' => (int) fromPOST('sector'),
-                'ship_ore' => (int) fromPOST('ship_ore'),
-                'ship_organics' => (int) fromPOST('ship_organics'),
-                'ship_goods' => (int) fromPOST('ship_goods'),
-                'ship_energy' => (int) fromPOST('ship_energy'),
-                'ship_colonists' => (int) fromPOST('ship_colonists'),
-                'ship_fighters' => (int) fromPOST('ship_fighters'),
-                'torps' => (int) fromPOST('torps'),
-                'armor_pts' => (int) fromPOST('armor_pts'),
-            ];
-
-            ShipUpdateDAO::call($this->container, $shipinfo, $ship);
             $this->redirectTo('admin', [
                 'module' => 'ship',
                 'operation' => 'list',
             ]);
-            return;
         }
-
-        throw new ErrorException('Not implemented');
     }
 }

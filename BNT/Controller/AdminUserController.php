@@ -6,6 +6,8 @@ namespace BNT\Controller;
 
 use BNT\User\DAO\UserByIdDAO;
 use BNT\User\DAO\UserUpdateDAO;
+use BNT\User\DAO\UsersByCriteriaDAO;
+use BNT\Ship\DAO\ShipsByCriteriaDAO;
 
 class AdminUserController extends BaseController
 {
@@ -19,24 +21,25 @@ class AdminUserController extends BaseController
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');
-        $this->operation = (string) $this->fromQueryParams('operation');
+        $this->operation = $this->fromQueryParams( 'operation')->asString();
+
+        if (in_array($this->operation, ['save', 'edit'])) {
+            $user = $this->fromQueryParams( 'user')->notEmpty()->asInt();
+            $this->user = UserByIdDAO::call($this->container, $user)->user;
+        }
     }
 
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        global $l;
-
         if ($this->operation === 'list') {
-            $this->users = db()->fetchAllKeyValue("SELECT id, character_name FROM users");
+            $this->users = array_column(UsersByCriteriaDAO::call($this->container)->users, 'character_name', 'id');
             $this->render('tpls/admin/userlist.tpl.php');
             return;
         }
 
         if ($this->operation === 'edit') {
-            $user = (int) $this->fromQueryParams('user', 'user ' . $l->is_required);
-            $this->user = UserByIdDAO::call($this->container, $user)->user;
-            $this->ships = db()->fetchAllKeyValue("SELECT ship_id, ship_name FROM ships ORDER BY ship_name");
+            $this->ships = array_column(ShipsByCriteriaDAO::call($this->container)->ships, 'ship_name', 'ship_id');
             $this->ships[''] = '';
             $this->render('tpls/admin/useredit.tpl.php');
             return;
@@ -48,23 +51,16 @@ class AdminUserController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $l;
-
         if ($this->operation === 'save') {
-            $user = (int) $this->fromQueryParams('user', 'user ' . $l->is_required);
-            $password = $this->fromParsedBody('password');
+            $password = $this->fromParsedBody('password')->trim()->asString();
 
-            $userinfo = [
-                'character_name' => $this->fromParsedBody('character_name', 'character_name ' . $l->is_required),
-                'role' => $this->fromParsedBody('role', 'role ' . $l->is_required),
-                'ship_id' => $this->fromParsedBody('ship_id'),
-            ];
+            UserUpdateDAO::call($this->container, [
+                'character_name' => $this->fromParsedBody('character_name')->trim()->notEmpty()->asString(),
+                'role' => $this->fromParsedBody('role')->trim()->notEmpty()->asString(),
+                'ship_id' => $this->fromParsedBody('ship_id')->notEmpty()->asInt(),
+                'password' => $password ? md5($password) : $this->user['password'],
+            ], $this->user['id']);
 
-            if (!empty($password)) {
-                $userinfo['password'] = md5($password);
-            }
-
-            UserUpdateDAO::call($this->container, $userinfo, $user);
             $this->redirectTo('admin', [
                 'module' => 'user',
                 'operation' => 'list',

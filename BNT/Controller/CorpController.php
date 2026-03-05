@@ -21,7 +21,7 @@ class CorpController extends BaseController
     protected function preProcess(): void
     {
         $this->title = $this->l->corpm_title;
-        $this->planetId = $this->fetch($this->queryParams, 'planet_id')->required()->notEmpty()->asInt();
+        $this->planetId = $this->fromQueryParams( 'planet_id')->required()->notEmpty()->asInt();
         $this->planet = PlanetByIdDAO::call($this->container, $this->planetId)->planet;
 
         $hasAccess = $this->planet['owner'] == $this->playerinfo['ship_id'] || ($this->planet['corp'] == $this->playerinfo['team'] && !empty($this->playerinfo['team']));
@@ -34,7 +34,7 @@ class CorpController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        $action = $this->fetch($this->queryParams, 'action')->required()->notEmpty()->asString();
+        $action = $this->fromQueryParams( 'action')->required()->notEmpty()->asString();
 
         if ($action == 'planetcorp') {
             PlanetUpdateDAO::call($this->container, [

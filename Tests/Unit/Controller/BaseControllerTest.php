@@ -37,19 +37,19 @@ class BaseControllerTest extends \Tests\UnitTestCase
                 #[\Override]
                 protected function processGetAsHtml(): void
                 {
-                    if ($this->fromQueryParams('testRedirectToSetsLocation')) {
+                    if ($this->fromQueryParams('testRedirectToSetsLocation')->asBool()) {
                         $this->redirectTo('main');
                     }
 
-                    if ($this->fromQueryParams('testSetCookieAddsToResponseCookies')) {
+                    if ($this->fromQueryParams('testSetCookieAddsToResponseCookies')->asBool()) {
                         $this->setCookie('token', 'abc123', 3600, '/', 'example.com', true, true);
                     }
 
-                    if ($this->fromQueryParams('testResponseJsonByExceptionSetsExceptionAndJson')) {
+                    if ($this->fromQueryParams('testResponseJsonByExceptionSetsExceptionAndJson')->asBool()) {
                         $this->responseJsonByException(new \Exception('Test error', 500));
                     }
 
-                    if ($this->fromQueryParams('testRenderSetsTemplate')) {
+                    if ($this->fromQueryParams('testRenderSetsTemplate')->asBool()) {
                         $this->render('test.tpl.php');
                     }
 

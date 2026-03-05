@@ -81,6 +81,8 @@ $l_fuel_scoop = "Сборщик топлива";
 $l_is_required = 'является обязательным';
 $l_is_wrong = 'является ложным';
 $l_is_invalid = 'является неправильным';
+$l_is_not_empty = ' не должен быть пустым';
+$l_is_contains_not_allow_value = ' содержит недопустимое значние';
 
 // global_funcs.php
 
