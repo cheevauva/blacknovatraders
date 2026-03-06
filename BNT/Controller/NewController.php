@@ -28,7 +28,7 @@ class NewController extends BaseController
         $this->title = $this->l->new_title;
 
         if ($this->accountCreationClosed) {
-            throw new WarningException($this->l->new_closed_message);
+            throw new WarningException('l_new_closed_message');
         }
     }
 

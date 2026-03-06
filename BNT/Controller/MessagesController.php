@@ -14,21 +14,16 @@ class MessagesController extends BaseController
     public int $to = 1;
 
     #[\Override]
-    protected function init(): void
+    protected function preProcess(): void
     {
-        global $l;
-
-        parent::init();
-
-        $this->title = $l->readm_title;
+        $this->title = $this->l->readm_title;
     }
 
     #[\Override]
     protected function processGetAsHtml(): void
     {
-
         $this->ships = db()->fetchAll("SELECT * FROM ships WHERE ship_destroyed = 'N' ORDER BY ship_name ASC");
-        $this->to = intval($this->queryParams['to'] ?? 0);
+        $this->to = $this->fromQueryParams('to')->default(0)->asInt();
         $this->messages = db()->fetchAll("SELECT * FROM messages WHERE recp_id='" . $this->playerinfo['ship_id'] . "' ORDER BY sent DESC");
         $this->messages[] = [
             'recp_id' => 1,
@@ -42,9 +37,9 @@ class MessagesController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        switch ($this->parsedBody['action'] ?? null) {
+        switch ($this->fromParsedBody('action')->notEmpty()->asString()) {
             case 'delete':
-                $id = intval($this->parsedBody['id'] ?? null);
+                $id = $this->fromParsedBody('id')->notEmpty()->asInt();
                 db()->q("DELETE FROM messages WHERE ID=:id AND recp_id=:recp_id", [
                     'id' => $id,
                     'recp_id' => $this->playerinfo['ship_id'],
@@ -58,9 +53,9 @@ class MessagesController extends BaseController
             case 'send':
                 db()->q("INSERT INTO messages (sender_id, recp_id, subject, message) VALUES (:sender_id, :recp_id, :subject, :message)", [
                     'sender_id' => $this->playerinfo['ship_id'],
-                    'recp_id' => $this->parsedBody['to'],
+                    'recp_id' => $this->fromParsedBody('to')->notEmpty()->asInt(),
                     'subject' => 'subject',
-                    'message' => $this->parsedBody['content'] ?? '',
+                    'message' => $this->fromParsedBody('content')->notEmpty()->asString(),
                 ]);
                 break;
         }

@@ -34,7 +34,7 @@ class SchemaController extends BaseController
         $password = $this->fromParsedBody('password')->label($this->l->schema_password)->trim()->notEmpty()->asString();
 
         if ($password !== $adminpass) {
-            throw new WarningException($this->l->schema_password . ' ' . $this->l->is_wrong);
+            throw new WarningException()->translate(['l_schema_password', 'l_is_wrong']);
         }
 
         $this->messages = GameMigrationsExecuteServant::call($this->container)->messages;

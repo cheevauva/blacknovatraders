@@ -24,7 +24,7 @@ class AdminShipController extends BaseController
 
         if (in_array($this->operation, ['edit', 'save'], true)) {
             $ship = $this->fromQueryParams('ship')->notEmpty()->asInt();
-            $this->ship = ShipByIdDAO::call($this->container, $ship)->ship ?: throw new ErrorException($this->l->not_found);
+            $this->ship = ShipByIdDAO::call($this->container, $ship)->ship ?: throw new ErrorException('l_not_found');
         }
     }
 

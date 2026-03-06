@@ -42,15 +42,15 @@ class OptionsController extends BaseController
 
         if (!empty($newpass1) || !empty($newpass2)) {
             if (empty($oldpass)) {
-                throw new WarningException($this->l->opt2_srcpassfalse);
+                throw new WarningException('l_opt2_srcpassfalse');
             }
 
             if ($newpass1 != $newpass2) {
-                throw new WarningException($this->l->opt2_newpassnomatch);
+                throw new WarningException('l_opt2_newpassnomatch');
             }
 
             if (md5($oldpass) != $this->userinfo['password']) {
-                throw new WarningException($this->l->opt2_srcpassfalse);
+                throw new WarningException('l_opt2_srcpassfalse');
             }
 
             $this->userinfo['password'] = md5($newpass1);

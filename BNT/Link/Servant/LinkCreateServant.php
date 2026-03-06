@@ -23,28 +23,31 @@ class LinkCreateServant extends \UUA\Servant
     public function serve(): void
     {
         global $link_max;
-        global $l;
 
         if ($this->sector == $this->targetSector) {
-            throw new WarningException($l->warp_cantsame);
+            throw new WarningException('l_warp_cantsame');
         }
 
-        $tgSector = SectorByIdDAO::call($this->container, $this->targetSector)->sector ?? throw new ErrorException($l->warp_nosector);
+        $tgSector = SectorByIdDAO::call($this->container, $this->targetSector)->sector ?? throw new ErrorException('l_warp_nosector');
         $tgZone = ZoneByIdDAO::call($this->container, $tgSector['zone_id'])->zone;
 
         if ($tgZone['allow_warpedit'] == 'N' && !$this->oneway) {
-            throw new WarningException(str_replace('[target_sector]', (string) $this->targetSector, $l->warp_twoerror));
+            throw new WarningException()->translate('l_warp_twoerror', [
+                'target_sector' => $this->targetSector
+            ]);
         }
 
         if (LinksCountByStartDAO::call($this->container, $this->sector)->count >= $link_max) {
-            throw new WarningException($l->warp_sectex);
+            throw new WarningException('l_warp_sectex');
         }
 
         $linksThere = LinksByStartAndDestDAO::call($this->container, $this->sector, $this->targetSector)->links;
         $linksHere = LinksByStartAndDestDAO::call($this->container, $this->targetSector, $this->sector)->links;
 
         if (!empty($linksThere)) {
-            throw new WarningException(str_replace('[target_sector]', (string) $this->targetSector, $l->warp_linked));
+            throw new WarningException()->translate('l_warp_linked', [
+                'target_sector' => $this->targetSector,
+            ]);
         }
 
         LinkCreateDAO::call($this->container, [

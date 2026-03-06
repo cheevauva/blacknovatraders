@@ -17,16 +17,14 @@ class ShipChooseServant extends \UUA\Servant
     #[\Override]
     public function serve(): void
     {
-        global $l;
-
         $ship = ShipByIdDAO::call($this->container, $this->shipId)->ship;
 
         if (empty($ship)) {
-            throw new ErrorException($l->ships_unavailable_ship);
+            throw new ErrorException('l_ships_unavailable_ship');
         }
 
         if ($ship['user_id'] !== $this->user['id']) {
-            throw new ErrorException($l->ships_unavailable_ship);
+            throw new ErrorException('l_ships_unavailable_ship');
         }
 
         if ($ship['ship_destroyed'] == 'Y') {
@@ -40,7 +38,6 @@ class ShipChooseServant extends \UUA\Servant
 
     protected function tryingRestoreDestroyedShip(array $ship): void
     {
-        global $l;
         global $newbie_nice;
 
         if ($ship['ship_destroyed'] == 'Y' && $ship['dev_escapepod'] == 'Y') {
@@ -51,7 +48,7 @@ class ShipChooseServant extends \UUA\Servant
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $newbie_nice !== 'YES') {
-            throw new ErrorException($l->login_you_have_die . ' ' . $l->login_looser);
+            throw new ErrorException()->translate(['l_login_you_have_die', 'l_login_looser']);
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $newbie_nice == 'YES') {
@@ -60,7 +57,7 @@ class ShipChooseServant extends \UUA\Servant
             $checkNewbie->serve();
 
             if (!$checkNewbie->isNewbie) {
-                throw new ErrorException($l->login_you_have_die . ' ' . $l->login_looser);
+                throw new ErrorException()->translate(['l_login_you_have_die', 'l_login_looser']);
             }
 
             $restore = ShipRestoreAsNewbieServant::new($this->container);

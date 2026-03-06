@@ -14,6 +14,7 @@ use BNT\Ship\DAO\ShipByIdDAO;
 class GameGenesisServant extends \UUA\Servant
 {
 
+
     public array $ship;
     public int $numPlanets;
 
@@ -22,10 +23,8 @@ class GameGenesisServant extends \UUA\Servant
     {
         global $max_planets_sector;
 
-        global $l;
-
         if ($this->ship['on_planet'] === 'Y') {
-            throw new WarningException($l->gns_onplanet);
+            throw new WarningException('l_gns_onplanet');
         }
 
         $sector = SectorByIdDAO::call($this->container, $this->ship['sector'])->sector;
@@ -35,32 +34,31 @@ class GameGenesisServant extends \UUA\Servant
         ]);
 
         if ($this->numPlanets >= $max_planets_sector) {
-            throw new WarningException($l->gns_full);
+            throw new WarningException('l_gns_full');
         }
 
         if ($this->ship['dev_genesis'] < 1) {
-            throw new WarningException($l->gns_nogenesis);
+            throw new WarningException('l_gns_nogenesis');
         }
 
         $zone = ZoneByIdDAO::call($this->container, $sector['zone_id'])->zone;
 
         if ($zone['allow_planet'] === 'Y') {
             PlanetCreateDAO::call($this->container, $this->newPlanet());
-            
-            throw new SuccessException($l->gns_pcreate);
+            return;
         }
 
         if ($zone['allow_planet'] == 'N') {
-            throw new WarningException($l->gns_forbid);
+            throw new WarningException('l_gns_forbid');
         }
 
         if ($zone['corp_zone'] == 'Y' && ($this->ship['team'] != $zone['owner'])) {
-            throw new WarningException($l->gns_bforbid);
+            throw new WarningException('l_gns_bforbid');
         }
 
         if ($zone['corp_zone'] == 'N' && empty($this->ship['team'])) {
             if ($zone['owner'] != $this->ship['ship_id']) {
-                throw new WarningException($l->gns_bforbid);
+                throw new WarningException('l_gns_bforbid');
             }
         }
 
@@ -68,13 +66,11 @@ class GameGenesisServant extends \UUA\Servant
             $owner = ShipByIdDAO::call($this->container, $zone['owner']);
 
             if ($owner['team'] != $this->ship['team']) {
-                throw new WarningException($l->gns_bforbid);
+                throw new WarningException('l_gns_bforbid');
             }
         }
 
         PlanetCreateDAO::call($this->container, $this->newPlanet());
-        
-        throw new SuccessException($l->gns_pcreate);
     }
 
     protected function planetName(): string

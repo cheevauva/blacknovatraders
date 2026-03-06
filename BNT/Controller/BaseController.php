@@ -6,9 +6,7 @@ namespace BNT\Controller;
 
 use Exception;
 use BNT\Exception\WarningException;
-use BNT\Exception\InfoException;
 use BNT\Exception\ErrorException;
-use BNT\Exception\SuccessException;
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\User\DAO\UserUpdateDAO;
 use BNT\Language;
@@ -42,13 +40,6 @@ abstract class BaseController extends \UUA\Unit
     public ?\Throwable $exception = null;
     public ?array $userinfo = null;
     public ?array $playerinfo = null;
-
-    protected function init(): void
-    {
-        global $l;
-
-        $this->l = $l;
-    }
 
     protected function redirectTo($route, array|string $params = []): void
     {
@@ -199,7 +190,7 @@ abstract class BaseController extends \UUA\Unit
         }
 
         if ($this->playerinfo['turns'] < 1) {
-            throw new WarningException($this->l->move_turn);
+            throw new WarningException('l_move_turn');
         }
     }
 

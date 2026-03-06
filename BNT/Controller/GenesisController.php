@@ -21,17 +21,15 @@ class GenesisController extends BaseController
     {
         $this->checkTurns();
 
-        try {
-            $genesis = GameGenesisServant::new($this->container);
-            $genesis->ship = $this->playerinfo;
-            $genesis->serve();
-        } catch (SuccessException $ex) {
-            $this->playerinfo['turns_used'] += 1;
-            $this->playerinfo['turns'] += 1;
-            $this->playerinfo['dev_genesis'] -= 1;
-            $this->playerinfoUpdate();
-            
-            throw $ex;
-        }
+        $genesis = GameGenesisServant::new($this->container);
+        $genesis->ship = $this->playerinfo;
+        $genesis->serve();
+
+        $this->playerinfo['turns_used'] += 1;
+        $this->playerinfo['turns'] += 1;
+        $this->playerinfo['dev_genesis'] -= 1;
+        $this->playerinfoUpdate();
+
+        throw new SuccessException('l_gns_pcreate');
     }
 }

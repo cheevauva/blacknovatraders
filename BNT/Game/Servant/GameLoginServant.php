@@ -22,17 +22,16 @@ class GameLoginServant extends \UUA\Servant
     #[\Override]
     public function serve(): void
     {
-        global $l;
         global $ip;
 
         $user = UserByEmailDAO::call($this->container, $this->email)->user;
 
         if (empty($user)) {
-            throw new WarningException($l->login_noone);
+            throw new WarningException('l_login_noone');
         }
 
         if ($user['password'] !== md5($this->password)) {
-            throw new WarningException($l->login_4gotpw1);
+            throw new WarningException('l_login_4gotpw1');
         }
 
         $user['token'] = UUID::v7();

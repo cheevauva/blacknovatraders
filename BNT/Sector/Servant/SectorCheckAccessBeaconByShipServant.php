@@ -17,17 +17,15 @@ class SectorCheckAccessBeaconByShipServant extends \UUA\Servant
     #[\Override]
     public function serve(): void
     {
-        global $l;
-
         if ($this->ship['dev_beacon'] < 1) {
-            throw new WarningException($l->beacon_donthave);
+            throw new WarningException('l_beacon_donthave');
         }
 
         $sectorinfo = SectorByIdDAO::call($this->container, $this->ship['sector'])->sector;
         $zoneinfo = ZoneByIdDAO::call($this->container, $sectorinfo['zone_id'])->zone;
 
         if ($zoneinfo['allow_beacon'] == 'N') {
-            throw new WarningException($l->beacon_notpermitted);
+            throw new WarningException('l_beacon_notpermitted');
         }
 
         if ($zoneinfo['allow_beacon'] == 'L') {
@@ -38,7 +36,7 @@ class SectorCheckAccessBeaconByShipServant extends \UUA\Servant
             }
 
             if (($owner['team'] != $this->ship['team']) || ($this->ship['team'] == 0)) {
-                throw new WarningException($l->beacon_notpermitted);
+                throw new WarningException('l_beacon_notpermitted');
             }
         }
     }

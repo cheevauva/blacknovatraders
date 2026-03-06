@@ -10,6 +10,6 @@ $type = match (true) {
 };
 ?>
 <div class="alert alert-<?= $type;?>">
-<?php echo $self->exception?->getMessage(); ?>
+<?php echo $self->exception?->__toString(); ?>
 </div>
 <?php include_footer(); ?>

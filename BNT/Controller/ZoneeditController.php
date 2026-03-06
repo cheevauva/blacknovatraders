@@ -21,7 +21,7 @@ class ZoneeditController extends BaseController
     {
         $this->title = $this->l->ze_title;
         $this->zone = $this->fromQueryParams( 'zone')->notEmpty()->asInt();
-        $this->currentZone = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException($this->l->zi_nexist);
+        $this->currentZone = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException('l_zi_nexist');
 
         if ($this->currentZone['corp_zone'] == 'N') {
             $this->ownerinfo = $this->playerinfo;
@@ -30,11 +30,11 @@ class ZoneeditController extends BaseController
         }
 
         if ($this->currentZone['corp_zone'] == 'N' && $this->currentZone['owner'] != $this->playerinfo['ship_id']) {
-            throw new WarningException($this->l->ze_notowner);
+            throw new WarningException('l_ze_notowner');
         }
 
         if ($this->currentZone['corp_zone'] == 'Y' && $this->currentZone['owner'] != $this->playerinfo['ship_id'] && $this->currentZone['owner'] == $this->playerinfo['creator']) {
-            throw new WarningException($this->l->ze_notowner);
+            throw new WarningException('l_ze_notowner');
         }
     }
 

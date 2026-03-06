@@ -25,7 +25,7 @@ class EmergencyWarpController extends BaseController
         $dest_sector = rand(0, $sector_max);
 
         if (empty($this->playerinfo['dev_emerwarp'])) {
-            throw new WarningException($this->l->ewd_none);
+            throw new WarningException('l_ewd_none');
         }
 
         $this->playerinfo['sector'] = $dest_sector;
@@ -34,6 +34,8 @@ class EmergencyWarpController extends BaseController
 
         MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $dest_sector);
 
-        throw new InfoException(str_replace('[sector]', (string) $dest_sector, $this->l->ewd_used));
+        throw new InfoException()->translate('l_ewd_used', [
+            'sector' => $dest_sector,
+        ]);
     }
 }

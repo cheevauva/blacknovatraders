@@ -57,11 +57,11 @@ class BountyController extends BaseController
             $bounty = BountyByIdDAO::call($this->container, $bountyId)->bounty;
 
             if (!$bounty) {
-                throw new WarningException($this->l->by_nobounty);
+                throw new WarningException('l_by_nobounty');
             }
 
             if ($bounty['placed_by'] != $this->playerinfo['ship_id']) {
-                throw new WarningException($this->l->by_notyours);
+                throw new WarningException('l_by_notyours');
             }
 
             BountyDeleteByCriteriaDAO::call($this->container, [

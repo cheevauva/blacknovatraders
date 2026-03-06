@@ -16,16 +16,8 @@ class PlanetController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        global $l_planet_none;
-        global $l_is_required;
-
-        $this->planetId = intval($this->queryParams['planet_id'] ?? 0) ?: throw new Exception('planet_id ' . $l_is_required);
-
-        $this->planet = PlanetByIdDAO::call($this->container, $this->planetId)->planet;
-
-        if (empty($this->playerinfo)) {
-            throw new Exception($l_planet_none);
-        }
+        $this->planetId = $this->fromQueryParams('planet_id')->notEmpty()->asInt();
+        $this->planet = PlanetByIdDAO::call($this->container, $this->planetId)->planet ?: throw new Exception('l_planet_none');
 
         $this->render('tpls/planet/planet.tpl.php');
     }

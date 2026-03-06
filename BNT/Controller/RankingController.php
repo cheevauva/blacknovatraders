@@ -17,11 +17,16 @@ class RankingController extends BaseController
     #[\Override]
     protected function init(): void
     {
-        global $max_rank;
-
         parent::init();
 
         $this->enableCheckAuth = false;
+    }
+
+    #[\Override]
+    protected function preProcess(): void
+    {
+        global $max_rank;
+        
         $this->title = strtr($this->l->ranks_title, [
             '[max_rank]' => $max_rank
         ]);

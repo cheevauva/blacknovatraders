@@ -28,7 +28,7 @@ class LoginController extends BaseController
         $this->title = $this->l->login_title;
 
         if ($this->serverClosed) {
-            throw new WarningException($this->l->login_closed_message);
+            throw new WarningException('l_login_closed_message');
         }
     }
 

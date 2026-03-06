@@ -27,8 +27,6 @@ class AdminPlanetController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        global $l;
-
         if ($this->operation === 'edit') {
             $planet = $this->fromQueryParams('planet')->notEmpty()->asInt();
 
@@ -48,8 +46,6 @@ class AdminPlanetController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        global $l;
-
         if ($this->operation === 'save') {
             $planet = $this->fromQueryParams('planet')->notEmpty()->asInt();
 

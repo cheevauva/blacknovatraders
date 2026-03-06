@@ -24,7 +24,7 @@ class AdminZoneController extends BaseController
 
         if (in_array($this->operation, ['edit', 'save'], true)) {
             $zoneId = $this->fromQueryParams('zone')->notEmpty()->asInt();
-            $this->zone = ZoneByIdDAO::call($this->container, $zoneId)->zone ?? throw new ErrorException($this->l->not_found);
+            $this->zone = ZoneByIdDAO::call($this->container, $zoneId)->zone ?? throw new ErrorException('l_not_found');
         }
     }
 

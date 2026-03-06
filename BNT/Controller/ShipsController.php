@@ -23,9 +23,7 @@ class ShipsController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        global $l;
-        
-        $this->title = $l->ships;
+        $this->title = $this->l->ships;
         $this->ships = ShipsByUserIdDAO::call($this->container, $this->userinfo['id'])->ships;
         $this->render('tpls/ships.tpl.php');
     }
@@ -33,7 +31,7 @@ class ShipsController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-        $shipId = intval($this->parsedBody['ship_id'] ?? 0);
+        $shipId = $this->fromParsedBody('ship_id')->default(0)->asInt();
 
         if (empty($shipId)) {
             $this->redirectTo('ships');

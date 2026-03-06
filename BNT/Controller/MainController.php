@@ -45,7 +45,7 @@ class MainController extends BaseController
             $this->traderoutess = $exploreSector->traderoutes;
             $this->shipsInSector = $exploreSector->ships;
 
-            if (!empty($this->queryParams['demo'])) {
+            if ($this->fromQueryParams('demo')->asBool()) {
                 $this->demoData();
             }
 

@@ -23,7 +23,7 @@ class ZoneinfoController extends BaseController
     protected function processGetAsHtml(): void
     {
         $this->zone = $this->fromQueryParams('zone')->notEmpty()->asInt();
-        $this->zoneinfo = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException($this->l->not_found);
+        $this->zoneinfo = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException('l_not_found');
 
         if (empty($this->zoneinfo)) {
             $this->render('tpls/zoneinfo.tpl.php');

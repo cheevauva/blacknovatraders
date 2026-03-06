@@ -22,25 +22,25 @@ class BountyPlaceServant extends \UUA\Servant
 
         $placedBy = ShipByIdDAO::call($this->container, $this->placedBy)->ship;
         $bountyOn = ShipByIdDAO::call($this->container, $this->bountyOn)->ship;
-        
+
         if ($this->bountyOn == $this->placedBy) {
-            throw new WarningException($this->l->by_yourself);
+            throw new WarningException('l_by_yourself');
         }
-        
+
         if (!$bountyOn) {
-            throw new WarningException($this->l->by_notexists);
+            throw new WarningException('l_by_notexists');
         }
 
         if ($bountyOn['ship_destroyed'] == 'Y') {
-            throw new WarningException($this->l->by_destroyed);
+            throw new WarningException('l_by_destroyed');
         }
 
         if (empty($this->amount)) {
-            throw new WarningException($this->l->by_zeroamount);
+            throw new WarningException('l_by_zeroamount');
         }
 
         if ($this->amount > $placedBy['credits']) {
-            throw new WarningException($this->l->by_notenough);
+            throw new WarningException('l_by_notenough');
         }
 
         if ($bounty_maxvalue != 0) {
@@ -59,7 +59,7 @@ class BountyPlaceServant extends \UUA\Servant
             }
 
             if ($this->amount + $previous_bounty > $maxtrans) {
-                throw new WarningException($this->l->by_toomuch);
+                throw new WarningException('l_by_toomuch');
             }
         }
 

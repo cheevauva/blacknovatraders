@@ -103,34 +103,34 @@ class CreateUniverseController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->step = intval($this->parsedBody['step'] ?? $this->step);
-        $this->swordfish = $this->parsedBody['swordfish'] ?? null;
-        $this->sector_max = intval($this->parsedBody['sector_max'] ?? $this->sector_max);
-        $this->admin_mail = strval($this->parsedBody['admin_mail'] ?? $this->admin_mail);
-        $this->admin_pass = strval($this->parsedBody['admin_pass'] ?? $this->admin_pass);
-        $this->initscommod = floatval($this->parsedBody['initscommod'] ?? $this->initscommod);
-        $this->initbcommod = floatval($this->parsedBody['initbcommod'] ?? $this->initbcommod);
-        $this->universe_size = intval($this->parsedBody['universe_size'] ?? $this->universe_size);
-        $this->special = intval($this->parsedBody['special'] ?? $this->special);
-        $this->ore = intval($this->parsedBody['ore'] ?? $this->ore);
-        $this->organics = intval($this->parsedBody['organics'] ?? $this->organics);
-        $this->goods = intval($this->parsedBody['goods'] ?? $this->goods);
-        $this->energy = intval($this->parsedBody['energy'] ?? $this->energy);
-        $this->planets = intval($this->parsedBody['planets'] ?? $this->planets);
-        $this->fedsecs = intval($this->parsedBody['fedsecs'] ?? $this->fedsecs);
-        $this->organics_limit = intval($this->parsedBody['organics_limit'] ?? $this->organics_limit);
-        $this->goods_limit = intval($this->parsedBody['goods_limit'] ?? $this->goods_limit);
-        $this->energy_limit = intval($this->parsedBody['energy_limit'] ?? $this->energy_limit);
-        $this->ore_limit = intval($this->parsedBody['ore_limit'] ?? $this->ore_limit);
-        $this->sched_ticks = intval($this->parsedBody['sched_ticks'] ?? $this->sched_ticks);
-        $this->sched_turns = intval($this->parsedBody['sched_turns'] ?? $this->sched_turns);
-        $this->sched_igb = intval($this->parsedBody['sched_igb'] ?? $this->sched_igb);
-        $this->sched_news = intval($this->parsedBody['sched_news'] ?? $this->sched_news);
-        $this->sched_planets = intval($this->parsedBody['sched_planets'] ?? $this->sched_planets);
-        $this->sched_ports = intval($this->parsedBody['sched_ports'] ?? $this->sched_ports);
-        $this->sched_degrade = intval($this->parsedBody['sched_degrade'] ?? $this->sched_degrade);
-        $this->sched_apocalypse = intval($this->parsedBody['sched_apocalypse'] ?? $this->sched_apocalypse);
-        $this->sched_ranking = intval($this->parsedBody['sched_ranking'] ?? $this->sched_ranking);
+        $this->step = $this->fromParsedBody('step')->default($this->step)->asInt();
+        $this->swordfish = $this->fromParsedBody('swordfish')->trim()->notEmpty()->asString();
+        $this->sector_max = $this->fromParsedBody('sector_max')->default($this->sector_max)->asInt();
+        $this->admin_mail = $this->fromParsedBody('admin_mail')->default($this->admin_mail)->asString();
+        $this->admin_pass = $this->fromParsedBody('admin_pass')->default($this->admin_pass)->asString();
+        $this->initscommod = $this->fromParsedBody('initscommod')->default($this->initscommod)->asFloat();
+        $this->initbcommod = $this->fromParsedBody('initbcommod')->default($this->initbcommod)->asFloat();
+        $this->universe_size = $this->fromParsedBody('universe_size')->default($this->universe_size);
+        $this->special = $this->fromParsedBody('special')->default($this->special)->asInt();
+        $this->ore = $this->fromParsedBody('ore')->default($this->ore)->asInt();
+        $this->organics = $this->fromParsedBody('organics')->default($this->organics)->asInt();
+        $this->goods = $this->fromParsedBody('goods')->default($this->goods)->asInt();
+        $this->energy = $this->fromParsedBody('energy')->default($this->energy)->asInt();
+        $this->planets = $this->fromParsedBody('planets')->default($this->planets)->asInt();
+        $this->fedsecs = $this->fromParsedBody('fedsecs')->default($this->fedsecs)->asInt();
+        $this->organics_limit = $this->fromParsedBody('organics_limit')->default($this->organics_limit)->asInt();
+        $this->goods_limit = $this->fromParsedBody('goods_limit')->default($this->goods_limit)->asInt();
+        $this->energy_limit = $this->fromParsedBody('energy_limit')->default($this->energy_limit)->asInt();
+        $this->ore_limit = $this->fromParsedBody('ore_limit')->default($this->ore_limit)->asInt();
+        $this->sched_ticks = $this->fromParsedBody('sched_ticks')->default($this->sched_ticks)->asInt();
+        $this->sched_turns = $this->fromParsedBody('sched_turns')->default($this->sched_turns)->asInt();
+        $this->sched_igb = $this->fromParsedBody('sched_igb')->default($this->sched_igb)->asInt();
+        $this->sched_news = $this->fromParsedBody('sched_news')->default($this->sched_news)->asInt();
+        $this->sched_planets = $this->fromParsedBody('sched_planets')->default($this->sched_planets)->asInt();
+        $this->sched_ports = $this->fromParsedBody('sched_ports')->default($this->sched_ports)->asInt();
+        $this->sched_degrade = $this->fromParsedBody('sched_degrade')->default($this->sched_degrade)->asInt();
+        $this->sched_apocalypse = $this->fromParsedBody('sched_apocalypse')->default($this->sched_apocalypse)->asInt();
+        $this->sched_ranking = $this->fromParsedBody('sched_ranking')->default($this->sched_ranking)->asInt();
     }
 
     #[\Override]

@@ -19,9 +19,7 @@ class LogController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        global $l;
-
-        $this->title = $l->log_titlet;
+        $this->title = $this->l->log_titlet;
         $this->startdate = fromRequest('startdate', date('Y-m-d'));
         $this->yesterday = date('Y-m-d', strtotime($this->startdate . ' -1 day'));
         $this->yesterday2 = date('Y-m-d', strtotime($this->startdate . ' -2 day'));

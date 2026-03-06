@@ -26,7 +26,7 @@ class AdminSectorController extends BaseController
 
         if (in_array($this->operation, ['edit', 'save'], true)) {
             $sectorId = $this->fromQueryParams('sector')->notEmpty()->asInt();
-            $this->sector = SectorByIdDAO::call($this->container, $sectorId)->sector ?? throw new ErrorException($this->l->not_found);
+            $this->sector = SectorByIdDAO::call($this->container, $sectorId)->sector ?? throw new ErrorException('l_not_found');
         }
     }
 

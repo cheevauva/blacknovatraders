@@ -17,17 +17,15 @@ class LinkCheckAccessByShipServant extends \UUA\Servant
     #[\Override]
     public function serve(): void
     {
-        global $l;
-
         if ($this->ship['dev_warpedit'] < 1) {
-            throw new WarningException($l->warp_none);
+            throw new WarningException('l_warp_none');
         }
 
         $sectorinfo = SectorByIdDAO::call($this->container, $this->ship['sector'])->sector ?? throw new ErrorException('sector');
         $zoneinfo = ZoneByIdDAO::call($this->container, $sectorinfo['zone_id'])->zone ?? throw new ErrorException('zone');
 
         if ($zoneinfo['allow_warpedit'] == 'N') {
-            throw new WarningException($l->warp_forbid);
+            throw new WarningException('l_warp_forbid');
         }
 
         if ($zoneinfo['allow_warpedit'] == 'L') {
@@ -39,7 +37,7 @@ class LinkCheckAccessByShipServant extends \UUA\Servant
             }
 
             if (($zoneteam['team'] != $this->ship['team']) || ($this->ship['team'] == 0)) {
-                throw new WarningException($l->warp_forbid);
+                throw new WarningException('l_warp_forbid');
             }
         }
     }

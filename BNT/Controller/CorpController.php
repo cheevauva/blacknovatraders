@@ -27,7 +27,7 @@ class CorpController extends BaseController
         $hasAccess = $this->planet['owner'] == $this->playerinfo['ship_id'] || ($this->planet['corp'] == $this->playerinfo['team'] && !empty($this->playerinfo['team']));
 
         if (!$hasAccess) {
-            throw new WarningException($this->l->corpm_exploit);
+            throw new WarningException('l_corpm_exploit');
         }
     }
 
@@ -43,7 +43,7 @@ class CorpController extends BaseController
             ], $this->planetId);
             GameCalcOwnershipServant::call($this->container, $this->playerinfo['sector']);
 
-            throw new SuccessException($this->l->corpm_tocorp);
+            throw new SuccessException('l_corpm_tocorp');
         }
 
         if ($action == 'planetpersonal') {
@@ -58,7 +58,7 @@ class CorpController extends BaseController
             $kickOthers->ship = $this->playerinfo['ship_id'];
             $kickOthers->serve();
 
-            throw new SuccessException($this->l->corpm_topersonal);
+            throw new SuccessException('l_corpm_topersonal');
         }
         
         $this->redirectTo('planet', [

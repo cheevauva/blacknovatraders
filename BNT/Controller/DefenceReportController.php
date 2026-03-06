@@ -39,7 +39,7 @@ class DefenceReportController extends BaseController
                 ])->defences;
 
         if (empty($this->defences)) {
-            throw new WarningException($this->l->sdf_none);
+            throw new WarningException('l_sdf_none');
         }
 
         $this->render('tpls/defence_report.tpl.php');

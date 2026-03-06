@@ -63,7 +63,7 @@ class MinesController extends BaseController
         $this->num_defences = count($this->defences);
 
         if ($this->zoneinfo['allow_defenses'] == 'N') {
-            throw new WarningException($this->l->mines_nopermit);
+            throw new WarningException('l_mines_nopermit');
         }
 
         if (!empty($this->num_defences) && !$this->owns_all) {
@@ -71,7 +71,7 @@ class MinesController extends BaseController
             $fighters_owner = ShipByIdDAO::call($this->container, $defence_owner)->ship;
 
             if ($fighters_owner['team'] != $this->playerinfo['team'] || empty($this->playerinfo['team'])) {
-                throw new WarningException($this->l->mines_nodeploy);
+                throw new WarningException('l_mines_nodeploy');
             }
         }
 
@@ -81,7 +81,7 @@ class MinesController extends BaseController
             $zoneowner_info = ShipByIdDAO::call($this->container, $zone_owner)->ship;
 
             if ($zone_owner != $this->playerinfo['ship_id'] && ($zoneowner_info['team'] != $this->playerinfo['team'] || empty($this->playerinfo['team']))) {
-                throw new WarningException($this->l->mines_nopermit);
+                throw new WarningException('l_mines_nopermit');
             }
         }
     }
@@ -109,11 +109,11 @@ class MinesController extends BaseController
         $messages = [];
 
         if ($nummines > $this->playerinfo['torps']) {
-            throw new WarningException($this->l->mines_notorps);
+            throw new WarningException('l_mines_notorps');
         }
 
         if ($numfighters > $this->playerinfo['ship_fighters']) {
-            throw new WarningException($this->l->mines_nofighters);
+            throw new WarningException('l_mines_nofighters');
         }
 
         $messages[] = str_replace("[mines]", (string) $nummines, $this->l->mines_dmines);
@@ -127,7 +127,7 @@ class MinesController extends BaseController
                 $defence = SectorDefenceByIdDAO::call($this->container, $this->fighter_id)->defence;
                 $defence['quantity'] += $numfighters;
                 $defence['fm_setting'] = $mode;
-   
+
                 SectorDefencesUpdateDAO::call($this->container, $defence, [
                     'defence_id' => $this->fighter_id
                 ]);

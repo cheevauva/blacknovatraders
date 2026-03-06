@@ -9,6 +9,7 @@ use BNT\Exception\ErrorException;
 use BNT\Exception\InfoException;
 use BNT\Exception\SuccessException;
 use BNT\Exception\WarningException;
+use BNT\Exception\CommonException;
 use BNT\Controller\BaseController;
 
 class FrontController extends \UUA\Unit
@@ -24,8 +25,10 @@ class FrontController extends \UUA\Unit
     {
         global $userinfo;
         global $playerinfo;
+        global $l;
 
         $controller = $this->controller;
+        $controller->l = $l;
         $controller->acceptType ??= $_SERVER['HTTP_ACCEPT'] ?? 'text/html';
         $controller->playerinfo ??= $playerinfo ?? null;
         $controller->userinfo ??= $userinfo ?? null;
@@ -34,6 +37,10 @@ class FrontController extends \UUA\Unit
         $controller->parsedBody ??= $_POST ?? [];
         $controller->serve();
 
+        if ($controller->exception instanceof CommonException) {
+            $controller->exception->language($controller->l);
+        }
+        
         if (count(array_filter([$controller->template, $controller->exception, $controller->location, $controller->responseJson])) != 1) {
             throw new \Exception('must be one action');
         }
@@ -72,10 +79,10 @@ class FrontController extends \UUA\Unit
     protected function responseHtml(string $template): void
     {
         global $title;
-        global $l;
 
         $self = $this->controller;
-        $title = $this->controller->title;
+        $title = $self->title;
+        $l = $self->l;
 
         include $template;
 
@@ -97,7 +104,7 @@ class FrontController extends \UUA\Unit
                 $ex instanceof SuccessException => 'success',
                 default => 'primary',
             },
-            'message' => $ex->getMessage(),
+            'message' => (string) $ex,
             'code' => $ex->getCode(),
         ];
     }

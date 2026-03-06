@@ -20,17 +20,19 @@ class LinkRemoveServant extends \UUA\Servant
     #[\Override]
     public function serve(): void
     {
-        global $l;
-
-        $tgSector = SectorByIdDAO::call($this->container, $this->targetSector)->sector ?? throw new WarningException($l->warp_nosector);
-        $tgZone = ZoneByIdDAO::call($this->container, $tgSector['zone_id'])->zone ?? throw new WarningException($l->warp_nozone);
+        $tgSector = SectorByIdDAO::call($this->container, $this->targetSector)->sector ?? throw new WarningException('l_warp_nosector');
+        $tgZone = ZoneByIdDAO::call($this->container, $tgSector['zone_id'])->zone ?? throw new WarningException('l_warp_nozone');
 
         if ($tgZone['allow_warpedit'] == 'N' && $this->bothway) {
-            throw new WarningException(str_replace('[target_sector]', (string) $this->targetSector, $l->warp_forbidtwo));
+            throw new WarningException()->translate('l_warp_forbidtwo', [
+                'target_sector' => $this->targetSector,
+            ]);
         }
 
         if (!LinksByStartAndDestDAO::call($this->container, $this->sector, $this->targetSector)) {
-            throw new WarningException(str_replace('[target_sector]', (string) $this->targetSector, $l->warp_unlinked));
+            throw new WarningException()->translate('l_warp_unlinked', [
+                'target_sector' => $this->targetSector,
+            ]);
         }
 
         LinksDeleteByStartAndDestDAO::call($this->container, $this->sector, $this->targetSector);
