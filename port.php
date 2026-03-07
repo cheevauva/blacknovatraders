@@ -682,7 +682,7 @@ if ($sectorinfo['port_type'] != "none" && $sectorinfo['port_type'] != "special")
     echo "  </TR>\n";
     echo " </TABLE>\n";
     echo "</FORM>\n";
-    echo "$l_would_dump <A HREF=dump.php>$l_here</A>.\n";
+    echo "$l_would_dump <A HREF=" . route('dump') . ">$l_here</A>.\n";
 } else {
     echo "$l_noport!\n";
 }

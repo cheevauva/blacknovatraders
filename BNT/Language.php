@@ -39,6 +39,7 @@ class Language
         'l_die_' => 'self_destruct.php',
         'l_by_' => 'bounty.php',
         'l_ship_' => 'ship.php',
+        'l_dump_' => 'dump.php',
     ];
 
     public static function instance(): Language

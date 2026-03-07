@@ -27,6 +27,7 @@ BNT\FrontController::call($container, match (str_replace('?' . $_SERVER['QUERY_S
 
         return $new;
     })(),
+    '/dump' => \BNT\Controller\DumpController::class,
     '/defence_report' => \BNT\Controller\DefenceReportController::class,
     '/bounty' => BNT\Controller\BountyController::class,
     '/preset' => BNT\Controller\PresetController::class,
