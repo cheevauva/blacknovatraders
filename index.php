@@ -27,6 +27,7 @@ BNT\FrontController::call($container, match (str_replace('?' . $_SERVER['QUERY_S
 
         return $new;
     })(),
+    '/info_publiclist' => \BNT\Controller\InfoPubliclistController::class,
     '/status' => BNT\Controller\StatusController::class,
     '/navcomp' => BNT\Controller\NavCompController::class,
     '/galaxy' => \BNT\Controller\GalaxyController::class,
