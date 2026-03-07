@@ -58,7 +58,7 @@ class NavCompController extends BaseController
             throw new WarningException('l_nav_proper');
         }
 
-        throw new SuccessException()->translate(['l_nav_pathfnd', '[path]', 'l_nav_answ1', '[search_depth]', 'l_nav_answ2'], [
+        throw new SuccessException()->t(['l_nav_pathfnd', '[path]', 'l_nav_answ1', '[search_depth]', 'l_nav_answ2'], [
             'path' => implode(' >> ', array_values($links)),
             'search_depth' => $searchPath->search_depth
         ], '%s: %s. %s %s %s');

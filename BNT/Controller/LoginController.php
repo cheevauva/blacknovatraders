@@ -10,7 +10,7 @@ use BNT\Exception\WarningException;
 class LoginController extends BaseController
 {
 
-    public bool $serverClosed;
+    public bool $serverClosed = false;
     public string $gamepath;
     public string $gamedomain;
 

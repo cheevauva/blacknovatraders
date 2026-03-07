@@ -6,7 +6,6 @@ namespace BNT;
 
 use BNT\Exception\WarningException;
 use BNT\Language;
-use BNT\Translate;
 
 class Fetch
 {
@@ -116,11 +115,7 @@ class Fetch
 
     protected function t(array|string $tag, array $replace = [], ?string $format = null): string
     {
-        $translate = new Translate;
-        $translate->language($this->language);
-        $translate->translate($tag, $replace, $format);
-
-        return (string) $translate;
+        return $this->language->t($tag, $replace, $format);
     }
 
     public function label(string $label): self

@@ -13,6 +13,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
     protected function prepareLoginPOST(array $parsedData = []): LoginController
     {
         $login = LoginController::new(self::$container);
+        $login->l = self::$l;
         $login->acceptType = $login::ACCEPT_TYPE_JSON;
         $login->requestMethod = 'POST';
         $login->parsedBody = $parsedData;
@@ -28,6 +29,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
     public function testLoginPage(): void
     {
         $login = LoginController::new(self::$container);
+        $login->l = self::$l;
         $login->acceptType = $login::ACCEPT_TYPE_HTML;
         $login->requestMethod = 'GET';
         $login->serve();
@@ -49,12 +51,13 @@ class LoginControllerTest extends \Tests\UnitTestCase
     public function testLoginClosed(): void
     {
         $login = LoginController::new(self::$container);
+        $login->l = self::$l;
         $login->serverClosed = true;
         $login->acceptType = $login::ACCEPT_TYPE_JSON;
         $login->requestMethod = 'POST';
         $login->serve();
 
-        self::assertEquals(self::$l->login_closed_message, $login->exception?->getMessage());
+        self::assertEquals(self::$l->l_login_closed_message, (string) $login->exception);
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }
@@ -63,7 +66,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
     {
         $login = $this->prepareLoginPOST();
 
-        self::assertEquals(self::$l->login_email . ' ' . self::$l->is_required, $login->exception?->getMessage());
+        self::assertEquals(self::$l->t(['l_login_email', 'l_is_not_empty']), (string) $login->exception);
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }
@@ -74,7 +77,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
             'email' => 'email@admin.com',
         ]);
 
-        self::assertEquals(self::$l->login_pw . ' ' . self::$l->is_required, $login->exception?->getMessage());
+        self::assertEquals(self::$l->l_login_pw . ' ' . self::$l->l_is_not_empty, (string) $login->exception);
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }
@@ -85,7 +88,7 @@ class LoginControllerTest extends \Tests\UnitTestCase
             'email' => 'emailadmin.com',
         ]);
 
-        self::assertEquals(self::$l->login_email . ' ' . self::$l->is_invalid, $login->exception?->getMessage());
+        self::assertEquals(self::$l->l_login_email . ' ' . self::$l->l_is_invalid, (string) $login->exception);
         self::assertEmpty($login->responseCookies);
         self::assertEmpty($login->location);
     }

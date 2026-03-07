@@ -24,13 +24,13 @@ class LinkRemoveServant extends \UUA\Servant
         $tgZone = ZoneByIdDAO::call($this->container, $tgSector['zone_id'])->zone ?? throw new WarningException('l_warp_nozone');
 
         if ($tgZone['allow_warpedit'] == 'N' && $this->bothway) {
-            throw new WarningException()->translate('l_warp_forbidtwo', [
+            throw new WarningException()->t('l_warp_forbidtwo', [
                 'target_sector' => $this->targetSector,
             ]);
         }
 
         if (!LinksByStartAndDestDAO::call($this->container, $this->sector, $this->targetSector)) {
-            throw new WarningException()->translate('l_warp_unlinked', [
+            throw new WarningException()->t('l_warp_unlinked', [
                 'target_sector' => $this->targetSector,
             ]);
         }

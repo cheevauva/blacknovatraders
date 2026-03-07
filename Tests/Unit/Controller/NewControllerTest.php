@@ -14,6 +14,7 @@ class NewControllerTest extends \Tests\UnitTestCase
     protected function prepareNewPOST(array $parsedData = []): NewController
     {
         $new = NewController::new(self::$container);
+        $new->l = self::$l;
         $new->requestMethod = 'POST';
         $new->parsedBody = $parsedData;
         $new->acceptType = $new::ACCEPT_TYPE_JSON;
@@ -28,6 +29,7 @@ class NewControllerTest extends \Tests\UnitTestCase
     public function testNewPage(): void
     {
         $new = NewController::new(self::$container);
+        $new->l = self::$l;
         $new->acceptType = $new::ACCEPT_TYPE_HTML;
         $new->requestMethod = 'GET';
         $new->serve();
@@ -59,7 +61,7 @@ class NewControllerTest extends \Tests\UnitTestCase
         if ($closure) {
             $closure($new);
         }
-        
+
         $new->serve();
     }
 
@@ -70,31 +72,31 @@ class NewControllerTest extends \Tests\UnitTestCase
         return [
             'testNewAccountCreationClosed' => [
                 [],
-                $l->new_closed_message,
+                $l->l_new_closed_message,
                 fn(NewController $c) => $c->accountCreationClosed = true,
             ],
             'testWithoutUsername' => [
                 [],
-                $l->new_username . ' ' . $l->is_required
+                $l->l_new_username . ' ' . $l->l_is_not_empty
             ],
             'testWithInvalidUsername' => [
                 [
                     'username' => 'invalid-email',
                 ],
-                $l->new_username . ' ' . $l->is_invalid
+                $l->l_new_username . ' ' . $l->l_is_invalid
             ],
             'testWithoutCharacter' => [
                 [
                     'username' => 'user@example.com',
                 ],
-                $l->new_character . ' ' . $l->is_required
+                $l->l_new_character . ' ' . $l->l_is_not_empty
             ],
             'testWithoutShipname' => [
                 [
                     'username' => 'user@example.com',
                     'character' => 'Test Character',
                 ],
-                $l->new_shipname . ' ' . $l->is_required
+                $l->l_new_shipname . ' ' . $l->l_is_not_empty
             ],
             'testWithoutPassword' => [
                 [
@@ -102,7 +104,7 @@ class NewControllerTest extends \Tests\UnitTestCase
                     'character' => 'Test Character',
                     'shipname' => 'Test Ship',
                 ],
-                $l->new_password . ' ' . $l->is_required,
+                $l->l_new_password . ' ' . $l->l_is_not_empty,
             ]
         ];
     }

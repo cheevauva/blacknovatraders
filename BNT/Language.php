@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BNT;
 
+use BNT\Translate;
+
 class Language
 {
 
@@ -63,14 +65,23 @@ class Language
         }
     }
 
+    public function t(array|string $tag, array $replace = [], ?string $format = null): string
+    {
+        $translate = new Translate;
+        $translate->language($this);
+        $translate->translate($tag, $replace, $format);
+
+        return (string) $translate;
+    }
+
     public function __get(string $var): mixed
-    { 
+    {
         if (isset($this->vars[$var])) {
             return $this->vars[$var];
         }
 
-        $slug = implode('_', array_slice(explode('_',  $var, 3), 0, 2)) . '_';
-   
+        $slug = implode('_', array_slice(explode('_', $var, 3), 0, 2)) . '_';
+
         if (!empty($this->mapping[$slug])) {
             $languageSubFile = sprintf('languages/%s/%s', $this->language, $this->mapping[$slug]);
 

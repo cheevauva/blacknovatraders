@@ -32,21 +32,21 @@ class PresetController extends BaseController
         $preset3 = abs($this->fromParsedBody('preset3')->label('l_pre_set_3')->asInt());
 
         if ($preset1 > $sector_max) {
-            throw new WarningException()->translate('l_pre_exceed', [
+            throw new WarningException()->t('l_pre_exceed', [
                 'preset' => '1',
                 'sector_max' => $sector_max
             ]);
         }
 
         if ($preset2 > $sector_max) {
-            throw new WarningException()->translate('l_pre_exceed', [
+            throw new WarningException()->t('l_pre_exceed', [
                 'preset' => '2',
                 'sector_max' => $sector_max
             ]);
         }
 
         if ($preset3 > $sector_max) {
-            throw new WarningException()->translate('l_pre_exceed', [
+            throw new WarningException()->t('l_pre_exceed', [
                 'preset' => '3',
                 'sector_max' => $sector_max
             ]);

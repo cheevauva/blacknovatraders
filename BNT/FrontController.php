@@ -36,10 +36,6 @@ class FrontController extends \UUA\Unit
         $controller->parsedBody ??= $_POST ?? [];
         $controller->serve();
 
-        if ($controller->exception instanceof CommonException) {
-            $controller->exception->language($controller->l);
-        }
-
         if (count(array_filter([$controller->template, $controller->exception, $controller->location, $controller->responseJson])) != 1) {
             throw new \Exception('must be one action');
         }

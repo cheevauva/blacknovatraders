@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace BNT\Controller;
 
 use Exception;
+use BNT\Exception\CommonException;
 use BNT\Exception\WarningException;
 use BNT\Exception\ErrorException;
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\User\DAO\UserUpdateDAO;
 use BNT\Language;
 use BNT\Fetch;
-use BNT\Translate;
 
 abstract class BaseController extends \UUA\Unit
 {
@@ -78,6 +78,19 @@ abstract class BaseController extends \UUA\Unit
                     throw new WarningException(sprintf('%s method processing is not implemented', $this->requestMethod));
             }
         } catch (Exception $ex) {
+            if ($ex instanceof CommonException) {
+                $ex->language($this->l);
+
+                $translatedMessage = strval($ex);
+
+                if (!$ex->getMessage() && $translatedMessage) {
+                    $reflection = new \ReflectionObject($ex);
+                    $property = $reflection->getProperty('message');
+                    $property->setAccessible(true);
+                    $property->setValue($ex, $translatedMessage);
+                }
+            }
+            
             $this->exception = $ex;
 
             if ($this->enableThrowExceptionOnProcess) {
@@ -149,24 +162,20 @@ abstract class BaseController extends \UUA\Unit
     {
         return $this->fetch($this->queryParams, $name);
     }
-    
+
     protected function t(array|string $tag, array $replace = [], ?string $format = null): string
     {
-        $translate = new Translate;
-        $translate->language($this->l);
-        $translate->translate($tag, $replace, $format);
-        
-        return (string) $translate;
+        return $this->l->t($tag, $replace, $format);
     }
 
     protected function fetch(array $data, ?string $path = null): Fetch
     {
         $fetch = new Fetch($data);
         $fetch->language($this->l);
-        $fetch->requiredMessage(':label ' . $this->l->is_required);
-        $fetch->notEmptyMessage(':label ' . $this->l->is_not_empty);
-        $fetch->filterMessage(':label ' . $this->l->is_invalid);
-        $fetch->enumMessage(':label ' . $this->l->is_contains_not_allow_value);
+        $fetch->requiredMessage($this->t([':label', 'l_is_required']));
+        $fetch->notEmptyMessage($this->t([':label', 'l_is_not_empty']));
+        $fetch->filterMessage($this->t([':label', 'l_is_invalid']));
+        $fetch->enumMessage($this->t([':label', 'l_is_contains_not_allow_value']));
 
         if ($path) {
             return $fetch->path($path);

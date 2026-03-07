@@ -23,6 +23,7 @@ class SchemaControllerTest extends \Tests\UnitTestCase
     protected function prepareSchemaPOST(array $parsedData = []): SchemaController
     {
         $schema = SchemaController::new(self::$container);
+        $schema->l = self::$l;
         $schema->requestMethod = 'POST';
         $schema->acceptType = $schema::ACCEPT_TYPE_HTML;
         $schema->enableThrowExceptionOnProcess = true;
@@ -57,17 +58,13 @@ class SchemaControllerTest extends \Tests\UnitTestCase
 
     public function testSchemaWithoutPassword(): void
     {
-        global $l;
-
-        $this->expectExceptionMessage($l->schema_password . ' ' . $l->is_required);
+        $this->expectExceptionMessage(self::$l->l_schema_password . ' ' . self::$l->l_is_not_empty);
         $this->prepareSchemaPOST();
     }
 
     public function testSchemaWithWrongPassword(): void
     {
-        global $l;
-
-        $this->expectExceptionMessage($l->schema_password . ' ' . $l->is_wrong);
+        $this->expectExceptionMessage(self::$l->l_schema_password . ' ' . self::$l->l_is_wrong);
         $this->prepareSchemaPOST([
             'password' => 'wrongpassword',
         ]);

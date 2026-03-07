@@ -84,6 +84,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testPrepareInputDefauts(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->l = self::$l;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->acceptType = $createUniverse::ACCEPT_TYPE_HTML;
         $createUniverse->parsedBody = [];
@@ -119,6 +120,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testPrepareInputFromParsedBody(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->l = self::$l;
         $createUniverse->acceptType = $createUniverse::ACCEPT_TYPE_HTML;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
@@ -183,6 +185,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testWrongPassword(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->l = self::$l;
         $createUniverse->acceptType = $createUniverse::ACCEPT_TYPE_HTML;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
@@ -198,6 +201,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testWrongStep(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->l = self::$l;
         $createUniverse->acceptType = $createUniverse::ACCEPT_TYPE_HTML;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
@@ -213,6 +217,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testStep1(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->l = self::$l;
         $createUniverse->acceptType = $createUniverse::ACCEPT_TYPE_HTML;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
@@ -228,6 +233,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testStep2(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->l = self::$l;
         $createUniverse->acceptType = $createUniverse::ACCEPT_TYPE_HTML;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [
@@ -261,6 +267,7 @@ class CreateUniverseControllerTest extends \Tests\UnitTestCase
     public function testStep3(): void
     {
         $createUniverse = CreateUniverseController::new(self::$container);
+        $createUniverse->l = self::$l;
         $createUniverse->acceptType = $createUniverse::ACCEPT_TYPE_HTML;
         $createUniverse->requestMethod = 'POST';
         $createUniverse->parsedBody = [

@@ -12,6 +12,7 @@ class BaseControllerTest extends \Tests\UnitTestCase
     protected function baseController(): BaseController
     {
         $controller = BaseController::new(self::$container);
+        $controller->l = self::$l;
         $controller->enableThrowExceptionOnProcess = true;
         $controller->enableCheckAuth = false;
 

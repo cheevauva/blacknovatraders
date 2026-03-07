@@ -32,7 +32,7 @@ class LinkCreateServant extends \UUA\Servant
         $tgZone = ZoneByIdDAO::call($this->container, $tgSector['zone_id'])->zone;
 
         if ($tgZone['allow_warpedit'] == 'N' && !$this->oneway) {
-            throw new WarningException()->translate('l_warp_twoerror', [
+            throw new WarningException()->t('l_warp_twoerror', [
                 'target_sector' => $this->targetSector
             ]);
         }
@@ -45,7 +45,7 @@ class LinkCreateServant extends \UUA\Servant
         $linksHere = LinksByStartAndDestDAO::call($this->container, $this->targetSector, $this->sector)->links;
 
         if (!empty($linksThere)) {
-            throw new WarningException()->translate('l_warp_linked', [
+            throw new WarningException()->t('l_warp_linked', [
                 'target_sector' => $this->targetSector,
             ]);
         }

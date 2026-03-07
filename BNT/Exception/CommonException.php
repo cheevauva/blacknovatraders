@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BNT\Exception;
 
 use BNT\Language;
-use BNT\Translate;
 
 class CommonException extends \Exception
 {
@@ -32,7 +31,7 @@ class CommonException extends \Exception
     /**
      * @return static
      */
-    public function translate(array|string $tag, array $replace = [], ?string $format = null)
+    public function t(array|string $tag, array $replace = [], ?string $format = null)
     {
         if (is_array($tag)) {
             $this->tags = $tag;
@@ -49,12 +48,8 @@ class CommonException extends \Exception
     #[\Override]
     public function __toString(): string
     {
-        if (!empty($this->tags)) {
-            $translate = new Translate();
-            $translate->language($this->language);
-            $translate->translate($this->tags, $this->replace, $this->format);
-
-            return (string) $translate;
+        if (!empty($this->tags) && !empty($this->language)) {
+            $this->message = $this->language->t($this->tags, $this->replace, $this->format);
         }
 
         return $this->getMessage();

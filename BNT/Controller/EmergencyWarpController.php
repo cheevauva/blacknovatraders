@@ -34,7 +34,7 @@ class EmergencyWarpController extends BaseController
 
         MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $dest_sector);
 
-        throw new InfoException()->translate('l_ewd_used', [
+        throw new InfoException()->t('l_ewd_used', [
             'sector' => $dest_sector,
         ]);
     }

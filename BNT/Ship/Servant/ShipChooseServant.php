@@ -48,7 +48,7 @@ class ShipChooseServant extends \UUA\Servant
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $newbie_nice !== 'YES') {
-            throw new ErrorException()->translate(['l_login_you_have_die', 'l_login_looser']);
+            throw new ErrorException()->t(['l_login_you_have_die', 'l_login_looser']);
         }
 
         if ($ship['ship_destroyed'] == 'Y' && $newbie_nice == 'YES') {
@@ -57,7 +57,7 @@ class ShipChooseServant extends \UUA\Servant
             $checkNewbie->serve();
 
             if (!$checkNewbie->isNewbie) {
-                throw new ErrorException()->translate(['l_login_you_have_die', 'l_login_looser']);
+                throw new ErrorException()->t(['l_login_you_have_die', 'l_login_looser']);
             }
 
             $restore = ShipRestoreAsNewbieServant::new($this->container);

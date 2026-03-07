@@ -10,7 +10,7 @@ use BNT\Exception\WarningException;
 class NewController extends BaseController
 {
 
-    public bool $accountCreationClosed;
+    public bool $accountCreationClosed = false;
     public string $gamepath;
     public string $gamedomain;
 
