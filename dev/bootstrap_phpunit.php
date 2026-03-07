@@ -1,8 +1,8 @@
 <?php
 
-use BNT\Language;
-
 declare(strict_types=1);
+
+use BNT\Language;
 
 global $l;
 

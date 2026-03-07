@@ -44,6 +44,7 @@ class Language
         'l_map_' => 'galaxy.php',
         'l_nav_' => 'navcomp.php',
         'l_messages_' => 'messages.php',
+        'l_create_universe_' => 'create_universe.php',
     ];
 
     public function __construct(protected string $language)

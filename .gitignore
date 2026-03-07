@@ -1,6 +1,7 @@
-/.phpunit.result.cache
-/phpunit-8.5.52.phar
-/phpcbf.phar
-/phpstan.phar
-/psalm.phar
-/phpunit.phar
+/dev/phpcbf.phar
+/dev/phpstan.phar
+/dev/psalm.phar
+/dev/phpunit.phar
+/dev/.phpunit.result.cache
+/dev/phpunit.phar
+/dev/.env

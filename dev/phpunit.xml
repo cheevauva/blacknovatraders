@@ -5,18 +5,19 @@
     displayDetailsOnTestsThatTriggerErrors="true"
     displayDetailsOnTestsThatTriggerNotices="true"
     displayDetailsOnTestsThatTriggerWarnings="true"
+    cacheResultFile="dev/.phpunit.result.cache"
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory>Tests/Unit</directory>
+            <directory>../Tests/Unit</directory>
         </testsuite>
         
         <testsuite name="Integration">
-            <directory>Tests/Integration</directory>
+            <directory>../Tests/Integration</directory>
         </testsuite>
         
         <testsuite name="Functional">
-            <directory>Tests/Functional</directory>
+            <directory>../Tests/Functional</directory>
         </testsuite>
     </testsuites>
     

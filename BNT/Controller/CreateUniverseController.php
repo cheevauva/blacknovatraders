@@ -104,13 +104,13 @@ class CreateUniverseController extends BaseController
     protected function preProcess(): void
     {
         $this->step = $this->fromParsedBody('step')->default($this->step)->asInt();
-        $this->swordfish = $this->fromParsedBody('swordfish')->trim()->notEmpty()->asString();
+        $this->swordfish = $this->fromParsedBody('swordfish')->trim()->asString();
         $this->sector_max = $this->fromParsedBody('sector_max')->default($this->sector_max)->asInt();
         $this->admin_mail = $this->fromParsedBody('admin_mail')->default($this->admin_mail)->asString();
         $this->admin_pass = $this->fromParsedBody('admin_pass')->default($this->admin_pass)->asString();
         $this->initscommod = $this->fromParsedBody('initscommod')->default($this->initscommod)->asFloat();
         $this->initbcommod = $this->fromParsedBody('initbcommod')->default($this->initbcommod)->asFloat();
-        $this->universe_size = $this->fromParsedBody('universe_size')->default($this->universe_size);
+        $this->universe_size = $this->fromParsedBody('universe_size')->default($this->universe_size)->asInt();
         $this->special = $this->fromParsedBody('special')->default($this->special)->asInt();
         $this->ore = $this->fromParsedBody('ore')->default($this->ore)->asInt();
         $this->organics = $this->fromParsedBody('organics')->default($this->organics)->asInt();
