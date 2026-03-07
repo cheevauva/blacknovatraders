@@ -67,36 +67,34 @@ class NewControllerTest extends \Tests\UnitTestCase
 
     public static function parsedBodyProvider(): array
     {
-        global $l;
-
         return [
             'testNewAccountCreationClosed' => [
                 [],
-                $l->l_new_closed_message,
+                self::l()->l_new_closed_message,
                 fn(NewController $c) => $c->accountCreationClosed = true,
             ],
             'testWithoutUsername' => [
                 [],
-                $l->l_new_username . ' ' . $l->l_is_not_empty
+                self::l()->l_new_username . ' ' . self::l()->l_is_not_empty
             ],
             'testWithInvalidUsername' => [
                 [
                     'username' => 'invalid-email',
                 ],
-                $l->l_new_username . ' ' . $l->l_is_invalid
+                self::l()->l_new_username . ' ' . self::l()->l_is_invalid
             ],
             'testWithoutCharacter' => [
                 [
                     'username' => 'user@example.com',
                 ],
-                $l->l_new_character . ' ' . $l->l_is_not_empty
+                self::l()->l_new_character . ' ' . self::l()->l_is_not_empty
             ],
             'testWithoutShipname' => [
                 [
                     'username' => 'user@example.com',
                     'character' => 'Test Character',
                 ],
-                $l->l_new_shipname . ' ' . $l->l_is_not_empty
+                self::l()->l_new_shipname . ' ' . self::l()->l_is_not_empty
             ],
             'testWithoutPassword' => [
                 [
@@ -104,7 +102,7 @@ class NewControllerTest extends \Tests\UnitTestCase
                     'character' => 'Test Character',
                     'shipname' => 'Test Ship',
                 ],
-                $l->l_new_password . ' ' . $l->l_is_not_empty,
+                self::l()->l_new_password . ' ' . self::l()->l_is_not_empty,
             ]
         ];
     }
