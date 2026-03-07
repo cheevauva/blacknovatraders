@@ -41,6 +41,7 @@ class Language
         'l_ship_' => 'ship.php',
         'l_dump_' => 'dump.php',
         'l_map_' => 'galaxy.php',
+        'l_nav_' => 'navcomp.php',
     ];
 
     public static function instance(): Language

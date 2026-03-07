@@ -1,6 +1,6 @@
 <?php
 global $ksm_allowed;
-
+global $allow_navcomp;
 $self = BNT\Controller\MainController::as($self);
 $picsperrow = 7;
 $shiptypes = shipTypes();
@@ -62,7 +62,9 @@ $planettypes = planetTypes();
                             <?php if (!empty($ksm_allowed)) : ?>
                                 <li class="list-group-item"><a class="nav-link" href="<?= route('galaxy'); ?>"><?= $l->map ?></a></li>
                             <?php endif; ?>
-                            <li class="list-group-item"><a class="nav-link" href="navcomp.php"><?= $l->navcomp ?></a></li>
+                            <?php if (!empty($allow_navcomp)) : ?>
+                                <li class="list-group-item"><a class="nav-link" href="<?= route('navcomp'); ?>"><?= $l->navcomp ?></a></li>
+                            <?php endif; ?>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('logout'); ?>"><?= $l->logout ?></a></li>
                         </ul>
                     </td>

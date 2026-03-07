@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
+// @todo replace sql to dao
 class GalaxyController extends BaseController
 {
 
