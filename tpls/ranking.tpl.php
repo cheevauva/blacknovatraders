@@ -2,21 +2,21 @@
 <?php include_header(); ?>
 <?php bigtitle(); ?>
 <?php if (empty($self->ships)) : ?>
-    <?= $l->ranks_none; ?>
+    <?= $l->l_ranks_none; ?>
 <?php else : ?>
-    <p class="text-start"><?= $l->ranks_pnum; ?>: <?= $self->numPlayers; ?></p>
+    <p class="text-start"><?= $l->l_ranks_pnum; ?>: <?= $self->numPlayers; ?></p>
     <div class="alert alert-info" role="alert">
-        <?= $l->ranks_dships; ?>
+        <?= $l->l_ranks_dships; ?>
     </div>
     <div class="table-responsive">
         <table class="table table-hover">
             <tr>
-                <td><?= $l->ranks_rank; ?></td>
-                <td><a href="<?= route('ranking');?>"><?= $l->score; ?></a></td>
-                <td><?= $l->player; ?></td>
-                <td><a href="<?= route('ranking', 'sort=turns'); ?>"><?= $l->turns_used; ?></a></td>
-                <td><a href="<?= route('ranking', 'sort=good'); ?>"><?= $l->ranks_good; ?></a>/<a href="<?= route('ranking', 'sort=bad'); ?>"><?= $l->ranks_evil; ?></a></td>
-                <td><a href="<?= route('ranking', 'sort=alliance'); ?>"><?= $l->team_alliance; ?></a></td>
+                <td><?= $l->l_ranks_rank; ?></td>
+                <td><a href="<?= route('ranking');?>"><?= $l->l_score; ?></a></td>
+                <td><?= $l->l_player; ?></td>
+                <td><a href="<?= route('ranking', 'sort=turns'); ?>"><?= $l->l_turns_used; ?></a></td>
+                <td><a href="<?= route('ranking', 'sort=good'); ?>"><?= $l->l_ranks_good; ?></a>/<a href="<?= route('ranking', 'sort=bad'); ?>"><?= $l->l_ranks_evil; ?></a></td>
+                <td><a href="<?= route('ranking', 'sort=alliance'); ?>"><?= $l->l_team_alliance; ?></a></td>
                 <td><a href="<?= route('ranking', 'sort=efficiency'); ?>">Eff. Rating.</a></td>
             </TR>
             <?php $i = 0; ?>

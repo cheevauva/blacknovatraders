@@ -6,7 +6,7 @@
     <form action="<?= route('mines'); ?>" method="POST" id="bntMinesForm">
         <div class="mb-3">
             <?=
-            strtr($l->mines_info1, [
+            strtr($l->l_mines_info1, [
                 '[sector]' => $self->playerinfo['sector'],
                 '[mines]' => number($self->total_sector_mines),
                 '[fighters]' => number($self->total_sector_fighters),
@@ -19,43 +19,43 @@
         </div>
 
         <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label"><?= $l->mines_deploy; ?></label>
+            <label class="col-sm-2 col-form-label"><?= $l->l_mines_deploy; ?></label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="nummines" size="10" maxlength="10" value="<?= $self->playerinfo['torps']; ?>">
             </div>
             <div class="col-sm-6">
-                <span class="form-control-plaintext"><?= $l->mines; ?>.</span>
+                <span class="form-control-plaintext"><?= $l->l_mines; ?>.</span>
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label"><?= $l->mines_deploy; ?></label>
+            <label class="col-sm-2 col-form-label"><?= $l->l_mines_deploy; ?></label>
             <div class="col-sm-4">
                 <input type="text" class="form-control" name="numfighters" size="10" maxlength="10" value="<?= $self->playerinfo['ship_fighters']; ?>">
             </div>
             <div class="col-sm-6">
-                <span class="form-control-plaintext"><?= $l->fighters; ?>.</span>
+                <span class="form-control-plaintext"><?= $l->l_fighters; ?>.</span>
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label class="col-sm-2 col-form-label"><?= $l->mines_fighter_mode; ?></label>
+            <label class="col-sm-2 col-form-label"><?= $l->l_mines_fighter_mode; ?></label>
             <div class="col-sm-10">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="mode" id="modeAttack" value="attack" <?= $self->set_attack ? 'checked' : ''; ?>>
-                    <label class="form-check-label" for="modeAttack"><?= $l->mines_att; ?></label>
+                    <label class="form-check-label" for="modeAttack"><?= $l->l_mines_att; ?></label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="mode" id="modeToll" value="toll" <?= $self->set_toll ? 'checked' : ''; ?>>
-                    <label class="form-check-label" for="modeToll"><?= $l->mines_toll; ?></label>
+                    <label class="form-check-label" for="modeToll"><?= $l->l_mines_toll; ?></label>
                 </div>
             </div>
         </div>
 
         <div class="mb-3 row">
             <div class="col-sm-10 offset-sm-2">
-                <button type="submit" class="btn btn-primary"><?= $l->submit; ?></button>
-                <button type="reset" class="btn btn-secondary"><?= $l->reset; ?></button>
+                <button type="submit" class="btn btn-primary"><?= $l->l_submit; ?></button>
+                <button type="reset" class="btn btn-secondary"><?= $l->l_reset; ?></button>
             </div>
         </div>
 

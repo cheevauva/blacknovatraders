@@ -3,18 +3,18 @@
 <?php bigtitle(); ?>
 <div class="alert alert-info">
     <?php if (!empty($self->sectorinfo['beacon'])) : ?>
-        <?php echo $l->beacon_reads; ?>: "<?php echo htmlspecialchars($self->sectorinfo['beacon']); ?>"
+        <?php echo $l->l_beacon_reads; ?>: "<?php echo htmlspecialchars($self->sectorinfo['beacon']); ?>"
     <?php else : ?>
-        <?php echo $l->beacon_none; ?><br><br>
+        <?php echo $l->l_beacon_none; ?><br><br>
     <?php endif; ?>
 </div>
 <form action="<?= route('beacon'); ?>" method="post" id="bntBeacontForm">
     <div class="mb-3">
-        <label class="form-label"><?php echo $l->beacon_name; ?></label>
+        <label class="form-label"><?php echo $l->l_beacon_name; ?></label>
         <input type="text" name="beacon_text" class="form-control" value="" size="40" maxlength="80" >
     </div>
-    <input type="submit" class="btn btn-primary" value="<?php echo $l->submit; ?>">
-    <input type="reset"  class="btn btn-primary" value="<?php echo $l->reset; ?>">
+    <input type="submit" class="btn btn-primary" value="<?php echo $l->l_submit; ?>">
+    <input type="reset"  class="btn btn-primary" value="<?php echo $l->l_reset; ?>">
 </form>
 <script type="text/javascript">
     bntForm('bntBeacontForm');

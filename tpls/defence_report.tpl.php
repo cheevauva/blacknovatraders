@@ -1,15 +1,15 @@
 <?php $self = \BNT\Controller\DefenceReportController::as($self); ?>
 <?php include_header(); ?>
 <?php bigtitle(); ?>
-<?= $l->pr_clicktosort; ?><br><br>
+<?= $l->l_pr_clicktosort; ?><br><br>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th><a href="<?= route('defence_report', 'sort=sector'); ?>" ><?= $l->sector; ?></a></th>
-            <th><a href="<?= route('defence_report', 'sort=quantity'); ?>" ><?= $l->qty; ?></a></th>
-            <th><a href="<?= route('defence_report', 'sort=type'); ?>" ><?= $l->sdf_type; ?></a></th>
-            <th><a href="<?= route('defence_report', 'sort=mode'); ?>" ><?= $l->sdf_mode; ?></a></th>
+            <th><a href="<?= route('defence_report', 'sort=sector'); ?>" ><?= $l->l_sector; ?></a></th>
+            <th><a href="<?= route('defence_report', 'sort=quantity'); ?>" ><?= $l->l_qty; ?></a></th>
+            <th><a href="<?= route('defence_report', 'sort=type'); ?>" ><?= $l->l_sdf_type; ?></a></th>
+            <th><a href="<?= route('defence_report', 'sort=mode'); ?>" ><?= $l->l_sdf_mode; ?></a></th>
         </tr>
     </thead>
     <tbody>
@@ -22,14 +22,14 @@
                 </td>
                 <td><?= number_format($defence['quantity']); ?></td>
                 <td>
-                    <?= $defence['defence_type'] == 'F' ? $l->fighters : $l->mines; ?>
+                    <?= $defence['defence_type'] == 'F' ? $l->l_fighters : $l->l_mines; ?>
                 </td>
                 <td>
-                    <?php $mode = $defence['defence_type'] == 'F' ? $defence['fm_setting'] : $l->n_a; ?>
+                    <?php $mode = $defence['defence_type'] == 'F' ? $defence['fm_setting'] : $l->l_n_a; ?>
                     <?php if ($mode == 'attack'): ?>
-                        <?= $l->md_attack; ?>
+                        <?= $l->l_md_attack; ?>
                     <?php else: ?>
-                        <?= $l->md_toll; ?>
+                        <?= $l->l_md_toll; ?>
                     <?php endif; ?>
                 </td>
             </tr>

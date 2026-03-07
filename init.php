@@ -8,6 +8,7 @@ use BNT\User\DAO\UserByTokenDAO;
 use UUA\Container\Container;
 use BNT\ADODB\ADOPDO;
 use BNT\Config\Servant\ConfigReloadGlobalVarsServant;
+use BNT\LanguageLegacyAdapter;
 
 if (empty($disableRegisterGlobalFix)) {
     foreach ($_POST as $k => $v) {
@@ -75,11 +76,11 @@ $languageFileSub = sprintf('languages/%s%s', $language, $_SERVER['PHP_SELF']);
 
 include $languageFileMain;
 
-$l = new \BNT\Language();
-
 if (file_exists($languageFileSub)) {
     include $languageFileSub;
 }
+
+$l = new LanguageLegacyAdapter($language);
 
 if (!empty($_COOKIE['token'])) {
     setcookie("token", $_COOKIE['token'], time() + (3600 * 24) * 365, $gamepath, $gamedomain);

@@ -1,5 +1,7 @@
 <?php
 
+use BNT\Language;
+
 declare(strict_types=1);
 
 global $l;
@@ -7,5 +9,5 @@ global $l;
 require_once 'bootstrap.php';
 require_once 'languages/english.php';
 
-$l = BNT\Language::instance();
+$l = new Language('english');
 

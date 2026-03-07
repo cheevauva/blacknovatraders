@@ -5,13 +5,13 @@
     <form action="<?= route('self_destruct');?>" id="bntSelfDestructForm" method="POST">
         <input type="hidden" name="sure" value="2">
         <div class="mb-3">
-            <?= $l->die_rusure; ?>
+            <?= $l->l_die_rusure; ?>
         </div>
         <div class="mb-3">
-            <a href="index.php" class="btn btn-primary"><?= $l->die_nonono; ?></a> <?= $l->die_what; ?>
+            <a href="index.php" class="btn btn-primary"><?= $l->l_die_nonono; ?></a> <?= $l->l_die_what; ?>
         </div>
         <div class="mb-3">
-            <button type="submit" class="btn btn-danger"><?= $l->yes; ?>!</button> <?= $l->die_goodbye; ?>
+            <button type="submit" class="btn btn-danger"><?= $l->l_yes; ?>!</button> <?= $l->l_die_goodbye; ?>
         </div>
     </form>
     <script type="text/javascript">

@@ -1,12 +1,12 @@
 <?php $self = BNT\Controller\LogController::as($self); ?>
 <?php include_header(); ?>
-<h1><?php echo str_replace("[player]", htmlspecialchars($self->playerinfo['ship_name']), $l->log_log); ?></h1>
+<h1><?php echo str_replace("[player]", htmlspecialchars($self->playerinfo['ship_name']), $l->l_log_log); ?></h1>
 <table class="table table-hover">
     <?php foreach ($self->logs as $log) : ?>
         <tr>
             <td><?php echo $log['title']; ?></td>
             <td>
-                <?php echo $l->log_months[date('n', strtotime($log['time'])) - 1]; ?> 
+                <?php echo $l->l_log_months[date('n', strtotime($log['time'])) - 1]; ?> 
                 <?php echo date('d', strtotime($log['time'])); ?> 
                 <?php echo date('Y', strtotime($log['time'])); ?> 
                 <?php echo date('H:i:s', strtotime($log['time'])); ?>

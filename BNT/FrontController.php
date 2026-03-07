@@ -25,10 +25,9 @@ class FrontController extends \UUA\Unit
     {
         global $userinfo;
         global $playerinfo;
-        global $l;
 
         $controller = $this->controller;
-        $controller->l = $l;
+        $controller->l = new Language($this->getLanguage($userinfo, $_SERVER));
         $controller->acceptType ??= $_SERVER['HTTP_ACCEPT'] ?? 'text/html';
         $controller->playerinfo ??= $playerinfo ?? null;
         $controller->userinfo ??= $userinfo ?? null;
@@ -40,7 +39,7 @@ class FrontController extends \UUA\Unit
         if ($controller->exception instanceof CommonException) {
             $controller->exception->language($controller->l);
         }
-        
+
         if (count(array_filter([$controller->template, $controller->exception, $controller->location, $controller->responseJson])) != 1) {
             throw new \Exception('must be one action');
         }
@@ -74,6 +73,26 @@ class FrontController extends \UUA\Unit
                 $this->responseHtml('tpls/error.tpl.php');
             }
         }
+    }
+
+    protected function getLanguage(?array $userinfo, array $serverParams): string
+    {
+        global $default_lang;
+
+        if (!empty($userinfo['lang'])) {
+            return $userinfo['lang'];
+        }
+
+        if (!empty($serverParams['HTTP_ACCEPT_LANGUAGE'])) {
+            switch (mb_strtolower(substr($serverParams['HTTP_ACCEPT_LANGUAGE'], 0, 2))) {
+                case 'ru':
+                    return 'russian';
+                case 'en':
+                    return 'english';
+            }
+        }
+
+        return $default_lang;
     }
 
     protected function responseHtml(string $template): void

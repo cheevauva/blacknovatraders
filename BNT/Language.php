@@ -7,6 +7,7 @@ namespace BNT;
 class Language
 {
 
+    protected array $vars;
     protected static Language $instance;
 
     use \UUA\Traits\AsTrait;
@@ -45,41 +46,44 @@ class Language
         'l_messages_' => 'messages.php',
     ];
 
-    public static function instance(): Language
+    public function __construct(protected string $language)
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
-        }
+        include sprintf('languages/%s.php', $this->language);
 
-        return self::$instance;
+        $this->setVars(get_defined_vars());
     }
 
-    public function __get(string $name): mixed
+    protected function setVars(array $vars): void
     {
-        global $language;
+        foreach ($vars as $var => $val) {
+            if (strpos($var, 'l_') === 0) {
+                $this->vars[$var] ??= $val;
+            }
+        }
+    }
 
-        if (isset($GLOBALS['l_' . $name])) {
-            return $GLOBALS['l_' . $name];
+    public function __get(string $var): mixed
+    { 
+        if (isset($this->vars[$var])) {
+            return $this->vars[$var];
         }
 
-        $slug = implode('_', array_slice(explode('_', 'l_' . $name, 3), 0, 2)) . '_';
-
+        $slug = implode('_', array_slice(explode('_',  $var, 3), 0, 2)) . '_';
+   
         if (!empty($this->mapping[$slug])) {
-            $languageSubFile = sprintf('languages/%s/%s', $language, $this->mapping[$slug]);
+            $languageSubFile = sprintf('languages/%s/%s', $this->language, $this->mapping[$slug]);
 
             if (file_exists($languageSubFile)) {
                 include $languageSubFile;
 
-                foreach (get_defined_vars() as $var => $val) {
-                    $GLOBALS[$var] ??= $val;
-                }
+                $this->setVars(get_defined_vars());
             }
         }
 
-        if (isset($GLOBALS['l_' . $name])) {
-            return $GLOBALS['l_' . $name];
+        if (isset($this->vars[$var])) {
+            return $this->vars[$var];
         }
 
-        return 'l_' . $name;
+        return $var;
     }
 }

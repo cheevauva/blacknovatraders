@@ -3,23 +3,23 @@
 <?php bigtitle(); ?>
 <div class="container">
     <div class="alert alert-info" role="alert">
-        <?= $l->news_info ?>
+        <?= $l->l_news_info ?>
     </div>
-    <p><?= $l->news_for ?> <?= $self->startdate ?></p>
+    <p><?= $l->l_news_for ?> <?= $self->startdate ?></p>
     <table class="table">
         <tr>
             <td colspan="2" align="right">
-                <a href="<?= route('news', ['startdate' => $self->previousday]); ?>"><?= $l->news_prev ?></a>
+                <a href="<?= route('news', ['startdate' => $self->previousday]); ?>"><?= $l->l_news_prev ?></a>
                 - 
-                <a href="<?= route('news', ['startdate' => $self->nextday]); ?>"><?= $l->news_next ?></a>
+                <a href="<?= route('news', ['startdate' => $self->nextday]); ?>"><?= $l->l_news_next ?></a>
             </td>
         </tr>
         <?php if (empty($self->news)) : ?>
             <tr class="table-warning">
                 <td  width="27%">
-                    <?= $l->news_flash; ?>
+                    <?= $l->l_news_flash; ?>
                 </td>
-                <td ><?= $l->news_none; ?></td>
+                <td ><?= $l->l_news_none; ?></td>
             </tr>
         <?php else : ?>
             <?php foreach ($self->news as $row) : ?>

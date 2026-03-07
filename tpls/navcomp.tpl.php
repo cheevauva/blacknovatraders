@@ -4,13 +4,13 @@
 <form action="<?= route('navcomp');?>" method="POST" class="navcomp-form" id="bntNavCompForm">
     <div class="row g-3 align-items-center">
         <div class="col-auto">
-            <label for="stop_sector" class="col-form-label"><?= $l->nav_query; ?></label>
+            <label for="stop_sector" class="col-form-label"><?= $l->l_nav_query; ?></label>
         </div>
         <div class="col-auto">
-            <input type="text" name="stop_sector" id="stop_sector" class="form-control" placeholder="<?= $l->nav_query; ?>">
+            <input type="text" name="stop_sector" id="stop_sector" class="form-control" placeholder="<?= $l->l_nav_query; ?>">
         </div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary"><?= $l->submit; ?></button>
+            <button type="submit" class="btn btn-primary"><?= $l->l_submit; ?></button>
         </div>
     </div>
 

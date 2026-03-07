@@ -4,18 +4,18 @@ global $l_footer_until_update, $l_footer_players_on_1, $l_footer_players_on_2, $
 <div class="bg-body-tertiary mt-5">
     <ul class="nav nav-pills nav-fill">
         <li class="nav-item">
-            <a class="nav-link" href="<?= route('help');?>"><?= $l->help; ?></a>
+            <a class="nav-link" href="<?= route('help');?>"><?= $l->l_help; ?></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="faq.html"><?= $l->faq; ?></a>
+            <a class="nav-link" href="faq.html"><?= $l->l_faq; ?></a>
         </li>
         <?php if (!empty($link_forums)) : ?>
             <li class="nav-item">
-                <a class="nav-link" href="<?= $link_forums; ?>" target="_blank"><?= $l->forums; ?></a>
+                <a class="nav-link" href="<?= $link_forums; ?>" target="_blank"><?= $l->l_forums; ?></a>
             </li>
         <?php endif; ?>
         <li class="nav-item">
-            <a class="nav-link" href="mailto:<?= $admin_mail; ?>"><?= $l->emailus; ?></a>
+            <a class="nav-link" href="mailto:<?= $admin_mail; ?>"><?= $l->l_emailus; ?></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="http://www.sourceforge.net/projects/blacknova">BlackNova Traders</a>

@@ -7,23 +7,11 @@ $l_main_other = "Другое";
 $l_traderoutes = "Торговые маршруты";
 $l_trade_control = "Контроль торговли";
 
-$l_youhave = "У вас есть ";
-$l_turns_have = "Ходов доступно: ";
-$l_sector = "Сектор";
-
-
-$l_commands = "Команды";
 $l_command_no = "Команда недоступна.";
-$l_devices = "Устройства";
-$l_log = "Журнал";
-$l_sector_def = "Оборона сектора";
 $l_defense = "Оборона";
-$l_read_msg = "Читать сообщения";
-$l_send_msg = "Отправить сообщения";
-$l_teams = "Альянсы";
+$l_main_read_msg = "Читать сообщения";
+$l_main_send_msg = "Отправить сообщения";
 $l_ohno = "Самоуничтожение";
-$l_options = "Настройки";
-$l_navcomp = "Навигационный компьютер";
 
 $l_incompletemove = "Вы не завершили предыдущий ход.";
 $l_clicktocontinue = "Нажмите здесь, чтобы продолжить";

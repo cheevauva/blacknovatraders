@@ -5,7 +5,7 @@
     <form action="<?= route('bounty'); ?>" method="POST" id="bntBountyForm">
         <table class="table table-borderless w-auto">
             <tr>
-                <td><?= $l->by_bountyon; ?></td>
+                <td><?= $l->l_by_bountyon; ?></td>
                 <td>
                     <select name="bounty_on" class="form-select">
                         <?php foreach ($self->ships as $ship): ?>
@@ -18,7 +18,7 @@
                 </td>
             </tr>
             <tr>
-                <td><?= $l->by_amount; ?>:</td>
+                <td><?= $l->l_by_amount; ?>:</td>
                 <td>
                     <input type="text" name="amount" class="form-control" size="20" maxlength="20">
                 </td>
@@ -26,22 +26,22 @@
             <tr>
                 <td></td>
                 <td>
-                    <button type="submit" class="btn btn-primary"><?= $l->by_place; ?></button>
-                    <button type="reset" class="btn btn-secondary"><?= $l->reset; ?></button>
+                    <button type="submit" class="btn btn-primary"><?= $l->l_by_place; ?></button>
+                    <button type="reset" class="btn btn-secondary"><?= $l->l_reset; ?></button>
                 </td>
             </tr>
         </table>
         <input type="hidden" name="response" value="place">
     </form>
     <?php if (empty($self->bounties)): ?>
-        <?= $l->by_nobounties; ?><br>
+        <?= $l->l_by_nobounties; ?><br>
     <?php else: ?>
-        <?= $l->by_moredetails; ?><br><br>
+        <?= $l->l_by_moredetails; ?><br><br>
 
         <table class="table">
             <tr>
-                <th><?= $l->by_bountyon; ?></th>
-                <th><?= $l->amount; ?></th>
+                <th><?= $l->l_by_bountyon; ?></th>
+                <th><?= $l->l_amount; ?></th>
             </tr>
 
             <?php foreach ($self->bounties as $bounty): ?>
@@ -62,15 +62,15 @@
 <?php endif; ?>
 <?php if ($self->response == 'display'): ?> 
     <?php if (empty($self->bounty_details)): ?>
-        <?= $l->by_nobounties; ?><br>
+        <?= $l->l_by_nobounties; ?><br>
     <?php else: ?>
-        <?= $l->by_bountyon . " " . $self->bounty_on['ship_name']; ?>
+        <?= $l->l_by_bountyon . " " . $self->bounty_on['ship_name']; ?>
 
         <table class="table">
             <tr>
-                <th><?= $l->amount; ?></th>
-                <th><?= $l->by_placedby; ?></th>
-                <th><?= $l->by_action; ?></th>
+                <th><?= $l->l_amount; ?></th>
+                <th><?= $l->l_by_placedby; ?></th>
+                <th><?= $l->l_by_action; ?></th>
             </tr>
 
             <?php foreach ($self->bounty_details as $bounty): ?>
@@ -79,7 +79,7 @@
 
                     <td>
                         <?php if ($bounty['placed_by'] == 0): ?>
-                            <?= $l->by_thefeds; ?>
+                            <?= $l->l_by_thefeds; ?>
                         <?php else: ?>
                             <?= $bounty['placer_info']['ship_name']; ?>
                         <?php endif; ?>
@@ -90,7 +90,7 @@
                             <form action="<?= route('bounty'); ?>" method="POST" id="bntBountyForm<?= $bounty['bounty_id']; ?>">
                                 <input type="hidden" name="bid" value="<?= $bounty['bounty_id']; ?>"/>
                                 <input type="hidden" name="response" value="cancel"/>
-                                <button type="submit" class="btn btn-primary"><?= $l->by_cancel; ?></button>
+                                <button type="submit" class="btn btn-primary"><?= $l->l_by_cancel; ?></button>
                             </form>
                             <script type="text/javascript">
                                 bntForm('bntBountyForm<?= $bounty['bounty_id']; ?>');

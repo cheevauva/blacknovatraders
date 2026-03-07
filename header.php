@@ -59,14 +59,14 @@ global $title, $l, $link_forums, $admin_mail, $userinfo;
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link" href="<?= route('news'); ?>"><?= $l->news_title; ?></a>
-                            <a class="nav-link" href="<?= route('ranking'); ?>"><?= $l->rankings; ?></a>
-                            <a class="nav-link" href="<?= route('settings'); ?>"><?= $l->settings_game; ?></A>
+                            <a class="nav-link" href="<?= route('news'); ?>"><?= $l->l_news_title; ?></a>
+                            <a class="nav-link" href="<?= route('ranking'); ?>"><?= $l->l_rankings; ?></a>
+                            <a class="nav-link" href="<?= route('settings'); ?>"><?= $l->l_settings_game; ?></A>
                             <?php if (isAdmin()) : ?>
-                                <a class="nav-link" href="<?= route('admin'); ?>"><?= "$l->admin"; ?></a>
+                                <a class="nav-link" href="<?= route('admin'); ?>"><?= "$l->l_admin"; ?></a>
                             <?php endif; ?>
                             <?php if (!empty($userinfo)) : ?>
-                                <a class="nav-link" href="<?= route('logout'); ?>"><?= "$l->logout"; ?></a>
+                                <a class="nav-link" href="<?= route('logout'); ?>"><?= "$l->l_logout"; ?></a>
                             <?php endif; ?>
                         </div>
                     </div>

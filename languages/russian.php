@@ -19,6 +19,17 @@ $l_special = "Особый";
 $l_qty = "Количество";
 $l_device = "Устройство";
 
+$l_commands = "Команды";
+$l_devices = "Устройства";
+$l_log = "Журнал";
+$l_navcomp = "Навигационный компьютер";
+$l_options = "Настройки";
+$l_teams = "Альянсы";
+$l_sector_def = "Оборона сектора";
+$l_youhave = "У вас есть ";
+$l_turns_have = "Ходов доступно: ";
+$l_sector = "Сектор";
+
 $l_cargo = "Груз";
 $l_fighters = "Истребители ";
 $l_mines = "Мины ";

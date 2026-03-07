@@ -4,27 +4,27 @@
 <form action="<?= route('new');?>" id="bntNewForm" method="POST">
     <div class="mb-3">
         <div class="form-text">
-            <?= $l->new_info; ?>
+            <?= $l->l_new_info; ?>
         </div>
     </div>
     <div class="mb-3">
-        <label class="form-label"><?= $l->new_username; ?></label>
+        <label class="form-label"><?= $l->l_new_username; ?></label>
         <input type="text" name="username" class="form-control" maxlength="40" required>
     </div>
     <div class="mb-3">
-        <label class="form-label"><?= $l->new_shipname; ?></label>
+        <label class="form-label"><?= $l->l_new_shipname; ?></label>
         <input type="text" name="shipname" class="form-control" maxlength="20"  required>
     </div>
     <div class="mb-3">
-        <label class="form-label"><?= $l->new_pname; ?></label>
+        <label class="form-label"><?= $l->l_new_pname; ?></label>
         <input type="text" name="character" class="form-control" maxlength="20"  required>
     </div>
     <div class="mb-3">
-        <label class="form-label"><?= $l->new_password; ?></label>
+        <label class="form-label"><?= $l->l_new_password; ?></label>
         <input type="password" name="password" class="form-control" maxlength="20"  required>
     </div>
-    <input type="submit" class="btn btn-primary" value="<?= $l->submit; ?>">
-    <input type="reset"  class="btn btn-primary" value="<?= $l->reset; ?>">
+    <input type="submit" class="btn btn-primary" value="<?= $l->l_submit; ?>">
+    <input type="reset"  class="btn btn-primary" value="<?= $l->l_reset; ?>">
 </form>
 <script type="text/javascript">
     bntForm('bntNewForm');

@@ -42,7 +42,7 @@ class Translate
 
         foreach ($tags as $idxTag => $tag) {
             if ($this->language && strpos($tag, 'l_') === 0) {
-                $tag = $this->language->__get(substr($tag, 2));
+                $tag = $this->language->$tag;
             }
 
             foreach ($this->replace as $search => $replace) {
