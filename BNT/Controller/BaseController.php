@@ -11,6 +11,7 @@ use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\User\DAO\UserUpdateDAO;
 use BNT\Language;
 use BNT\Fetch;
+use BNT\Translate;
 
 abstract class BaseController extends \UUA\Unit
 {
@@ -147,6 +148,15 @@ abstract class BaseController extends \UUA\Unit
     protected function fromQueryParams(string $name): Fetch
     {
         return $this->fetch($this->queryParams, $name);
+    }
+    
+    protected function t(array|string $tag, array $replace = [], ?string $format = null): string
+    {
+        $translate = new Translate;
+        $translate->language($this->l);
+        $translate->translate($tag, $replace, $format);
+        
+        return (string) $translate;
     }
 
     protected function fetch(array $data, ?string $path = null): Fetch

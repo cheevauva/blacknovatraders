@@ -16,7 +16,7 @@ class NavCompController extends BaseController
     {
         global $allow_navcomp;
 
-        $this->title = $this->l->nav_title;
+        $this->title = $this->t('l_nav_title');
 
         if (empty($allow_navcomp)) {
             throw new WarningException('l_nav_nocomp');
@@ -48,7 +48,7 @@ class NavCompController extends BaseController
 
         $searchPath = LinkSearchPathServant::new($this->container);
         $searchPath->max_search_depth = $maxSearchDepth;
-        $searchPath->stop_sector = $this->fromParsedBody('stop_sector')->notEmpty()->asInt();
+        $searchPath->stop_sector = $this->fromParsedBody('stop_sector')->label($this->t('l_nav_stop_sector'))->notEmpty()->asInt();
         $searchPath->current_sector = $this->playerinfo['sector'];
         $searchPath->serve();
 
@@ -58,12 +58,9 @@ class NavCompController extends BaseController
             throw new WarningException('l_nav_proper');
         }
 
-        throw new SuccessException(vsprintf('%s: %s. %s %s %s', [
-            $this->l->nav_pathfnd,
-            implode(' >> ', array_values($links)),
-            $this->l->nav_answ1,
-            $searchPath->search_depth,
-            $this->l->nav_answ2,
-        ]));
+        throw new SuccessException()->translate(['l_nav_pathfnd', '[path]', 'l_nav_answ1', '[search_depth]', 'l_nav_answ2'], [
+            'path' => implode(' >> ', array_values($links)),
+            'search_depth' => $searchPath->search_depth
+        ], '%s: %s. %s %s %s');
     }
 }

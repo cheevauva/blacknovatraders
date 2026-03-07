@@ -2,27 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BNT\Exception;
+namespace BNT;
 
 use BNT\Language;
-use BNT\Translate;
 
-class CommonException extends \Exception
+class Translate
 {
 
     protected ?Language $language = null;
     public array $tags = [];
     public ?string $format = null;
     protected array $replace = [];
-
-    public function __construct(string $message = "", int $code = 0, ?\Throwable $previous = null)
-    {
-        if (strpos($message, 'l_') === 0) {
-            $this->tags[] = $message;
-        }
-
-        parent::__construct($message, $code, $previous);
-    }
 
     public function language(Language $language): void
     {
@@ -46,17 +36,22 @@ class CommonException extends \Exception
         return $this;
     }
 
-    #[\Override]
     public function __toString(): string
     {
-        if (!empty($this->tags)) {
-            $translate = new Translate();
-            $translate->language($this->language);
-            $translate->translate($this->tags, $this->replace, $this->format);
+        $tags = $this->tags;
 
-            return (string) $translate;
+        foreach ($tags as $idxTag => $tag) {
+            if ($this->language && strpos($tag, 'l_') === 0) {
+                $tag = $this->language->__get(substr($tag, 2));
+            }
+
+            foreach ($this->replace as $search => $replace) {
+                $tag = str_replace('[' . $search . ']', (string) $replace, $tag);
+            }
+
+            $tags[$idxTag] = $tag;
         }
-
-        return $this->getMessage();
+    
+        return $this->format ? vsprintf($this->format, $tags) : implode(' ', $tags);
     }
 }
