@@ -40,6 +40,7 @@ class Language
         'l_by_' => 'bounty.php',
         'l_ship_' => 'ship.php',
         'l_dump_' => 'dump.php',
+        'l_map_' => 'galaxy.php',
     ];
 
     public static function instance(): Language

@@ -1,4 +1,6 @@
 <?php
+global $ksm_allowed;
+
 $self = BNT\Controller\MainController::as($self);
 $picsperrow = 7;
 $shiptypes = shipTypes();
@@ -58,7 +60,7 @@ $planettypes = planetTypes();
                             <li class="list-group-item"><a class="nav-link" href="<?= route('self_destruct'); ?>"><?= $l->ohno ?></a></li>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('options'); ?>"><?= $l->options ?></a></li>
                             <?php if (!empty($ksm_allowed)) : ?>
-                                <li class="list-group-item"><a class="nav-link" href="galaxy.php"><?= $l->map ?></a></li>
+                                <li class="list-group-item"><a class="nav-link" href="<?= route('galaxy'); ?>"><?= $l->map ?></a></li>
                             <?php endif; ?>
                             <li class="list-group-item"><a class="nav-link" href="navcomp.php"><?= $l->navcomp ?></a></li>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('logout'); ?>"><?= $l->logout ?></a></li>
@@ -253,19 +255,19 @@ $planettypes = planetTypes();
                                 <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset1']; ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset1']; ?>
                                 </a>
-                                <a class="nav-link d-inline ms-2" href="<?= route('preset');?>">[<?= $l->set; ?>]</a>
+                                <a class="nav-link d-inline ms-2" href="<?= route('preset'); ?>">[<?= $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
                                 <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset2']; ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset2']; ?>
                                 </a>
-                                <a class="nav-link d-inline ms-2" href="<?= route('preset');?>">[<?= $l->set; ?>]</a>
+                                <a class="nav-link d-inline ms-2" href="<?= route('preset'); ?>">[<?= $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
                                 <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset3']; ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset3']; ?>
                                 </a>
-                                <a class="nav-link d-inline ms-2" href="<?= route('preset');?>">[<?= $l->set; ?>]</a>
+                                <a class="nav-link d-inline ms-2" href="<?= route('preset'); ?>">[<?= $l->set; ?>]</a>
                             </li>
                             <li class="list-group-item">
                                 <a class="nav-link" href="rsmove.php">=&gt;&nbsp;<?= $l->main_other; ?></a>
