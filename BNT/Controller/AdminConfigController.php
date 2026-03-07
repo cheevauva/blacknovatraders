@@ -36,9 +36,9 @@ class AdminConfigController extends BaseController
     protected function processPostAsJson(): void
     {
         if ($this->operation == 'save') {
-            $adminpass = $this->fromParsedBody('adminpass')->label($this->l->admin_adminpass)->trim()->asString();
-            $universeSize = $this->fromParsedBody('universe_size')->label($this->l->admin_universe_size)->notEmpty()->asInt();
-            $adminMail = $this->fromParsedBody('admin_mail')->label($this->l->admin_admin_mail)->notEmpty()->filter(FILTER_VALIDATE_EMAIL)->asString();
+            $adminpass = $this->fromParsedBody('adminpass')->label('l_admin_adminpass')->trim()->asString();
+            $universeSize = $this->fromParsedBody('universe_size')->label('l_admin_universe_size')->notEmpty()->asInt();
+            $adminMail = $this->fromParsedBody('admin_mail')->label('l_admin_admin_mail')->notEmpty()->filter(FILTER_VALIDATE_EMAIL)->asString();
 
             $config = [
                 'admin_mail' => $adminMail,

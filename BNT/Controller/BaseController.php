@@ -162,6 +162,7 @@ abstract class BaseController extends \UUA\Unit
     protected function fetch(array $data, ?string $path = null): Fetch
     {
         $fetch = new Fetch($data);
+        $fetch->language($this->l);
         $fetch->requiredMessage(':label ' . $this->l->is_required);
         $fetch->notEmptyMessage(':label ' . $this->l->is_not_empty);
         $fetch->filterMessage(':label ' . $this->l->is_invalid);

@@ -31,7 +31,7 @@ class SchemaController extends BaseController
     {
         global $adminpass;
 
-        $password = $this->fromParsedBody('password')->label($this->l->schema_password)->trim()->notEmpty()->asString();
+        $password = $this->fromParsedBody('password')->label('l_schema_password')->trim()->notEmpty()->asString();
 
         if ($password !== $adminpass) {
             throw new WarningException()->translate(['l_schema_password', 'l_is_wrong']);

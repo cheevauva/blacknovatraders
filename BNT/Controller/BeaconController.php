@@ -36,7 +36,7 @@ class BeaconController extends BaseController
     protected function processPostAsJson(): void
     {
         SectorUpdateDAO::call($this->container, [
-            'beacon' => $this->fromParsedBody('beacon_text')->label($this->l->beacon_name)->trim()->notEmpty()->asString(),
+            'beacon' => $this->fromParsedBody('beacon_text')->label('l_beacon_name')->trim()->notEmpty()->asString(),
         ], $this->playerinfo['sector']);
 
         $this->playerinfo['dev_beacon'] -= 1;

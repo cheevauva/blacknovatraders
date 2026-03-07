@@ -45,17 +45,16 @@ class NewController extends BaseController
     #[\Override]
     protected function processPostAsJson(): void
     {
-
         if (!empty($this->userinfo)) {
             $this->redirectTo('index');
             return;
         }
 
         $gameNew = GameNewServant::new($this->container);
-        $gameNew->email = $this->fromParsedBody('username')->filter(FILTER_VALIDATE_EMAIL)->notEmpty()->label($this->l->new_username)->asString();
-        $gameNew->character = $this->fromParsedBody('character')->trim()->notEmpty()->label($this->l->new_character)->asString();
-        $gameNew->shipname = $this->fromParsedBody('shipname')->trim()->notEmpty()->label($this->l->new_shipname)->asString();
-        $gameNew->password = $this->fromParsedBody('password')->trim()->notEmpty()->label($this->l->new_password)->asString();
+        $gameNew->email = $this->fromParsedBody('username')->filter(FILTER_VALIDATE_EMAIL)->trim()->notEmpty()->label('l_new_username')->asString();
+        $gameNew->character = $this->fromParsedBody('character')->trim()->notEmpty()->label('l_new_character')->asString();
+        $gameNew->shipname = $this->fromParsedBody('shipname')->trim()->notEmpty()->label('l_new_shipname')->asString();
+        $gameNew->password = $this->fromParsedBody('password')->trim()->notEmpty()->label('l_new_password')->asString();
         $gameNew->serve();
 
         $this->setCookie('token', $gameNew->user['token'], time() + (3600 * 24) * 365, $this->gamepath, $this->gamedomain);

@@ -35,13 +35,13 @@ class ZoneinfoController extends BaseController
         }
 
         if ($this->zoneinfo['zone_id'] == 2) {
-            $this->ownername = $this->l->zi_feds;
+            $this->ownername = $this->t('l_zi_feds');
         } elseif ($this->zoneinfo['zone_id'] == 3) {
-            $this->ownername = $this->l->zi_traders;
+            $this->ownername = $this->t('l_zi_traders');
         } elseif ($this->zoneinfo['zone_id'] == 1) {
-            $this->ownername = $this->l->zi_nobody;
+            $this->ownername = $this->t('l_zi_nobody');
         } elseif ($this->zoneinfo['zone_id'] == 4) {
-            $this->ownername = $this->l->zi_war;
+            $this->ownername = $this->t('l_zi_war');
         } else {
             if ($this->zoneinfo['corp_zone'] == 'N') {
                 $this->ownerinfo = ShipByIdDAO::call($this->container, $this->zoneinfo['owner'])->ship;

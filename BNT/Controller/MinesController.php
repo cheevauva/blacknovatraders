@@ -116,10 +116,13 @@ class MinesController extends BaseController
             throw new WarningException('l_mines_nofighters');
         }
 
-        $messages[] = str_replace("[mines]", (string) $nummines, $this->l->mines_dmines);
-        $messages[] = strtr($this->l->mines_dfighter, [
-            '[fighters]' => $numfighters,
-            '[mode]' => $mode,
+        $messages[] = $this->t('l_mines_dmines', [
+            'mines' => $nummines,
+        ]);
+        
+        $messages[] = $this->t('l_mines_dfighter', [
+            'fighters' => $numfighters,
+            'mode' => $mode,
         ]);
 
         if ($numfighters > 0) {

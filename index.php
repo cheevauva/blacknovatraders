@@ -27,6 +27,7 @@ BNT\FrontController::call($container, match (str_replace('?' . $_SERVER['QUERY_S
 
         return $new;
     })(),
+    '/status' => BNT\Controller\StatusController::class,
     '/navcomp' => BNT\Controller\NavCompController::class,
     '/galaxy' => \BNT\Controller\GalaxyController::class,
     '/dump' => \BNT\Controller\DumpController::class,

@@ -24,7 +24,7 @@ class StatusController extends BaseController
     protected function processPostAsJson(): void
     {
         global $sched_ticks;
-        
+
         $messages = 0;
 
         $getLastRun = SchedulerGetLastRunDAO::new($this->container);
@@ -50,8 +50,6 @@ class StatusController extends BaseController
             }
         }
 
-
-
         $mySEC = 0;
 
         if ($schedulerLastRun) {
@@ -61,12 +59,13 @@ class StatusController extends BaseController
             $mySEC = ($sched_ticks * 60);
         }
 
-
         $this->responseJson = [
             'online' => $online,
             'schedTicks' => $sched_ticks,
             'myx' => $mySEC,
-            'unreadMessages' => $messages ? $this->l->youhave . $messages . $$this->l->messages_wait : null,
+            'unreadMessages' =>$messages ? $this->t(['l_youhave', '[messages]', 'l_messages_wait'], [
+                'messages' => $messages
+            ], '%s %s %s') : null,
             'M' => sprintf('%.2f', memory_get_peak_usage() / 1024 / 1024, 2),
             'E' => sprintf('%.3f', microtime(true) - MICROTIME_START),
         ];

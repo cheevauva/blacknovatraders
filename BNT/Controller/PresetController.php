@@ -27,9 +27,9 @@ class PresetController extends BaseController
     {
         global $sector_max;
 
-        $preset1 = abs($this->fromParsedBody('preset1')->label($this->l->pre_set_1)->asInt());
-        $preset2 = abs($this->fromParsedBody('preset2')->label($this->l->pre_set_2)->asInt());
-        $preset3 = abs($this->fromParsedBody('preset3')->label($this->l->pre_set_3)->asInt());
+        $preset1 = abs($this->fromParsedBody('preset1')->label('l_pre_set_1')->asInt());
+        $preset2 = abs($this->fromParsedBody('preset2')->label('l_pre_set_2')->asInt());
+        $preset3 = abs($this->fromParsedBody('preset3')->label('l_pre_set_3')->asInt());
 
         if ($preset1 > $sector_max) {
             throw new WarningException()->translate('l_pre_exceed', [

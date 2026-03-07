@@ -50,9 +50,8 @@ class LoginController extends BaseController
             return;
         }
 
-
-        $email = $this->fromParsedBody('email')->filter(FILTER_VALIDATE_EMAIL)->notEmpty()->label($this->l->login_email)->asString();
-        $password = $this->fromParsedBody('pass')->trim()->notEmpty()->label($this->l->login_pw)->asString();
+        $email = $this->fromParsedBody('email')->filter(FILTER_VALIDATE_EMAIL)->notEmpty()->trim()->label('l_login_email')->asString();
+        $password = $this->fromParsedBody('pass')->trim()->notEmpty()->label('l_login_pw')->asString();
     
         $login = GameLoginServant::new($this->container);
         $login->email = $email;

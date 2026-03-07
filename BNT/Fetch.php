@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace BNT;
 
 use BNT\Exception\WarningException;
+use BNT\Language;
+use BNT\Translate;
 
 class Fetch
 {
 
+    protected Language $language;
     protected array $data;
     protected string $path;
     protected bool $isRequired = false;
@@ -27,6 +30,11 @@ class Fetch
     public function __construct($data)
     {
         $this->data = $data;
+    }
+
+    public function language(Language $language): void
+    {
+        $this->language = $language;
     }
 
     public function filter(int $filter): self
@@ -106,9 +114,18 @@ class Fetch
         return $this;
     }
 
+    protected function t(array|string $tag, array $replace = [], ?string $format = null): string
+    {
+        $translate = new Translate;
+        $translate->language($this->language);
+        $translate->translate($tag, $replace, $format);
+
+        return (string) $translate;
+    }
+
     public function label(string $label): self
     {
-        $this->label = $label;
+        $this->label = $this->t($label);
 
         return $this;
     }
