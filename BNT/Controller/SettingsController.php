@@ -18,7 +18,7 @@ class SettingsController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->settings_game;
+        $this->title = $this->t('l_settings_game');
     }
 
     #[\Override]

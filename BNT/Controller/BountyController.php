@@ -24,7 +24,7 @@ class BountyController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->by_title;
+        $this->title = $this->t('l_by_title');
     }
 
     #[\Override]

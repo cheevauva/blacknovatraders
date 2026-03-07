@@ -20,7 +20,7 @@ class CorpController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->corpm_title;
+        $this->title = $this->t('l_corpm_title');
         $this->planetId = $this->fromQueryParams( 'planet_id')->required()->notEmpty()->asInt();
         $this->planet = PlanetByIdDAO::call($this->container, $this->planetId)->planet;
 

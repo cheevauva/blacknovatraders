@@ -19,7 +19,7 @@ class ZoneeditController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->ze_title;
+        $this->title = $this->t('l_ze_title');
         $this->zone = $this->fromQueryParams( 'zone')->notEmpty()->asInt();
         $this->currentZone = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException('l_zi_nexist');
 

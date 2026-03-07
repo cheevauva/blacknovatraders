@@ -10,7 +10,7 @@ class DeviceController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->device_title;
+        $this->title = $this->t('l_device_title');
     }
 
     #[\Override]

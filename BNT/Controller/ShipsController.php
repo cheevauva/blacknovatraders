@@ -23,7 +23,7 @@ class ShipsController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        $this->title = $this->l->ships;
+        $this->title = $this->t('l_ships');
         $this->ships = ShipsByUserIdDAO::call($this->container, $this->userinfo['id'])->ships;
         $this->render('tpls/ships.tpl.php');
     }

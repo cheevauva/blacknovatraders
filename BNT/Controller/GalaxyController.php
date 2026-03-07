@@ -19,7 +19,7 @@ class GalaxyController extends BaseController
 
         $this->sectors = range(1, $sector_max);
         $this->sectorMax = $sector_max;
-        $this->title = $this->l->map_title;
+        $this->title = $this->t('l_map_title');
     }
 
     #[\Override]

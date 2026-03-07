@@ -16,7 +16,7 @@ class ShipController extends BaseController
     #[\Override]
     protected function processGetAsHtml(): void
     {
-        $this->title = $this->l->ship_title;
+        $this->title = $this->t('l_ship_title');
         $this->ship_id = $this->fromQueryParams('ship_id')->notEmpty()->asInt();
         $this->othership = ShipByIdDAO::call($this->container, $this->ship_id)->ship ?: throw new WarningException('l_not_found');
 

@@ -21,7 +21,7 @@ class MainController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->main_title;
+        $this->title = $this->t('l_main_title');
     }
 
     #[\Override]

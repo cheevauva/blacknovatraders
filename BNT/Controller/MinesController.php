@@ -33,7 +33,7 @@ class MinesController extends BaseController
     protected function preProcess(): void
     {
         $this->checkTurns();
-        $this->title = $this->l->mines_title;
+        $this->title = $this->t('l_mines_title');
         $this->sector = SectorByIdDAO::call($this->container, $this->playerinfo['sector'])->sector;
         $this->defences = SectorDefencesByCriteriaDAO::call($this->container, [
             'sector_id' => $this->playerinfo['sector']

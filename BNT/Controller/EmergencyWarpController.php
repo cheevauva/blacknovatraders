@@ -14,7 +14,7 @@ class EmergencyWarpController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->ewd_title;
+        $this->title = $this->t('l_ewd_title');
     }
 
     #[\Override]

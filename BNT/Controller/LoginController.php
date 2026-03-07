@@ -25,7 +25,7 @@ class LoginController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->login_title;
+        $this->title = $this->t('l_login_title');
 
         if ($this->serverClosed) {
             throw new WarningException('l_login_closed_message');

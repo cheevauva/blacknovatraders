@@ -18,7 +18,7 @@ class HelpController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->help_title;
+        $this->title = $this->t('l_help_title');
     }
 
     #[\Override]

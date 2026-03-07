@@ -13,7 +13,7 @@ class GenesisController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->gns_title;
+        $this->title = $this->t('l_gns_title');
     }
 
     #[\Override]

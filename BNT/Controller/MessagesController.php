@@ -16,7 +16,7 @@ class MessagesController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->readm_title;
+        $this->title = $this->t('l_readm_title');
     }
 
     #[\Override]

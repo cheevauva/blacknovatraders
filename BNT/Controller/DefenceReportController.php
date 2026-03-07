@@ -15,7 +15,7 @@ class DefenceReportController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->sdf_title;
+        $this->title = $this->t('l_sdf_title');
     }
 
     #[\Override]

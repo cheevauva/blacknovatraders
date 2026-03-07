@@ -15,7 +15,7 @@ class DumpController extends BaseController
     protected function processGetAsHtml(): void
     {
         $this->checkTurns();
-        $this->title = $this->l->dump_title;
+        $this->title = $this->t('l_dump_title');
 
         $sectorinfo = SectorByIdDAO::call($this->container, $this->playerinfo['sector'])->sector;
 

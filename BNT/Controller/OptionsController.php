@@ -14,7 +14,7 @@ class OptionsController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = $this->l->opt_title;
+        $this->title = $this->t('l_opt_title');
     }
 
     #[\Override]
