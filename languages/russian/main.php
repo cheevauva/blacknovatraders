@@ -9,8 +9,7 @@ $l_trade_control = "Контроль торговли";
 
 $l_command_no = "Команда недоступна.";
 $l_defense = "Оборона";
-$l_main_read_msg = "Читать сообщения";
-$l_main_send_msg = "Отправить сообщения";
+$l_main_messages = 'Сообщения';
 $l_ohno = "Самоуничтожение";
 
 $l_incompletemove = "Вы не завершили предыдущий ход.";

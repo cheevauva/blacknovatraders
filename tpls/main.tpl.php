@@ -54,8 +54,7 @@ $planettypes = planetTypes();
                             <li class="list-group-item"><a class="nav-link" href="<?= route('planet_report.php'); ?>"><?= $l->l_planets ?></a></li>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('log'); ?>"><?= $l->l_log ?></a></li>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('defence_report'); ?>"><?= $l->l_sector_def ?></a></li>
-                            <li class="list-group-item"><a class="nav-link" href="<?= route('readmail.php'); ?>"><?= $l->l_main_read_msg ?></A></li>
-                            <li class="list-group-item"><a class="nav-link" href="<?= route('mailto2.php'); ?>"><?= $l->l_main_send_msg ?></a></li>
+                            <li class="list-group-item"><a class="nav-link" href="<?= route('messages', ['read' => 1, 'send' => 1]); ?>"><?= $l->l_main_messages ?></A></li>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('teams.php'); ?>"><?= $l->l_teams ?></a></li>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('self_destruct'); ?>"><?= $l->l_ohno ?></a></li>
                             <li class="list-group-item"><a class="nav-link" href="<?= route('options'); ?>"><?= $l->l_options ?></a></li>

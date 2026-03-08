@@ -221,14 +221,14 @@ INSERT INTO news (headline, newstext, date, news_type) VALUES ('Big Bang!','Scie
 
 CREATE TABLE messages 
 (
-    ID int NOT NULL auto_increment,
+    id int NOT NULL auto_increment,
     sender_id int NOT NULL default '0',
     recp_id int NOT NULL default '0',
-    subject varchar(250) NOT NULL default '',
+    reply_id int NOT NULL default '0',
     sent varchar(19) NULL,
-    message longtext NOT NULL,
+    message varchar(250) NOT NULL,
     notified enum('Y','N') NOT NULL default 'N',
-    PRIMARY KEY  (ID) 
+    PRIMARY KEY  (id) 
 );
 
 CREATE TABLE xenobe

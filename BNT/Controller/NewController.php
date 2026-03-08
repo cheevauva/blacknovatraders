@@ -51,6 +51,7 @@ class NewController extends BaseController
         }
 
         $gameNew = GameNewServant::new($this->container);
+        $gameNew->l = $this->l;
         $gameNew->email = $this->fromParsedBody('username')->filter(FILTER_VALIDATE_EMAIL)->trim()->notEmpty()->label('l_new_username')->asString();
         $gameNew->character = $this->fromParsedBody('character')->trim()->notEmpty()->label('l_new_character')->asString();
         $gameNew->shipname = $this->fromParsedBody('shipname')->trim()->notEmpty()->label('l_new_shipname')->asString();

@@ -10,7 +10,6 @@ class Language
 {
 
     protected array $vars;
-    protected static Language $instance;
 
     use \UUA\Traits\AsTrait;
 
@@ -49,11 +48,16 @@ class Language
         'l_create_universe_' => 'create_universe.php',
     ];
 
-    public function __construct(protected string $language)
+    public function __construct(protected string $languageName)
     {
-        include sprintf('languages/%s.php', $this->language);
+        include sprintf('languages/%s.php', $this->languageName);
 
         $this->setVars(get_defined_vars());
+    }
+
+    public function languageName(): string
+    {
+        return $this->languageName;
     }
 
     protected function setVars(array $vars): void
@@ -83,7 +87,7 @@ class Language
         $slug = implode('_', array_slice(explode('_', $var, 3), 0, 2)) . '_';
 
         if (!empty($this->mapping[$slug])) {
-            $languageSubFile = sprintf('languages/%s/%s', $this->language, $this->mapping[$slug]);
+            $languageSubFile = sprintf('languages/%s/%s', $this->languageName, $this->mapping[$slug]);
 
             if (file_exists($languageSubFile)) {
                 include $languageSubFile;

@@ -1,163 +1,105 @@
 <?= include_header(); ?>
 <?php $self = \BNT\Controller\MessagesController::as($self); ?>
-<form action="mailto2.php" method="POST">
-    <table class="form-table">
-        <tr>
-            <td>To:</td>
-            <td>
-                <select name="to">
-                    <?php foreach ($self->ships as $ship): ?>
-                        <option value="<?php echo $ship['ship_id']; ?>" <?php echo ($ship['ship_id'] == $self->to) ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($ship['ship_name']); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td><?= $l->l_mt_from; ?></td>
-            <td>
-                <input disabled type="text" name="dummy" size="40" maxlength="40" value="<?php echo htmlspecialchars($self->playerinfo['ship_name']); ?>">
-            </td>
-        </tr>
-        <tr>
-            <td><?= $l->l_mt_subject; ?></td>
-            <td>
-                <input type="text" name="subject" size="40" maxlength="40">
-            </td>
-        </tr>
-        <tr>
-            <td><?= $l->l_mt_message; ?>:</td>
-            <td>
-                <textarea name="content" rows="5" cols="40"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="<?= $l->l_mt_send; ?>">
-                <input type="reset" value="Clear">
-            </td>
-        </tr>
-    </table>
-</form>
-<div class="container mt-4">
-    <div class="row">
-        <div class="col">
-            <div class="card bg-light border">
-                <div class="card-body p-1">
-
-                    <!-- Header row -->
-                    <div class="card bg-dark text-white rounded-0 border-0 mb-1">
-                        <div class="card-body p-1">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold small"><?= $l->l_dreadm_center ?></span>
-                                <span class="small"><?php echo "$cur_D" ?>&nbsp;<?php echo "$cur_T" ?></span>
-                                <a href="<?= route('main');?>" class="text-white text-decoration-none">
-                                    <i class="bi bi-house-door-fill"></i>
-                                </a>
-                            </div>
-                        </div>
+<?php if ($self->reply): ?>
+    <div class="card mb-3">
+        <div class="card-header">
+            <?= $l->l_messages_sender; ?>: <?= $self->reply['sender']['ship_name']; ?> [<?= $self->reply['sent']; ?>]
+        </div>
+        <div class="card-body">
+            <p class="card-text"><?= htmlspecialchars($self->reply['message']); ?></p>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if ($self->send): ?>
+    <form action="<?= route('messages', ['send' => $self->send, 'read' => $self->read]); ?>" method="POST" id="bntMessageSendForm">
+        <input type="hidden" name="action" value="send"/>
+        <?php if ($self->reply): ?>
+        <input type="hidden" name="reply_id" value="<?= $self->reply['id']; ?>"/>
+        <?php endif;?>
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label fw-bold"><?= $l->l_messages_to ?>:</label>
+            <div class="col-sm-10">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label"><?= $l->l_messages_ship ?>:</label>
+                        <select name="ship" class="form-select">
+                            <option value="0"></option>
+                            <?php foreach ($self->ships as $ship): ?>
+                                <option value="<?= $ship['ship_id']; ?>" <?= $ship['ship_id'] == $self->ship ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($ship['ship_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-
-                    <!-- Message list area -->
-                    <?php if (empty($self->messages)): ?>
-                        <div class="card bg-dark text-white rounded-0 border-0 mt-1">
-                            <div class="card-body p-0">
-                                <div class="card bg-white text-black rounded-0 border">
-                                    <div class="card-body text-center text-danger fw-bold">
-                                        <?= $l->l_dreadm_nomessage ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php else: ?>
-                        <?php foreach ($self->messages as $msg): ?>
-                            <?php $sender = $msg['sender']; ?>
-                            <div class="mt-2 mb-2">
-                                <hr class="bg-dark border-0" style="height: 4px; opacity: 1; margin: 4px 0;">
-
-                                <!-- Sender row -->
-                                <div class="card bg-secondary text-white rounded-0 border-0">
-                                    <div class="card-body p-1">
-                                        <div class="row align-items-center g-0">
-                                            <div class="col-auto me-2">
-                                                <span class="fw-bold small"><?= $l->l_dreadm_sender; ?></span>
-                                            </div>
-                                            <div class="col">
-                                                <span class="text-warning small"><?php echo $sender['ship_name']; ?></span>
-                                            </div>
-                                            <div class="col-auto text-nowrap">
-                                                <span class="small me-2"><?php echo $msg['sent']; ?></span>
-                                                <a href="readmail.php?action=delete&ID=<?php echo $msg['ID']; ?>" class="text-white text-decoration-none">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Captain row -->
-                                <div class="card bg-secondary text-white rounded-0 border-0 mt-1">
-                                    <div class="card-body p-1">
-                                        <div class="row g-0">
-                                            <div class="col-auto me-2">
-                                                <span class="fw-bold small"><?= $l->l_dreadm_captn ?></span>
-                                            </div>
-                                            <div class="col">
-                                                <span class="text-warning small"><?php echo $sender['ship_name']; ?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Subject row -->
-                                <div class="card bg-secondary text-white rounded-0 border-0 mt-1">
-                                    <div class="card-body p-1">
-                                        <div class="row g-0">
-                                            <div class="col-auto me-2">
-                                                <span class="fw-bold small">Subject</span>
-                                            </div>
-                                            <div class="col">
-                                                <span class="fw-bold text-warning small"><?php echo $msg['subject']; ?></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Message body -->
-                                <div class="card bg-white text-black rounded-0 border mt-1">
-                                    <div class="card-body p-2 small">
-                                        <?php echo htmlspecialchars($msg['message']); ?>
-                                    </div>
-                                </div>
-
-                                <!-- Action buttons -->
-                                <div class="card bg-secondary text-white rounded-0 border mt-1">
-                                    <div class="card-body p-1 text-center">
-                                        <a href="readmail.php?action=delete&ID=<?php echo $msg['ID']; ?>" class="text-white text-decoration-none me-3"><?= $l->l_dreadm_del ?></a>
-                                        <span class="text-white">|</span>
-                                        <a href="mailto2.php?name=<?php echo $sender['ship_name']; ?>&subject=<?php echo $msg['subject']; ?>" class="text-white text-decoration-none ms-3"><?= $l->l_dreadm_repl ?></a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-
-                    <!-- Footer -->
-                    <hr class="bg-dark border-0" style="height: 4px; opacity: 1; margin: 4px 0;">
-                    <div class="card bg-dark text-white rounded-0 border-0">
-                        <div class="card-body p-1">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="small">Mail Reader</span>
-                                <a href="readmail.php?action=delete_all" class="text-white text-decoration-none small">Delete All</a>
-                            </div>
-                        </div>
+                    <div class="col-md-6">
+                        <label class="form-label"><?= $l->l_messages_team ?>:</label>
+                        <select name="team" class="form-select">
+                            <option value="0"></option>
+                            <?php foreach ($self->teams as $team): ?>
+                                <option value="<?= $team['id']; ?>" <?= $team['id'] == $self->team ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($team['team_name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-
                 </div>
             </div>
         </div>
+
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label fw-bold"><?= $l->l_messages_content; ?>:</label>
+            <div class="col-sm-10">
+                <textarea name="content" class="form-control" rows="3" maxlength="140" required></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="submit" class="btn btn-primary"><?= $l->l_submit; ?></button>
+                <button type="reset" class="btn btn-secondary"><?= $l->l_reset; ?></button>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        bntForm('bntMessageSendForm');
+    </script>
+<?php endif; ?>
+<?php if ($self->read): ?>
+    <div class="overflow-auto" style="height: 400px;">
+        <?php foreach ($self->messages as $msg): ?>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <?= $l->l_messages_sender; ?>: <?= $msg['sender']['ship_name']; ?> [<?= $msg['sent']; ?>]
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><?= htmlspecialchars($msg['message']); ?></p>
+                </div>
+                <div class="card-footer">
+                    <form action="<?= route('messages', ['send' => $self->send, 'read' => $self->read]); ?>" method="POST" id="bntMessageDelForm<?= $msg['id']; ?>" class="d-inline">
+                        <input name="action" value="delete" type="hidden">
+                        <input name="id" value="<?= $msg['id']; ?>" type="hidden">
+                        <button type="submit" class="btn btn-danger btn-sm"><?= $l->l_messages_delete ?></button>
+                    </form>
+                    <script type="text/javascript">
+                        bntForm('bntMessageDelForm<?= $msg['id']; ?>');
+                    </script>
+                    <a href="<?= route('messages', ['send' => 1, 'read' => $self->read, 'reply_id' => $msg['id'], 'ship' => $msg['sender']['ship_id']]); ?>" class="btn btn-secondary btn-sm"><?= $l->l_messages_reply ?></a>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
-</div>
+
+    <div class="card bg-dark text-white rounded-0 border-0">
+        <div class="card-body p-1">
+            <form action="<?= route('messages', ['send' => $self->send, 'read' => $self->read]); ?>" method="POST" id="bntMessageDelAllForm" class="d-inline">
+                <input name="action" value="delete_all" type="hidden">
+                <button type="submit" class="btn btn-primary btn-sm"><?= $l->l_messages_delete_all ?></button>
+            </form>
+            <script type="text/javascript">
+                bntForm('bntMessageDelAllForm');
+            </script>
+        </div>
+    </div>
+
+<?php endif; ?>
 <?php include_footer(); ?>
