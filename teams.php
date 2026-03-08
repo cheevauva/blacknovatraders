@@ -116,11 +116,11 @@ function DISPLAY_ALL_ALLIANCES()
         echo "<TD><a href=teams.php?teamwhat=1&whichteam=" . $row['id'] . ">" . $row['team_name'] . "</A></TD>";
         echo "<TD>" . $row['number_of_members'] . "</TD>";
         
-        $row2 = db()->fetch("SELECT character_name FROM ships WHERE ship_id = :creator", [
+        $row2 = db()->fetch("SELECT * FROM ships WHERE ship_id = :creator", [
             'creator' => $row['creator']
         ]);
 
-        echo "<TD><a href=mailto2.php?name=" . $row2['character_name'] . ">" . $row2['character_name'] . "</A></TD>";
+        echo "<TD><a href=" . route('messages',['ship_id' => $row2['ship_id'], 'send' => 1]) . ">" . $row2['character_name'] . "</A></TD>";
         echo "<TD>" . $row['total_score'] . "</TD>";
         echo "</TR>";
     }

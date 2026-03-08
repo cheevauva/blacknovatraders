@@ -16,13 +16,13 @@
         <?= $l->l_ship_perform; ?>
     </div>
     <div class="mb-3">
-        <a class="btn btn-secondary" href="scan.php?ship_id=<?= $self->ship_id; ?>" ><?= $l->l_planet_scn_link; ?></a>
+        <a class="btn btn-secondary" href="<?= route('scan', ['ship_id' => $self->ship_id]); ?>" ><?= $l->l_planet_scn_link; ?></a>
     </div>
     <div class="mb-3">
-        <a class="btn btn-danger" href="attack.php?ship_id=<?= $self->ship_id; ?>"><?= $l->l_planet_att_link; ?></a>
+        <a class="btn btn-danger" href="<?= route('attack', ['ship_id' => $self->ship_id]); ?>"><?= $l->l_planet_att_link; ?></a>
     </div>
     <div class="mb-3">
-        <a class="btn btn-info" href="mailto.php?to=<?= $self->ship_id; ?>"><?= $l->l_send_msg; ?></a>
+        <a class="btn btn-info" href="<?= route('messages', ['ship' => $self->ship_id, 'send' => 1]); ?>"><?= $l->l_send_msg; ?></a>
     </div>
 <?php endif; ?>
 <?php include_footer(); ?>
