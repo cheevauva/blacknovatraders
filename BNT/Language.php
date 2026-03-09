@@ -46,6 +46,7 @@ class Language
         'l_nav_' => 'navcomp.php',
         'l_messages_' => 'messages.php',
         'l_create_universe_' => 'create_universe.php',
+        'l_scan_' => 'scan.php',
     ];
 
     public function __construct(protected string $languageName)
