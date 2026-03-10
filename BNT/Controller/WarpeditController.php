@@ -46,7 +46,7 @@ class WarpeditController extends BaseController
                 $create->serve();
 
                 $this->playerinfo['dev_warpedit'] -= 1;
-                $this->playerinfo['turns'] -= 1;
+                $this->playerinfoTurn();
                 $this->playerinfoUpdate();
                 $this->redirectTo('index');
                 break;
@@ -58,7 +58,7 @@ class WarpeditController extends BaseController
                 $remove->serve();
 
                 $this->playerinfo['dev_warpedit'] -= 1;
-                $this->playerinfo['turns'] -= 1;
+                $this->playerinfoTurn();
                 $this->playerinfoUpdate();
                 $this->redirectTo('index');
                 break;

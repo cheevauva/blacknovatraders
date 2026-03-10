@@ -27,6 +27,8 @@ BNT\FrontController::call($container, match (str_replace('?' . $_SERVER['QUERY_S
 
         return $new;
     })(),
+    '/lrscan' => BNT\Controller\LongRangeScanController::class,
+    '/lrscan_sector' => BNT\Controller\LongRangeScanSectorController::class,
     '/scan' => BNT\Controller\ScanController::class,
     '/messages' => BNT\Controller\MessagesController::class,
     '/info_publiclist' => \BNT\Controller\InfoPubliclistController::class,

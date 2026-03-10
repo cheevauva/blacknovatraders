@@ -14,6 +14,6 @@ class SchedulerGetLastRunDAO extends \UUA\DAO
     #[\Override]
     public function serve(): void
     {
-        $this->lastRun = db()->column("SELECT last_run FROM scheduler LIMIT 1");
+        $this->lastRun = db()->fetchColumn("SELECT last_run FROM scheduler LIMIT 1");
     }
 }

@@ -17,7 +17,7 @@ class LinksCountByStartDAO extends \UUA\DAO
     #[\Override]
     public function serve(): void
     {
-        $this->count = (int) $this->db()->column("SELECT COUNT(*) FROM links WHERE link_start= :sectorId", [
+        $this->count = (int) $this->db()->fetchColumn("SELECT COUNT(*) FROM links WHERE link_start= :sectorId", [
             'sectorId' => $this->start,
         ]);
     }

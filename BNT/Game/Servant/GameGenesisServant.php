@@ -29,7 +29,7 @@ class GameGenesisServant extends \UUA\Servant
 
         $sector = SectorByIdDAO::call($this->container, $this->ship['sector'])->sector;
 
-        $this->numPlanets = db()->column("SELECT COUNT(*) as count FROM planets WHERE sector_id= :sector", [
+        $this->numPlanets = db()->fetchColumn("SELECT COUNT(*) as count FROM planets WHERE sector_id= :sector", [
             'sector' => $this->ship['sector']
         ]);
 

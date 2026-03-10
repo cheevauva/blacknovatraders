@@ -119,7 +119,7 @@ class MinesController extends BaseController
         $messages[] = $this->t('l_mines_dmines', [
             'mines' => $nummines,
         ]);
-        
+
         $messages[] = $this->t('l_mines_dfighter', [
             'fighters' => $numfighters,
             'mode' => $mode,
@@ -166,10 +166,9 @@ class MinesController extends BaseController
         }
 
 
-        $this->playerinfo['turns'] -= 1;
-        $this->playerinfo['turns_used'] += 1;
         $this->playerinfo['ship_fighters'] -= $numfighters;
         $this->playerinfo['torps'] -= $nummines;
+        $this->playerinfoTurn();
         $this->playerinfoUpdate();
 
         throw new SuccessException(implode("; ", $messages));

@@ -40,8 +40,7 @@ class BeaconController extends BaseController
         ], $this->playerinfo['sector']);
 
         $this->playerinfo['dev_beacon'] -= 1;
-        $this->playerinfo['turns'] -= 1;
-
+        $this->playerinfoTurn();
         $this->playerinfoUpdate();
         $this->redirectTo('beacon');
     }

@@ -47,6 +47,7 @@ class Language
         'l_messages_' => 'messages.php',
         'l_create_universe_' => 'create_universe.php',
         'l_scan_' => 'scan.php',
+        'l_lrs_' => 'lrscan.php',
     ];
 
     public function __construct(protected string $languageName)

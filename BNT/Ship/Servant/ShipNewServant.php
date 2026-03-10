@@ -81,7 +81,7 @@ class ShipNewServant extends \UUA\Servant
     {
         global $max_turns;
 
-        $mturns = db()->column("SELECT MAX(turns_used + turns) AS mturns FROM ships");
+        $mturns = db()->fetchColumn("SELECT MAX(turns_used + turns) AS mturns FROM ships");
 
         if ($mturns > $max_turns) {
             $mturns = $max_turns;

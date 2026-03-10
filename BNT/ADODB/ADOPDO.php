@@ -63,7 +63,7 @@ class ADOPDO extends PDO
      * @param array<string, mixed> $types
      * @return mixed
      */
-    public function column($sql, array $params = [], array $types = [])
+    public function fetchColumn($sql, array $params = [], array $types = [])
     {
         $stmt = $this->prepareStmt($sql, $params, $types);
         $stmt->execute();

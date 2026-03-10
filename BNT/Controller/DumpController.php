@@ -28,8 +28,7 @@ class DumpController extends BaseController
         }
 
         $this->playerinfo['ship_colonists'] = 0;
-        $this->playerinfo['turns'] = -1;
-        $this->playerinfo['turns_used'] += 1;
+        $this->playerinfoTurn();
         $this->playerinfoUpdate();
 
         throw new SuccessException('l_dump_dumped');

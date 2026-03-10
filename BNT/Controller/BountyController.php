@@ -44,8 +44,7 @@ class BountyController extends BaseController
             $place->amount = $amount;
             $place->serve();
 
-            $this->playerinfo['turns'] -= 1;
-            $this->playerinfo['turns_used'] += 1;
+            $this->playerinfoTurn();
             $this->playerinfo['credits'] -= $amount;
             $this->playerinfoUpdate();
             $this->redirectTo('bounty');
@@ -68,8 +67,7 @@ class BountyController extends BaseController
                 'bounty_id' => $bountyId,
             ]);
 
-            $this->playerinfo['turns'] -= 1;
-            $this->playerinfo['turns_used'] += 1;
+            $this->playerinfoTurn();
             $this->playerinfo['credits'] += $bounty['amount'];
             $this->playerinfoUpdate();
             $this->redirectTo('bounty', [

@@ -55,8 +55,7 @@ class ScanController extends BaseController
             $this->success = 95;
         }
 
-        $this->playerinfo['turns'] -= 1;
-        $this->playerinfo['turns_used'] += 1;
+        $this->playerinfoTurn();
         $this->playerinfoUpdate();
 
         if ($this->roll > $this->success) {

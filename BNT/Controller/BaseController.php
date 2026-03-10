@@ -90,7 +90,7 @@ abstract class BaseController extends \UUA\Unit
                     $property->setValue($ex, $translatedMessage);
                 }
             }
-            
+
             $this->exception = $ex;
 
             if ($this->enableThrowExceptionOnProcess) {
@@ -223,11 +223,16 @@ abstract class BaseController extends \UUA\Unit
         return $this->userinfo['role'] == 'admin';
     }
 
+    protected function playerinfoTurn(int $turns = 1): void
+    {
+        $this->playerinfo ?? throw new ErrorException('playerinfo not define');
+        $this->playerinfo['turns'] -= $turns;
+        $this->playerinfo['turns_used'] += $turns;
+    }
+
     protected function playerinfoUpdate(): void
     {
-        if (empty($this->playerinfo)) {
-            throw new ErrorException('playerinfo not define');
-        }
+        $this->playerinfo ?? throw new ErrorException('playerinfo not define');
 
         ShipUpdateDAO::call($this->container, $this->playerinfo, $this->playerinfo['ship_id']);
     }

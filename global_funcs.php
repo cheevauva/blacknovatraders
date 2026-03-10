@@ -678,16 +678,9 @@ function cancel_bounty($ship)
 
 function get_player($ship_id)
 {
-
-    $row = db()->fetch("SELECT character_name from ships where ship_id = :ship_id", [
+    return db()->fetch("SELECT ship_name from ships where ship_id = :ship_id", [
         'ship_id' => $ship_id,
-    ]);
-    if ($row) {
-        $character_name = $row['character_name'];
-        return $character_name;
-    } else {
-        return "Unknown";
-    }
+    ])['ship_name'] ?? 'Unknown';
 }
 
 function log_move($ship_id, $sector_id)

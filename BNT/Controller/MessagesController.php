@@ -134,10 +134,9 @@ class MessagesController extends BaseController
                         'reply_id' => $reply,
                     ]);
                 }
-                
-                $this->playerinfo['turns'] -= $turns;
-                $this->playerinfo['turns_used'] += $turns;
+
                 $this->playerinfo['credits'] -= $messagesCost;
+                $this->playerinfoTurn($turns);
                 $this->playerinfoUpdate();
 
                 throw new SuccessException('l_messages_sent');

@@ -16,7 +16,7 @@ class ShipGetNotDestroyedExcludeXenobeCountDAO extends \UUA\DAO
     #[\Override]
     public function serve(): void
     {
-        $this->count = (int) $this->db()->column("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N'");
+        $this->count = (int) $this->db()->fetchColumn("SELECT COUNT(*) AS num_players FROM ships WHERE ship_destroyed='N'");
     }
 
     public static function call(ContainerInterface $container): self
