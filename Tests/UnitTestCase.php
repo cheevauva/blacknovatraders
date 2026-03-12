@@ -23,7 +23,7 @@ class UnitTestCase extends TestCase
 
     protected static function l(): Language
     {
-        return self::$l ??= new Language('english');
+        return self::$l ??= Language::get('english');
     }
 
     protected function container(): ContainerInterface

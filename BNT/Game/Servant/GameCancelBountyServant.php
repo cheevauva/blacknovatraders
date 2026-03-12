@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Game\Servant;
 
+use Psr\Container\ContainerInterface;
 use BNT\Log\DAO\LogPlayerDAO;
 use BNT\Log\LogTypeConstants;
 use BNT\Bounty\DAO\BountiesByCriteriaDAO;
@@ -22,14 +23,14 @@ class GameCancelBountyServant extends \UUA\Servant
         $bounties = BountiesByCriteriaDAO::call($this->container, [
             'bounty_on' => $this->ship,
         ])->bounties;
-        
+
         $ship = ShipByIdDAO::call($this->container, $this->ship)->ship;
 
         foreach ($bounties as $bounty) {
             if (!empty($bounty['placed_by'])) {
                 $placedBy = ShipByIdDAO::call($this->container, $bounty['placed_by'])->ship;
                 $placedBy['credits'] += $bounty['amount'];
-                
+
                 ShipUpdateDAO::call($this->container, $placedBy, $placedBy['ship_id']);
 
                 LogPlayerDAO($this->container, $bounty['placed_by'], LogTypeConstants::LOG_BOUNTY_CANCELLED, [
@@ -42,5 +43,14 @@ class GameCancelBountyServant extends \UUA\Servant
                 'bounty_id' => $bounty['bounty_id'],
             ]);
         }
+    }
+
+    public static function call(ContainerInterface $container, int $ship): self
+    {
+        $self = self::new($container);
+        $self->ship = $ship;
+        $self->serve();
+
+        return $self;
     }
 }

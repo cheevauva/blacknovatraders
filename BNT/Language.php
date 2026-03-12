@@ -13,6 +13,7 @@ class Language
 
     use \UUA\Traits\AsTrait;
 
+    protected static array $languages = [];
     protected array $mapping = [
         'l_zi_' => 'zoneinfo.php',
         'l_ze_' => 'zoneedit.php',
@@ -48,6 +49,7 @@ class Language
         'l_create_universe_' => 'create_universe.php',
         'l_scan_' => 'scan.php',
         'l_lrs_' => 'lrscan.php',
+        'l_chf_' => 'check_fighters.php',
     ];
 
     public function __construct(protected string $languageName)
@@ -55,6 +57,11 @@ class Language
         include sprintf('languages/%s.php', $this->languageName);
 
         $this->setVars(get_defined_vars());
+    }
+
+    public static function get(string $language): Language
+    {
+        return self::$languages[$language] ??= new Language($language);
     }
 
     public function languageName(): string

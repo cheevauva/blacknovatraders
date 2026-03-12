@@ -454,17 +454,8 @@ function destroy_fighters($sector, $num_fighters)
 
 function message_defence_owner($sector, $message)
 {
-
-    $result3 = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id=:sector", [
-        'sector' => $sector,
-    ]);
-
-    //Put the defence information into the array "defenceinfo"
-    if (!empty($result3)) {
-        foreach ($result3 as $row) {
-            playerlog($row['ship_id'], LogTypeConstants::LOG_RAW, $message);
-        }
-    }
+    global $container;
+    \BNT\Game\Servant\GameMessageDefenceOwnerServant::call($container, (int) $sector, $message);
 }
 
 function distribute_toll($sector, $toll, $total_fighters)

@@ -57,6 +57,10 @@ class PresetController extends BaseController
         $this->playerinfo['preset3'] = $preset3;
         $this->playerinfoUpdate();
 
-        throw new SuccessException('l_pre_set');
+        throw new SuccessException()->t('l_pre_set', [
+            'preset1' => $preset1,
+            'preset2' => $preset2,
+            'preset3' => $preset3,
+        ]);
     }
 }

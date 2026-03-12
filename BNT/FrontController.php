@@ -27,7 +27,7 @@ class FrontController extends \UUA\Unit
         global $playerinfo;
 
         $controller = $this->controller;
-        $controller->l = new Language($this->getLanguage($userinfo, $_SERVER));
+        $controller->l = Language::get($this->getLanguage($userinfo, $_SERVER));
         $controller->acceptType ??= $_SERVER['HTTP_ACCEPT'] ?? 'text/html';
         $controller->playerinfo ??= $playerinfo ?? null;
         $controller->userinfo ??= $userinfo ?? null;

@@ -8,6 +8,7 @@ use BNT\Language;
 
 class Translate
 {
+    use \UUA\Traits\AsTrait;
 
     protected ?Language $language = null;
     public array $tags = [];

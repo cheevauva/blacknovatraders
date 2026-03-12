@@ -13,7 +13,7 @@ class LanguageLegacyAdapter
 
     public function __construct(string $language)
     {
-        $this->language = new Language($language);
+        $this->language = Language::get($language);
     }
 
     public function __get(string $name): mixed

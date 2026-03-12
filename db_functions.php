@@ -7,11 +7,6 @@ function defencesBySectorAndFighters($sectorId)
     ]);
 }
 
-function defencesCleanUp()
-{
-    return db()->q("delete from sector_defence where quantity <= 0 ");
-}
-
 function shipTurn($shipId, $turns)
 {
     return db()->q('UPDATE ships SET turns = turns - :turns, turns_used = turns_used + :turns WHERE ship_id = :shipId', [

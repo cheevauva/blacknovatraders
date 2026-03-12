@@ -1,50 +1,44 @@
-<?php include "header.php"; ?>
-<?php
-if (fromGET('debug')) {
-    $debug = true;
-    $total_sector_fighters = 999;
-    $fighterstoll = 111;
-}
-?>
-<FORM ACTION="<?php echo $calledfrom; ?>" METHOD=POST>
+<?php $self = BNT\Controller\MoveController::as($self); ?>
+<?= include_header(); ?>
+<form action="<?= $calledfrom; ?>" method="post">
     <div class="alert alert-danger" role="alert">
-        <?php echo str_replace("[chf_total_sector_fighters]", $total_sector_fighters, $l_chf_therearetotalfightersindest); ?>
+        <?= $l->t('l_chf_therearetotalfightersindest', ['chf_total_sector_fighters' => $self->totalSectorFighters]); ?>
     </div>
-    <?php if ($defences[0]['fm_setting'] == "toll" || $debug) : ?>
+    <?php if (($self->defences[0]['fm_setting'] ?? null) == "toll") : ?>
         <div class="alert alert-warning" role="alert">
-            <?php echo str_replace("[chf_number_fighterstoll]", NUMBER($fighterstoll), $l_chf_creditsdemanded); ?>
+            <?= $l->t('l_chf_creditsdemanded', ['chf_number_fighterstoll' => $self->totalSectorFighters]); ?>
         </div>
     <?php endif; ?>
 
     <div class="mb-3">
         <input class="btn-check" type="radio" name="response" id="radio-retreat" value="retreat" checked>
         <label class="btn btn-secondary" for="radio-retreat">
-            <?php echo $l_chf_youcanretreat; ?>
+            <?= $l->l_chf_youcanretreat; ?>
         </label>
     </div>
-    <?php if ($defences[0]['fm_setting'] == "toll" || $debug) : ?>
+    <?php if (($self->defences[0]['fm_setting'] ?? null) == "toll") : ?>
         <div class="mb-3">
             <input class="btn-check" type="radio" name="response" id="radio-pay" value="pay">
             <label class="btn btn-secondary" for="radio-pay">
-                <?php echo $l_chf_inputpay; ?>
+                <?= $l->l_chf_inputpay; ?>
             </label>
         </div>
     <?php endif; ?>
     <div class="mb-3">
         <input class="btn-check" type="radio" name="response" id="radio-fight" value="fight">
         <label class="btn btn-secondary" for="radio-fight">
-            <?php echo $l_chf_inputfight; ?>
+            <?= $l->l_chf_inputfight; ?>
         </label>
     </div>
     <div class="mb-3">
         <input class="btn-check" type="radio" name="response" id="radio-sneak" value="sneak">
         <label class="btn btn-secondary" for="radio-sneak">
-            <?php echo $l_chf_inputcloak; ?>
+            <?= $l->l_chf_inputcloak; ?>
         </label>
     </div>
-    <input type=submit class="btn btn-primary" value="<?php echo $l_chf_go; ?>"><br><br>
-    <input type=hidden name=sector value="<?php echo $sector; ?>">
+    <input type=submit class="btn btn-primary" value="<?= $l->l_chf_go; ?>"><br><br>
+    <input type=hidden name=sector value="<?= $sector; ?>">
     <input type=hidden name=engage value=1>
-    <input type=hidden name=destination value="<?php echo $destination; ?>">
+    <input type=hidden name=destination value="<?= $destination; ?>">
 </FORM>
-<?php include 'footer.php'; ?>
+<?= include_footer(); ?>

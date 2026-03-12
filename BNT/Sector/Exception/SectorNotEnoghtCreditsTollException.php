@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BNT\Sector\Exception;
 
-class SectorNotEnoghtCreditsTollException extends \Exception
+class SectorNotEnoghtCreditsTollException extends \BNT\Exception\CommonException
 {
-    //put your code here
 }
