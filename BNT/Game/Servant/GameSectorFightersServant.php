@@ -17,6 +17,8 @@ use BNT\Game\Servant\GameCancelBountyServant;
 class GameSectorFightersServant extends \UUA\Servant
 {
 
+    use \BNT\Traits\TranslateTrait;
+
     public array $playerinfo;
     public int $sector;
     public int $totalSectorFighters;
@@ -181,10 +183,5 @@ class GameSectorFightersServant extends \UUA\Servant
                 GameKillPlayerServant::call($this->container, $this->playerinfo['ship_id']);
             }
         }
-    }
-
-    protected function t(array|string $tag, array $replace = [], ?string $format = null): Translate
-    {
-        return new Translate()->translate($tag, $replace, $format);
     }
 }

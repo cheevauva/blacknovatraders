@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
+use BNT\Exception\ErrorException;
 use BNT\Exception\WarningException;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Link\DAO\LinksByStartDAO;

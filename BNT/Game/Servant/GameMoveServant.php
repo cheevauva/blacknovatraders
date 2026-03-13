@@ -14,6 +14,8 @@ use BNT\Translate;
 class GameMoveServant extends \UUA\Servant
 {
 
+    use \BNT\Traits\TranslateTrait;
+
     public array $fightersOwner;
     public string $response;
     public int $sector;
@@ -92,10 +94,5 @@ class GameMoveServant extends \UUA\Servant
     protected function playerinfoUpdate(): void
     {
         ShipUpdateDAO::call($this->container, $this->playerinfo, $this->playerinfo['ship_id']);
-    }
-
-    protected function t(array|string $tag, array $replace = [], ?string $format = null): Translate
-    {
-        return new Translate()->translate($tag, $replace, $format);
     }
 }

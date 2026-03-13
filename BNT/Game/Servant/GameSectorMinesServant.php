@@ -17,6 +17,8 @@ use BNT\Ship\Servant\ShipRestoreFromEscapePodServant;
 class GameSectorMinesServant extends \UUA\Servant
 {
 
+    use \BNT\Traits\TranslateTrait;
+
     public array $playerinfo;
     public int $sector;
     public int $totalSectorMines;
@@ -102,7 +104,7 @@ class GameSectorMinesServant extends \UUA\Servant
         }
 
         $this->shipDestroyed = true;
-        
+
         // BOOM
         LogPlayerDAO::call($this->container, $this->playerinfo['ship_id'], LogTypeConstants::LOG_SHIP_DESTROYED_MINES, [$this->sector, $this->playerinfo['dev_escapepod']]);
 
@@ -142,10 +144,5 @@ class GameSectorMinesServant extends \UUA\Servant
     protected function playerinfoUpdate(): void
     {
         ShipUpdateDAO::call($this->container, $this->playerinfo, $this->playerinfo['ship_id']);
-    }
-
-    protected function t(array|string $tag, array $replace = [], ?string $format = null): Translate
-    {
-        return new Translate()->translate($tag, $replace, $format);
     }
 }
