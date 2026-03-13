@@ -19,7 +19,7 @@ class GameDestroyFightersServant extends \UUA\Servant
     public function serve(): void
     {
         $defences = SectorDefencesByCriteriaDAO::call($this->container, [
-            'sector_id' => $this->sector,
+            'sector_id' => $this->secDestDesttor,
             'defence_type' => 'F',
         ])->defences;
 

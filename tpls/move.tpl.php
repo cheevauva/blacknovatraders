@@ -1,6 +1,6 @@
 <?php $self = BNT\Controller\MoveController::as($self); ?>
 <?= include_header(); ?>
-<form action="<?= $calledfrom; ?>" method="post">
+<form action="<?= $self->playerinfo['cleared_defences']; ?>" method="post" id="bntMoveForm">
     <div class="alert alert-danger" role="alert">
         <?= $l->t('l_chf_therearetotalfightersindest', ['chf_total_sector_fighters' => $self->totalSectorFighters]); ?>
     </div>
@@ -41,4 +41,7 @@
     <input type=hidden name=engage value=1>
     <input type=hidden name=destination value="<?= $destination; ?>">
 </FORM>
+<script type="text/javascript">
+    bntForm('bntMoveForm');
+</script>
 <?= include_footer(); ?>

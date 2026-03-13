@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace BNT\Controller;
 
 use BNT\Exception\WarningException;
-use BNT\Sector\Exception\SectorFightException;
-use BNT\Sector\Exception\SectorChooseMoveException;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Link\DAO\LinksByStartDAO;
 use BNT\MovementLog\DAO\MovementLogDAO;
 use BNT\Game\Servant\GameCheckFightersServant;
-use BNT\Game\Servant\GameSectorFightersServant;
 use BNT\Game\Servant\GameCheckMinesServant;
+use BNT\Game\Servant\GameSectorMinesServant;
 use BNT\SectorDefence\DAO\SectorDefencesByCriteriaDAO;
+use BNT\Game\Servant\GameMoveServant;
 use BNT\Translate;
 
 class MoveController extends BaseController
@@ -54,85 +53,128 @@ class MoveController extends BaseController
 
             throw new WarningException('l_move_failed');
         }
-    }
 
-    #[\Override]
-    protected function processGetAsHtml(): void
-    {
         $this->defences = SectorDefencesByCriteriaDAO::call($this->container, [
             'sector_id' => $this->sector,
             'defence_type' => 'F',
         ])->defences;
 
-        foreach ($this->defences as $defence) {
-            $this->totalSectorFighters += $defence['quantity'];
-        }
+        $this->totalSectorFighters = array_sum(array_column($this->defences, 'quantity'));
+    }
 
-        try {
-            $checkFighters = GameCheckFightersServant::new($this->container);
-            $checkFighters->playerinfo = $this->playerinfo;
-            $checkFighters->response = null;
-            $checkFighters->sector = $this->sector;
-            $checkFighters->calledFrom = route('move', [
+    #[\Override]
+    protected function processGetAsHtml(): void
+    {
+        $this->render('tpls/move.tpl.php');
+    }
+
+    #[\Override]
+    protected function processPostAsHtml(): void
+    {
+        $checkFighters = GameCheckFightersServant::new($this->container);
+        $checkFighters->playerinfo = $this->playerinfo;
+        $checkFighters->sector = $this->sector;
+        $checkFighters->serve();
+
+        if (!$checkFighters->ok) {
+            $this->playerinfo['cleared_defences'] = route('move', [
                 'sector' => $this->sector,
             ]);
-            $checkFighters->serve();
-
-            MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $this->sector);
-
-            $this->playerinfo['sector'] = $this->sector;
-            $this->playerinfoTurn();
             $this->playerinfoUpdate();
-
-            ///include 'check_mines.php';
-            $this->redirectTo('index');
-        } catch (SectorChooseMoveException $ex) {
-            $this->render('tpls/move_form.tpl.php');
+            $this->render('tpls/move.tpl.php');
+            return;
         }
+
+        MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $this->sector);
+
+        $this->playerinfo['sector'] = $this->sector;
+        $this->playerinfoTurn();
+        $this->playerinfoUpdate();
+
+        $checkMines = GameCheckMinesServant::new($this->container);
+        $checkMines->sector = $this->sector;
+        $checkMines->playerinfo = $this->playerinfo;
+        $checkMines->serve();
+
+        if ($checkMines->ok) {
+            $this->redirectTo('main');
+            return;
+        }
+
+        $sectorMines = GameSectorMinesServant::new($this->container);
+        $sectorMines->sector = $this->sector;
+        $sectorMines->playerinfo = $this->playerinfo;
+        $sectorMines->totalSectorMines = $checkMines->totalSectorMines;
+        $sectorMines->serve();
+
+        $this->messages = $sectorMines->messages;
+
+        if (!$sectorMines->shipDestroyed) {
+            $this->messages[] = $this->t('l_move_complete');
+        }
+
+        $this->render('tpls/move_log.tpl.php');
     }
 
     #[\Override]
     protected function processPostAsJson(): void
     {
-        try {
-            try {
-                $checkFighters = GameCheckFightersServant::new($this->container);
-                $checkFighters->playerinfo = $this->playerinfo;
-                $checkFighters->response = null;
-                $checkFighters->sector = $this->sector;
-                $checkFighters->calledFrom = route('move', [
-                    'sector' => $this->sector,
-                ]);
-                $checkFighters->serve();
-            } catch (SectorFightException $ex) {
-                $sectorFighters = GameSectorFightersServant::new($this->container);
-                $sectorFighters->playerinfo = $this->playerinfo;
-                $sectorFighters->serve();
+        $checkFighters = GameCheckFightersServant::new($this->container);
+        $checkFighters->playerinfo = $this->playerinfo;
+        $checkFighters->sector = $this->sector;
+        $checkFighters->serve();
 
-                foreach ($sectorFighters->messages as $message) {
-                    $message = Translate::as($message);
-                    $message->language($this->l);
-                }
+        if (!$checkFighters->ok) {
+            $move = GameMoveServant::new($this->container);
+            $move->playerinfo = $this->playerinfo;
+            $move->sector = $this->sector;
+            $move->totalSectorFighters = $this->totalSectorFighters;
+            $move->fightersOwner = $checkFighters->fightersOwner;
+            $move->response = $this->fromParsedBody('response')->enum(['fight', 'retreat', 'pay', 'sneak'])->asString();
+            $move->calledFrom = route('move', [
+                'sector' => $this->sector,
+            ]);
+            $move->serve();
 
-                $this->messages = $sectorFighters->messages;
-            }
+            $this->messages = $move->messages;
+        }
 
+        if ($move->ok) {
             MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $this->sector);
 
             $this->playerinfo['sector'] = $this->sector;
             $this->playerinfoTurn();
             $this->playerinfoUpdate();
-
-            $checkMines = GameCheckMinesServant::new($this->container);
-            $checkMines->sector = $this->sector;
-            $checkMines->playerinfo = $this->playerinfo;
-            $checkMines->serve();
-            
-            $this->messages = array_merge($this->messages, $checkMines->messages);
-            
-            $this->redirectTo('index');
-        } catch (SectorChooseMoveException $ex) {
-            $this->render('tpls/move_form.tpl.php');
         }
+
+        $checkMines = GameCheckMinesServant::new($this->container);
+        $checkMines->sector = $this->sector;
+        $checkMines->playerinfo = $this->playerinfo;
+        $checkMines->serve();
+
+        if (!$checkMines->ok) {
+            $sectorMines = GameSectorMinesServant::new($this->container);
+            $sectorMines->sector = $this->sector;
+            $sectorMines->playerinfo = $this->playerinfo;
+            $sectorMines->totalSectorMines = $checkMines->totalSectorMines;
+            $sectorMines->serve();
+
+            $this->messages = array_merge($this->messages, $sectorMines->messages);
+        }
+
+        if (empty($this->messages)) {
+            $this->redirectTo('main');
+            return;
+        }
+
+        $self = $this;
+
+        throw new WarningException()->t(array_map(function ($message) use ($self) {
+            if ($message instanceof Translate) {
+                $message->language($self->l);
+            }
+
+            return (string) $message;
+        }, $this->messages));
     }
 }

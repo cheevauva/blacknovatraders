@@ -291,7 +291,9 @@ $planettypes = planetTypes();
                             <?php else : ?>
                                 <?php foreach ($self->links as $link) : ?>
                                     <li class="list-group-item">
-                                        <a href="<?= route('move', ['sector' => $link['link_dest']]); ?>">=&gt;&nbsp;<?= $link['link_dest']; ?></a>&nbsp;
+                                        <form action="<?= route('move', ['sector' => $link['link_dest']]); ?>" method="post" class="d-inline">
+                                            <a href="javascript:;" onclick="parentNode.submit();">=&gt;&nbsp;<?= $link['link_dest']; ?></a>&nbsp;
+                                        </form>
                                         <a href="<?= route('lrscan_sector', ['sector' => $link['link_dest']]); ?>"><?= $l->l_scan; ?></a>
                                     </li>
                                 <?php endforeach; ?>

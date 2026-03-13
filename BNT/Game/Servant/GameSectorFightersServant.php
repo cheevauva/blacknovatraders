@@ -18,6 +18,7 @@ class GameSectorFightersServant extends \UUA\Servant
 {
 
     public array $playerinfo;
+    public int $sector;
     public int $totalSectorFighters;
     public bool $isRSMove = false;
     public float|int $energyScooped;

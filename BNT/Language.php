@@ -50,6 +50,8 @@ class Language
         'l_scan_' => 'scan.php',
         'l_lrs_' => 'lrscan.php',
         'l_chf_' => 'check_fighters.php',
+        'l_chm_' => 'check_mines.php',
+        'l_move_' => 'move.php',
     ];
 
     public function __construct(protected string $languageName)
