@@ -9,6 +9,7 @@ use BNT\SectorDefence\DAO\SectorDefencesCleanUpDAO;
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Log\LogTypeConstants;
 use BNT\Log\DAO\LogPlayerDAO;
+use BNT\Translate;
 
 class GameMoveServant extends \UUA\Servant
 {
@@ -42,16 +43,15 @@ class GameMoveServant extends \UUA\Servant
             case 'retreat':
                 $this->playerinfo['turns'] -= 2;
                 $this->playerinfo['turns_used'] += 2;
-                $this->playerinfo['sector'] = $this->playerinfo['sector'];
                 $this->playerinfoUpdate();
+                $this->ok = false;
+                $this->messages[] = $this->t('l_chf_youretreatback');
                 break;
             case 'pay':
                 $fightersToll = intval($this->totalSectorFighters * $fighter_price * 0.6);
 
                 if ($this->playerinfo['credits'] < $fightersToll) {
-                    $this->playerinfo['sector'] = $this->playerinfo['sector'];
-                    $this->playerinfoUpdate();
-
+                    $this->messages[] = $this->t(['l_chf_notenoughcreditstoll', 'l_chf_movefailed']);
                     $this->ok = false;
                     return;
                 }
@@ -72,6 +72,8 @@ class GameMoveServant extends \UUA\Servant
                     $this->messages[] = $this->t('l_chf_thefightersdetectyou');
 
                     $sectorFighters = GameSectorFightersServant::new($this->container);
+                    $sectorFighters->sector = $this->sector;
+                    $sectorFighters->totalSectorFighters = $this->totalSectorFighters;
                     $sectorFighters->playerinfo = $this->playerinfo;
                     $sectorFighters->serve();
 
@@ -79,7 +81,9 @@ class GameMoveServant extends \UUA\Servant
                 }
                 break;
             default:
-                throw new Exception('fail');
+                $this->messages[] = $this->t(['l_chf_movefailed']);
+                $this->ok = false;
+                break;
         }
 
         SectorDefencesCleanUpDAO::call($this->container);
@@ -88,5 +92,10 @@ class GameMoveServant extends \UUA\Servant
     protected function playerinfoUpdate(): void
     {
         ShipUpdateDAO::call($this->container, $this->playerinfo, $this->playerinfo['ship_id']);
+    }
+
+    protected function t(array|string $tag, array $replace = [], ?string $format = null): Translate
+    {
+        return new Translate()->translate($tag, $replace, $format);
     }
 }

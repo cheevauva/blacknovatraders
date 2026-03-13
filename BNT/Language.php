@@ -52,6 +52,7 @@ class Language
         'l_chf_' => 'check_fighters.php',
         'l_chm_' => 'check_mines.php',
         'l_move_' => 'move.php',
+        'l_sf_' => 'sector_fighters.php',
     ];
 
     public function __construct(protected string $languageName)

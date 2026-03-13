@@ -88,14 +88,14 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_ATTACK_LOSE:
-                list($name, $pod) = split("\|", $entry['data']);
+                list($name, $pod) = explode('|', $entry['data']);
                 $text .= ($pod == 'Y' ? $l_log_pod : $l_log_nopod);
                 $placeholders = [
                     '[player]' => $name
                 ];
                 break;
             case LogTypeConstants::LOG_ATTACKED_WIN:
-                list($name, $armor, $fighters) = split("\|", $entry['data']);
+                list($name, $armor, $fighters) = explode('|', $entry['data']);
                 $placeholders = [
                     '[player]' => $name,
                     '[armor]' => $armor,
@@ -104,14 +104,14 @@ class LogController extends BaseController
                 break;
             case LogTypeConstants::LOG_TOLL_PAID:
             case LogTypeConstants::LOG_TOLL_RECV:
-                list($toll, $sector) = split("\|", $entry['data']);
+                list($toll, $sector) = explode('|', $entry['data']);
                 $placeholders = [
                     '[toll]' => $toll,
                     '[sector]' => $sector
                 ];
                 break;
             case LogTypeConstants::LOG_HIT_MINES:
-                list($mines, $sector) = split("\|", $entry['data']);
+                list($mines, $sector) = explode('|', $entry['data']);
                 $placeholders = [
                     '[mines]' => $mines,
                     '[sector]' => $sector
@@ -119,7 +119,7 @@ class LogController extends BaseController
                 break;
             case LogTypeConstants::LOG_SHIP_DESTROYED_MINES:
             case LogTypeConstants::LOG_DEFS_KABOOM:
-                list($sector, $pod) = split("\|", $entry['data']);
+                list($sector, $pod) = explode('|', $entry['data']);
                 $text .= ($pod == 'Y' ? $l_log_pod : $l_log_nopod);
                 $placeholders = [
                     '[sector]' => $sector
@@ -129,7 +129,7 @@ class LogController extends BaseController
             case LogTypeConstants::LOG_PLANET_DEFEATED:
             case LogTypeConstants::LOG_PLANET_SCAN:
             case LogTypeConstants::LOG_PLANET_SCAN_FAIL:
-                list($planet_name, $sector, $name) = split("\|", $entry['data']);
+                list($planet_name, $sector, $name) = explode('|', $entry['data']);
                 $placeholders = [
                     '[planet_name]' => $planet_name,
                     '[sector]' => $sector,
@@ -138,7 +138,7 @@ class LogController extends BaseController
                 break;
 
             case LogTypeConstants::LOG_PLANET_NOT_DEFEATED:
-                list($planet_name, $sector, $name, $ore, $organics, $goods, $salvage, $credits) = split("\|", $entry['data']);
+                list($planet_name, $sector, $name, $ore, $organics, $goods, $salvage, $credits) = explode('|', $entry['data']);
                 $placeholders = [
                     '[planet_name]' => $planet_name,
                     '[sector]' => $sector,
@@ -155,7 +155,7 @@ class LogController extends BaseController
                 $text = $entry['data'];
                 break;
             case LogTypeConstants::LOG_DEFS_DESTROYED:
-                list($quantity, $type, $sector) = split("\|", $entry['data']);
+                list($quantity, $type, $sector) = explode("|", $entry['data']);
                 $placeholders = [
                     '[quantity]' => $quantity,
                     '[type]' => $type,
@@ -164,7 +164,7 @@ class LogController extends BaseController
                 break;
 
             case LogTypeConstants::LOG_PLANET_EJECT:
-                list($sector, $name) = split("\|", $entry['data']);
+                list($sector, $name) = explode("|", $entry['data']);
                 $placeholders = [
                     '[sector]' => $sector,
                     '[name]' => $name
@@ -172,14 +172,14 @@ class LogController extends BaseController
                 break;
 
             case LogTypeConstants::LOG_STARVATION:
-                list($sector, $starvation) = split("\|", $entry['data']);
+                list($sector, $starvation) = explode("|", $entry['data']);
                 $placeholders = [
                     '[sector]' => $sector,
                     '[starvation]' => $starvation
                 ];
                 break;
             case LogTypeConstants::LOG_TOW:
-                list($sector, $newsector, $hull) = split("\|", $entry['data']);
+                list($sector, $newsector, $hull) = explode("|", $entry['data']);
                 $placeholders = [
                     '[sector]' => $sector,
                     '[newsector]' => $newsector,
@@ -187,14 +187,14 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_DEFS_DESTROYED_F:
-                list($fighters, $sector) = split("\|", $entry['data']);
+                list($fighters, $sector) = explode('|', $entry['data']);
                 $placeholders = [
                     '[sector]' => $sector,
                     '[fighters]' => $fighters
                 ];
                 break;
             case LogTypeConstants::LOG_TEAM_REJECT:
-                list($player, $teamname) = split("\|", $entry['data']);
+                list($player, $teamname) = explode("|", $entry['data']);
                 $placeholders = [
                     '[player]' => $player,
                     '[teamname]' => $teamname
@@ -214,21 +214,21 @@ class LogController extends BaseController
                 break;
             case LogTypeConstants::LOG_TEAM_NEWLEAD:
             case LogTypeConstants::LOG_TEAM_NEWMEMBER:
-                list($team, $name) = split("\|", $entry['data']);
+                list($team, $name) = explode('|', $entry['data']);
                 $placeholders = [
                     '[team]' => $team,
                     '[name]' => $name
                 ];
                 break;
             case LogTypeConstants::LOG_ADMIN_HARAKIRI:
-                list($player, $ip) = split("\|", $entry['data']);
+                list($player, $ip) = explode('|', $entry['data']);
                 $placeholders = [
                     '[player]' => $player,
                     '[ip]' => $ip
                 ];
                 break;
             case LogTypeConstants::LOG_ADMIN_ILLEGVALUE:
-                list($player, $quantity, $type, $holds) = split("\|", $entry['data']);
+                list($player, $quantity, $type, $holds) = explode('|', $entry['data']);
                 $placeholders = [
                     '[player]' => $player,
                     '[quantity]' => $quantity,
@@ -237,7 +237,7 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_ADMIN_PLANETDEL:
-                list($attacker, $defender, $sector) = split("\|", $entry['data']);
+                list($attacker, $defender, $sector) = explode('|', $entry['data']);
                 $placeholders = [
                     '[attacker]' => $attacker,
                     '[defender]' => $defender,
@@ -245,14 +245,14 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_DEFENCE_DEGRADE:
-                list($sector, $degrade) = split("\|", $entry['data']);
+                list($sector, $degrade) = explode('|', $entry['data']);
                 $placeholders = [
                     '[sector]' => $sector,
                     '[degrade]' => $degrade
                 ];
                 break;
             case LogTypeConstants::LOG_PLANET_CAPTURED:
-                list($cols, $credits, $owner) = split("\|", $entry['data']);
+                list($cols, $credits, $owner) = explode('|', $entry['data']);
                 $placeholders = [
                     '[cols]' => $cols,
                     '[credits]' => $credits,
@@ -260,7 +260,7 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_BOUNTY_CLAIMED:
-                list($amount, $bounty_on, $placed_by) = split("\|", $entry['data']);
+                list($amount, $bounty_on, $placed_by) = explode('|', $entry['data']);
                 $placeholders = [
                     '[amount]' => $amount,
                     '[bounty_on]' => $bounty_on,
@@ -268,14 +268,14 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_BOUNTY_PAID:
-                list($amount, $bounty_on) = split("\|", $entry['data']);
+                list($amount, $bounty_on) = explode('|', $entry['data']);
                 $placeholders = [
                     '[amount]' => $amount,
                     '[bounty_on]' => $bounty_on
                 ];
                 break;
             case LogTypeConstants::LOG_BOUNTY_CANCELLED:
-                list($amount, $bounty_on) = split("\|", $entry['data']);
+                list($amount, $bounty_on) = explode('|', $entry['data']);
                 $placeholders = [
                     '[amount]' => $amount,
                     '[bounty_on]' => $bounty_on
@@ -287,7 +287,7 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_SPACE_PLAGUE:
-                list($name, $sector) = split("\|", $entry['data']);
+                list($name, $sector) = explode('|', $entry['data']);
                 $percentage = $space_plague_kills * 100;
                 $placeholders = [
                     '[name]' => $name,
@@ -296,7 +296,7 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_PLASMA_STORM:
-                list($name, $sector, $percentage) = split("\|", $entry['data']);
+                list($name, $sector, $percentage) = explode('|', $entry['data']);
                 $placeholders = [
                     '[name]' => $name,
                     '[sector]' => $sector,
@@ -304,7 +304,7 @@ class LogController extends BaseController
                 ];
                 break;
             case LogTypeConstants::LOG_PLANET_BOMBED:
-                list($planet_name, $sector, $name, $beams, $torps, $figs) = split("\|", $entry['data']);
+                list($planet_name, $sector, $name, $beams, $torps, $figs) = explode('|', $entry['data']);
                 $placeholders = [
                     '[planet_name]' => $planet_name,
                     '[sector]' => $sector,

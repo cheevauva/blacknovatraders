@@ -29,8 +29,9 @@ class MoveController extends BaseController
     protected function preProcess(): void
     {
         $this->title = $this->t('l_move_title');
-        $this->checkTurns();
         $this->sector = $this->fromQueryParams('sector')->asInt();
+        $this->checkTurns();
+
         SectorByIdDAO::call($this->container, $this->sector)->sector ?? throw new ErrorException()->t('l_sector', $this->sector, 'l_not_found');
         // Put the sector information into the array "sectorinfo"
         $this->sectorinfo = SectorByIdDAO::call($this->container, $this->playerinfo['sector'])->sector ?: throw new WarningException(['l_sector', 'l_not_found']);
@@ -131,20 +132,21 @@ class MoveController extends BaseController
             $move->totalSectorFighters = $this->totalSectorFighters;
             $move->fightersOwner = $checkFighters->fightersOwner;
             $move->response = $this->fromParsedBody('response')->enum(['fight', 'retreat', 'pay', 'sneak'])->asString();
-            $move->calledFrom = route('move', [
-                'sector' => $this->sector,
-            ]);
             $move->serve();
 
             $this->messages = $move->messages;
+            
+            if ($move->ok) {
+                MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $this->sector);
+
+                $this->playerinfo['sector'] = $this->sector;
+                $this->playerinfoTurn();
+                $this->playerinfoUpdate();
+            }
         }
 
-        if ($move->ok) {
-            MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $this->sector);
-
-            $this->playerinfo['sector'] = $this->sector;
-            $this->playerinfoTurn();
-            $this->playerinfoUpdate();
+        if ($this->messages) {
+            throw $this->messagesToException();
         }
 
         $checkMines = GameCheckMinesServant::new($this->container);
@@ -164,12 +166,16 @@ class MoveController extends BaseController
 
         if (empty($this->messages)) {
             $this->redirectTo('main');
-            return;
+        } else {
+            throw $this->messagesToException();
         }
+    }
 
+    protected function messagesToException(): WarningException
+    {
         $self = $this;
 
-        throw new WarningException()->t(array_map(function ($message) use ($self) {
+        return new WarningException()->t(array_map(function ($message) use ($self) {
             if ($message instanceof Translate) {
                 $message->language($self->l);
             }

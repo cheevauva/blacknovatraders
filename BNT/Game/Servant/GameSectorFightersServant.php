@@ -127,7 +127,7 @@ class GameSectorFightersServant extends \UUA\Servant
 
         $fightersLost = $this->totalSectorFighters - $targetFighters;
 
-        GameDestroyFightersServant::call($this->container, $this->sector, $fightersLost);
+        GameDestroyFightersServant::call($this->container, $this->sector, (int) $fightersLost);
         GameMessageDefenceOwnerServant::new($this->container, $this->sector, $this->t('l_sf_sendlog', [
             'player' => $this->playerinfo['ship_name'],
             'lost' => $fightersLost,
