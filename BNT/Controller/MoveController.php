@@ -12,6 +12,7 @@ use BNT\Link\DAO\LinksByStartDAO;
 use BNT\MovementLog\DAO\MovementLogDAO;
 use BNT\Game\Servant\GameCheckFightersServant;
 use BNT\Game\Servant\GameSectorFightersServant;
+use BNT\Game\Servant\GameCheckMinesServant;
 use BNT\SectorDefence\DAO\SectorDefencesByCriteriaDAO;
 use BNT\Translate;
 
@@ -66,7 +67,7 @@ class MoveController extends BaseController
         foreach ($this->defences as $defence) {
             $this->totalSectorFighters += $defence['quantity'];
         }
-        
+
         try {
             $checkFighters = GameCheckFightersServant::new($this->container);
             $checkFighters->playerinfo = $this->playerinfo;
@@ -122,7 +123,13 @@ class MoveController extends BaseController
             $this->playerinfoTurn();
             $this->playerinfoUpdate();
 
-            ///include 'check_mines.php';
+            $checkMines = GameCheckMinesServant::new($this->container);
+            $checkMines->sector = $this->sector;
+            $checkMines->playerinfo = $this->playerinfo;
+            $checkMines->serve();
+            
+            $this->messages = array_merge($this->messages, $checkMines->messages);
+            
             $this->redirectTo('index');
         } catch (SectorChooseMoveException $ex) {
             $this->render('tpls/move_form.tpl.php');

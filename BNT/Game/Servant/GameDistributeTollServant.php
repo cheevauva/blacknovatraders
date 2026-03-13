@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Game\Servant;
 
+use Psr\Container\ContainerInterface;
 use BNT\SectorDefence\DAO\SectorDefencesByCriteriaDAO;
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Ship\DAO\ShipByIdDAO;
@@ -24,7 +25,7 @@ class GameDistributeTollServant extends \UUA\Servant
             'sector_id' => $this->sector,
             'defence_type' => 'F',
         ])->defences;
-        
+
         foreach ($defences as $defence) {
             $tollAmount = round(($defence['quantity'] / $this->totalFighters) * $this->toll);
 
@@ -32,7 +33,18 @@ class GameDistributeTollServant extends \UUA\Servant
             $ship['credits'] += $tollAmount;
 
             ShipUpdateDAO::call($this->container, $ship, $ship['ship_id']);
-            LogPlayerDAO::call($this->container, $defence['ship_id'], LogTypeConstants::LOG_TOLL_RECV, [$tollAmount, $sector]);
+            LogPlayerDAO::call($this->container, $defence['ship_id'], LogTypeConstants::LOG_TOLL_RECV, [$tollAmount, $this->sector]);
         }
+    }
+
+    public static function call(ContainerInterface $container, int $sector, int $totalFighters, int $toll): self
+    {
+        $self = self::new($container);
+        $self->sector = $sector;
+        $self->toll = $toll;
+        $self->totalFighters = $totalFighters;
+        $self->serve();
+
+        return $self;
     }
 }

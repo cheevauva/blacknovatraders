@@ -394,62 +394,16 @@ function SCAN_ERROR($level_scan, $level_cloak)
 
 function explode_mines($sector, $num_mines)
 {
-
-
-    $result3 = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id=:sector and defence_type ='M' order by quantity ASC", [
-        'sector' => $sector,
-    ]);
-
-    //Put the defence information into the array "defenceinfo"
-    if (!empty($result3)) {
-        foreach ($result3 as $row) {
-            if ($num_mines <= 0)
-                break;
-
-            if ($row['quantity'] > $num_mines) {
-                db()->q("UPDATE sector_defence set quantity=quantity - :num_mines where defence_id = :defence_id", [
-                    'num_mines' => $num_mines,
-                    'defence_id' => $row['defence_id'],
-                ]);
-                $num_mines = 0;
-            } else {
-                db()->q("DELETE FROM sector_defence WHERE defence_id = :defence_id", [
-                    'defence_id' => $row['defence_id'],
-                ]);
-                $num_mines -= $row['quantity'];
-            }
-        }
-    }
+    global $container;
+    
+    BNT\Game\Servant\GameExplodeMinesServant::call($container, (int) $sector, (int) $num_mines);
 }
 
 function destroy_fighters($sector, $num_fighters)
 {
-
-
-    $result3 = db()->fetchAll("SELECT * FROM sector_defence WHERE sector_id=:sector and defence_type ='F' order by quantity ASC", [
-        'sector' => $sector,
-    ]);
-
-    //Put the defence information into the array "defenceinfo"
-    if (!empty($result3)) {
-        foreach ($result3 as $row) {
-            if ($num_fighters <= 0)
-                break;
-
-            if ($row['quantity'] > $num_fighters) {
-                db()->q("UPDATE sector_defence set quantity=quantity - :num_fighters where defence_id = :defence_id", [
-                    'num_fighters' => $num_fighters,
-                    'defence_id' => $row['defence_id'],
-                ]);
-                $num_fighters = 0;
-            } else {
-                db()->q("DELETE FROM sector_defence WHERE defence_id = :defence_id", [
-                    'defence_id' => $row['defence_id'],
-                ]);
-                $num_fighters -= $row['quantity'];
-            }
-        }
-    }
+    global $container;
+    
+    \BNT\Game\Servant\GameDestroyFightersServant::call($container, (int) $sector, (int) $num_fighters);
 }
 
 function message_defence_owner($sector, $message)
@@ -460,12 +414,9 @@ function message_defence_owner($sector, $message)
 
 function distribute_toll($sector, $toll, $total_fighters)
 {
-    //Put the defence information into the array "defenceinfo"
-    foreach (defencesBySectorAndFighters($sector) as $defence) {
-        $toll_amount = ROUND(($defence['quantity'] / $total_fighters) * $toll);
-        shipCreditsAdd($defence['ship_id'], $toll_amount);
-        playerlog($defence['ship_id'], LogTypeConstants::LOG_TOLL_RECV, "$toll_amount|$sector");
-    }
+    global $container;
+    
+    BNT\Game\Servant\GameDistributeTollServant::call($container, (int) $sector, (int) $total_fighters, (int) $toll);
 }
 
 function defence_vs_defence($ship_id)
