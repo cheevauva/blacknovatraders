@@ -135,7 +135,7 @@ class MoveController extends BaseController
 
         return new WarningException()->t(array_map(function ($message) use ($self) {
             if ($message instanceof Translate) {
-                $message->language($self->l);
+                $message->l($self->l);
             }
 
             return (string) $message;

@@ -8,16 +8,26 @@ use BNT\Language;
 
 class Translate
 {
+
     use \UUA\Traits\AsTrait;
 
     protected ?Language $language = null;
-    public array $tags = [];
-    public ?string $format = null;
+    protected array $tags = [];
+    protected ?string $format = null;
     protected array $replace = [];
 
-    public function language(Language $language): void
+    public function l(Language $language): self
     {
         $this->language = $language;
+
+        return $this;
+    }
+
+    public function replace(string $slug, mixed $value): self
+    {
+        $this->replace[$slug] = $value;
+        
+        return $this;
     }
 
     /**
@@ -47,12 +57,16 @@ class Translate
             }
 
             foreach ($this->replace as $search => $replace) {
+                if ($this->language && $replace instanceof self) {
+                    $replace->l($this->language);
+                }
+                
                 $tag = str_replace('[' . $search . ']', (string) $replace, $tag);
             }
 
             $tags[$idxTag] = $tag;
         }
-    
+
         return $this->format ? vsprintf($this->format, $tags) : implode(' ', $tags);
     }
 }

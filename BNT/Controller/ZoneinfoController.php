@@ -8,13 +8,14 @@ use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Team\DAO\TeamByIdDAO;
 use BNT\Exception\WarningException;
+use BNT\Translate;
 
 class ZoneinfoController extends BaseController
 {
 
     public ?array $zoneinfo = null;
     public bool $isAllowChangeZone = false;
-    public string $ownername;
+    public Translate|string $ownername;
     public ?array $ownerinfo;
     public int $zone;
     public $hull;

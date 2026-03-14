@@ -32,10 +32,7 @@ class GameMessageDefenceOwnerServant extends \UUA\Servant
                 $ship = ShipByIdDAO::call($this->container, $defence['ship_id'])->ship;
                 $user = UserByIdDAO::call($this->container, $ship['user_id'])->user;
 
-                $translate = Translate::as($this->message);
-                $translate->language(Language::get($user['lang']));
-
-                $message = (string) $translate;
+                $message = (string) Translate::as($this->message)->l(Language::get($user['lang']));
             } else {
                 $message = $this->message;
             }

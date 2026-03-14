@@ -48,7 +48,7 @@ class ZoneeditController extends BaseController
     protected function processPostAsJson(): void
     {
         ZoneUpdateDAO::call($this->container, [
-            'zone_name' => $this->fromParsedBody('name')->trim()->notEmpty()->asString(),
+            'zone_name' => $this->fromParsedBody('name')->trim()->label('l_ze_name')->notEmpty()->asString(),
             'allow_beacon' => $this->fromParsedBody('beacons')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
             'allow_attack' => $this->fromParsedBody('attacks')->enum(['Y', 'N'])->notEmpty()->asString(), 
             'allow_warpedit' => $this->fromParsedBody('warpedits')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),

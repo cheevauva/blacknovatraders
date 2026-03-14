@@ -12,7 +12,7 @@ class AdminController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
-        $this->title = 'Administration';
+        $this->title = $this->t('Administration');
         $this->isAdmin() ?: throw new ErrorException('You not admin');
     }
 

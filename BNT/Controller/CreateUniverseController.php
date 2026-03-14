@@ -90,8 +90,6 @@ class CreateUniverseController extends BaseController
         $this->sched_degrade = $sched_degrade;
         $this->sched_apocalypse = $sched_apocalypse;
         $this->sched_ranking = $sched_ranking;
-
-        $this->title = "Create Universe";
     }
 
     #[\Override]
@@ -103,6 +101,8 @@ class CreateUniverseController extends BaseController
     #[\Override]
     protected function preProcess(): void
     {
+        $this->title = $this->t('Create Universe');
+
         $this->step = $this->fromParsedBody('step')->default($this->step)->asInt();
         $this->swordfish = $this->fromParsedBody('swordfish')->trim()->asString();
         $this->sector_max = $this->fromParsedBody('sector_max')->default($this->sector_max)->asInt();

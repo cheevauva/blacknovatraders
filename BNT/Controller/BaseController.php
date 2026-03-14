@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BNT\Controller;
 
 use Exception;
+use BNT\Translate;
 use BNT\Exception\CommonException;
 use BNT\Exception\WarningException;
 use BNT\Exception\ErrorException;
@@ -18,6 +19,7 @@ abstract class BaseController extends \UUA\Unit
 
     use \UUA\Traits\ContainerTrait;
     use \UUA\Traits\BuildTrait;
+    use \BNT\Traits\MessagesTrait;
 
     public const ACCEPT_TYPE_JSON = 'application/json';
     public const ACCEPT_TYPE_HTML = 'text/html';
@@ -29,7 +31,7 @@ abstract class BaseController extends \UUA\Unit
     public array $parsedBody;
     public array $queryParams;
     public protected(set) ?string $location = null;
-    public string $title = 'BlackNova Traders';
+    public ?Translate $title = null;
     public array $responseCookies = [];
     public null|array|\ArrayObject $responseJson = null;
     public bool $enableThrowExceptionOnProcess = false;
@@ -163,7 +165,7 @@ abstract class BaseController extends \UUA\Unit
         return $this->fetch($this->queryParams, $name);
     }
 
-    protected function t(array|string $tag, array $replace = [], ?string $format = null): string
+    protected function t(array|string $tag, array $replace = [], ?string $format = null): Translate
     {
         return $this->l->t($tag, $replace, $format);
     }
@@ -172,10 +174,10 @@ abstract class BaseController extends \UUA\Unit
     {
         $fetch = new Fetch($data);
         $fetch->language($this->l);
-        $fetch->requiredMessage($this->t([':label', 'l_is_required']));
-        $fetch->notEmptyMessage($this->t([':label', 'l_is_not_empty']));
-        $fetch->filterMessage($this->t([':label', 'l_is_invalid']));
-        $fetch->enumMessage($this->t([':label', 'l_is_contains_not_allow_value']));
+        $fetch->messageTemplate('required', $this->t(['[label]', 'l_is_required']));
+        $fetch->messageTemplate('not_empty', $this->t(['[label]', 'l_is_not_empty']));
+        $fetch->messageTemplate('filter_is_invalid', $this->t(['[label]', 'l_is_invalid']));
+        $fetch->messageTemplate('not_allow_value', $this->t(['[label]', 'l_is_contains_not_allow_value']));
 
         if ($path) {
             return $fetch->path($path);

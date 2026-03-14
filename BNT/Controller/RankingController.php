@@ -27,8 +27,8 @@ class RankingController extends BaseController
     {
         global $max_rank;
         
-        $this->title = strtr($this->l->ranks_title, [
-            '[max_rank]' => $max_rank
+        $this->title = $this->t('l_ranks_title', [
+            'max_rank' => $max_rank
         ]);
     }
 

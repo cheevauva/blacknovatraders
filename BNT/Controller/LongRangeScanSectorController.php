@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BNT\Controller;
 
+use BNT\Translate;
 use BNT\Exception\WarningException;
 use BNT\Link\DAO\LinksByStartDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
@@ -24,7 +25,7 @@ class LongRangeScanSectorController extends BaseController
     public array $planets = [];
     public int $fighters = 0;
     public int $mines = 0;
-    public ?string $lastShipInSectorDetected = null;
+    public ?Translate $lastShipInSectorDetected = null;
 
     #[\Override]
     protected function preProcess(): void

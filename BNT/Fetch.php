@@ -6,21 +6,24 @@ namespace BNT;
 
 use BNT\Exception\WarningException;
 use BNT\Language;
+use BNT\Translate;
 
 class Fetch
 {
+
+    use Traits\TranslateTrait;
 
     protected Language $language;
     protected array $data;
     protected string $path;
     protected bool $isRequired = false;
-    protected string $requiredMessage = ':label is required';
     protected bool $notEmpty = false;
-    protected string $notEmptyMessage = ':label cannot be empty';
-    protected string $filterMessage = ':label is invalid';
-    protected string $enumMessage = ':label contains is not allow value';
-    protected ?string $label = null;
-    protected array $typeMessages = [];
+    protected ?Translate $label = null;
+
+    /**
+     * @var array<string, Translate>
+     */
+    protected array $messageTemplates = [];
     protected ?int $filter = null;
     protected bool $trim = false;
     protected mixed $default = null;
@@ -28,6 +31,20 @@ class Fetch
 
     public function __construct($data)
     {
+        $this->messageTemplates = [
+            'is_required' => $this->t('[label] is required'),
+            'filter_is_invalid' => $this->t('[label] is invalid'),
+            'not_empty' => $this->t('[label] cannot be empty'),
+            'not_allow_value' => '[label] contains is not allow value',
+            'convert_string' => $this->t('Cannot convert [label] to string'),
+            'convert_int' => $this->t('Cannot convert [label] to integer'),
+            'convert_datetime' => $this->t('Cannot convert [label] to DateTime'),
+            'convert_float' => $this->t('Cannot convert [label] to float'),
+            'convert_bool' => $this->t('Cannot convert [label] to boolean'),
+            'convert_enum_not_exists' => $this->t('Enum class [enumClass] for [label] does not exist'),
+            'convert_enum' => $this->t('Cannot convert [label] to enum [enumClass]'),
+        ];
+
         $this->data = $data;
     }
 
@@ -57,13 +74,6 @@ class Fetch
         return $this;
     }
 
-    public function enumMessage(string $message): self
-    {
-        $this->enumMessage = $message;
-
-        return $this;
-    }
-
     public function trim(): self
     {
         $this->trim = true;
@@ -74,6 +84,7 @@ class Fetch
     public function path(string $path): self
     {
         $this->path = $path;
+        $this->label($path);
 
         return $this;
     }
@@ -85,13 +96,6 @@ class Fetch
         return $this;
     }
 
-    public function requiredMessage(string $message): self
-    {
-        $this->requiredMessage = $message;
-
-        return $this;
-    }
-
     public function notEmpty(): self
     {
         $this->notEmpty = true;
@@ -99,42 +103,20 @@ class Fetch
         return $this;
     }
 
-    public function notEmptyMessage(string $message): self
-    {
-        $this->notEmptyMessage = $message;
-
-        return $this;
-    }
-
-    public function filterMessage(string $message): self
-    {
-        $this->filterMessage = $message;
-
-        return $this;
-    }
-
-    protected function t(array|string $tag, array $replace = [], ?string $format = null): string
-    {
-        return $this->language->t($tag, $replace, $format);
-    }
-
     public function label(string $label): self
     {
-        $this->label = $this->t($label);
+        foreach ($this->messageTemplates as $messageTemplate) {
+            Translate::as($messageTemplate)->replace('label', $this->t($label));
+        }
 
         return $this;
     }
 
-    public function typeMessage(string $type, string $message): self
+    public function messageTemplate(string $type, Translate $message): self
     {
-        $this->typeMessages[$type] = $message;
+        $this->messageTemplates[$type] = $message;
 
         return $this;
-    }
-
-    protected function formatMessage(string $message): string
-    {
-        return str_replace(':label', $this->label ?? $this->path, $message);
     }
 
     protected function val(): mixed
@@ -154,22 +136,22 @@ class Fetch
         }
 
         if (isset($this->enum) && !in_array($val, $this->enum, true)) {
-            throw new WarningException($this->formatMessage($this->enumMessage));
+            throw new WarningException()->tt($this->messageTemplates['not_allow_value']);
         }
 
         if ($this->isRequired && $val === null) {
-            throw new WarningException($this->formatMessage($this->requiredMessage));
+            throw new WarningException()->tt($this->messageTemplates['is_required']);
         }
 
         if ($this->notEmpty && ($val === null || $val === '')) {
-            throw new WarningException($this->formatMessage($this->notEmptyMessage));
+            throw new WarningException()->tt($this->messageTemplates['not_empty']);
         }
 
         if ($this->filter) {
             $filterVal = filter_var($val, $this->filter, FILTER_NULL_ON_FAILURE);
 
             if ($filterVal === null) {
-                throw new WarningException($this->formatMessage($this->filterMessage));
+                throw new WarningException()->tt($this->messageTemplates['filter_is_invalid']);
             }
         }
 
@@ -185,8 +167,7 @@ class Fetch
         }
 
         if (!is_scalar($value) && !(is_object($value) && method_exists($value, '__toString'))) {
-            $message = $this->typeMessages['string'] ?? 'Cannot convert :label to string';
-            throw new WarningException($this->formatMessage($message));
+            throw new WarningException()->tt($this->messageTemplates['convert_string']);
         }
 
         return (string) $value;
@@ -201,14 +182,12 @@ class Fetch
         }
 
         if (!is_numeric($value)) {
-            $message = $this->typeMessages['int'] ?? 'Cannot convert :label to integer';
-            throw new WarningException($this->formatMessage($message));
+            throw new WarningException()->tt($this->messageTemplates['convert_int']);
         }
 
         $intValue = (int) $value;
         if ((string) $intValue !== (string) $value && $value !== $intValue) {
-            $message = $this->typeMessages['int'] ?? 'Cannot convert :label to integer';
-            throw new WarningException($this->formatMessage($message));
+            throw new WarningException()->tt($this->messageTemplates['convert_int']);
         }
 
         return $intValue;
@@ -223,8 +202,7 @@ class Fetch
         }
 
         if (!is_numeric($value)) {
-            $message = $this->typeMessages['float'] ?? 'Cannot convert :label to float';
-            throw new WarningException($this->formatMessage($message));
+            throw new WarningException()->tt($this->messageTemplates['convert_float']);
         }
 
         return (float) $value;
@@ -256,8 +234,7 @@ class Fetch
             return (bool) $value;
         }
 
-        $message = $this->typeMessages['bool'] ?? 'Cannot convert :label to boolean';
-        throw new WarningException($this->formatMessage($message));
+        throw new WarningException()->tt($this->messageTemplates['convert_bool']);
     }
 
     public function asEnum(string $enumClass)
@@ -269,15 +246,13 @@ class Fetch
         }
 
         if (!enum_exists($enumClass)) {
-            $message = $this->typeMessages['enum'] ?? "Enum class {$enumClass} does not exist";
-            throw new WarningException($this->formatMessage($message));
+            throw new WarningException()->tt(Translate::as($this->messageTemplates['convert_enum_not_exists'])->replace('enumClass', $enumClass));
         }
 
         $enum = $enumClass::tryFrom($value);
 
         if ($enum === null) {
-            $message = $this->typeMessages['enum'] ?? "Cannot convert :label to enum {$enumClass}";
-            throw new WarningException($this->formatMessage($message));
+            throw new WarningException()->tt(Translate::as($this->messageTemplates['convert_enum'])->replace('enumClass', $enumClass));
         }
 
         return $enum;
@@ -304,8 +279,7 @@ class Fetch
 
             return new \DateTime($value);
         } catch (\Exception $e) {
-            $message = $this->typeMessages['datetime'] ?? 'Cannot convert :label to DateTime';
-            throw new WarningException($this->formatMessage($message));
+            throw new WarningException()->tt($this->messageTemplates['convert_datetime']);
         }
     }
 
