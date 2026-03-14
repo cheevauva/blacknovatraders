@@ -46,7 +46,16 @@ abstract class BaseController extends \UUA\Unit
 
     protected function redirectTo($route, array|string $params = []): void
     {
-        $this->location = route($route, $params);
+        if (!empty($this->messages)) {
+            $this->responseJson = [
+                'success' => true,
+                'type' => 'redirectAfterMessages',
+                'redirectTo' => route($route, $params),
+                'messages' => array_map(fn(Translate $t) => (string) $t->l($this->l), $this->messages),
+            ];
+        } else {
+            $this->location = route($route, $params);
+        }
     }
 
     protected function setCookie(string $name, string $value = "", int $expires_or_options = 0, string $path = "", string $domain = "", bool $secure = false, bool $httponly = false): void
@@ -61,10 +70,10 @@ abstract class BaseController extends \UUA\Unit
 
     protected function process(): void
     {
-        $this->acceptType ?? throw new WarningException('acceptType is required');
-        $this->requestMethod ?? throw new WarningException('requestMethod is required');
-
         try {
+            $this->acceptType ?? throw new WarningException('acceptType is required');
+            $this->requestMethod ?? throw new WarningException('requestMethod is required');
+
             $this->preProcess();
 
             switch ($this->requestMethod) {
@@ -77,7 +86,7 @@ abstract class BaseController extends \UUA\Unit
                     $this->processedPost = true;
                     break;
                 default:
-                    throw new WarningException(sprintf('%s method processing is not implemented', $this->requestMethod));
+                    throw new WarningException()->t('[method] method processing is not implemented', ['method' => $this->requestMethod]);
             }
         } catch (Exception $ex) {
             if ($ex instanceof CommonException) {
@@ -263,6 +272,11 @@ abstract class BaseController extends \UUA\Unit
 
         if ($this->enableCheckShip) {
             if (empty($this->playerinfo)) {
+                $this->redirectTo('ships');
+                return false;
+            }
+
+            if ($this->playerinfo['ship_destroyed'] === 'Y') {
                 $this->redirectTo('ships');
                 return false;
             }

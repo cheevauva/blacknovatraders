@@ -14,6 +14,14 @@ class AdminConfigController extends BaseController
     public array $config;
 
     #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->enableCheckShip = false;
+    }
+
+    #[\Override]
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');

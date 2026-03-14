@@ -10,6 +10,14 @@ class AdminController extends BaseController
 {
 
     #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->enableCheckShip = false;
+    }
+
+    #[\Override]
     protected function preProcess(): void
     {
         $this->title = $this->t('Administration');

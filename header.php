@@ -24,6 +24,48 @@ global $title, $l, $link_forums, $admin_mail, $userinfo;
             alertPlaceholder.append(wrapper);
         }
 
+        function redirectToAfterMessages(redirectTo, messages) {
+            const modalId = 'redirectModal_' + Date.now();
+
+            const modalHtml = `
+        <div class="modal fade" id="${modalId}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ${Array.isArray(messages) ? `
+                            <ul class="mb-0">
+                                ${messages.map(msg => `<li>${msg}</li>`).join('')}
+                            </ul>
+                        ` : `<p class="mb-0">${messages}</p>`}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            const modalElement = document.getElementById(modalId);
+            const modal = new bootstrap.Modal(modalElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            modalElement.addEventListener('hidden.bs.modal', function () {
+                modalElement.remove();
+                window.location.href = redirectTo;
+            });
+
+            modal.show();
+        }
+
+
         function bntForm(id) {
             document.getElementById(id).addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -45,7 +87,12 @@ global $title, $l, $link_forums, $admin_mail, $userinfo;
 
                 const result = await response.json();
 
-                alert(result.message, result.type);
+                if (result.type === 'redirectAfterMessages') {
+                    redirectToAfterMessages(result.redirectTo, result.messages);
+                } else {
+                    alert(result.message, result.type);
+
+                }
             });
         }
     </script>

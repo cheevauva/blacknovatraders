@@ -20,7 +20,7 @@ class ZoneeditController extends BaseController
     protected function preProcess(): void
     {
         $this->title = $this->t('l_ze_title');
-        $this->zone = $this->fromQueryParams( 'zone')->notEmpty()->asInt();
+        $this->zone = $this->fromQueryParams('zone')->notEmpty()->asInt();
         $this->currentZone = ZoneByIdDAO::call($this->container, $this->zone)->zone ?: throw new WarningException('l_zi_nexist');
 
         if ($this->currentZone['corp_zone'] == 'N') {
@@ -50,11 +50,11 @@ class ZoneeditController extends BaseController
         ZoneUpdateDAO::call($this->container, [
             'zone_name' => $this->fromParsedBody('name')->trim()->label('l_ze_name')->notEmpty()->asString(),
             'allow_beacon' => $this->fromParsedBody('beacons')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
-            'allow_attack' => $this->fromParsedBody('attacks')->enum(['Y', 'N'])->notEmpty()->asString(), 
+            'allow_attack' => $this->fromParsedBody('attacks')->enum(['Y', 'N'])->notEmpty()->asString(),
             'allow_warpedit' => $this->fromParsedBody('warpedits')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
-            'allow_planet' => $this->fromParsedBody('planets')->enum(['Y', 'N', 'L'])->notEmpty()->asString(), 
-            'allow_trade' => $this->fromParsedBody('trades')->enum(['Y', 'N', 'L'])->notEmpty()->asString(), 
-            'allow_defenses' => $this->fromParsedBody('defenses')->enum(['Y', 'N', 'L'])->notEmpty()->asString(), 
+            'allow_planet' => $this->fromParsedBody('planets')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
+            'allow_trade' => $this->fromParsedBody('trades')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
+            'allow_defenses' => $this->fromParsedBody('defenses')->enum(['Y', 'N', 'L'])->notEmpty()->asString(),
         ], $this->zone);
 
         $this->redirectTo('zoneinfo', [

@@ -18,13 +18,21 @@ class AdminUserController extends BaseController
     public string $operation;
 
     #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->enableCheckShip = false;
+    }
+
+    #[\Override]
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');
-        $this->operation = $this->fromQueryParams( 'operation')->asString();
+        $this->operation = $this->fromQueryParams('operation')->asString();
 
         if (in_array($this->operation, ['save', 'edit'])) {
-            $user = $this->fromQueryParams( 'user')->notEmpty()->asInt();
+            $user = $this->fromQueryParams('user')->notEmpty()->asInt();
             $this->user = UserByIdDAO::call($this->container, $user)->user;
         }
     }

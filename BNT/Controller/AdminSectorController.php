@@ -19,6 +19,14 @@ class AdminSectorController extends BaseController
     public string $operation;
 
     #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->enableCheckShip = false;
+    }
+
+    #[\Override]
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');

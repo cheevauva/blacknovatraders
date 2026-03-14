@@ -41,7 +41,7 @@ class GameMoveToSectorWhenIsAProblemServant extends \UUA\Servant
         if (!$checkFighters->ok) {
             $this->playerinfo['cleared_defences'] = '';
             $this->playerinfoUpdate();
-            
+
             match ($this->solutionProblem) {
                 'fight' => $this->fight($checkFighters->totalSectorFighters),
                 'retreat' => $this->retreat(),
@@ -55,6 +55,8 @@ class GameMoveToSectorWhenIsAProblemServant extends \UUA\Servant
         if ($this->isNotOk()) {
             return;
         }
+
+        $this->playerinfoReload();
 
         MovementLogDAO::call($this->container, $this->playerinfo['ship_id'], $this->sector);
 

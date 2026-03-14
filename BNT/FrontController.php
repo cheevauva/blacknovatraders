@@ -52,7 +52,6 @@ class FrontController extends \UUA\Unit
             header('Location: ' . $controller->location, true, 302);
         }
 
-
         if (str_contains($controller->acceptType, 'application/json') && !empty($controller->responseJson)) {
             header('Content-Type: application/json');
             echo json_encode($controller->responseJson, JSON_UNESCAPED_UNICODE);

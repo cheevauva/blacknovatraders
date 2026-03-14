@@ -14,8 +14,12 @@ trait MessagesTrait
      */
     public protected(set) array $messages = [];
 
-    protected function messagesAppend(array|Translate $messages): void
+    protected function messagesAppend(string|array|Translate $messages): void
     {
+        if (is_string($messages)) {
+            $messages = new Translate($messages);
+        }
+        
         if ($messages instanceof Translate) {
             $messages = [$messages];
         }

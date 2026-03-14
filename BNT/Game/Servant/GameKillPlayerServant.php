@@ -61,7 +61,7 @@ class GameKillPlayerServant extends \UUA\Servant
         ]);
 
         $zones = ZonesByCriteriaDAO::call($this->container, [
-            'corp' => 'N',
+            'corp_zone' => 'N',
             'owner' => $this->ship,
         ])->zones;
 
@@ -78,7 +78,7 @@ class GameKillPlayerServant extends \UUA\Servant
         NewsCreateDAO::call($this->container, [
             'headline' => $ship['ship_name'] . $l->killheadline,
             'newstext' => str_replace('[name]', $ship['ship_name'], $l->news_killed),
-            'ship_id' => $this->ship,
+            'user_id' => $this->ship,
         ]);
     }
 

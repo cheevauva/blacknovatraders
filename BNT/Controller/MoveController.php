@@ -87,7 +87,7 @@ class MoveController extends BaseController
     protected function processPostAsHtml(): void
     {
         try {
-            
+
             $moveToSector = GameMoveToSectorWhenIsNotAProblemServant::new($this->container);
             $moveToSector->playerinfo = $this->playerinfo;
             $moveToSector->energyScooped = $this->energyScooped;
@@ -121,24 +121,7 @@ class MoveController extends BaseController
         $moveToSector->solutionProblem = $this->fromParsedBody('response')->enum(['fight', 'retreat', 'pay', 'sneak'])->asString();
         $moveToSector->serve();
 
-        if ($moveToSector->ok && empty($moveToSector->messages)) {
-            $this->redirectTo('main');
-            return;
-        }
-
-        throw $this->messagesToException($moveToSector->messages);
-    }
-
-    protected function messagesToException(array $messages): WarningException
-    {
-        $self = $this;
-
-        return new WarningException()->t(array_map(function ($message) use ($self) {
-            if ($message instanceof Translate) {
-                $message->l($self->l);
-            }
-
-            return (string) $message;
-        }, $messages));
+        $this->messagesAppend($moveToSector->messages);
+        $this->redirectTo('main');
     }
 }

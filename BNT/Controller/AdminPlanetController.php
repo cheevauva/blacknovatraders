@@ -18,6 +18,14 @@ class AdminPlanetController extends BaseController
     public array $planets;
 
     #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->enableCheckShip = false;
+    }
+
+    #[\Override]
     protected function preProcess(): void
     {
         $this->isAdmin() ?: throw new ErrorException('You not admin');
@@ -50,29 +58,29 @@ class AdminPlanetController extends BaseController
             $planet = $this->fromQueryParams('planet')->notEmpty()->asInt();
 
             PlanetUpdateDAO::call($this->container, [
-                'sector_id' =>  $this->fromParsedBody('sector_id')->notEmpty()->asInt(),
+                'sector_id' => $this->fromParsedBody('sector_id')->notEmpty()->asInt(),
                 'defeated' => !$this->fromParsedBody('defeated')->asBool() ? 'N' : 'Y',
-                'name' =>  $this->fromParsedBody('name')->asString(),
+                'name' => $this->fromParsedBody('name')->asString(),
                 'base' => !$this->fromParsedBody('base')->asBool() ? 'N' : 'Y',
                 'sells' => !$this->fromParsedBody('sells')->asBool() ? 'N' : 'Y',
-                'owner' =>  $this->fromParsedBody('owner')->default(0)->asInt(),
-                'organics' =>  $this->fromParsedBody('organics')->default(0)->asInt(),
-                'ore' =>  $this->fromParsedBody('ore')->default(0)->asInt(),
-                'goods' =>  $this->fromParsedBody('goods')->default(0)->asInt(),
-                'energy' =>  $this->fromParsedBody('energy')->default(0)->asInt(),
-                'corp' =>  $this->fromParsedBody('corp')->default(0)->asInt(),
-                'colonists' =>  $this->fromParsedBody('colonists')->default(0)->asInt(),
-                'credits' =>  $this->fromParsedBody('credits')->default(0)->asInt(),
-                'fighters' =>  $this->fromParsedBody('fighters')->default(0)->asInt(),
-                'torps' =>  $this->fromParsedBody('torps')->default(0)->asInt(),
-                'prod_organics' =>  $this->fromParsedBody('prod_organics')->default(0)->asInt(),
-                'prod_ore' =>  $this->fromParsedBody('prod_ore')->default(0)->asInt(),
-                'prod_goods' =>  $this->fromParsedBody('prod_goods')->default(0)->asInt(),
-                'prod_energy' =>  $this->fromParsedBody('prod_energy')->default(0)->asInt(),
-                'prod_fighters' =>  $this->fromParsedBody('prod_fighters')->default(0)->asInt(),
-                'prod_torp' =>  $this->fromParsedBody('prod_torp')->default(0)->asInt()
+                'owner' => $this->fromParsedBody('owner')->default(0)->asInt(),
+                'organics' => $this->fromParsedBody('organics')->default(0)->asInt(),
+                'ore' => $this->fromParsedBody('ore')->default(0)->asInt(),
+                'goods' => $this->fromParsedBody('goods')->default(0)->asInt(),
+                'energy' => $this->fromParsedBody('energy')->default(0)->asInt(),
+                'corp' => $this->fromParsedBody('corp')->default(0)->asInt(),
+                'colonists' => $this->fromParsedBody('colonists')->default(0)->asInt(),
+                'credits' => $this->fromParsedBody('credits')->default(0)->asInt(),
+                'fighters' => $this->fromParsedBody('fighters')->default(0)->asInt(),
+                'torps' => $this->fromParsedBody('torps')->default(0)->asInt(),
+                'prod_organics' => $this->fromParsedBody('prod_organics')->default(0)->asInt(),
+                'prod_ore' => $this->fromParsedBody('prod_ore')->default(0)->asInt(),
+                'prod_goods' => $this->fromParsedBody('prod_goods')->default(0)->asInt(),
+                'prod_energy' => $this->fromParsedBody('prod_energy')->default(0)->asInt(),
+                'prod_fighters' => $this->fromParsedBody('prod_fighters')->default(0)->asInt(),
+                'prod_torp' => $this->fromParsedBody('prod_torp')->default(0)->asInt()
             ], $planet);
-            
+
             $this->redirectTo('admin', [
                 'module' => 'planet',
                 'operation' => 'list',
