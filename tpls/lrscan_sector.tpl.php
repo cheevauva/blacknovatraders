@@ -41,5 +41,7 @@
         <td colspan="2"><?= htmlspecialchars($self->lastShipInSectorDetected) ?></td>
     </tr>
 </table>
-<a href="<?= route('move', ['sector' => $self->sector]); ?>"><?= $l->l_clickme; ?></a> <?= $l->l_lrs_moveto; ?> <?= $self->sector; ?>.
+<form action="<?= route('move', ['sector' => $self->sector]); ?>" method="post" class="d-inline">
+    <a href="javascript:;" onclick="parentNode.submit();"><?= $l->l_clickme; ?></a> <?= $l->l_lrs_moveto; ?> <?= $self->sector; ?>.
+</form>
 <?= include_footer(); ?>

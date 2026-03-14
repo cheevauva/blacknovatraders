@@ -20,12 +20,15 @@
     </tr>
     <?php foreach ($self->links as $link) : ?>
         <tr>
-            <td><a href="<?= route('move', ['sector' => $link['link_dest']]); ?>"><?= $link['link_dest']; ?></a></td>
+            <td>
+                <form action="<?= route('move', ['sector' => $link['link_dest']]); ?>" method="post" class="d-inline">
+                    <a href="javascript:;" onclick="parentNode.submit();"><?= $link['link_dest']; ?></a>&nbsp;
+                </form>
             <td><a href="<?= route('lrscan_sector', ['sector' => $link['link_dest']]); ?>"><?= $l->l_lrs_scan; ?></a></td>
             <td><?= $link['num_links']; ?></td>
             <td><?= $link['num_ships']; ?></td>
             <td><?php if ($link['port_type'] !== 'none'): ?><img src="images/<?= $link['port_type']; ?>.gif"><?php endif; ?></td>
-            <td><?= t_port($link['port_type']);?></td>
+            <td><?= t_port($link['port_type']); ?></td>
             <td><?= $link['has_planet']; ?></td>
             <td><?= $link['has_mines']; ?></td>
             <td><?= $link['has_fighters']; ?></td>
@@ -36,5 +39,5 @@
     <?php endforeach; ?>
 </table>
 <br/>
-<?= $l->l_lrs_click;?>
+<?= $l->l_lrs_click; ?>
 <?= include_footer(); ?>
