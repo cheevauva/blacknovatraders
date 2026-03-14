@@ -164,7 +164,7 @@ function standard_report()
             }
 
             echo "<TR>";
-            echo "<TD><A HREF=rsmove.php?engage=1&destination=" . $planet['sector_id'] . ">" . $planet['sector_id'] . "</A></TD>";
+            echo "<TD><A HREF=" . route('rsmove', 'engage=1&sector=' . $planet['sector_id']) . ">" . $planet['sector_id'] . "</A></TD>";
             echo "<TD>" . $planet['name'] . "</TD>";
             echo "<TD>" . NUMBER($planet['ore']) . "</TD>";
             echo "<TD>" . NUMBER($planet['organics']) . "</TD>";
@@ -289,7 +289,7 @@ function planet_production_change()
             }
 
             echo "<TR>";
-            echo "<TD><A HREF=rsmove.php?engage=1&destination=" . $planet['sector_id'] . ">" . $planet['sector_id'] . "</A></TD>";
+            echo "<TD><A HREF=" . route('rsmove', 'engage=1&sector=' . $planet['sector_id']) . ">" . $planet['sector_id'] . "</A></TD>";
             echo "<TD>" . $planet['name'] . "</TD>";
             echo "<TD>" . "<input size=6 type=text name=\"prod_ore[" . $planet["planet_id"] . "]\" value=\"" . $planet["prod_ore"] . "\">" . "</TD>";
             echo "<TD>" . "<input size=6 type=text name=\"prod_organics[" . $planet["planet_id"] . "]\" value=\"" . $planet["prod_organics"] . "\">" . "</TD>";

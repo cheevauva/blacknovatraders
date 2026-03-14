@@ -18,12 +18,13 @@ class GameSectorFightersServant extends \UUA\Servant
 {
 
     use \BNT\Traits\TranslateTrait;
+    use \BNT\Traits\OkTrait;
 
     public array $playerinfo;
     public int $sector;
     public int $totalSectorFighters;
     public bool $isRSMove = false;
-    public float|int $energyScooped;
+    public int $energyScooped = 0;
     public protected(set) array $messages = [];
     public protected(set) bool $shipDestroyed = false;
 

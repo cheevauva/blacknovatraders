@@ -106,7 +106,7 @@ if ($num_planets < 1) {
         ]);
 
         echo "<TR>";
-        echo "<TD><A HREF=rsmove.php?engage=1&destination=" . $planet['sector_id'] . ">" . $planet['sector_id'] . "</A></TD>";
+        echo "<TD><A HREF=" . route('rsmove', 'engage=1&destination=' . $planet['sector_id']) . ">" . $planet['sector_id'] . "</A></TD>";
         echo "<TD>" . $planet['name'] . "</TD>";
         echo "<TD>" . NUMBER($planet['ore']) . "</TD>";
         echo "<TD>" . NUMBER($planet['organics']) . "</TD>";

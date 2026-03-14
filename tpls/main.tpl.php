@@ -253,25 +253,25 @@ $planettypes = planetTypes();
                     <td>
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset1']; ?>">
+                                <a class="nav-link d-inline" href="<?= route('rsmove', ['engage' => 1, 'sector' => $self->playerinfo['preset1']]); ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset1']; ?>
                                 </a>
                                 <a class="nav-link d-inline ms-2" href="<?= route('preset'); ?>">[<?= $l->l_set; ?>]</a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset2']; ?>">
+                                <a class="nav-link d-inline" href="<?= route('rsmove', ['engage' => 1, 'sector' => $self->playerinfo['preset2']]); ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset2']; ?>
                                 </a>
                                 <a class="nav-link d-inline ms-2" href="<?= route('preset'); ?>">[<?= $l->l_set; ?>]</a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link d-inline" href="rsmove.php?engage=1&amp;destination=<?= $self->playerinfo['preset3']; ?>">
+                                <a class="nav-link d-inline" href="<?= route('rsmove', ['engage' => 1, 'sector' => $self->playerinfo['preset3']]); ?>">
                                     =&gt;&nbsp;<?= $self->playerinfo['preset3']; ?>
                                 </a>
                                 <a class="nav-link d-inline ms-2" href="<?= route('preset'); ?>">[<?= $l->l_set; ?>]</a>
                             </li>
                             <li class="list-group-item">
-                                <a class="nav-link" href="rsmove.php">=&gt;&nbsp;<?= $l->l_main_other; ?></a>
+                                <a class="nav-link" href="<?= route('rsmove');?>">=&gt;&nbsp;<?= $l->l_main_other; ?></a>
                             </li>
                         </ul>
                     </td>

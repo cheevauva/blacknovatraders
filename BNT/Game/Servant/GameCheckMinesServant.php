@@ -10,10 +10,11 @@ use BNT\Ship\DAO\ShipByIdDAO;
 class GameCheckMinesServant extends \UUA\Servant
 {
 
+    use \BNT\Traits\OkTrait;
+
     public int $sector;
     public array $playerinfo;
     public protected(set) int $totalSectorMines;
-    public protected(set) bool $ok = true;
 
     #[\Override]
     public function serve(): void
@@ -56,7 +57,7 @@ class GameCheckMinesServant extends \UUA\Servant
         $mineOwner = ShipByIdDAO::call($this->container, $defences[0]['ship_id'])->ship;
 
         if ($mineOwner['team'] != $this->playerinfo['team'] || empty($this->playerinfo['team'])) {
-            $this->ok = false;
+            $this->notOk();
         }
     }
 }

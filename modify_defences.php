@@ -79,7 +79,12 @@ switch ($response) {
             $countres = $db->adoExecute("SELECT SUM(quantity) as totalfighters FROM sector_defence where sector_id = $sector and defence_type = 'F'");
             $ttl = $countres->fields;
             $total_sector_fighters = $ttl['totalfighters'];
-            include("sector_fighters.php");
+
+            $sectorFighters = \BNT\Game\Servant\GameSectorFightersServant::new($container);
+            $sectorFighters->totalSectorFighters = (int) $total_sector_fighters;
+            $sectorFighters->sector=  $sector;
+            $sectorFighters->playerinfo =  $playerinfo;
+            $sectorFighters->serve();
         } else {
             // Attack mines goes here
             $countres = $db->adoExecute("SELECT SUM(quantity) as totalmines FROM sector_defence where sector_id = $sector and defence_type = 'M'");
