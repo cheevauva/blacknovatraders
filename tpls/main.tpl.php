@@ -189,14 +189,14 @@ $planettypes = planetTypes();
                         <?php foreach ($self->defencesInSector as $defence) : ?>
                             <td align=center valign=top>
                                 <?php if ($defence['defence_type'] == 'F') : ?>
-                                    <a href="modify_defences.php?defence_id=<?= $defence['defence_id']; ?>">
+                                    <a href="<?= route('modify_defences', ['defence_id' => $defence['defence_id']]); ?>">
                                         <img src="images/fighters.gif" border=0>
                                     </a>
                                     <?php $def_type = $l->l_fighters; ?>
                                     <?php $def_type .= ($defence['fm_setting'] == 'attack') ? $l->l_md_attack : $l->l_md_toll; ?>
                                 <?php endif; ?>
                                 <?php if ($defence['defence_type'] == 'M') : ?>
-                                    <a href="modify_defences.php?defence_id=<?= $defence['defence_id']; ?>">
+                                    <a href="<?= route('modify_defences', ['defence_id' => $defence['defence_id']]); ?>">
                                         <img src="images/mines.gif" border=0>
                                     </a>
                                     <?php $def_type = $l->l_mines; ?>

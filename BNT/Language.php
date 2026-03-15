@@ -54,6 +54,7 @@ class Language
         'l_move_' => 'move.php',
         'l_sf_' => 'sector_fighters.php',
         'l_rs_' => 'rsmove.php',
+        'l_md_' => 'modify_defences.php',
     ];
 
     public function __construct(protected string $languageName)

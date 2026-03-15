@@ -27,6 +27,7 @@ BNT\FrontController::call($container, match (str_replace('?' . $_SERVER['QUERY_S
 
         return $new;
     })(),
+    '/modify_defences' =>  BNT\Controller\ModifyDefencesController::class,
     '/rsmove' => BNT\Controller\MoveRSController::class,
     '/move' => BNT\Controller\MoveController::class,
     '/lrscan' => BNT\Controller\LongRangeScanController::class,
