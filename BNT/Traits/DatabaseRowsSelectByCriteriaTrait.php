@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BNT\Traits;
 
 use Psr\Container\ContainerInterface;
+use BNT\DB\Criteria\Criteria;
 
 trait DatabaseRowsSelectByCriteriaTrait
 {
@@ -19,13 +20,20 @@ trait DatabaseRowsSelectByCriteriaTrait
         if (empty($this->criteria)) {
             return $this->items = $this->db()->fetchAll('SELECT * FROM ' . $table);
         }
-        
+
         $parameters = [];
         $where = [];
 
         foreach ($this->criteria as $field => $value) {
-            $where[] = sprintf('%s = :%s', $field, $field);
-            $parameters[$field] = $value;
+            if ($value instanceof Criteria) {
+                $value->field = $field;
+                
+                $where[] = strval($value);
+                $parameters[$field] = $value->value;
+            } else {
+                $where[] = sprintf('%s = :%s', $field, $field);
+                $parameters[$field] = $value;
+            }
         }
 
         return $this->items = $this->db()->fetchAll('SELECT * FROM ' . $table . ' WHERE ' . implode(' AND ', $where), $parameters);

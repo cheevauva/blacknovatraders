@@ -98,7 +98,9 @@ if ($swordfish != $adminpass) {
                     'sched_tow' => BNT\Scheduler\Servant\SchedulerTowServant::new($container),
                     'sched_ranking' => BNT\Scheduler\Servant\SchedulerRankingServant::new($container),
                     'sched_ports.php' => BNT\Scheduler\Servant\SchedulerPortsServant::new($container),
-                    
+                    'sched_igb.php' => BNT\Scheduler\Servant\SchedulerIGBServant::new ($container),
+                    'sched_apocalypse.php' => BNT\Scheduler\Servant\SchedulerApocalypseServant::new($container),
+                    'sched_defenses.php' => BNT\Scheduler\Servant\SchedulerDefensesServant::new($container),
                 });
                 $sched->multiplier = $multiplier;
                 $sched->serve();

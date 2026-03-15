@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BNT\Game\Servant;
 
-use BNT\Translate;
 use BNT\Log\LogTypeConstants;
 use BNT\Log\DAO\LogPlayerDAO;
 use BNT\Ship\DAO\ShipUpdateDAO;
@@ -33,6 +32,10 @@ class GameSectorFightersServant extends \UUA\Servant
     {
         global $level_factor;
         global $torp_dmg_rate;
+        
+        if (empty($this->totalSectorFighters)) {
+            return;
+        }
 
         $this->messages[] = $this->t('l_sf_attacking');
 

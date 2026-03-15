@@ -28,6 +28,10 @@ class GameSectorMinesServant extends \UUA\Servant
     #[\Override]
     public function serve(): void
     {
+        if (empty($this->totalSectorMines)) {
+            return;
+        }
+        
         $roll = $this->roll();
 
         // Red Alert: You are hit sir!!! Tell the player and put it in the log
