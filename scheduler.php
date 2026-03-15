@@ -54,8 +54,7 @@ include("header.php");
 
 
 bigtitle();
-
-require_once("sched_funcs.php");
+use BNT\Scheduler\Servant\SchedulerServant;
 
 srand((double)microtime() * 1000000);
 
@@ -94,7 +93,16 @@ if ($swordfish != $adminpass) {
 
             $sched_i = 0;
             while ($sched_i < $multiplier) {
-                include("$event[sched_file]");
+                $sched = SchedulerServant::as(match ($event['sched_file']) {
+                    'sched_turns' => BNT\Scheduler\Servant\SchedulerTurnServant::new($container),
+                    'sched_tow' => BNT\Scheduler\Servant\SchedulerTowServant::new($container),
+                    'sched_ranking' => BNT\Scheduler\Servant\SchedulerRankingServant::new($container),
+                    'sched_ports.php' => BNT\Scheduler\Servant\SchedulerPortsServant::new($container),
+                    
+                });
+                $sched->multiplier = $multiplier;
+                $sched->serve();
+                $multiplier = $sched->multiplier;
                 $sched_i++;
             }
             $sched_res->MoveNext();

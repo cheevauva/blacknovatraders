@@ -10,6 +10,16 @@ if (preg_match("/sched_news.php/i", $_SERVER['PHP_SELF'])) {
     echo "You can not access this file directly!";
     die();
 }
+function get_player_name($userid)
+{
+    global $db;
+
+    $query = $db->adoExecute("select character_name from ships where ship_id='$userid'");
+    $name = $query->fields;
+
+    return $name[character_name];
+}
+
 global $default_lang;
 include("languages/$default_lang" . ".inc");
 echo "<B>Posting News</B><BR><BR>";
