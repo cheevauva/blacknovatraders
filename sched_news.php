@@ -38,7 +38,7 @@ while (!$sql->EOF) {
             $headline = $l_news_p_headline2 . $planetcount . $l_news_planets;
                        $l_news_p_text502 = str_replace("[name]", $name, $l_news_p_text50);
                        $news = $db->Execute("INSERT INTO news (headline, newstext, user_id, date, news_type) VALUES ('$headline','$l_news_p_text502','$row[owner]',NOW(), 'planet50')");
-        }
+        } 
     } elseif ($row[amount] >= 25) {
                          $sql2 = $db->Execute("select * from news where user_id='$row[owner]' and news_type='planet25'");
 

@@ -14,6 +14,7 @@ use BNT\Game\Servant\GameCollectBountyServitor;
 use BNT\Game\Servant\GameKillPlayerServant;
 use BNT\Bounty\DAO\BountyCreateDAO;
 use BNT\Game\Servant\GameShipFightServant;
+use BNT\Game\Servant\GameShipSalvServant;
 use BNT\Ship\Ship;
 
 class GameAttackShipServant extends \UUA\Servant
@@ -35,6 +36,7 @@ class GameAttackShipServant extends \UUA\Servant
         global $bounty_maxvalue;
         global $bounty_ratio;
         global $bounty_minturns;
+        global $rating_combat_factor;
 
         $targetinfo = ShipByIdDAO::call($this->container, $this->ship)->ship;
         $success = (10 - $targetinfo['cloak'] + $this->playerinfo['sensors']) * 5;
@@ -92,10 +94,8 @@ class GameAttackShipServant extends \UUA\Servant
         $random_value = rand(1, 100);
 
         if (!empty($targetinfo['dev_emerwarp']) && $random_value > $chance) {
-            $rating_change = round($targetinfo['rating'] * .1);
             $dest_sector = rand(1, $sector_max);
 
-            $this->playerinfo['rating'] -= $rating_change;
             $this->playerinfoTurn();
             $this->playerinfoUpdate();
 
@@ -146,27 +146,38 @@ class GameAttackShipServant extends \UUA\Servant
         if ($target->armorPts < 1) {
             $this->targetDestroyed = true;
 
-            $this->messages[] = $this->t([$targetinfo['ship_name'], 'l_att_sdest']);
+            $this->messages[] = $this->t([$target->name, 'l_att_sdest']);
 
             if ($targetinfo['dev_escapepod'] == "Y") {
                 $this->messages[] = $this->t('l_att_espod');
 
-                $targetinfo['rating'] /= 2;
-
-                ShipRestoreFromEscapePodServant::call($this->container, $targetinfo);
-                LogPlayerDAO::call($this->container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, [$this->playerinfo['ship_name'], 'Y']);
+                ShipRestoreFromEscapePodServant::call($this->container, $target->id);
+                LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACK_LOSE, [$player->name, 'Y']);
                 GameCollectBountyServitor::call($this->container, $this->playerinfo['ship_id'], $targetinfo['ship_id']);
             } else {
-                LogPlayerDAO::call($this->container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_LOSE, [$this->playerinfo['ship_name'], 'N']);
-                GameKillPlayerServant::call($this->container, $targetinfo['ship_id']);
-                GameCollectBountyServitor::call($this->container, $this->playerinfo['ship_id'], $targetinfo['ship_id']);
+                LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACK_LOSE, [$player->name, 'N']);
+                GameKillPlayerServant::call($this->container, $target->id);
+                GameCollectBountyServitor::call($this->container, $player->id, $target->id);
             }
 
             if ($player->armorPts > 0) {
-                $rating_change = round($targetinfo['rating'] * $rating_combat_factor);
+                $salv = GameShipSalvServant::new($this->container);
+                $salv->player = $player;
+                $salv->target = $target;
+                $salv->serve();
 
-                $this->playerinfo = $this->calculateShip($targetinfo, $this->playerinfo, true, $target->armorPts, $target->fighters, $target->torpNum);
-                $this->playerinfo['rating'] -= $rating_change;
+                $armor_lost = $this->playerinfo['armor_pts'] - $player->armorPts;
+                $fighters_lost = $this->playerinfo['ship_fighters'] - $player->fighters;
+                $energy = $this->playerinfo['ship_energy'];
+
+                $this->playerinfo['ship_ore'] += $salv->salvOre;
+                $this->playerinfo['ship_organics'] += $salv->salvOrganics;
+                $this->playerinfo['ship_goods'] += $salv->salvGoods;
+                $this->playerinfo['credits'] += $salv->salvCredits;
+                $this->playerinfo['ship_energy'] = $energy;
+                $this->playerinfo['ship_fighters'] -= $fighters_lost;
+                $this->playerinfo['armor_pts'] -= $armor_lost;
+                $this->playerinfo['torps'] -= $torpNum;
                 $this->playerinfoTurn();
                 $this->playerinfoUpdate();
 
@@ -177,7 +188,6 @@ class GameAttackShipServant extends \UUA\Servant
                 'name' => $targetinfo['ship_name'],
             ]);
 
-            $rating_change = round($targetinfo['rating'] * .1);
             $targetArmorLost = $targetinfo['armor_pts'] - $target->armorPts;
             $targetFightersLost = $targetinfo['ship_fighters'] - $target->fighters;
 
@@ -200,7 +210,6 @@ class GameAttackShipServant extends \UUA\Servant
             $this->playerinfo['ship_fighters'] -= $playerFightersLost;
             $this->playerinfo['armor_pts'] -= $playerArmorLost;
             $this->playerinfo['torps'] -= $player->torpNum;
-            $this->playerinfo['rating'] -= $rating_change;
             $this->playerinfoTurn();
             $this->playerinfoUpdate();
 
@@ -215,8 +224,6 @@ class GameAttackShipServant extends \UUA\Servant
             if ($this->playerinfo['dev_escapepod'] == "Y") {
                 $this->messages[] = $this->t('l_att_loosepod');
 
-                $this->playerinfo['rating'] /= 2;
-
                 ShipRestoreFromEscapePodServant::call($this->container, $this->playerinfo);
                 GameCollectBountyServitor::call($this->container, $targetinfo['ship_id'], $this->playerinfo['ship_id']);
             } else {
@@ -227,100 +234,26 @@ class GameAttackShipServant extends \UUA\Servant
 
             if ($target->armorPts > 0) {
                 $targetinfo = $this->calculateShip($this->playerinfo, $targetinfo, false, $target->armorPts, $target->fighters, $target->torpNum, $salv_credits);
+                $armor_lost = $targetinfo['armor_pts'] - $armor;
+                $fighters_lost = $targetinfo['ship_fighters'] - $fighters;
+                $energy = $targetinfo['ship_energy'];
+
+                $salv = GameShipSalvServant::new($this->container);
+                $salv->player = $target;
+                $salv->target = $player;
+                $salv->serve();
+
+                $targetinfo['ship_ore'] += $salv->salvOre;
+                $targetinfo['ship_organics'] += $salv->salvOrganics;
+                $targetinfo['ship_goods'] += $salv->salvGoods;
+                $targetinfo['credits'] += $salv->salvCredits;
+                $targetinfo['ship_energy'] = $energy;
+                $targetinfo['ship_fighters'] -= $fighters_lost;
+                $targetinfo['armor_pts'] -= $armor_lost;
+                $targetinfo['torps'] -= $torpNum;
 
                 ShipUpdateDAO::call($this->container, $targetinfo, $targetinfo['ship_id']);
             }
         }
-    }
-
-    protected function calculatePlayerinfo(array $ship, $armor, $fighters, $torpNum): array
-    {
-        $ship = $this->calculateShip($ship, true, $armor, $fighters, $torpNum);
-        $ship['turns'] -= 1;
-        $ship['turns_used'] += 1;
-        $ship['rating'] -= $rating_change;
-
-        return $ship;
-    }
-
-    protected function calculateShip(array $ship1, array $ship2, bool $attacker, $armor, $fighters, $torpNum): array
-    {
-        global $upgrade_factor;
-        global $upgrade_cost;
-
-        $free_ore = round($ship1['ship_ore'] / 2);
-        $free_organics = round($ship1['ship_organics'] / 2);
-        $free_goods = round($ship1['ship_goods'] / 2);
-        $free_holds = NUM_HOLDS($ship2['hull']) - $ship2['ship_ore'] - $ship2['ship_organics'] - $ship2['ship_goods'] - $ship2['ship_colonists'];
-
-        if ($free_holds > $free_goods) {
-            $salv_goods = $free_goods;
-            $free_holds = $free_holds - $free_goods;
-        } elseif ($free_holds > 0) {
-            $salv_goods = $free_holds;
-            $free_holds = 0;
-        } else {
-            $salv_goods = 0;
-        }
-
-        if ($free_holds > $free_ore) {
-            $salv_ore = $free_ore;
-            $free_holds = $free_holds - $free_ore;
-        } elseif ($free_holds > 0) {
-            $salv_ore = $free_holds;
-            $free_holds = 0;
-        } else {
-            $salv_ore = 0;
-        }
-
-        if ($free_holds > $free_organics) {
-            $salv_organics = $free_organics;
-            $free_holds = $free_holds - $free_organics;
-        } elseif ($free_holds > 0) {
-            $salv_organics = $free_holds;
-            $free_holds = 0;
-        } else {
-            $salv_organics = 0;
-        }
-
-        $ship_value = $upgrade_cost * array_sum([
-            round(mypw($upgrade_factor, $ship1['hull'])),
-            round(mypw($upgrade_factor, $ship1['engines'])),
-            round(mypw($upgrade_factor, $ship1['power'])),
-            round(mypw($upgrade_factor, $ship1['computer'])),
-            round(mypw($upgrade_factor, $ship1['sensors'])),
-            round(mypw($upgrade_factor, $ship1['beams'])),
-            round(mypw($upgrade_factor, $ship1['torp_launchers'])),
-            round(mypw($upgrade_factor, $ship1['shields'])),
-            round(mypw($upgrade_factor, $ship1['armor'])),
-            round(mypw($upgrade_factor, $ship1['cloak']))
-        ]);
-        $ship_salvage_rate = rand(10, 20);
-        $ship_salvage = $ship_value * $ship_salvage_rate / 100;
-
-        $armor_lost = $ship2['armor_pts'] - $armor;
-        $fighters_lost = $ship2['ship_fighters'] - $fighters;
-        $energy = $ship2['ship_energy'];
-
-        $ship2['ship_ore'] += $salv_ore;
-        $ship2['ship_organics'] += $salv_organics;
-        $ship2['ship_goods'] += $salv_goods;
-        $ship2['credits'] += $ship_salvage;
-        $ship2['ship_energy'] = $energy;
-        $ship2['ship_fighters'] -= $fighters_lost;
-        $ship2['armor_pts'] -= $armor_lost;
-        $ship2['torps'] -= $torpNum;
-
-        $this->messages[] = $this->t($attacker ? 'l_att_ysalv' : 'l_att_salv', [
-            'salv_ore' => $salv_ore,
-            'salv_organics' => $salv_organics,
-            'salv_goods' => $salv_goods,
-            'ship_salvage_rate' => $ship_salvage_rate,
-            'ship_salvage' => $ship_salvage,
-            'name' => $ship2['ship_name'],
-            'rating_change' => number(abs($rating_change)),
-        ]);
-
-        return $ship;
     }
 }
