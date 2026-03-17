@@ -110,42 +110,46 @@ class GameShipFightServant extends \UUA\Servant
 
     protected function beamsVsFighters(Ship $player, Ship $target): void
     {
-        $temp = round($target->fighters / 2);
+        $fightersHalf = round($target->fighters / 2);
 
-        if ($player->beams > $temp) {
-            $lost = $target->fighters - $temp;
-            $player->beams -= $lost;
-            $target->fighters = $temp;
-            $this->messages[] = $this->t([$target->name, 'l_att_lost', $lost, 'l_fighters']);
+        if ($player->beams > $fightersHalf) {
+            $lost = $target->fighters - $fightersHalf;
         } else {
-            $target->fighters -= $player->beams;
-            $this->messages[] = $this->t([$target->name, 'l_att_lost', $player->beams, 'l_fighters']);
-            $player->beams = 0;
+            $lost = $player->beams;
         }
+
+        $this->messages[] = $this->t([$target->name, 'l_att_lost', $lost, 'l_fighters']);
+
+        $player->lossesInBattle()->beams($lost);
+        $target->lossesInBattle()->fighters($lost);
     }
 
     protected function beamsVsShields(Ship $player, Ship $target): void
     {
         if ($player->beams > $target->shields) {
-            $target->shields = 0;
-            $player->beams -= $target->shields;
-            $this->messages[] = $this->t([$target->name, 'l_att_sdown']);
+            $hits = $target->shields;
         } else {
-            $target->shields -= $player->beams;
-            $this->messages[] = $this->t([$target->name, 'l_att_shits', $player->beams, 'l_att_dmg']);
-            $player->beams = 0;
+            $hits = $player->beams;
         }
+
+        $this->messages[] = $this->t([$target->name, 'l_att_shits', $hits, 'l_att_dmg']);
+
+        $player->lossesInBattle()->beams($hits);
+        $target->lossesInBattle()->shields($hits);
     }
 
     protected function beamsVsArmor(Ship $player, Ship $target): void
     {
         if ($player->beams > $target->armorPts) {
-            $target->armorPts = 0;
-            $this->messages[] = $this->t([$target->name, 'l_att_sarm']);
+            $hits = $target->armorPts;
         } else {
-            $target->armorPts -= $player->beams;
-            $this->messages[] = $this->t([$target->name, 'l_att_ashit', $player->beams, 'l_att_dmg']);
+            $hits = $player->beams;
         }
+
+        $this->messages[] = $this->t([$target->name, 'l_att_ashit', $hits, 'l_att_dmg']);
+
+        $player->lossesInBattle()->beams($hits);
+        $target->lossesInBattle()->armorPts($hits);
     }
 
     protected function torpDmgVsFighters(Ship $player, Ship $target): void

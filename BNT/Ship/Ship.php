@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Ship;
 
+use BNT\Ship\DTO\ShipLossesInBattleDTO;
+
 class Ship
 {
 
@@ -31,6 +33,7 @@ class Ship
     public $torps;
     public $cloak;
     public $rating;
+    protected ?ShipLossesInBattleDTO $lossesInBattle;
     public array $ship;
 
     public function __construct(array $ship)
@@ -99,5 +102,10 @@ class Ship
             round(mypw($upgrade_factor, $this->armor)),
             round(mypw($upgrade_factor, $this->cloak))
         ]);
+    }
+
+    public function lossesInBattle(): ShipLossesInBattleDTO
+    {
+        return $this->lossesInBattle ?? new ShipLossesInBattleDTO();
     }
 }
