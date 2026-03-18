@@ -32,7 +32,6 @@ class Ship
     public $torpLaunchers;
     public $torps;
     public $cloak;
-    public $rating;
     protected ?ShipLossesInBattleDTO $lossesInBattle;
     public array $ship;
 
@@ -62,7 +61,6 @@ class Ship
         $this->torpLaunchers = $ship['torp_launchers'];
         $this->torps = $ship['torps'];
         $this->cloak = $ship['cloak'];
-        $this->rating = $ship['rating'];
 
         if ($this->beams > $this->energy) {
             $this->beams = $this->energy;
@@ -106,6 +104,6 @@ class Ship
 
     public function lossesInBattle(): ShipLossesInBattleDTO
     {
-        return $this->lossesInBattle ?? new ShipLossesInBattleDTO();
+        return $this->lossesInBattle = $this->lossesInBattle ?? new ShipLossesInBattleDTO($this);
     }
 }

@@ -52,7 +52,7 @@ class Translate
         $tags = $this->tags;
 
         foreach ($tags as $idxTag => $tag) {
-            if ($this->language && strpos($tag, 'l_') === 0) {
+            if ($this->language && strpos(strval($tag), 'l_') === 0) {
                 $tag = $this->language->$tag;
             }
 

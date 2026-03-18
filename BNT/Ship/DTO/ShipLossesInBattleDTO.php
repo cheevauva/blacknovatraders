@@ -13,10 +13,17 @@ class ShipLossesInBattleDTO extends \UUA\DTO
     public $armorPts = 0;
     public $beams = 0;
     public $shields = 0;
+    public $torpDmg = 0;
 
     public function __construct(protected Ship $ship)
     {
         
+    }
+
+    public function torpDmg($torpDmg): void
+    {
+        $this->torpDmg += $torpDmg;
+        $this->ship->torpDmg -= $torpDmg;
     }
 
     public function armorPts($armorPts): void
