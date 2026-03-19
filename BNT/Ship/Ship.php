@@ -104,6 +104,6 @@ class Ship
 
     public function lossesInBattle(): ShipLossesInBattleDTO
     {
-        return $this->lossesInBattle = $this->lossesInBattle ?? new ShipLossesInBattleDTO($this);
+        return $this->lossesInBattle ??= new ShipLossesInBattleDTO($this);
     }
 }

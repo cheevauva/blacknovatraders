@@ -48,71 +48,38 @@ class GameShipFightServant extends \UUA\Servant
 
         $this->messages[] = $this->t('l_att_beams');
 
-        if ($target->fighters > 0 && $player->beams > 0) {
-            $this->beamsVsFighters($player, $target);
-        }
-
-        if ($player->fighters > 0 && $target->beams > 0) {
-            $this->beamsVsFighters($target, $player);
-        }
-
-        if ($player->beams > 0) {
-            $this->beamsVsShields($player, $target);
-        }
-
-        if ($target->beams > 0) {
-            $this->beamsVsShields($target, $player);
-        }
-
-        if ($player->beams > 0) {
-            $this->beamsVsArmor($player, $target);
-        }
-
-        if ($target->beams > 0) {
-            $this->beamsVsArmor($target, $player);
-        }
+        $this->beamsVsFighters($player, $target);
+        $this->beamsVsFighters($target, $player);
+        $this->beamsVsShields($player, $target);
+        $this->beamsVsShields($target, $player);
+        $this->beamsVsArmor($player, $target);
+        $this->beamsVsArmor($target, $player);
 
         $this->messages[] = $this->t('l_att_torps');
 
-        if ($target->fighters > 0 && $player->torpDmg > 0) {
-            $this->torpDmgVsFighters($player, $target);
-        }
-
-        if ($player->fighters > 0 && $target->torpDmg > 0) {
-            $this->torpDmgVsFighters($target, $player);
-        }
-
-        if ($player->torpDmg > 0) {
-            $this->torpDmgVsArmor($player, $target);
-        }
-
-        if ($target->torpDmg > 0) {
-            $this->torpDmgVsArmor($target, $player);
-        }
+        $this->torpDmgVsFighters($player, $target);
+        $this->torpDmgVsFighters($target, $player);
+        $this->torpDmgVsArmor($player, $target);
+        $this->torpDmgVsArmor($target, $player);
 
         $this->messages[] = $this->t('l_att_fighters');
 
-        if ($player->fighters > 0 && $target->fighters > 0) {
-            [$targetFightersLost, $playerFightersLost] = [$this->fightersVsFighters($player, $target), $this->fightersVsFighters($target, $player)];
-            //
-            $target->lossesInBattle()->fighters($targetFightersLost);
-            $target->lossesInBattle()->fighters($playerFightersLost);
-        }
+        [$targetFightersLost, $playerFightersLost] = [$this->fightersVsFighters($player, $target), $this->fightersVsFighters($target, $player)];
+        //
+        $target->lossesInBattle()->fighters($targetFightersLost);
+        $player->lossesInBattle()->fighters($playerFightersLost);
 
-        if ($player->fighters > 0) {
-            $this->fightersVsArmor($player, $target);
-        }
-
-        if ($target->fighters > 0) {
-            $this->fightersVsArmor($target, $player);
-        }
+        $this->fightersVsArmor($player, $target);
+        $this->fightersVsArmor($target, $player);
     }
 
     protected function beamsVsFighters(Ship $player, Ship $target): void
     {
         $fightersHalf = round($target->fighters / 2);
 
-        if ($player->beams > $fightersHalf) {
+        if ($target->fighters <= 0) {
+            $lost = 0;
+        } elseif ($player->beams > $fightersHalf) {
             $lost = $target->fighters - $fightersHalf;
         } else {
             $lost = $player->beams;
@@ -126,7 +93,9 @@ class GameShipFightServant extends \UUA\Servant
 
     protected function beamsVsShields(Ship $player, Ship $target): void
     {
-        if ($player->beams > $target->shields) {
+        if ($target->shields <= 0) {
+            $hits = 0;
+        } elseif ($player->beams > $target->shields) {
             $hits = $target->shields;
         } else {
             $hits = $player->beams;
@@ -140,7 +109,9 @@ class GameShipFightServant extends \UUA\Servant
 
     protected function beamsVsArmor(Ship $player, Ship $target): void
     {
-        if ($player->beams > $target->armorPts) {
+        if ($target->armorPts <= 0) {
+            $hits = 0;
+        } elseif ($player->beams > $target->armorPts) {
             $hits = $target->armorPts;
         } else {
             $hits = $player->beams;
@@ -148,7 +119,6 @@ class GameShipFightServant extends \UUA\Servant
 
         $this->messages[] = $this->t([$target->name, 'l_att_ashit', $hits, 'l_att_dmg']);
 
-        $player->lossesInBattle()->beams($hits);
         $target->lossesInBattle()->armorPts($hits);
     }
 
@@ -156,7 +126,9 @@ class GameShipFightServant extends \UUA\Servant
     {
         $fightersHalf = round($target->fighters / 2);
 
-        if ($player->torpDmg > $fightersHalf) {
+        if ($target->fighters <= 0) {
+            $lost = 0;
+        } elseif ($player->torpDmg > $fightersHalf) {
             $lost = $target->fighters - $fightersHalf;
         } else {
             $lost = $player->torpDmg;
@@ -170,18 +142,24 @@ class GameShipFightServant extends \UUA\Servant
 
     protected function torpDmgVsArmor(Ship $player, Ship $target): void
     {
-        if ($player->torpDmg > $target->armorPts) {
+        if ($target->armorPts <= 0) {
+            $lost = 0;
+        } elseif ($player->torpDmg > $target->armorPts) {
             $lost = $target->armorPts;
         } else {
             $lost = $player->torpDmg;
         }
+
+        $this->messages[] = $this->t([$target->name, 'l_att_ashit', $lost, 'l_att_dmg']);
 
         $target->lossesInBattle()->armorPts($lost);
     }
 
     protected function fightersVsFighters(Ship $player, Ship $target): mixed
     {
-        if ($player->fighters > $target->fighters) {
+        if ($target->fighters <= 0) {
+            $lost = 0;
+        } elseif ($player->fighters > $target->fighters) {
             $lost = $target->fighters;
         } else {
             $lost = $player->fighters;
@@ -194,7 +172,9 @@ class GameShipFightServant extends \UUA\Servant
 
     protected function fightersVsArmor(Ship $player, Ship $target): void
     {
-        if ($player->fighters > $target->armorPts) {
+        if ($target->armorPts <= 0) {
+            $lost = 0;
+        } elseif ($player->fighters > $target->armorPts) {
             $lost = $target->armorPts;
         } else {
             $lost = $player->fighters;
