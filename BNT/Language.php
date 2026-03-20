@@ -83,11 +83,11 @@ class Language
         }
     }
 
-    public function t(array|string $tag, array $replace = [], ?string $format = null): Translate
+    public function t(array|string $tag, array $replace = []): Translate
     {
         $translate = new Translate;
         $translate->l($this);
-        $translate->translate($tag, $replace, $format);
+        $translate->translate($tag, $replace);
 
         return $translate;
     }

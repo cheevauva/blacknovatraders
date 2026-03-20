@@ -14,12 +14,17 @@ trait MessagesTrait
      */
     public protected(set) array $messages = [];
 
+    protected function mt(array|string $tag, array $replace = []): void
+    {
+        $this->messages[] = new Translate()->translate($tag, $replace);
+    }
+
     protected function messagesAppend(string|array|Translate $messages): void
     {
         if (is_string($messages)) {
             $messages = new Translate($messages);
         }
-        
+
         if ($messages instanceof Translate) {
             $messages = [$messages];
         }

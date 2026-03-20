@@ -33,7 +33,7 @@ class Translate
     /**
      * @return static
      */
-    public function translate(array|string $tag, array $replace = [], ?string $format = null)
+    public function translate(array|string $tag, array $replace = [])
     {
         if (is_array($tag)) {
             $this->tags = $tag;
@@ -42,7 +42,6 @@ class Translate
         }
 
         $this->replace = $replace;
-        $this->format = $format;
 
         return $this;
     }

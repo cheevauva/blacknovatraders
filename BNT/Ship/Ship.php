@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace BNT\Ship;
 
-use BNT\Ship\DTO\ShipLossesInBattleDTO;
+use BNT\Ship\VO\ShipLossesInBattleVO;
 
 class Ship
 {
 
     public int $id;
     public $name;
-    public $beams;
+    public $numBeams;
+    public $numShields;
+    public $numTorp;
+    public $numTorpLaunchers;
     public $energy;
-    public $shields;
-    public $torpNum;
     public $fighters;
     public $torpDmg;
     public $armor;
@@ -32,7 +33,7 @@ class Ship
     public $torpLaunchers;
     public $torps;
     public $cloak;
-    protected ?ShipLossesInBattleDTO $lossesInBattle;
+    protected ?ShipLossesInBattleVO $lossesInBattle;
     public array $ship;
 
     public function __construct(array $ship)
@@ -44,8 +45,6 @@ class Ship
         $this->id = $ship['ship_id'];
         $this->name = $ship['ship_name'];
         $this->energy = $this->ship['ship_energy'];
-        $this->beams = NUM_BEAMS($this->ship['beams']);
-        $this->shields = NUM_SHIELDS($this->ship['shields']);
         $this->armorPts = $this->ship['armor_pts'];
         $this->armor = $this->ship['armor'];
         $this->fighters = $this->ship['ship_fighters'];
@@ -61,26 +60,12 @@ class Ship
         $this->torpLaunchers = $ship['torp_launchers'];
         $this->torps = $ship['torps'];
         $this->cloak = $ship['cloak'];
-
-        if ($this->beams > $this->energy) {
-            $this->beams = $this->energy;
-        }
-
-        $this->energy -= $this->beams;
-
-        if ($this->shields > $this->energy) {
-            $this->shields = $this->energy;
-        }
-
-        $this->energy -= $this->shields;
-
-        $this->torpNum = round(mypw($level_factor, $this->torpLaunchers)) * 10;
-
-        if ($this->torpNum > $this->torps) {
-            $this->torpNum = $this->torps;
-        }
-
-        $this->torpDmg = $torp_dmg_rate * $this->torpNum;
+        //
+        $this->numBeams = NUM_BEAMS($this->ship['beams']);
+        $this->numShields = NUM_SHIELDS($this->ship['shields']);
+        $this->numTorpLaunchers = round(mypw($level_factor, $this->torpLaunchers)) * 10;
+        $this->numTorp = $this->numTorpLaunchers > $this->torps ? $this->torps : $this->numTorpLaunchers;
+        $this->torpDmg = $torp_dmg_rate * $this->numTorp;
     }
 
     public function upgradeValue(): float
@@ -94,16 +79,16 @@ class Ship
             round(mypw($upgrade_factor, $this->power)),
             round(mypw($upgrade_factor, $this->computer)),
             round(mypw($upgrade_factor, $this->sensors)),
-            round(mypw($upgrade_factor, $this->beams)),
+            round(mypw($upgrade_factor, $this->numBeams)),
             round(mypw($upgrade_factor, $this->torpLaunchers)),
-            round(mypw($upgrade_factor, $this->shields)),
+            round(mypw($upgrade_factor, $this->numShields)),
             round(mypw($upgrade_factor, $this->armor)),
             round(mypw($upgrade_factor, $this->cloak))
         ]);
     }
 
-    public function lossesInBattle(): ShipLossesInBattleDTO
+    public function lossesInBattle(): ShipLossesInBattleVO
     {
-        return $this->lossesInBattle ??= new ShipLossesInBattleDTO($this);
+        return $this->lossesInBattle ??= new ShipLossesInBattleVO($this);
     }
 }

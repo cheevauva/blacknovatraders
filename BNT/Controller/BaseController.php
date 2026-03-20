@@ -174,9 +174,9 @@ abstract class BaseController extends \UUA\Unit
         return $this->fetch($this->queryParams, $name);
     }
 
-    protected function t(array|string $tag, array $replace = [], ?string $format = null): Translate
+    protected function t(array|string $tag, array $replace = []): Translate
     {
-        return $this->l->t($tag, $replace, $format);
+        return $this->l->t($tag, $replace);
     }
 
     protected function fetch(array $data, ?string $path = null): Fetch

@@ -9,8 +9,8 @@ use BNT\Translate;
 trait TranslateTrait
 {
 
-    protected function t(array|string $tag, array $replace = [], ?string $format = null): Translate
+    protected function t(array|string $tag, array $replace = []): Translate
     {
-        return new Translate()->translate($tag, $replace, $format);
+        return new Translate()->translate($tag, $replace);
     }
 }

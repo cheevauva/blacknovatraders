@@ -67,7 +67,7 @@ class GameAttackShipServant extends \UUA\Servant
         }
 
         if ($flee < $roll2) {
-            $this->messages[] = $this->t('l_att_flee');
+            $this->mt('l_att_flee');
             $this->playerinfoTurn();
             $this->playerinfoUpdate();
 
@@ -76,7 +76,7 @@ class GameAttackShipServant extends \UUA\Servant
         }
 
         if ($roll > $success) {
-            $this->messages[] = $this->t('l_planet_noscan');
+            $this->mt('l_planet_noscan');
             $this->playerinfoTurn();
             $this->playerinfoUpdate();
             LogPlayerDAO::call($this->container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACK_OUTSCAN, $this->playerinfo['ship_name']);
@@ -108,7 +108,7 @@ class GameAttackShipServant extends \UUA\Servant
             ShipUpdateDAO::call($this->container, $targetinfo, $targetinfo['ship_id']);
             MovementLogDAO::call($this->container, $targetinfo['ship_id'], $dest_sector);
 
-            $this->messages[] = $this->t('l_att_ewd');
+            $this->mt('l_att_ewd');
             return;
         }
 
@@ -125,7 +125,7 @@ class GameAttackShipServant extends \UUA\Servant
                     'amount' => $bounty,
                 ]);
                 LogPlayerDAO::call($this->container, $this->playerinfo['ship_id'], LogTypeConstants::LOG_BOUNTY_FEDBOUNTY, $bounty);
-                $this->messages[] = $this->t('l_by_fedbounty2');
+                $this->mt('l_by_fedbounty2');
             }
         }
 
@@ -145,115 +145,80 @@ class GameAttackShipServant extends \UUA\Servant
 
         if ($target->armorPts < 1) {
             $this->targetDestroyed = true;
-
-            $this->messages[] = $this->t([$target->name, 'l_att_sdest']);
-
-            if ($targetinfo['dev_escapepod'] == "Y") {
-                $this->messages[] = $this->t('l_att_espod');
-
-                ShipRestoreFromEscapePodServant::call($this->container, $target->id);
-                LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACK_LOSE, [$player->name, 'Y']);
-                GameCollectBountyServitor::call($this->container, $this->playerinfo['ship_id'], $targetinfo['ship_id']);
-            } else {
-                LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACK_LOSE, [$player->name, 'N']);
-                GameKillPlayerServant::call($this->container, $target->id);
-                GameCollectBountyServitor::call($this->container, $player->id, $target->id);
-            }
-
-            if ($player->armorPts > 0) {
-                $salv = GameShipSalvServant::new($this->container);
-                $salv->player = $player;
-                $salv->target = $target;
-                $salv->serve();
-
-                $armor_lost = $this->playerinfo['armor_pts'] - $player->armorPts;
-                $fighters_lost = $this->playerinfo['ship_fighters'] - $player->fighters;
-                $energy = $this->playerinfo['ship_energy'];
-
-                $this->playerinfo['ship_ore'] += $salv->salvOre;
-                $this->playerinfo['ship_organics'] += $salv->salvOrganics;
-                $this->playerinfo['ship_goods'] += $salv->salvGoods;
-                $this->playerinfo['credits'] += $salv->salvCredits;
-                $this->playerinfo['ship_energy'] = $energy;
-                $this->playerinfo['ship_fighters'] -= $fighters_lost;
-                $this->playerinfo['armor_pts'] -= $armor_lost;
-                $this->playerinfo['torps'] -= $torpNum;
-                $this->playerinfoTurn();
-                $this->playerinfoUpdate();
-
-                $this->messages[] = $this->t(['l_att_ylost', $armor_lost, 'l_armorpts', $fighters_lost, ',', 'l_fighters', 'l_att_andused', $player->torpNum, 'l_torps']);
-            }
+            $this->shipDestroy($player, $target);
         } else {
-            $this->messages[] = $this->t('l_att_stilship', [
-                'name' => $targetinfo['ship_name'],
+            $this->mt('l_att_stilship', [
+                'name' => $target->name
             ]);
 
-            $targetArmorLost = $targetinfo['armor_pts'] - $target->armorPts;
-            $targetFightersLost = $targetinfo['ship_fighters'] - $target->fighters;
+            $loss = $target->lossesInBattle();
 
-            LogPlayerDAO::call($this->container, $targetinfo['ship_id'], LogTypeConstants::LOG_ATTACKED_WIN, [
-                $this->playerinfo['ship_name'],
-                $targetArmorLost,
-                $targetFightersLost
-            ]);
+            LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACKED_WIN, [$player->name, $loss->armorPts, $loss->fighters]);
 
-            $targetinfo['ship_fighters'] -= $targetFightersLost;
-            $targetinfo['armor_pts'] -= $targetArmorLost;
-            $targetinfo['torps'] -= $target->torpNum;
+            $targetinfo['ship_energy'] = $loss->energy;
+            $targetinfo['ship_fighters'] -= $loss->fighters;
+            $targetinfo['armor_pts'] -= $loss->armorPts;
+            $targetinfo['torps'] -= $loss->numTorps;
 
             ShipUpdateDAO::call($this->container, $targetinfo, $targetinfo['ship_id']);
 
-            $playerArmorLost = $this->playerinfo['armor_pts'] - $player->armorPts;
-            $playerFightersLost = $this->playerinfo['ship_fighters'] - $player->fighters;
+            $playerLoss = $player->lossesInBattle();
 
-            $this->playerinfo['ship_energy'] = $energy;
-            $this->playerinfo['ship_fighters'] -= $playerFightersLost;
-            $this->playerinfo['armor_pts'] -= $playerArmorLost;
-            $this->playerinfo['torps'] -= $player->torpNum;
+            $this->playerinfo['ship_energy'] = $playerLoss->energy;
+            $this->playerinfo['ship_fighters'] -= $playerLoss->fighters;
+            $this->playerinfo['armor_pts'] -= $playerLoss->armorPts;
+            $this->playerinfo['torps'] -= $playerLoss->numTorps;
             $this->playerinfoTurn();
             $this->playerinfoUpdate();
 
-            $this->messages[] = $this->t(['l_att_ylost', $armor_lost, 'l_armorpts', $fighters_lost, 'l_fighters', ',', 'l_att_andused', $player->torpNum, 'l_torps']);
+            $this->mt([$player->name, $loss->armorPts, 'l_armorpts', $loss->fighters, 'l_fighters', ',', 'l_att_andused', $loss->numTorp, 'l_torps']);
         }
 
         if ($player->armorPts < 1) {
             $this->playerDestroyed = true;
+            $this->shipDestroy($target, $player);
+        }
+    }
 
-            $this->messages[] = $this->t('l_att_yshiplost');
+    protected function shipDestroy(Ship $player, Ship $target): void
+    {
+        $this->mt([$target->name, 'l_att_sdest']);
 
-            if ($this->playerinfo['dev_escapepod'] == "Y") {
-                $this->messages[] = $this->t('l_att_loosepod');
+        if ($target->escapepod == 'Y') {
+            $this->mt('l_att_espod');
 
-                ShipRestoreFromEscapePodServant::call($this->container, $this->playerinfo);
-                GameCollectBountyServitor::call($this->container, $targetinfo['ship_id'], $this->playerinfo['ship_id']);
-            } else {
-                $this->messages[] = 'Didnt have pod?! ' . $this->playerinfo['dev_escapepod'];
-                GameKillPlayerServant::call($this->container, $this->playerinfo['ship_id']);
-                GameCollectBountyServitor::call($this->container, $targetinfo['ship_id'], $this->playerinfo['ship_id']);
-            }
+            ShipRestoreFromEscapePodServant::call($this->container, $target->id);
+            LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACK_LOSE, [$player->name, 'Y']);
+            GameCollectBountyServitor::call($this->container, $player->id, $target->id);
+        } else {
+            LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACK_LOSE, [$player->name, 'N']);
+            GameKillPlayerServant::call($this->container, $target->id);
+            GameCollectBountyServitor::call($this->container, $player->id, $target->id);
+        }
 
-            if ($target->armorPts > 0) {
-                $targetinfo = $this->calculateShip($this->playerinfo, $targetinfo, false, $target->armorPts, $target->fighters, $target->torpNum, $salv_credits);
-                $armor_lost = $targetinfo['armor_pts'] - $armor;
-                $fighters_lost = $targetinfo['ship_fighters'] - $fighters;
-                $energy = $targetinfo['ship_energy'];
+        if ($player->armorPts > 0) {
+            $salv = GameShipSalvServant::new($this->container);
+            $salv->player = $player;
+            $salv->target = $target;
+            $salv->serve();
 
-                $salv = GameShipSalvServant::new($this->container);
-                $salv->player = $target;
-                $salv->target = $player;
-                $salv->serve();
+            $loss = $player->lossesInBattle();
 
-                $targetinfo['ship_ore'] += $salv->salvOre;
-                $targetinfo['ship_organics'] += $salv->salvOrganics;
-                $targetinfo['ship_goods'] += $salv->salvGoods;
-                $targetinfo['credits'] += $salv->salvCredits;
-                $targetinfo['ship_energy'] = $energy;
-                $targetinfo['ship_fighters'] -= $fighters_lost;
-                $targetinfo['armor_pts'] -= $armor_lost;
-                $targetinfo['torps'] -= $torpNum;
+            $playerinfo = $player->ship;
+            $playerinfo['ship_ore'] += $salv->salvOre;
+            $playerinfo['ship_organics'] += $salv->salvOrganics;
+            $playerinfo['ship_goods'] += $salv->salvGoods;
+            $playerinfo['credits'] += $salv->salvCredits;
+            $playerinfo['ship_energy'] -= $loss->energy;
+            $playerinfo['ship_fighters'] -= $loss->fighters;
+            $playerinfo['armor_pts'] -= $loss->armorPts;
+            $playerinfo['torps'] -= $loss->torpNums;
+            $playerinfo['turns'] -= 1;
+            $playerinfo['turns_used'] += 1;
 
-                ShipUpdateDAO::call($this->container, $targetinfo, $targetinfo['ship_id']);
-            }
+            ShipUpdateDAO::call($this->container, $playerinfo, $playerinfo);
+
+            $this->mt([$player->name, $loss->armorPts, 'l_armorpts', $loss->fighters, ',', 'l_fighters', 'l_att_andused', $loss->numTorps, 'l_torps']);
         }
     }
 }

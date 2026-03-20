@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BNT\Ship\DTO;
+namespace BNT\Ship\VO;
 
 use BNT\Ship\Ship;
 
-class ShipLossesInBattleDTO extends \UUA\DTO
+class ShipLossesInBattleVO extends \UUA\VO
 {
 
+    public $energy = 0;
     public $fighters = 0;
     public $armorPts = 0;
     public $beams = 0;
@@ -18,6 +19,16 @@ class ShipLossesInBattleDTO extends \UUA\DTO
     public function __construct(protected Ship $ship)
     {
         
+    }
+
+    public function energy($energy): void
+    {
+        if ($this->ship->energy - $energy < 0) {
+            $energy = $this->ship->energy;
+        }
+
+        $this->energy += $energy;
+        $this->ship->energy -= $energy;
     }
 
     public function torpDmg($torpDmg): void
@@ -52,21 +63,21 @@ class ShipLossesInBattleDTO extends \UUA\DTO
 
     public function beams($beams): void
     {
-        if ($this->ship->beams - $beams < 0) {
-            $beams = $this->ship->beams;
+        if ($this->ship->numBeams - $beams < 0) {
+            $beams = $this->ship->numBeams;
         }
 
         $this->beams += $beams;
-        $this->ship->beams -= $beams;
+        $this->ship->numBeams -= $beams;
     }
 
     public function shields($shields): void
     {
-        if ($this->ship->shields - $shields < 0) {
-            $shields = $this->ship->shields;
+        if ($this->ship->numShields - $shields < 0) {
+            $shields = $this->ship->numShields;
         }
 
         $this->shields += $shields;
-        $this->ship->shields -= $shields;
+        $this->ship->numShields -= $shields;
     }
 }

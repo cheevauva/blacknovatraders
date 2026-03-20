@@ -28,9 +28,9 @@ class CommonException extends \Exception
     /**
      * @return static
      */
-    public function t(array|string $tag, array $replace = [], ?string $format = null)
+    public function t(array|string $tag, array $replace = [])
     {
-        $this->translate = new Translate()->translate($tag, $replace, $format);
+        $this->translate = new Translate()->translate($tag, $replace);
 
         return $this;
     }

@@ -68,7 +68,7 @@ class GameShipFightServantTest extends \Tests\UnitTestCase
 
         $messages = array_map(fn($m) => (string) $m, $fight->messages);
         
-        self::assertCount(20, $messages);
+        self::assertCount(24, $messages);
         
         //print_r($messages);
         //print_r($player->lossesInBattle());
