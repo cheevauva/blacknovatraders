@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace BNT\Ship\DAO;
 
+use Psr\Container\ContainerInterface;
+
 class ShipGenScoreDAO extends \UUA\DAO
 {
 
     use \BNT\Traits\DatabaseMainTrait;
 
     public int $ship;
+    public protected(set) float $score;
 
     #[\Override]
     public function serve(): void
@@ -87,30 +90,41 @@ class ShipGenScoreDAO extends \UUA\DAO
             ship_destroyed = 'N'
         ";
 
+        $this->score = $this->db()->fetchColumn($sql, [
+            'sid' => $this->ship,
+            'upgrade_factor' => $upgrade_factor,
+            'upgrade_cost' => $upgrade_cost,
+            'torpedo_price' => $torpedo_price,
+            'armor_price' => $armor_price,
+            'ore_price' => $ore_price,
+            'organics_price' => $organics_price,
+            'goods_price' => $goods_price,
+            'energy_price' => $energy_price,
+            'colonist_price' => $colonist_price,
+            'fighter_price' => $fighter_price,
+            'dev_warpedit_price' => $dev_warpedit_price,
+            'dev_genesis_price' => $dev_genesis_price,
+            'dev_beacon_price' => $dev_beacon_price,
+            'dev_emerwarp_price' => $dev_emerwarp_price,
+            'dev_escapepod_price' => $dev_escapepod_price,
+            'dev_fuelscoop_price' => $dev_fuelscoop_price,
+            'dev_lssd_price' => $dev_lssd_price,
+            'dev_minedeflector_price' => $dev_minedeflector_price,
+            'base_credits' => $base_credits
+        ]);
+
         $this->db()->q("UPDATE ships SET score = :score WHERE ship_id = :sid", [
-            'score' => $this->db()->fetchColumn($sql, [
-                'sid' => $this->ship,
-                'upgrade_factor' => $upgrade_factor,
-                'upgrade_cost' => $upgrade_cost,
-                'torpedo_price' => $torpedo_price,
-                'armor_price' => $armor_price,
-                'ore_price' => $ore_price,
-                'organics_price' => $organics_price,
-                'goods_price' => $goods_price,
-                'energy_price' => $energy_price,
-                'colonist_price' => $colonist_price,
-                'fighter_price' => $fighter_price,
-                'dev_warpedit_price' => $dev_warpedit_price,
-                'dev_genesis_price' => $dev_genesis_price,
-                'dev_beacon_price' => $dev_beacon_price,
-                'dev_emerwarp_price' => $dev_emerwarp_price,
-                'dev_escapepod_price' => $dev_escapepod_price,
-                'dev_fuelscoop_price' => $dev_fuelscoop_price,
-                'dev_lssd_price' => $dev_lssd_price,
-                'dev_minedeflector_price' => $dev_minedeflector_price,
-                'base_credits' => $base_credits
-            ]),
+            'score' => $this->score,
             'sid' => $this->ship,
         ]);
+    }
+
+    public static function call(ContainerInterface $container, int $ship): self
+    {
+        $self = self::new($container);
+        $self->ship = $ship;
+        $self->serve();
+
+        return $self;
     }
 }

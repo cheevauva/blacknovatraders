@@ -33,6 +33,10 @@ class Ship
     public $torpLaunchers;
     public $torps;
     public $cloak;
+    public int $sector;
+    public int $dev_emerwarp;
+    public int $turns;
+    public int $turns_used;
     protected ?ShipLossesInBattleVO $lossesInBattle;
     public array $ship;
 
@@ -60,6 +64,10 @@ class Ship
         $this->torpLaunchers = $ship['torp_launchers'];
         $this->torps = $ship['torps'];
         $this->cloak = $ship['cloak'];
+        $this->sector = $ship['sector'];
+        $this->dev_emerwarp = $ship['dev_emerwarp'];
+        $this->turns = $ship['turns'];
+        $this->turns_used = $ship['turns_used'];
         //
         $this->numBeams = NUM_BEAMS($this->ship['beams']);
         $this->numShields = NUM_SHIELDS($this->ship['shields']);

@@ -15,6 +15,7 @@ class ShipLossesInBattleVO extends \UUA\VO
     public $beams = 0;
     public $shields = 0;
     public $torpDmg = 0;
+    public $torps = 0;
 
     public function __construct(protected Ship $ship)
     {
@@ -29,6 +30,16 @@ class ShipLossesInBattleVO extends \UUA\VO
 
         $this->energy += $energy;
         $this->ship->energy -= $energy;
+    }
+
+    public function torps($torps): void
+    {
+        if ($this->ship->numTorp - $torps < 0) {
+            $torps = $this->ship->numTorp;
+        }
+
+        $this->torps += $torps;
+        $this->ship->numTorp -= $torps;
     }
 
     public function torpDmg($torpDmg): void

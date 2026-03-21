@@ -46,7 +46,9 @@ class GameShipFightServantTest extends \Tests\UnitTestCase
         $ship['on_planet'] = 'N';
         $ship['cleared_defences'] = '';
         $ship['dev_lssd'] = 'N';
-
+        $ship['turns'] = 100;
+        $ship['turns_used'] = 0;
+        
         return new Ship($ship);
     }
 
