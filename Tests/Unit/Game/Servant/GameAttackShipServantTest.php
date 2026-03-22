@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace Tests\Unit\Game\Servant;
 
 use BNT\Game\Servant\GameAttackShipServant;
-use BNT\Ship\Ship;
-use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Ship\DAO\ShipGenScoreDAO;
 use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Log\DAO\LogPlayerDAO;
+use BNT\Ship\Servant\ShipSaveServant;
 
 class GameAttackShipServantTest extends \Tests\UnitTestCase
 {
 
     public static string $allow_attack;
-    public static Ship $shipAttack;
-    public static Ship $shipUnderAttack;
+    public static array $shipAttack;
+    public static array $shipUnderAttack;
     public static int $roll;
     public static int $roll2;
     public static int $randomValue;
@@ -38,7 +37,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         ]);
     }
 
-    public static function ship(int $id, string $name, array $default = []): Ship
+    public static function ship(int $id, string $name, array $default = []): array
     {
         $ship = [
             'ship_id' => $id,
@@ -77,7 +76,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         $ship['turns'] = 100;
         $ship['turns_used'] = 0;
 
-        return new Ship($ship);
+        return $ship;
     }
 
     public function testZoneNotAllowAttack(): void
@@ -85,8 +84,8 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         self::$allow_attack = 'N';
 
         $attackShip = GameAttackShipServant::new($this->container());
-        $attackShip->playerinfo = self::$shipAttack->ship;
-        $attackShip->ship = self::$shipUnderAttack->id;
+        $attackShip->playerinfo = self::$shipAttack;
+        $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
 
         self::assertEquals('l_att_noatt', strval($attackShip->messages[0] ?? ''));
@@ -101,18 +100,18 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         $attackShip = GameAttackShipServant::new($this->container());
         $attackShip->playerinfo = self::ship(1, 'Attacker', [
             'engines' => 1,
-        ])->ship;
-        $attackShip->ship = 2;
+        ]);
+        $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
 
         self::assertEquals('l_att_flee', strval($attackShip->messages[0] ?? ''));
     }
 
-    public function testMain(): void
+    protected function testMain(): void
     {
         $attackShip = GameAttackShipServant::new($this->container());
-        $attackShip->playerinfo = self::ship(1, 'Attacker')->ship;
-        $attackShip->ship = 2;
+        $attackShip->playerinfo = self::ship(1, 'Attacker');
+        $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
     }
 
@@ -140,20 +139,6 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
                     return GameAttackShipServantTest::$randomValue;
                 }
             },
-            ShipByIdDAO::class => fn($c) => new class($c) extends ShipByIdDAO {
-
-                #[\Override]
-                public function serve(): void
-                {
-                    if ($this->id === 1) {
-                        $this->ship = GameAttackShipServantTest::$shipAttack->ship;
-                    }
-
-                    if ($this->id === 2) {
-                        $this->ship = GameAttackShipServantTest::$shipUnderAttack->ship;
-                    }
-                }
-            },
             ShipGenScoreDAO::class => fn($c) => new class($c) extends ShipGenScoreDAO {
 
                 #[\Override]
@@ -162,7 +147,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
                     $this->score = 10;
                 }
             },
-            ShipUpdateDAO::class => fn($c) => new class($c) extends ShipUpdateDAO {
+            ShipSaveServant::class => fn($c) => new class($c) extends ShipSaveServant {
 
                 #[\Override]
                 public function serve(): void

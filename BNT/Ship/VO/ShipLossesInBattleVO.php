@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BNT\Ship\VO;
 
 use BNT\Ship\Ship;
+use BNT\Ship\VO\ShipBattleStateVO;
 
 class ShipLossesInBattleVO extends \UUA\VO
 {
@@ -34,32 +35,32 @@ class ShipLossesInBattleVO extends \UUA\VO
 
     public function torps($torps): void
     {
-        if ($this->ship->numTorp - $torps < 0) {
-            $torps = $this->ship->numTorp;
+        if ($this->battleState()->numTorp - $torps < 0) {
+            $torps = $this->battleState()->numTorp;
         }
 
         $this->torps += $torps;
-        $this->ship->numTorp -= $torps;
+        $this->battleState()->numTorp -= $torps;
     }
 
     public function torpDmg($torpDmg): void
     {
-        if ($this->ship->torpDmg - $torpDmg < 0) {
-            $torpDmg = $this->ship->torpDmg;
+        if ($this->battleState()->torpDmg - $torpDmg < 0) {
+            $torpDmg = $this->battleState()->torpDmg;
         }
 
         $this->torpDmg += $torpDmg;
-        $this->ship->torpDmg -= $torpDmg;
+        $this->battleState()->torpDmg -= $torpDmg;
     }
 
     public function armorPts($armorPts): void
     {
-        if ($this->ship->armorPts - $armorPts < 0) {
-            $armorPts = $this->ship->armorPts;
+        if ($this->ship->armor_pts - $armorPts < 0) {
+            $armorPts = $this->ship->armor_pts;
         }
 
         $this->armorPts += $armorPts;
-        $this->ship->armorPts -= $armorPts;
+        $this->ship->armor_pts -= $armorPts;
     }
 
     public function fighters($fighters): void
@@ -74,21 +75,26 @@ class ShipLossesInBattleVO extends \UUA\VO
 
     public function beams($beams): void
     {
-        if ($this->ship->numBeams - $beams < 0) {
-            $beams = $this->ship->numBeams;
+        if ($this->battleState()->beams - $beams < 0) {
+            $beams = $this->battleState()->beams;
         }
 
         $this->beams += $beams;
-        $this->ship->numBeams -= $beams;
+        $this->battleState()->beams -= $beams;
     }
 
     public function shields($shields): void
     {
-        if ($this->ship->numShields - $shields < 0) {
-            $shields = $this->ship->numShields;
+        if ($this->battleState()->shields - $shields < 0) {
+            $shields = $this->battleState()->shields;
         }
 
         $this->shields += $shields;
-        $this->ship->numShields -= $shields;
+        $this->battleState()->shields -= $shields;
+    }
+
+    protected function battleState(): ShipBattleStateVO
+    {
+        return $this->ship->battleState();
     }
 }

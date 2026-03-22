@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace BNT\Game\Servant;
 
 use BNT\Ship\Ship;
-use BNT\Ship\DAO\ShipByIdDAO;
 use BNT\Ship\DAO\ShipGenScoreDAO;
-use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Ship\Servant\ShipRestoreFromEscapePodServant;
-use BNT\Exception\WarningException;
 use BNT\Log\LogTypeConstants;
 use BNT\Log\DAO\LogPlayerDAO;
 use BNT\MovementLog\DAO\MovementLogDAO;
@@ -21,6 +18,8 @@ use BNT\Bounty\DAO\BountyCreateDAO;
 use BNT\Bounty\DAO\BountiesByCriteriaDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
+use BNT\Ship\Servant\ShipSaveServant;
+use BNT\Ship\Mapper\ShipRowToEntityMapper;
 
 class GameAttackShipServant extends \UUA\Servant
 {
@@ -29,6 +28,7 @@ class GameAttackShipServant extends \UUA\Servant
     use \BNT\Traits\TranslateTrait;
 
     public array $playerinfo;
+    public array $targetinfo;
     public int $ship;
     public protected(set) bool $playerDestroyed = false;
     public protected(set) bool $targetDestroyed = false;
@@ -55,8 +55,8 @@ class GameAttackShipServant extends \UUA\Servant
         global $bounty_ratio;
         global $bounty_minturns;
 
-        $target = new Ship(ShipByIdDAO::call($this->container, $this->ship)->ship ?? throw new WarningException()->t(['l_ship', $this->ship, 'l_not_found']));
-        $player = new Ship($this->playerinfo);
+        $target = ShipRowToEntityMapper::call($this->container, $this->targetinfo)->ship;
+        $player = ShipRowToEntityMapper::call($this->container, $this->playerinfo)->ship;
         $success = (10 - $target->cloak + $player->sensors) * 5;
 
         $playerscore = ShipGenScoreDAO::call($this->container, $player->id)->score;
@@ -96,7 +96,7 @@ class GameAttackShipServant extends \UUA\Servant
             return;
         }
 
-        $shipScore = shipScore($target->ship);
+        $shipScore = $target->score();
 
         if ($shipScore > $ewd_maxhullsize) {
             $chance = ($shipScore - $ewd_maxhullsize) * 10;
@@ -124,12 +124,12 @@ class GameAttackShipServant extends \UUA\Servant
 
         $this->messagesAppend($fight->messages);
 
-        if ($target->armorPts < 1) {
+        if ($target->armor_pts < 1) {
             $this->targetDestroyed = true;
             $this->shipDestroy($player, $target);
         }
 
-        if ($player->armorPts < 1) {
+        if ($player->armor_pts < 1) {
             $this->playerDestroyed = true;
             $this->shipDestroy($target, $player);
         }
@@ -180,11 +180,9 @@ class GameAttackShipServant extends \UUA\Servant
 
     protected function attackOutman(Ship $attackShip, Ship $underAttackShip): void
     {
-        $attackShipInfo = $attackShip->ship;
-        $attackShipInfo['turns'] -= 1;
-        $attackShipInfo['turns_used'] += 1;
+        $attackShip->turn();
 
-        ShipUpdateDAO::call($this->container, $attackShipInfo, $attackShip->id);
+        ShipSaveServant::call($this->container, $attackShip);
         LogPlayerDAO::call($this->container, $underAttackShip->id, LogTypeConstants::LOG_ATTACK_OUTMAN, $attackShip->name);
 
         $this->mt('l_att_flee');
@@ -192,11 +190,9 @@ class GameAttackShipServant extends \UUA\Servant
 
     protected function attackOutscan(Ship $attackShip, Ship $underAttackShip): void
     {
-        $attackShipInfo = $attackShip->ship;
-        $attackShipInfo['turns'] -= 1;
-        $attackShipInfo['turns_used'] += 1;
+        $attackShip->turn();
 
-        ShipUpdateDAO::call($this->container, $attackShipInfo, $attackShip->id);
+        ShipSaveServant::call($this->container, $attackShip);
         LogPlayerDAO::call($this->container, $underAttackShip->id, LogTypeConstants::LOG_ATTACK_OUTSCAN, $attackShip->name);
 
         $this->mt('l_planet_noscan');
@@ -208,17 +204,14 @@ class GameAttackShipServant extends \UUA\Servant
 
         $destSector = rand(1, $sector_max);
 
-        $attackShipInfo = $attackShip->ship;
-        $attackShipInfo['turns'] -= 1;
-        $attackShipInfo['turns_used'] += 1;
+        $attackShip->turn();
 
-        $underAttackShipInfo = $underAttackShip->ship;
-        $underAttackShipInfo['sector'] = $destSector;
-        $underAttackShipInfo['dev_emerwarp'] -= 1;
-        $underAttackShipInfo['cleared_defences'] = '';
+        $underAttackShip->sector = $destSector;
+        $underAttackShip->dev_emerwarp -= 1;
+        $underAttackShip->cleared_defences = '';
 
-        ShipUpdateDAO::call($this->container, $attackShipInfo, $attackShip->id);
-        ShipUpdateDAO::call($this->container, $underAttackShipInfo, $underAttackShip->id);
+        ShipSaveServant::call($this->container, $attackShip);
+        ShipSaveServant::call($this->container, $underAttackShip);
         //
         MovementLogDAO::call($this->container, $underAttackShip->id, $destSector);
         //
@@ -236,19 +229,13 @@ class GameAttackShipServant extends \UUA\Servant
 
         $loss = $attackShip->lossesInBattle();
 
-        $attackShipInfo = $attackShip->ship;
-        $attackShipInfo['ship_ore'] += $salv->salvOre;
-        $attackShipInfo['ship_organics'] += $salv->salvOrganics;
-        $attackShipInfo['ship_goods'] += $salv->salvGoods;
-        $attackShipInfo['credits'] += $salv->salvCredits;
-        $attackShipInfo['ship_energy'] -= $loss->energy;
-        $attackShipInfo['ship_fighters'] -= $loss->fighters;
-        $attackShipInfo['armor_pts'] -= $loss->armorPts;
-        $attackShipInfo['torps'] -= $loss->torpNums;
-        $attackShipInfo['turns'] -= 1;
-        $attackShipInfo['turns_used'] += 1;
+        $attackShip->ore += $salv->salvOre;
+        $attackShip->organics += $salv->salvOrganics;
+        $attackShip->goods += $salv->salvGoods;
+        $attackShip->credits += $salv->salvCredits;
+        $attackShip->turn();
 
-        ShipUpdateDAO::call($this->container, $attackShipInfo, $attackShip->id);
+        ShipSaveServant::call($this->container, $attackShip);
 
         $this->mt([$attackShip->name, $loss->armorPts, 'l_armorpts', $loss->fighters, ',', 'l_fighters', 'l_att_andused', $loss->torps, 'l_torps']);
     }
@@ -257,7 +244,7 @@ class GameAttackShipServant extends \UUA\Servant
     {
         $this->mt([$destroyedShip->name, 'l_att_sdest']);
 
-        if ($destroyedShip->escapepod == 'Y') {
+        if ($destroyedShip->dev_escapepod) {
             $this->mt([$destroyedShip->name, 'l_att_espod']);
 
             ShipRestoreFromEscapePodServant::call($this->container, $destroyedShip->id);
@@ -276,25 +263,12 @@ class GameAttackShipServant extends \UUA\Servant
             'name' => $underAttackShip->name
         ]);
 
-        $targetLoss = $underAttackShip->lossesInBattle();
-        $playerLoss = $attackShip->lossesInBattle();
+        $targetLoss = $underAttackShip->battleState()->losses();
 
-        $underAttackShipInfo = $underAttackShip->ship;
-        $underAttackShipInfo['ship_energy'] = $targetLoss->energy;
-        $underAttackShipInfo['ship_fighters'] -= $targetLoss->fighters;
-        $underAttackShipInfo['armor_pts'] -= $targetLoss->armorPts;
-        $underAttackShipInfo['torps'] -= $targetLoss->torps;
+        $attackShip->turn();
 
-        $attackShipInfo = $attackShip->ship;
-        $attackShipInfo['ship_energy'] = $playerLoss->energy;
-        $attackShipInfo['ship_fighters'] -= $playerLoss->fighters;
-        $attackShipInfo['armor_pts'] -= $playerLoss->armorPts;
-        $attackShipInfo['torps'] -= $playerLoss->torps;
-        $attackShipInfo['turns'] -= 1;
-        $attackShipInfo['turns_used'] += 1;
-
-        ShipUpdateDAO::call($this->container, $underAttackShipInfo, $underAttackShip->id);
-        ShipUpdateDAO::call($this->container, $attackShipInfo, $attackShip->id);
+        ShipSaveServant::call($this->container, $underAttackShip);
+        ShipSaveServant::call($this->container, $attackShip);
         //
         LogPlayerDAO::call($this->container, $underAttackShip->id, LogTypeConstants::LOG_ATTACKED_WIN, [$attackShip->name, $targetLoss->armorPts, $targetLoss->fighters]);
 

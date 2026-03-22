@@ -4,99 +4,63 @@ declare(strict_types=1);
 
 namespace BNT\Ship;
 
-use BNT\Ship\VO\ShipLossesInBattleVO;
+use BNT\Ship\VO\ShipBattleStateVO;
 
 class Ship
 {
 
     public int $id;
-    public $name;
-    public $numBeams;
-    public $numShields;
-    public $numTorp;
-    public $numTorpLaunchers;
-    public $energy;
-    public $fighters;
-    public $torpDmg;
-    public $armor;
-    public $armorPts;
-    public $ore;
-    public $organics;
-    public $goods;
-    public $credits;
-    public $colonists;
+    public string $name;
+    public int|float $beams;
+    public int|float $shields;
+    public int|float $energy;
+    public int|float $fighters;
+    public int $armor;
+    public int|float $armor_pts;
+    public int $ore;
+    public int $organics;
+    public int $goods;
+    public int $credits;
+    public int $colonists;
     public $hull;
     public $engines;
     public $power;
     public $computer;
     public $sensors;
-    public $torpLaunchers;
-    public $torps;
+    public int $torp_launchers;
+    public int $torps;
     public $cloak;
     public int $sector;
     public int $dev_emerwarp;
+    public bool $dev_escapepod;
     public int $turns;
     public int $turns_used;
-    protected ?ShipLossesInBattleVO $lossesInBattle;
-    public array $ship;
+    protected ?ShipBattleStateVO $battleState;
 
-    public function __construct(array $ship)
+    public function battleState(): ShipBattleStateVO
     {
-        global $level_factor;
-        global $torp_dmg_rate;
-
-        $this->ship = $ship;
-        $this->id = $ship['ship_id'];
-        $this->name = $ship['ship_name'];
-        $this->energy = $this->ship['ship_energy'];
-        $this->armorPts = $this->ship['armor_pts'];
-        $this->armor = $this->ship['armor'];
-        $this->fighters = $this->ship['ship_fighters'];
-        $this->ore = $this->ship['ship_ore'];
-        $this->organics = $this->ship['ship_organics'];
-        $this->goods = $this->ship['ship_goods'];
-        $this->engines = $this->ship['engines'];
-        $this->power = $this->ship['power'];
-        $this->computer = $this->ship['computer'];
-        $this->sensors = $this->ship['sensors'];
-        $this->colonists = $this->ship['ship_colonists'];
-        $this->hull = $this->ship['hull'];
-        $this->torpLaunchers = $ship['torp_launchers'];
-        $this->torps = $ship['torps'];
-        $this->cloak = $ship['cloak'];
-        $this->sector = $ship['sector'];
-        $this->dev_emerwarp = $ship['dev_emerwarp'];
-        $this->turns = $ship['turns'];
-        $this->turns_used = $ship['turns_used'];
-        //
-        $this->numBeams = NUM_BEAMS($this->ship['beams']);
-        $this->numShields = NUM_SHIELDS($this->ship['shields']);
-        $this->numTorpLaunchers = round(mypw($level_factor, $this->torpLaunchers)) * 10;
-        $this->numTorp = $this->numTorpLaunchers > $this->torps ? $this->torps : $this->numTorpLaunchers;
-        $this->torpDmg = $torp_dmg_rate * $this->numTorp;
+        return $this->battleState ??= new ShipBattleStateVO($this);
     }
 
-    public function upgradeValue(): float
+    public function turn(int $turns = 1): void
     {
-        global $upgrade_cost;
-        global $upgrade_factor;
-
-        return $upgrade_cost * array_sum([
-            round(mypw($upgrade_factor, $this->hull)),
-            round(mypw($upgrade_factor, $this->engines)),
-            round(mypw($upgrade_factor, $this->power)),
-            round(mypw($upgrade_factor, $this->computer)),
-            round(mypw($upgrade_factor, $this->sensors)),
-            round(mypw($upgrade_factor, $this->numBeams)),
-            round(mypw($upgrade_factor, $this->torpLaunchers)),
-            round(mypw($upgrade_factor, $this->numShields)),
-            round(mypw($upgrade_factor, $this->armor)),
-            round(mypw($upgrade_factor, $this->cloak))
-        ]);
+        $this->turns -= $turns;
+        $this->turns_used += $turns;
     }
 
-    public function lossesInBattle(): ShipLossesInBattleVO
+    public function score(): mixed
     {
-        return $this->lossesInBattle ??= new ShipLossesInBattleVO($this);
+        return array_sum([
+            $this->hull,
+            $this->engines,
+            $this->power,
+            $this->computer,
+            $this->sensors,
+            $this->armor,
+            $this->shields,
+            $this->beams,
+            $this->torp_launchers,
+            $this->cloak,
+        ]) / 10;
     }
 }

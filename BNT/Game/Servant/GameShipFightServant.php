@@ -27,26 +27,26 @@ class GameShipFightServant extends \UUA\Servant
         $this->mt([$player->name, 'l_att_att', $target->name]);
         $this->mt([
             $player->name,
-            sprintf('Beams(lvl): %s(%s)', $player->numBeams, $player->ship['beams']),
-            sprintf('Shields(lvl): %s(%s)', $player->numShields, $player->ship['shields']),
-            sprintf('Energy(Start): %s(%s)', $player->energy, $player->ship['ship_energy']),
-            sprintf('Torps(lvl): %s(%s)', $player->numTorp, $player->ship['torp_launchers']),
-            sprintf('TorpDmg: %s', $player->torpDmg),
+            sprintf('Beams(lvl): %s(%s)', $player->battleState()->beams, $player->beams),
+            sprintf('Shields(lvl): %s(%s)', $player->battleState()->shields, $player->shields),
+            sprintf('Energy(Start): %s(%s)', $player->energy, $player->energy + $player->battleState()->losses()->energy),
+            sprintf('Torps(lvl): %s(%s)', $player->battleState()->numTorp, $player->torp_launchers),
+            sprintf('TorpDmg: %s', $player->battleState()->torpDmg),
             sprintf('Fighters(lvl): %s', $player->fighters),
-            sprintf('Armor(lvl): %s', $player->armorPts, $player->ship['armor']),
-            sprintf('Does have Pod? %s', $player->ship['dev_escapepod']),
+            sprintf('Armor(lvl): %s', $player->armor_pts, $player->armor),
+            sprintf('Does have Pod? %s', $player->dev_escapepod),
         ]);
 
         $this->mt([
             $target->name,
-            sprintf('Beams(lvl): %s(%s)', $target->numBeams, $target->ship['beams']),
-            sprintf('Shields(lvl): %s(%s)', $target->numShields, $target->ship['shields']),
-            sprintf('Energy(Start): %s(%s)', $target->energy, $target->ship['ship_energy']),
-            sprintf('Torps(lvl): %s(%s)', $target->numTorp, $target->ship['torp_launchers']),
-            sprintf('TorpDmg: %s', $target->torpDmg),
+            sprintf('Beams(lvl): %s(%s)', $target->battleState()->beams, $target->beams),
+            sprintf('Shields(lvl): %s(%s)', $target->battleState()->shields, $target->shields),
+            sprintf('Energy(Start): %s(%s)', $target->energy, $target->energy + $target->battleState()->losses()->energy),
+            sprintf('Torps(lvl): %s(%s)', $target->battleState()->numTorp, $target->torp_launchers),
+            sprintf('TorpDmg: %s', $target->battleState()->torpDmg),
             sprintf('Fighters(lvl): %s', $target->fighters),
-            sprintf('Armor(lvl): %s', $target->armorPts, $target->ship['armor']),
-            sprintf('Does have Pod? %s', $target->ship['dev_escapepod']),
+            sprintf('Armor(lvl): %s', $target->armor_pts, $target->armor),
+            sprintf('Does have Pod? %s', $target->dev_escapepod),
         ]);
 
         $this->mt('l_att_beams');
@@ -69,8 +69,8 @@ class GameShipFightServant extends \UUA\Servant
 
         [$targetFightersLost, $playerFightersLost] = [$this->fightersVsFighters($player, $target), $this->fightersVsFighters($target, $player)];
         //
-        $target->lossesInBattle()->fighters($targetFightersLost);
-        $player->lossesInBattle()->fighters($playerFightersLost);
+        $target->battleState()->losses()->fighters($targetFightersLost);
+        $player->battleState()->losses()->fighters($playerFightersLost);
 
         $this->fightersVsArmor($player, $target);
         $this->fightersVsArmor($target, $player);
@@ -78,13 +78,13 @@ class GameShipFightServant extends \UUA\Servant
 
     protected function chargeBeamsAndShield(Ship $player): void
     {
-        $beams = $player->numBeams > $player->energy ? $player->energy : $player->numBeams;
+        $beams = $player->battleState()->beams > $player->energy ? $player->energy : $player->battleState()->beams;
 
-        $player->lossesInBattle()->energy($beams);
+        $player->battleState()->losses()->energy($beams);
 
-        $shields = $player->numShields > $player->energy ? $player->energy : $player->numShields;
+        $shields = $player->battleState()->shields > $player->energy ? $player->energy : $player->battleState()->shields;
 
-        $player->lossesInBattle()->energy($shields);
+        $player->battleState()->losses()->energy($shields);
 
         $this->mt([$player->name, 'l_att_charge', $beams, 'l_att_beams']);
         $this->mt([$player->name, 'l_att_charge', $shields, 'l_att_shields']);
@@ -96,47 +96,47 @@ class GameShipFightServant extends \UUA\Servant
 
         if ($target->fighters <= 0) {
             $lost = 0;
-        } elseif ($player->numBeams > $fightersHalf) {
+        } elseif ($player->battleState()->beams > $fightersHalf) {
             $lost = $target->fighters - $fightersHalf;
         } else {
-            $lost = $player->numBeams;
+            $lost = $player->battleState()->beams;
         }
 
         $this->mt([$target->name, 'l_att_lost', $lost, 'l_fighters']);
 
-        $player->lossesInBattle()->beams($lost);
-        $target->lossesInBattle()->fighters($lost);
+        $player->battleState()->losses()->beams($lost);
+        $target->battleState()->losses()->fighters($lost);
     }
 
     protected function beamsVsShields(Ship $player, Ship $target): void
     {
-        if ($target->numShields <= 0) {
+        if ($target->battleState()->shields <= 0) {
             $hits = 0;
-        } elseif ($player->numBeams > $target->numShields) {
-            $hits = $target->numShields;
+        } elseif ($player->battleState()->beams > $target->battleState()->shields) {
+            $hits = $target->battleState()->shields;
         } else {
-            $hits = $player->numBeams;
+            $hits = $player->battleState()->beams;
         }
 
         $this->mt([$target->name, 'l_att_shits', $hits, 'l_att_dmg']);
 
-        $player->lossesInBattle()->beams($hits);
-        $target->lossesInBattle()->shields($hits);
+        $player->battleState()->losses()->beams($hits);
+        $target->battleState()->losses()->shields($hits);
     }
 
     protected function beamsVsArmor(Ship $player, Ship $target): void
     {
-        if ($target->armorPts <= 0) {
+        if ($target->armor_pts <= 0) {
             $hits = 0;
-        } elseif ($player->numBeams > $target->armorPts) {
-            $hits = $target->armorPts;
+        } elseif ($player->battleState()->beams > $target->armor_pts) {
+            $hits = $target->armor_pts;
         } else {
-            $hits = $player->numBeams;
+            $hits = $player->battleState()->beams;
         }
 
         $this->mt([$target->name, 'l_att_ashit', $hits, 'l_att_dmg']);
 
-        $target->lossesInBattle()->armorPts($hits);
+        $target->battleState()->losses()->armorPts($hits);
     }
 
     protected function torpDmgVsFighters(Ship $player, Ship $target): void
@@ -145,31 +145,31 @@ class GameShipFightServant extends \UUA\Servant
 
         if ($target->fighters <= 0) {
             $lost = 0;
-        } elseif ($player->torpDmg > $fightersHalf) {
+        } elseif ($player->battleState()->torpDmg > $fightersHalf) {
             $lost = $target->fighters - $fightersHalf;
         } else {
-            $lost = $player->torpDmg;
+            $lost = $player->battleState()->torpDmg;
         }
 
         $this->mt([$target->name, 'l_att_lost', $lost, 'l_fighters']);
 
-        $target->lossesInBattle()->fighters($lost);
-        $player->lossesInBattle()->torpDmg($lost);
+        $target->battleState()->losses()->fighters($lost);
+        $player->battleState()->losses()->torpDmg($lost);
     }
 
     protected function torpDmgVsArmor(Ship $player, Ship $target): void
     {
-        if ($target->armorPts <= 0) {
+        if ($target->armor_pts <= 0) {
             $lost = 0;
-        } elseif ($player->torpDmg > $target->armorPts) {
-            $lost = $target->armorPts;
+        } elseif ($player->battleState()->torpDmg > $target->armor_pts) {
+            $lost = $target->armor_pts;
         } else {
-            $lost = $player->torpDmg;
+            $lost = $player->battleState()->torpDmg;
         }
 
         $this->mt([$target->name, 'l_att_ashit', $lost, 'l_att_dmg']);
 
-        $target->lossesInBattle()->armorPts($lost);
+        $target->battleState()->losses()->armorPts($lost);
     }
 
     protected function fightersVsFighters(Ship $player, Ship $target): mixed
@@ -189,16 +189,16 @@ class GameShipFightServant extends \UUA\Servant
 
     protected function fightersVsArmor(Ship $player, Ship $target): void
     {
-        if ($target->armorPts <= 0) {
+        if ($target->armor_pts <= 0) {
             $lost = 0;
-        } elseif ($player->fighters > $target->armorPts) {
-            $lost = $target->armorPts;
+        } elseif ($player->fighters > $target->armor_pts) {
+            $lost = $target->armor_pts;
         } else {
             $lost = $player->fighters;
         }
 
         $this->mt([$target->name, 'l_att_ashit', $lost, 'l_att_dmg']);
 
-        $target->lossesInBattle()->armorPts($lost);
+        $target->battleState()->losses()->armorPts($lost);
     }
 }

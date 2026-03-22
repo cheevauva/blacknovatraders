@@ -6,6 +6,7 @@ namespace Tests\Unit\Game\Servant;
 
 use BNT\Ship\Ship;
 use BNT\Game\Servant\GameShipFightServant;
+use BNT\Ship\Mapper\ShipRowToEntityMapper;
 
 class GameShipFightServantTest extends \Tests\UnitTestCase
 {
@@ -48,8 +49,8 @@ class GameShipFightServantTest extends \Tests\UnitTestCase
         $ship['dev_lssd'] = 'N';
         $ship['turns'] = 100;
         $ship['turns_used'] = 0;
-        
-        return new Ship($ship);
+
+        return ShipRowToEntityMapper::call(self::$container, $ship)->ship;
     }
 
     public function testMain(): void
@@ -69,11 +70,33 @@ class GameShipFightServantTest extends \Tests\UnitTestCase
         $fight->serve();
 
         $messages = array_map(fn($m) => (string) $m, $fight->messages);
-        
+
         self::assertCount(24, $messages);
-        
-        //print_r($messages);
-        //print_r($player->lossesInBattle());
-        //print_r($target->lossesInBattle());
+        self::assertEquals([
+            'PShip l_att_charge 338 l_att_beams',
+            'PShip l_att_charge 150 l_att_shields',
+            'TShip l_att_charge 338 l_att_beams',
+            'TShip l_att_charge 150 l_att_shields',
+            'PShip l_att_att TShip',
+            'PShip Beams(lvl): 338(3) Shields(lvl): 150(1) Energy(Start): 512(1000) Torps(lvl): 50(100) TorpDmg: 500 Fighters(lvl): 200 Armor(lvl): 900 Does have Pod? 1',
+            'TShip Beams(lvl): 338(3) Shields(lvl): 150(1) Energy(Start): 512(1000) Torps(lvl): 50(100) TorpDmg: 500 Fighters(lvl): 250 Armor(lvl): 900 Does have Pod? 1',
+            'l_att_beams',
+            'TShip l_att_lost 125 l_fighters',
+            'PShip l_att_lost 100 l_fighters',
+            'TShip l_att_shits 150 l_att_dmg',
+            'PShip l_att_shits 150 l_att_dmg',
+            'TShip l_att_ashit 63 l_att_dmg',
+            'PShip l_att_ashit 88 l_att_dmg',
+            'l_att_torps',
+            'TShip l_att_lost 62 l_fighters',
+            'PShip l_att_lost 50 l_fighters',
+            'TShip l_att_ashit 438 l_att_dmg',
+            'PShip l_att_ashit 450 l_att_dmg',
+            'l_att_fighters',
+            'TShip l_att_lost 50 l_fighters',
+            'PShip l_att_lost 50 l_fighters',
+            'TShip l_att_ashit 0 l_att_dmg',
+            'PShip l_att_ashit 13 l_att_dmg',
+        ], $messages);
     }
 }
