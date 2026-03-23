@@ -12,6 +12,7 @@ use BNT\Log\DAO\LogPlayerDAO;
 use BNT\Ship\Servant\ShipSaveServant;
 use BNT\Game\Servant\GameShipScanShipServant;
 use BNT\Game\Servant\GameShipEscapedFromShipServant;
+use BNT\Game\Servant\GameShipEmergencyWarpServant;
 
 class GameAttackShipServantTest extends \Tests\UnitTestCase
 {
@@ -21,14 +22,14 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
     public static array $shipUnderAttack;
     public static bool $scanSuccess;
     public static bool $escapeFromShipSuccess;
-    public static int $randomValue;
+    public static bool $emergencyWarpSuccess;
 
     #[\Override]
     protected function setUp(): void
     {
         self::$scanSuccess = true;
         self::$escapeFromShipSuccess = false;
-        self::$randomValue = 45;
+        self::$emergencyWarpSuccess = false;
         self::$allow_attack = 'Y';
         self::$shipAttack = GameAttackShipServantTest::ship(1, 'Attacker', [
             'engines' => 10,
@@ -80,39 +81,42 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         return array_merge($ship, $default);
     }
 
-    public function testZoneNotAllowAttack(): void
+    protected function attack(): GameAttackShipServant
     {
-        self::$allow_attack = 'N';
-
         $attackShip = GameAttackShipServant::new($this->container());
         $attackShip->playerinfo = self::$shipAttack;
         $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
 
-        self::assertEquals('l_att_noatt', strval($attackShip->messages[0] ?? ''));
+        return $attackShip;
+    }
+
+    public function testZoneNotAllowAttack(): void
+    {
+        self::$allow_attack = 'N';
+
+        self::assertEquals('l_att_noatt', strval($this->attack()->messages[0] ?? ''));
     }
 
     public function testOutman(): void
     {
         self::$escapeFromShipSuccess = true;
-        $attackShip = GameAttackShipServant::new($this->container());
-        $attackShip->playerinfo = self::$shipAttack;
-        $attackShip->targetinfo = self::$shipUnderAttack;
-        $attackShip->serve();
 
-        self::assertEquals('l_att_flee', strval($attackShip->messages[0] ?? ''));
+        self::assertEquals('l_att_flee', strval($this->attack()->messages[0] ?? ''));
     }
 
     public function testOutscan(): void
     {
         self::$scanSuccess = false;
-        
-        $attackShip = GameAttackShipServant::new($this->container());
-        $attackShip->playerinfo = self::$shipAttack;
-        $attackShip->targetinfo = self::$shipUnderAttack;
-        $attackShip->serve();
 
-        self::assertEquals('l_planet_noscan', strval($attackShip->messages[0] ?? ''));
+        self::assertEquals('l_planet_noscan', strval($this->attack()->messages[0] ?? ''));
+    }
+
+    protected function testEmergencyWarp(): void
+    {
+        self::$emergencyWarpSuccess = true;
+
+        self::assertEquals('l_att_ewd', strval($this->attack()->messages[0] ?? ''));
     }
 
     protected function testMain(): void
@@ -127,15 +131,6 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
     protected function stubs(): array
     {
         $stubs = [
-            GameAttackShipServant::class => fn($c) => new class($c) extends GameAttackShipServant {
-
-
-                #[\Override]
-                protected function randomValue(): int
-                {
-                    return GameAttackShipServantTest::$randomValue;
-                }
-            },
             GameShipEscapedFromShipServant::class => fn($c) => new class($c) extends GameShipEscapedFromShipServant {
 
                 #[\Override]
@@ -150,6 +145,14 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
                 public function serve(): void
                 {
                     $this->isSuccess = GameAttackShipServantTest::$scanSuccess;
+                }
+            },
+            GameShipEmergencyWarpServant::class => fn($c) => new class($c) extends GameShipEmergencyWarpServant {
+
+                #[\Override]
+                public function serve(): void
+                {
+                    $this->isSuccess = GameAttackShipServantTest::$emergencyWarpSuccess;
                 }
             },
             ShipGenScoreDAO::class => fn($c) => new class($c) extends ShipGenScoreDAO {

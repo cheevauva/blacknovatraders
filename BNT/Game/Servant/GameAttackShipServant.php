@@ -22,6 +22,7 @@ use BNT\Ship\Servant\ShipSaveServant;
 use BNT\Ship\Mapper\ShipRowToEntityMapper;
 use BNT\Game\Servant\GameShipScanShipServant;
 use BNT\Game\Servant\GameShipEscapedFromShipServant;
+use BNT\Game\Servant\GameShipEmergencyWarpServant;
 
 class GameAttackShipServant extends \UUA\Servant
 {
@@ -35,15 +36,9 @@ class GameAttackShipServant extends \UUA\Servant
     public protected(set) bool $playerDestroyed = false;
     public protected(set) bool $targetDestroyed = false;
 
-    protected function randomValue(): int
-    {
-        return rand(1, 100);
-    }
-
     #[\Override]
     public function serve(): void
     {
-        global $ewd_maxhullsize;
         global $bounty_ratio;
         global $bounty_minturns;
 
@@ -70,7 +65,7 @@ class GameAttackShipServant extends \UUA\Servant
         $escapeFromShip->player = $player;
         $escapeFromShip->target = $target;
         $escapeFromShip->serve();
-        
+
         if ($escapeFromShip->isSuccess) {
             $this->attackOutman($player, $target);
             return;
@@ -87,15 +82,11 @@ class GameAttackShipServant extends \UUA\Servant
             return;
         }
 
-        $shipScore = $target->score();
+        $emerWarp = GameShipEmergencyWarpServant::new($this->container);
+        $emerWarp->ship = $target;
+        $emerWarp->serve();
 
-        if ($shipScore > $ewd_maxhullsize) {
-            $chance = ($shipScore - $ewd_maxhullsize) * 10;
-        } else {
-            $chance = 0;
-        }
-
-        if (!empty($target->dev_emerwarp) && $this->randomValue() > $chance) {
+        if ($emerWarp->isSuccess) {
             $this->emergencyWarp($player, $target);
             return;
         }
@@ -191,21 +182,9 @@ class GameAttackShipServant extends \UUA\Servant
 
     protected function emergencyWarp(Ship $attackShip, Ship $underAttackShip): void
     {
-        global $sector_max;
-
-        $destSector = rand(1, $sector_max);
-
         $attackShip->turn();
 
-        $underAttackShip->sector = $destSector;
-        $underAttackShip->dev_emerwarp -= 1;
-        $underAttackShip->cleared_defences = '';
-
         ShipSaveServant::call($this->container, $attackShip);
-        ShipSaveServant::call($this->container, $underAttackShip);
-        //
-        MovementLogDAO::call($this->container, $underAttackShip->id, $destSector);
-        //
         LogPlayerDAO::call($this->container, $underAttackShip->id, LogTypeConstants::LOG_ATTACK_EWD, $attackShip->name);
 
         $this->mt('l_att_ewd');
