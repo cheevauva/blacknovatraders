@@ -10,6 +10,8 @@ use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Log\DAO\LogPlayerDAO;
 use BNT\Ship\Servant\ShipSaveServant;
+use BNT\Game\Servant\GameShipScanShipServant;
+use BNT\Game\Servant\GameShipEscapedFromShipServant;
 
 class GameAttackShipServantTest extends \Tests\UnitTestCase
 {
@@ -17,15 +19,15 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
     public static string $allow_attack;
     public static array $shipAttack;
     public static array $shipUnderAttack;
-    public static int $roll;
-    public static int $roll2;
+    public static bool $scanSuccess;
+    public static bool $escapeFromShipSuccess;
     public static int $randomValue;
 
     #[\Override]
     protected function setUp(): void
     {
-        self::$roll = 45;
-        self::$roll2 = 45;
+        self::$scanSuccess = true;
+        self::$escapeFromShipSuccess = false;
         self::$randomValue = 45;
         self::$allow_attack = 'Y';
         self::$shipAttack = GameAttackShipServantTest::ship(1, 'Attacker', [
@@ -92,13 +94,10 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
 
     public function testOutman(): void
     {
+        self::$escapeFromShipSuccess = true;
         $attackShip = GameAttackShipServant::new($this->container());
-        $attackShip->playerinfo = self::ship(1, 'Attacker', [
-            'engines' => 1,
-        ]);
-        $attackShip->targetinfo = GameAttackShipServantTest::ship(2, 'UnderAttacked', [
-            'engines' => 10,
-        ]);
+        $attackShip->playerinfo = self::$shipAttack;
+        $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
 
         self::assertEquals('l_att_flee', strval($attackShip->messages[0] ?? ''));
@@ -106,13 +105,11 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
 
     public function testOutscan(): void
     {
+        self::$scanSuccess = false;
+        
         $attackShip = GameAttackShipServant::new($this->container());
-        $attackShip->playerinfo = self::ship(1, 'Attacker', [
-            'sensors' => 1,
-        ]);
-        $attackShip->targetinfo = GameAttackShipServantTest::ship(2, 'UnderAttacked', [
-            'cloak' => 9,
-        ]);
+        $attackShip->playerinfo = self::$shipAttack;
+        $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
 
         self::assertEquals('l_planet_noscan', strval($attackShip->messages[0] ?? ''));
@@ -132,22 +129,27 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         $stubs = [
             GameAttackShipServant::class => fn($c) => new class($c) extends GameAttackShipServant {
 
-                #[\Override]
-                protected function roll(): int
-                {
-                    return GameAttackShipServantTest::$roll;
-                }
-
-                #[\Override]
-                protected function roll2(): int
-                {
-                    return GameAttackShipServantTest::$roll2;
-                }
 
                 #[\Override]
                 protected function randomValue(): int
                 {
                     return GameAttackShipServantTest::$randomValue;
+                }
+            },
+            GameShipEscapedFromShipServant::class => fn($c) => new class($c) extends GameShipEscapedFromShipServant {
+
+                #[\Override]
+                public function serve(): void
+                {
+                    $this->isSuccess = GameAttackShipServantTest::$escapeFromShipSuccess;
+                }
+            },
+            GameShipScanShipServant::class => fn($c) => new class($c) extends GameShipScanShipServant {
+
+                #[\Override]
+                public function serve(): void
+                {
+                    $this->isSuccess = GameAttackShipServantTest::$scanSuccess;
                 }
             },
             ShipGenScoreDAO::class => fn($c) => new class($c) extends ShipGenScoreDAO {

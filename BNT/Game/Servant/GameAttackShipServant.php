@@ -20,6 +20,8 @@ use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Ship\Servant\ShipSaveServant;
 use BNT\Ship\Mapper\ShipRowToEntityMapper;
+use BNT\Game\Servant\GameShipScanShipServant;
+use BNT\Game\Servant\GameShipEscapedFromShipServant;
 
 class GameAttackShipServant extends \UUA\Servant
 {
@@ -32,16 +34,6 @@ class GameAttackShipServant extends \UUA\Servant
     public int $ship;
     public protected(set) bool $playerDestroyed = false;
     public protected(set) bool $targetDestroyed = false;
-
-    protected function roll(): int
-    {
-        return rand(1, 100);
-    }
-
-    protected function roll2(): int
-    {
-        return rand(1, 100);
-    }
 
     protected function randomValue(): int
     {
@@ -57,23 +49,11 @@ class GameAttackShipServant extends \UUA\Servant
 
         $target = ShipRowToEntityMapper::call($this->container, $this->targetinfo)->ship;
         $player = ShipRowToEntityMapper::call($this->container, $this->playerinfo)->ship;
-        $success = (10 - $target->cloak + $player->sensors) * 5;
 
         $playerscore = ShipGenScoreDAO::call($this->container, $player->id)->score;
         $targetscore = ShipGenScoreDAO::call($this->container, $target->id)->score;
         $playerscore = $playerscore * $playerscore;
         $targetscore = $targetscore * $targetscore;
-
-        if ($success < 5) {
-            $success = 5;
-        }
-        if ($success > 95) {
-            $success = 95;
-        }
-        $flee = (10 - $target->engines + $player->engines) * 5;
-
-        $roll = $this->roll();
-        $roll2 = $this->roll2();
 
         $targetSector = SectorByIdDAO::call($this->container, $target->sector)->sector;
         $targetZone = ZoneByIdDAO::call($this->container, $targetSector['zone_id'])->zone;
@@ -85,12 +65,24 @@ class GameAttackShipServant extends \UUA\Servant
             return;
         }
 
-        if ($flee < $roll2) {
+        $escapeFromShip = GameShipEscapedFromShipServant::new($this->container);
+        $escapeFromShip->base = 10;
+        $escapeFromShip->player = $player;
+        $escapeFromShip->target = $target;
+        $escapeFromShip->serve();
+        
+        if ($escapeFromShip->isSuccess) {
             $this->attackOutman($player, $target);
             return;
         }
 
-        if ($roll > $success) {
+        $scan = GameShipScanShipServant::new($this->container);
+        $scan->base = 10;
+        $scan->player = $player;
+        $scan->target = $target;
+        $scan->serve();
+
+        if (!$scan->isSuccess) {
             $this->attackOutscan($player, $target);
             return;
         }
