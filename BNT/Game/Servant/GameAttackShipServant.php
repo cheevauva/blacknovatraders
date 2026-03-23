@@ -82,11 +82,7 @@ class GameAttackShipServant extends \UUA\Servant
             return;
         }
 
-        $emerWarp = GameShipEmergencyWarpServant::new($this->container);
-        $emerWarp->ship = $target;
-        $emerWarp->serve();
-
-        if ($emerWarp->isSuccess) {
+        if (GameShipEmergencyWarpServant::call($this->container, $target)->isSuccess) {
             $this->emergencyWarp($player, $target);
             return;
         }

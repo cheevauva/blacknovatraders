@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BNT\Game\Servant;
 
+use Psr\Container\ContainerInterface;
+
 class GameShipEmergencyWarpServant extends \UUA\Servant
 {
 
@@ -43,5 +45,14 @@ class GameShipEmergencyWarpServant extends \UUA\Servant
     protected function randomValue(): int
     {
         return rand(1, 100);
+    }
+
+    public static function call(ContainerInterface $container, int $ship): self
+    {
+        $self = self::new($container);
+        $self->ship = $ship;
+        $self->serve();
+
+        return $self;
     }
 }
