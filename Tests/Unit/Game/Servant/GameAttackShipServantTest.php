@@ -6,7 +6,6 @@ namespace Tests\Unit\Game\Servant;
 
 use BNT\Game\Servant\GameAttackShipServant;
 use BNT\Ship\DAO\ShipGenScoreDAO;
-use BNT\Ship\DAO\ShipUpdateDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
 use BNT\Log\DAO\LogPlayerDAO;
@@ -44,7 +43,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
             'ship_name' => $name,
         ];
         $ship['hull'] = 0;
-        $ship['engines'] = $default['engines'] ?? 0;
+        $ship['engines'] = 0;
         $ship['power'] = 0;
         $ship['sensors'] = 0;
         $ship['computer'] = 0;
@@ -61,7 +60,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         $ship['ship_goods'] = 0;
         $ship['ship_energy'] = 1000;
         $ship['ship_colonists'] = 0;
-        $ship['ship_fighters'] = $default['ship_fighters'] ?? 0;
+        $ship['ship_fighters'] = 0;
         $ship['dev_warpedit'] = 0;
         $ship['dev_genesis'] = 0;
         $ship['dev_beacon'] = 0;
@@ -76,7 +75,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         $ship['turns'] = 100;
         $ship['turns_used'] = 0;
 
-        return $ship;
+        return array_merge($ship, $default);
     }
 
     public function testZoneNotAllowAttack(): void
@@ -91,20 +90,32 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         self::assertEquals('l_att_noatt', strval($attackShip->messages[0] ?? ''));
     }
 
-    public function testFlee(): void
+    public function testOutman(): void
     {
-        self::$shipUnderAttack = GameAttackShipServantTest::ship(2, 'UnderAttacked', [
-            'engines' => 10,
-        ]);
-
         $attackShip = GameAttackShipServant::new($this->container());
         $attackShip->playerinfo = self::ship(1, 'Attacker', [
             'engines' => 1,
         ]);
-        $attackShip->targetinfo = self::$shipUnderAttack;
+        $attackShip->targetinfo = GameAttackShipServantTest::ship(2, 'UnderAttacked', [
+            'engines' => 10,
+        ]);
         $attackShip->serve();
 
         self::assertEquals('l_att_flee', strval($attackShip->messages[0] ?? ''));
+    }
+
+    public function testOutscan(): void
+    {
+        $attackShip = GameAttackShipServant::new($this->container());
+        $attackShip->playerinfo = self::ship(1, 'Attacker', [
+            'sensors' => 1,
+        ]);
+        $attackShip->targetinfo = GameAttackShipServantTest::ship(2, 'UnderAttacked', [
+            'cloak' => 9,
+        ]);
+        $attackShip->serve();
+
+        self::assertEquals('l_planet_noscan', strval($attackShip->messages[0] ?? ''));
     }
 
     protected function testMain(): void

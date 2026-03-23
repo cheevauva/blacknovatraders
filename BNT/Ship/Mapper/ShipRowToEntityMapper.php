@@ -44,6 +44,7 @@ class ShipRowToEntityMapper extends \UUA\Mapper
         $ship->beams = $row['beams'];
         $ship->shields = $row['shields'];
         $ship->dev_escapepod = $row['dev_escapepod'] == 'Y';
+        $ship->cleared_defences = $row['cleared_defences'];
 
         $this->ship = $ship;
     }

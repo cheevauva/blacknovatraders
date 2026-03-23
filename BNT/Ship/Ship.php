@@ -35,6 +35,7 @@ class Ship
     public bool $dev_escapepod;
     public int $turns;
     public int $turns_used;
+    public string $cleared_defences;
     protected ?ShipBattleStateVO $battleState;
 
     public function battleState(): ShipBattleStateVO

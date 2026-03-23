@@ -70,7 +70,6 @@ class GameAttackShipServant extends \UUA\Servant
         if ($success > 95) {
             $success = 95;
         }
-
         $flee = (10 - $target->engines + $player->engines) * 5;
 
         $roll = $this->roll();
