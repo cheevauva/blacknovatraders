@@ -6,7 +6,7 @@ namespace BNT\Game\Servant;
 
 use BNT\Ship\Ship;
 
-class GameShipFightServant extends \UUA\Servant
+class GameFightShipVersusShipServant extends \UUA\Servant
 {
 
     use \BNT\Traits\TranslateTrait;

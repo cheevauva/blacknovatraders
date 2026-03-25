@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Game\Servant;
 
-use BNT\Game\Servant\GameAttackShipServant;
+use BNT\Game\Servant\GameShipAttackShipServant;
 use BNT\Ship\DAO\ShipGenScoreDAO;
 use BNT\Sector\DAO\SectorByIdDAO;
 use BNT\Zone\DAO\ZoneByIdDAO;
@@ -14,7 +14,7 @@ use BNT\Game\Servant\GameShipScanShipServant;
 use BNT\Game\Servant\GameShipEscapedFromShipServant;
 use BNT\Game\Servant\GameShipEmergencyWarpServant;
 
-class GameAttackShipServantTest extends \Tests\UnitTestCase
+class GameShipAttackShipServantTest extends \Tests\UnitTestCase
 {
 
     public static string $allow_attack;
@@ -31,10 +31,10 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         self::$escapeFromShipSuccess = false;
         self::$emergencyWarpSuccess = false;
         self::$allow_attack = 'Y';
-        self::$shipAttack = GameAttackShipServantTest::ship(1, 'Attacker', [
+        self::$shipAttack = GameShipAttackShipServantTest::ship(1, 'Attacker', [
             'engines' => 10,
         ]);
-        self::$shipUnderAttack = GameAttackShipServantTest::ship(2, 'UnderAttacked', [
+        self::$shipUnderAttack = GameShipAttackShipServantTest::ship(2, 'UnderAttacked', [
             'engines' => 1,
         ]);
     }
@@ -81,9 +81,9 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
         return array_merge($ship, $default);
     }
 
-    protected function attack(): GameAttackShipServant
+    protected function attack(): GameShipAttackShipServant
     {
-        $attackShip = GameAttackShipServant::new($this->container());
+        $attackShip = GameShipAttackShipServant::new($this->container());
         $attackShip->playerinfo = self::$shipAttack;
         $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
@@ -121,7 +121,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
 
     protected function testMain(): void
     {
-        $attackShip = GameAttackShipServant::new($this->container());
+        $attackShip = GameShipAttackShipServant::new($this->container());
         $attackShip->playerinfo = self::ship(1, 'Attacker');
         $attackShip->targetinfo = self::$shipUnderAttack;
         $attackShip->serve();
@@ -136,7 +136,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->isSuccess = GameAttackShipServantTest::$escapeFromShipSuccess;
+                    $this->isSuccess = GameShipAttackShipServantTest::$escapeFromShipSuccess;
                 }
             },
             GameShipScanShipServant::class => fn($c) => new class($c) extends GameShipScanShipServant {
@@ -144,7 +144,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->isSuccess = GameAttackShipServantTest::$scanSuccess;
+                    $this->isSuccess = GameShipAttackShipServantTest::$scanSuccess;
                 }
             },
             GameShipEmergencyWarpServant::class => fn($c) => new class($c) extends GameShipEmergencyWarpServant {
@@ -152,7 +152,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
                 #[\Override]
                 public function serve(): void
                 {
-                    $this->isSuccess = GameAttackShipServantTest::$emergencyWarpSuccess;
+                    $this->isSuccess = GameShipAttackShipServantTest::$emergencyWarpSuccess;
                 }
             },
             ShipGenScoreDAO::class => fn($c) => new class($c) extends ShipGenScoreDAO {
@@ -189,7 +189,7 @@ class GameAttackShipServantTest extends \Tests\UnitTestCase
                 {
                     $this->zone = [
                         'zone_id' => 1,
-                        'allow_attack' => GameAttackShipServantTest::$allow_attack,
+                        'allow_attack' => GameShipAttackShipServantTest::$allow_attack,
                     ];
                 }
             },

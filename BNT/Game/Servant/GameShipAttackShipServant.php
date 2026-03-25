@@ -12,7 +12,7 @@ use BNT\Log\DAO\LogPlayerDAO;
 use BNT\MovementLog\DAO\MovementLogDAO;
 use BNT\Game\Servant\GameCollectBountyServitor;
 use BNT\Game\Servant\GameKillPlayerServant;
-use BNT\Game\Servant\GameShipFightServant;
+use BNT\Game\Servant\GameFightShipVersusShipServant;
 use BNT\Game\Servant\GameShipSalvServant;
 use BNT\Bounty\DAO\BountyCreateDAO;
 use BNT\Bounty\DAO\BountiesByCriteriaDAO;
@@ -24,7 +24,7 @@ use BNT\Game\Servant\GameShipScanShipServant;
 use BNT\Game\Servant\GameShipEscapedFromShipServant;
 use BNT\Game\Servant\GameShipEmergencyWarpServant;
 
-class GameAttackShipServant extends \UUA\Servant
+class GameShipAttackShipServant extends \UUA\Servant
 {
 
     use \BNT\Traits\MessagesTrait;
@@ -95,7 +95,7 @@ class GameAttackShipServant extends \UUA\Servant
             LogPlayerDAO::call($this->container, $target->id, LogTypeConstants::LOG_ATTACK_EWDFAIL, $player->name);
         }
 
-        $fight = GameShipFightServant::new($this->container);
+        $fight = GameFightShipVersusShipServant::new($this->container);
         $fight->player = $player;
         $fight->target = $target;
         $fight->serve();

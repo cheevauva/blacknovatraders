@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Tests\Unit\Game\Servant;
 
 use BNT\Ship\Ship;
-use BNT\Game\Servant\GameShipFightServant;
+use BNT\Game\Servant\GameFightShipVersusShipServant;
 use BNT\Ship\Mapper\ShipRowToEntityMapper;
 
-class GameShipFightServantTest extends \Tests\UnitTestCase
+class GameFightShipVersusShipServantTest extends \Tests\UnitTestCase
 {
 
     protected function ship(int $id, string $name, int $fighters = 200): Ship
@@ -64,7 +64,7 @@ class GameShipFightServantTest extends \Tests\UnitTestCase
         $player = $this->ship(1, 'PShip', 200);
         $target = $this->ship(2, 'TShip', 250);
 
-        $fight = GameShipFightServant::new($this->container());
+        $fight = GameFightShipVersusShipServant::new($this->container());
         $fight->player = $player;
         $fight->target = $target;
         $fight->serve();
